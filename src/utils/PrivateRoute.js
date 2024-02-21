@@ -1,13 +1,14 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom/cjs/react-router-dom.min";
+import { Route, Redirect } from "react-router-dom";
 
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
   const isLoggedIn = localStorage.getItem("token");
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        isLoggedIn ? <Component {...rest} /> : <Redirect to="/" />
+        isLoggedIn ? <Component {...props} /> : <Redirect to="/" />
       }
     />
   );

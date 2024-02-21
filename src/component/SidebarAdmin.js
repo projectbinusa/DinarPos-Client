@@ -18,10 +18,13 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import brand from "../assets/brand.png";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-function Sidebar() {
+function SidebarAdmin() {
   const [open, setOpen] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const history = useHistory();
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -30,26 +33,48 @@ function Sidebar() {
   const openDrawer = () => setIsDrawerOpen(true);
   const closeDrawer = () => setIsDrawerOpen(false);
 
+  const logout = () => {
+    history.push("/");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+    localStorage.clear();
+  };
+
+  // const ref = "p";
+
   return (
     <>
-      <section>
-        <IconButton
-          className="md:hidden block"
-          variant="text"
-          size="lg"
-          onClick={openDrawer}
+      <div>
+        <div className="w-full bg-white drop-shadow-lg flex gap-3 p-2 md:hidden fixed z-10">
+          <IconButton variant="text" size="lg" onClick={openDrawer}>
+            {isDrawerOpen ? (
+              <XMarkIcon className="h-8 w-8 stroke-2" />
+            ) : (
+              <Bars3Icon className="h-8 w-8 stroke-2" />
+            )}
+          </IconButton>
+          <div className="flex items-center gap-1">
+            <img src={brand} alt="brand" className="h-8 w-12" />
+            <Typography variant="h5" color="blue-gray">
+              EXCELLENT
+            </Typography>
+          </div>
+        </div>
+        <Drawer
+          open={isDrawerOpen}
+          onClose={closeDrawer}
+          overlay={true}
+          overlayRef={(ref) => {
+            if (ref) {
+              document.body.style.overflow = isDrawerOpen ? "hidden" : "auto";
+            }
+          }}
         >
-          {isDrawerOpen ? (
-            <XMarkIcon className="h-8 w-8 stroke-2" />
-          ) : (
-            <Bars3Icon className="h-8 w-8 stroke-2" />
-          )}
-        </IconButton>
-        <Drawer open={isDrawerOpen} onClose={closeDrawer}>
           <Card
-            color="transparent"
+            color="white"
             shadow={false}
-            className="h-screen w-full p-2"
+            className="h-screen w-full p-2 bg-blend-overlay"
           >
             <div className="mb-2 flex items-center gap-4 p-2">
               <img src={brand} alt="brand" className="h-8 w-12" />
@@ -57,9 +82,9 @@ function Sidebar() {
                 EXCELLENT
               </Typography>
             </div>
-            <List>
-              <a href="">
-                <ListItem className="px-3 py-2 text-base rounded uppercase">
+            <List className="mb-5">
+              <a href="/dashboard_admin">
+                <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   dashboard
                 </ListItem>
               </a>
@@ -81,7 +106,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       TRANSAKSI PENJUALAN
                     </Typography>
@@ -89,8 +114,8 @@ function Sidebar() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/transaksi_penjualan_excelcom">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -100,8 +125,8 @@ function Sidebar() {
                         EXCELCOM
                       </ListItem>
                     </a>
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/transaksi_penjualan_dinarpos">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -132,7 +157,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal "
                     >
                       TRANSAKSI pembelian
                     </Typography>
@@ -140,8 +165,8 @@ function Sidebar() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/transaksi_pembelian_excelcom">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -151,8 +176,8 @@ function Sidebar() {
                         EXCELCOM
                       </ListItem>
                     </a>
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/transaksi_pembelian_dinarpos">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -183,7 +208,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       data user
                     </Typography>
@@ -191,8 +216,8 @@ function Sidebar() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/data_customer">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -202,8 +227,8 @@ function Sidebar() {
                         data customer
                       </ListItem>
                     </a>
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/data_customer_cp">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -213,8 +238,8 @@ function Sidebar() {
                         data customer cp
                       </ListItem>
                     </a>
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/data_suplier">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -224,8 +249,8 @@ function Sidebar() {
                         data suplier
                       </ListItem>
                     </a>
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/data_salesman">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -235,8 +260,8 @@ function Sidebar() {
                         data salesman
                       </ListItem>
                     </a>
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                    <a href="/data_pengguna">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -267,7 +292,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       data barang
                     </Typography>
@@ -276,7 +301,7 @@ function Sidebar() {
                 <AccordionBody className="py-2">
                   <List className="p-0">
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -287,7 +312,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -298,7 +323,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -329,7 +354,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       return excelcom
                     </Typography>
@@ -338,7 +363,7 @@ function Sidebar() {
                 <AccordionBody className="py-2">
                   <List className="p-0">
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -349,7 +374,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -360,7 +385,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -371,7 +396,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -402,7 +427,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       return dinarpos
                     </Typography>
@@ -411,7 +436,7 @@ function Sidebar() {
                 <AccordionBody className="py-2">
                   <List className="p-0">
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -422,7 +447,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -433,7 +458,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -444,7 +469,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -475,7 +500,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       laporan excelcom
                     </Typography>
@@ -484,7 +509,7 @@ function Sidebar() {
                 <AccordionBody className="py-2">
                   <List className="p-0">
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -495,7 +520,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -506,7 +531,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -517,7 +542,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -528,7 +553,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -559,7 +584,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       laporan dinarpos
                     </Typography>
@@ -568,7 +593,7 @@ function Sidebar() {
                 <AccordionBody className="py-2">
                   <List className="p-0">
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -579,7 +604,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -590,7 +615,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -601,7 +626,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -612,7 +637,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -643,7 +668,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       notifikasi excelcom
                     </Typography>
@@ -652,7 +677,7 @@ function Sidebar() {
                 <AccordionBody className="py-2">
                   <List className="p-0">
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -663,7 +688,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -674,7 +699,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -685,7 +710,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -696,7 +721,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -707,7 +732,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -738,7 +763,7 @@ function Sidebar() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-base font-normal"
+                      className="font-popins uppercase mr-auto text-sm font-normal"
                     >
                       notifikasi dinarpos
                     </Typography>
@@ -747,7 +772,7 @@ function Sidebar() {
                 <AccordionBody className="py-2">
                   <List className="p-0">
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -758,7 +783,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -769,7 +794,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -780,7 +805,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -791,7 +816,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -802,7 +827,7 @@ function Sidebar() {
                       </ListItem>
                     </a>
                     <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2">
+                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
                             strokeWidth={3}
@@ -816,22 +841,24 @@ function Sidebar() {
                 </AccordionBody>
               </Accordion>
             </List>
-            <div className="fixed bottom-0 bg-white w-[18rem] left-0 uppercase py-2 px-6">
-              <a href="">lOG OUT</a>
-            </div>
+            <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
+              <button onClick={logout} className="uppercase text-sm">
+                Logout
+              </button>
+            </div>{" "}
           </Card>
         </Drawer>
         {/* SIDEBAR */}
-        <Card className="relative md:block hidden h-screen w-full max-w-[20rem] p-2 shadow-2xl rounded-none overflow-y-auto sidebar">
+        <Card className="fixed z-1 md:block hidden h-screen w-full max-w-[18rem] p-2 shadow-xl rounded-none overflow-y-auto sidebar ">
           <div className="mb-2 flex items-center gap-4 p-2">
             <img src={brand} alt="brand" className="h-8 w-12" />
             <Typography variant="h5" color="blue-gray">
               EXCELLENT
             </Typography>
           </div>
-          <List>
-            <a href="">
-              <ListItem className="px-3 py-2 text-base rounded uppercase">
+          <List className="mb-5">
+            <a href="/dashboard_admin">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 dashboard
               </ListItem>
             </a>
@@ -853,7 +880,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     TRANSAKSI PENJUALAN
                   </Typography>
@@ -861,16 +888,16 @@ function Sidebar() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/transaksi_penjualan_excelcom">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
                       EXCELCOM
                     </ListItem>
                   </a>
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/transaksi_penjualan_dinarpos">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -898,7 +925,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal "
                   >
                     TRANSAKSI pembelian
                   </Typography>
@@ -906,16 +933,16 @@ function Sidebar() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/transaksi_pembelian_excelcom">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
                       EXCELCOM
                     </ListItem>
                   </a>
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/transaksi_pembelian_dinarpos">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -943,7 +970,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     data user
                   </Typography>
@@ -951,40 +978,40 @@ function Sidebar() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/data_customer">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
                       data customer
                     </ListItem>
                   </a>
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/data_customer_cp">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
                       data customer cp
                     </ListItem>
                   </a>
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/data_suplier">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
                       data suplier
                     </ListItem>
                   </a>
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/data_salesman">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
                       data salesman
                     </ListItem>
                   </a>
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                  <a href="/data_pengguna">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1012,7 +1039,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     data barang
                   </Typography>
@@ -1021,7 +1048,7 @@ function Sidebar() {
               <AccordionBody className="py-2">
                 <List className="p-0">
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1029,7 +1056,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1037,7 +1064,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1065,7 +1092,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     return excelcom
                   </Typography>
@@ -1074,7 +1101,7 @@ function Sidebar() {
               <AccordionBody className="py-2">
                 <List className="p-0">
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1082,7 +1109,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1090,7 +1117,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1098,7 +1125,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1126,7 +1153,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     return dinarpos
                   </Typography>
@@ -1135,7 +1162,7 @@ function Sidebar() {
               <AccordionBody className="py-2">
                 <List className="p-0">
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1143,7 +1170,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1151,7 +1178,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1159,7 +1186,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1187,7 +1214,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     laporan excelcom
                   </Typography>
@@ -1196,7 +1223,7 @@ function Sidebar() {
               <AccordionBody className="py-2">
                 <List className="p-0">
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1204,7 +1231,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1212,7 +1239,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1220,7 +1247,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1228,7 +1255,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1256,7 +1283,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     laporan dinarpos
                   </Typography>
@@ -1265,7 +1292,7 @@ function Sidebar() {
               <AccordionBody className="py-2">
                 <List className="p-0">
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1273,7 +1300,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1281,7 +1308,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1289,7 +1316,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1297,7 +1324,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1325,7 +1352,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     notifikasi excelcom
                   </Typography>
@@ -1334,7 +1361,7 @@ function Sidebar() {
               <AccordionBody className="py-2">
                 <List className="p-0">
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1342,7 +1369,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1350,7 +1377,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1358,7 +1385,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1366,7 +1393,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1374,7 +1401,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1402,7 +1429,7 @@ function Sidebar() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-base font-normal"
+                    className="font-popins uppercase mr-auto text-sm font-normal"
                   >
                     notifikasi dinarpos
                   </Typography>
@@ -1411,7 +1438,7 @@ function Sidebar() {
               <AccordionBody className="py-2">
                 <List className="p-0">
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1419,7 +1446,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1427,7 +1454,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1435,7 +1462,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1443,7 +1470,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1451,7 +1478,7 @@ function Sidebar() {
                     </ListItem>
                   </a>
                   <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2">
+                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
                       </ListItemPrefix>
@@ -1462,13 +1489,15 @@ function Sidebar() {
               </AccordionBody>
             </Accordion>
           </List>
-          <div className="fixed bottom-0 bg-white w-[19rem] left-0 uppercase py-2 px-6">
-            <a href="">lOG OUT</a>
+          <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
+            <button onClick={logout} className="uppercase text-sm">
+              Logout
+            </button>
           </div>
         </Card>
-      </section>
+      </div>
     </>
   );
 }
 
-export default Sidebar;
+export default SidebarAdmin;
