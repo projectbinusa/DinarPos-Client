@@ -48,7 +48,7 @@ function Login() {
     <section className="h-screen flex items-center justify-center bg-gray-50 font-helvetica">
       <Card className="p-8">
         <img src={brand} alt="brand" className="h-20 mx-auto mb-12" />
-        <form className="flex md:w-80 w-64 flex-col items-end gap-8" onSubmit={login}>
+        <form className="flex lg:w-80 w-64 flex-col items-end gap-8" onSubmit={login}>
           <Input
             color="blue"
             size="lg"

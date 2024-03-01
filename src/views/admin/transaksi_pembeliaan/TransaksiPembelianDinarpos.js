@@ -72,9 +72,9 @@ function TransaksiPembelianDinarpos() {
     }),
   };
   return (
-    <section className="md:flex font-popins bg-gray-50 ">
+    <section className="lg:flex font-popins bg-gray-50 ">
       <SidebarAdmin />
-      <div className="md:ml-[18rem] ml-0 pt-24 md:pt-5 w-full md:px-7 px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             TRANSAKSI Pembelian dinarpos
@@ -120,8 +120,8 @@ function TransaksiPembelianDinarpos() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-5">
             <div className="col-span-2 mt-3">
-              <div className=" grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-y-8">
-                <div className="col-span-2">
+              <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
+                <div className="lg:col-span-2">
                   <label
                     htmlFor="barang"
                     className="text-[14px] text-blue-gray-400"
@@ -328,7 +328,7 @@ function TransaksiPembelianDinarpos() {
       <Dialog open={open} handler={handleOpen} size="lg">
         <DialogHeader>Tambah Customer</DialogHeader>
         <form action="" className="">
-          <DialogBody className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Select
               variant="static"
               label="Salesman"
@@ -406,7 +406,7 @@ function TransaksiPembelianDinarpos() {
       <Dialog open={open2} handler={handleOpen2} size="lg">
         <DialogHeader>Tambah Customer CP</DialogHeader>
         <form action="" className="">
-          <DialogBody className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Select
               variant="static"
               label="Salesman"

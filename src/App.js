@@ -22,6 +22,14 @@ import DataSalesman from "./views/admin/data_user/salesman/DataSalesman";
 import DataSuplier from "./views/admin/data_user/suplier/DataSuplier";
 import AddSuplier from "./views/admin/data_user/suplier/AddSuplier";
 import AddPengguna from "./views/admin/data_user/pengguna/AddPengguna";
+import DataBarang from "./views/admin/data_barang/barang/DataBarang";
+import AddBarang from "./views/admin/data_barang/barang/AddBarang";
+import StokMasuk from "./views/admin/data_barang/stok_masuk/StokMasuk";
+import AddStokMasuk from "./views/admin/data_barang/stok_masuk/AddStokMasuk";
+import StokOpname from "./views/admin/data_barang/stok_opname/StokOpname";
+import AddStokOpname from "./views/admin/data_barang/stok_opname/AddStokOpname";
+import PenjualanReturn from "./views/admin/return_excelcom/penjualan/PenjualanReturn";
+import PenjualanBarangReturn from "./views/admin/return_excelcom/penjualan_barang/PenjualanBarangReturn";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -128,6 +136,61 @@ function App() {
               isAuthenticated={true}
             />
             {/* END DATA PENGGUNA */}
+
+            {/* END DATA USER */}
+
+            {/* DATA BARANG */}
+            <PrivateRoute
+              path="/data_barang"
+              component={DataBarang}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_barang"
+              component={AddBarang}
+              isAuthenticated={true}
+            />
+
+            {/* STOK MASUK BARANG */}
+            <PrivateRoute
+              path="/stok_masuk_barang"
+              component={StokMasuk}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_stok_masuk"
+              component={AddStokMasuk}
+              isAuthenticated={true}
+            />
+            {/* END STOK MASUK BARANG */}
+
+            {/* STOK KELUAR BARANG */}
+            <PrivateRoute
+              path="/stok_keluar_barang"
+              component={StokOpname}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_stok_keluar"
+              component={AddStokOpname}
+              isAuthenticated={true}
+            />
+            {/* END STOK KELUAR BARANG */}
+
+            {/* END DATA BARANG */}
+
+            {/* RETURN EXCELCOM */}
+            <PrivateRoute
+              path="/penjualan_return_excelcom"
+              component={PenjualanReturn}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/penjualan_barang_return_excelcom"
+              component={PenjualanBarangReturn}
+              isAuthenticated={true}
+            />
+            {/* END RETURN EXCELCOM */}
           </Switch>
         </main>
       </BrowserRouter>

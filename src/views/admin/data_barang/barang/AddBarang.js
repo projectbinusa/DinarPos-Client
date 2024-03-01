@@ -4,24 +4,18 @@ import {
   Breadcrumbs,
   Button,
   Input,
-  Option,
-  Select,
   Typography,
 } from "@material-tailwind/react";
-import {
-  PhoneIcon,
-  UserCircleIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { ClipboardDocumentListIcon, CurrencyDollarIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 
-function AddPengguna() {
+function AddBarang() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Tambah Pengguna
+            tambah barang
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard_admin" className="opacity-60">
@@ -34,57 +28,63 @@ function AddPengguna() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/data_pengguna">
-              <span>Pengguna</span>
+            <a href="/data_customer">
+              <span>Barang</span>
             </a>
-            <span className="cursor-default">Tambah Pengguna</span>
+            <span className="cursor-default capitalize">tambah barang</span>
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form action="">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
-                label="Username"
+                label="Barcode Barang"
                 variant="static"
                 color="blue"
                 size="lg"
-                placeholder="Masukkan Username"
-                icon={<UserIcon />}
+                icon={<ClipboardDocumentListIcon />}
+                placeholder="Masukkan Barcode Barang"
               />
               <Input
-                label="No Telephone"
+                label="Nama Barang"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Masukkan Nama Barang"
+                icon={<UserCircleIcon />}
+              />
+              <Input
+                label="Unit Barang"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Masukkan Unit Barang"
+                icon={<UserCircleIcon />}
+              />
+              <Input
+                label="Harga Beli"
                 variant="static"
                 color="blue"
                 size="lg"
                 type="number"
-                placeholder="Masukkan No Telephone"
-                icon={<PhoneIcon />}
+                placeholder="Masukkan Harga Beli"
+                icon={<CurrencyDollarIcon />}
               />
               <Input
-                label="Nama Pengguna"
+                label="Harga Jual"
                 variant="static"
                 color="blue"
                 size="lg"
-                placeholder="Masukkan Nama Pengguna"
-                icon={<UserCircleIcon />}
+                type="number"
+                placeholder="Masukkan Harga Jual"
+                icon={<CurrencyDollarIcon />}
               />
-              <Select
-                variant="static"
-                label="Level Pengguna"
-                color="blue"
-                size="lg"
-              >
-                <Option>Kasir</Option>
-                <Option>Admin</Option>
-                <Option>Warehouse</Option>
-                <Option>Accounting</Option>
-              </Select>
             </div>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>
               </Button>
-              <a href="/data_pengguna">
+              <a href="/data_barang">
                 <Button variant="text" color="gray" className="mr-1">
                   <span>Kembali</span>
                 </Button>
@@ -97,4 +97,4 @@ function AddPengguna() {
   );
 }
 
-export default AddPengguna;
+export default AddBarang;

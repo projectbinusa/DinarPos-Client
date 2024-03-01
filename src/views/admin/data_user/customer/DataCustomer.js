@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -13,15 +13,53 @@ import {
   Typography,
 } from "@material-tailwind/react";
 
+import $ from "jquery";
+import "datatables.net";
+import "./../../../../assets/styles/datatables.css";
+import { API_CUSTOMER } from "../../../../utils/BaseUrl";
+import axios from "axios";
+
 function DataCustomer() {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
 
+  const tableRef = useRef(null);
+  const [customers, setCustomer] = useState([]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
+
+    $(tableRef.current).DataTable({});
+  };
+
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_CUSTOMER}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setCustomer(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
+  useEffect(() => {
+    if (customers && customers.length > 0) {
+      initializeDataTable();
+    }
+  }, [customers]);
+
   return (
-    <section className="md:flex font-popins bg-gray-50 ">
+    <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="md:ml-[18rem] ml-0 pt-24 md:pt-5 w-full md:px-7 px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             Data Customer
@@ -42,21 +80,61 @@ function DataCustomer() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg p-5 my-5 rounded">
-          <div className="block lg:flex gap-4">
+        <main className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
+          <div className="flex flex-col lg:flex-row gap-4">
             <a href="/add_customer">
               <Button variant="gradient" color="blue">
                 Tambah Customer
               </Button>
             </a>
-            <Button
-              onClick={handleOpen}
-              variant="gradient"
-              color="blue"
-              className="mt-4 lg:mt-0"
+            <div>
+              <Button onClick={handleOpen} variant="gradient" color="blue">
+                Tambah customer cp
+              </Button>
+            </div>
+          </div>
+          <div className="rounded my-5 w-full">
+            <table
+              id="example_data"
+              ref={tableRef}
+              className="rounded-sm table-auto w-full"
             >
-              Tambah customer cp
-            </Button>
+              <thead className="border-b-2 ">
+                <tr>
+                  <th className="py-2 px-3 font-semibold">No</th>
+                  <th className="py-2 px-3 font-semibold">Nama</th>
+                  <th className="py-2 px-3 font-semibold">Jenis</th>
+                  <th className="py-2 px-3 font-semibold">Alamat</th>
+                  <th className="py-2 px-3 font-semibold">Email</th>
+                  <th className="py-2 px-3 font-semibold">No Telepon</th>
+                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customers.length > 0 ? (
+                  customers.map((customer, index) => (
+                    <tr key={index}>
+                      <td className="w-[4%]">{index + 1}</td>
+                      <td className="py-2 px-3">{customer.nama_customer}</td>
+                      <td className="py-2 px-3">{customer.jenis}</td>
+                      <td className="py-2 px-3">{customer.alamat}</td>
+                      <td className="py-2 px-3">{customer.email}</td>
+                      <td className="py-2 px-3">{customer.telp}</td>
+                      <td className="py-2 px-3">{customer.telp}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </main>
       </div>
@@ -64,7 +142,7 @@ function DataCustomer() {
       <Dialog open={open} handler={handleOpen} size="lg">
         <DialogHeader>Tambah Customer CP</DialogHeader>
         <form action="" className="">
-          <DialogBody className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Select
               variant="static"
               label="Salesman"

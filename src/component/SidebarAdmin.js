@@ -46,7 +46,7 @@ function SidebarAdmin() {
   return (
     <>
       <div>
-        <div className="w-full bg-white drop-shadow-lg flex gap-3 p-2 md:hidden fixed z-10">
+        <div className="w-full bg-white drop-shadow-lg flex gap-3 p-2 lg:hidden fixed z-10">
           <IconButton variant="text" size="lg" onClick={openDrawer}>
             {isDrawerOpen ? (
               <XMarkIcon className="h-8 w-8 stroke-2" />
@@ -106,7 +106,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       TRANSAKSI PENJUALAN
                     </Typography>
@@ -157,7 +157,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal "
+                      className="font-poppins uppercase mr-auto text-sm font-normal "
                     >
                       TRANSAKSI pembelian
                     </Typography>
@@ -208,7 +208,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       data user
                     </Typography>
@@ -292,7 +292,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       data barang
                     </Typography>
@@ -300,7 +300,7 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
+                    <a href="/data_barang">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -311,7 +311,7 @@ function SidebarAdmin() {
                         data barang
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/stok_masuk_barang">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -322,7 +322,7 @@ function SidebarAdmin() {
                         stok masuk
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/stok_keluar_barang">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -354,7 +354,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       return excelcom
                     </Typography>
@@ -362,7 +362,7 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
+                    <a href="/penjualan_return_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -427,7 +427,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       return dinarpos
                     </Typography>
@@ -500,7 +500,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       laporan excelcom
                     </Typography>
@@ -584,7 +584,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       laporan dinarpos
                     </Typography>
@@ -668,7 +668,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       notifikasi excelcom
                     </Typography>
@@ -763,7 +763,7 @@ function SidebarAdmin() {
                   >
                     <Typography
                       color="blue-gray"
-                      className="font-popins uppercase mr-auto text-sm font-normal"
+                      className="font-poppins uppercase mr-auto text-sm font-normal"
                     >
                       notifikasi dinarpos
                     </Typography>
@@ -849,7 +849,7 @@ function SidebarAdmin() {
           </Card>
         </Drawer>
         {/* SIDEBAR */}
-        <Card className="fixed z-1 md:block hidden h-screen w-full max-w-[18rem] p-2 shadow-xl rounded-none overflow-y-auto sidebar ">
+        <Card className="fixed z-15 lg:block hidden h-screen w-full max-w-[18rem] p-2 shadow-xl rounded-none overflow-y-auto sidebar ">
           <div className="mb-2 flex items-center gap-4 p-2">
             <img src={brand} alt="brand" className="h-8 w-12" />
             <Typography variant="h5" color="blue-gray">
@@ -880,7 +880,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     TRANSAKSI PENJUALAN
                   </Typography>
@@ -925,7 +925,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal "
+                    className="font-poppins uppercase mr-auto text-sm font-normal "
                   >
                     TRANSAKSI pembelian
                   </Typography>
@@ -970,7 +970,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     data user
                   </Typography>
@@ -1039,7 +1039,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     data barang
                   </Typography>
@@ -1047,7 +1047,7 @@ function SidebarAdmin() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
+                  <a href="/data_barang">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1055,7 +1055,7 @@ function SidebarAdmin() {
                       data barang
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/stok_masuk_barang">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1063,7 +1063,7 @@ function SidebarAdmin() {
                       stok masuk
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/stok_keluar_barang">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1092,7 +1092,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     return excelcom
                   </Typography>
@@ -1100,7 +1100,7 @@ function SidebarAdmin() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
+                  <a href="/penjualan_return_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1153,7 +1153,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     return dinarpos
                   </Typography>
@@ -1214,7 +1214,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     laporan excelcom
                   </Typography>
@@ -1283,7 +1283,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     laporan dinarpos
                   </Typography>
@@ -1352,7 +1352,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     notifikasi excelcom
                   </Typography>
@@ -1429,7 +1429,7 @@ function SidebarAdmin() {
                 >
                   <Typography
                     color="blue-gray"
-                    className="font-popins uppercase mr-auto text-sm font-normal"
+                    className="font-poppins uppercase mr-auto text-sm font-normal"
                   >
                     notifikasi dinarpos
                   </Typography>

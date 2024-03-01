@@ -101,16 +101,16 @@ function Dashboard() {
   };
 
   return (
-    <section className="md:flex font-popins bg-gray-50 min-h-screen">
+    <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="md:ml-[22rem] pt-12 md:pt-0">
-        <div className="grid md:grid-cols-2 grid-cols-1">
+      <div className="lg:ml-[22rem] pt-12 lg:pt-0">
+        <div className="grid lg:grid-cols-2 grid-cols-1">
           <Card>
             <CardHeader
               floated={false}
               shadow={false}
               color="transparent"
-              className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+              className="flex flex-col gap-4 rounded-none lg:flex-row lg:items-center"
             >
               <div>
                 <Typography variant="h6" color="blue-gray">
@@ -134,7 +134,7 @@ function Dashboard() {
               floated={false}
               shadow={false}
               color="transparent"
-              className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+              className="flex flex-col gap-4 rounded-none lg:flex-row lg:items-center"
             >
               <div>
                 <Typography variant="h6" color="blue-gray">

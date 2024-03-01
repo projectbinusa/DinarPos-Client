@@ -1,123 +1,106 @@
-.dataTables_wrapper select,
-.dataTables_wrapper .dataTables_filter input {
-  color: rgb(21 128 61);
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  line-height: 1.25;
-  border-width: 2px;
-  border-radius: 0.25rem !important;
-  border-color: #f5f7f8;
-  background-color: #f5f7f8;
-  margin: 10px 0;
+.dt-layout-row:nth-child(1),
+.dt-layout-row:nth-child(3) {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95em;
+  margin: 1rem 0;
 }
 
-.dataTables_wrapper .dataTables_filter input {
-  margin-left: 9px;
+.dt-layout-row:nth-child(1) .dt-length select,
+.dt-layout-row:nth-child(1) .dt-search input {
+  border-radius: 0.2em;
+  background-color: #fcfcfc;
+  padding: 0.4em;
+  outline: 1px solid #dddddd;
+}
+.dt-paging button {
+  padding: 0 0.5em;
+}
+.dt-paging button.current {
+  background: rgb(59 130 246);
+  padding: 0.2em 1em;
+  border-radius: 0.2em;
+  color: #ffffff;
+}
+@media only screen and (max-width: 1024px) {
+  .dt-layout-row:nth-child(1),
+  .dt-layout-row:nth-child(3) {
+    display: block;
+    font-size: 0.85em;
+  }
+  .dt-layout-row:nth-child(1) .dt-search input {
+    margin-top: 1rem;
+    padding: 0.2em;
+  }
+  .dt-paging {
+    margin-top: 0.5rem;
+  }
 }
 
-/*Row Hover*/
 table.dataTable.hover tbody tr:hover,
 table.dataTable.display tbody tr:hover {
   background-color: #ebf4ff;
 }
 
-/*Pagination Buttons*/
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-  font-weight: 700;
-  border-radius: 0.25rem;
-  border: 1px solid transparent;
-  height: 39px;
-}
-
-/*Pagination Buttons - Current selected */
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-  color: white !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  font-weight: 700;
-  border-radius: 0.25rem;
-  background: rgb(21 128 61) !important;
-  border: 1px solid transparent;
-}
-
-/*Pagination Buttons - Hover */
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  color: white !important;
-  box-shadow: 0 1px 3px 0 rgba(153, 123, 123, 0.1),
-    0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  font-weight: 700;
-  border-radius: 0.25rem;
-  background: rgb(21 128 61) !important;
-  border: 1px solid transparent;
-}
-
-/*Add padding to bottom border */
-table.dataTable.no-footer {
-  border-bottom: 1px solid #e2e8f0;
-  margin-top: 0.75em;
-  margin-bottom: 0.75em;
-}
-
-/*Change colour of responsive icon*/
 table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
-  background-color: rgb(21 128 61) !important;
+  background-color: rgb(59 130 246) !important;
 }
+
 table.dataTable {
   text-align: center;
   border: 1px solid #e2e8f0;
 }
 
-/* Latar belakang hijau untuk elemen thead (header) */
 table.dataTable thead th {
   text-align: center;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 0.6rem;
+  font-weight: 600;
 }
 
-/* Tambahkan garis pada elemen tbody */
 table.dataTable tbody td {
   text-align: center;
   border-bottom: 1px solid #e2e8f0;
+  font-size: 0.95em;
+  padding: 1em;
 }
 
-/* Hapus garis pada elemen tbody yang terakhir */
 table.dataTable tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Hover di setiap baris (row) */
 table.dataTable.hover tbody tr:hover,
 table.dataTable.display tbody tr:hover {
   background-color: #ebf4ff;
 }
 table.dataTable tbody tr:nth-child(even) {
-  background-color: #f9f9f9; /* Warna latar belakang untuk baris genap */
+  background-color: #f9f9f9;
 }
 
 table.dataTable tbody tr:nth-child(odd) {
-  background-color: #ffffff; /* Warna latar belakang untuk baris ganjil */
+  background-color: #ffffff;
 }
 table.dataTable thead th {
   text-align: center !important;
 }
 
-/* Tengahkan teks di elemen td */
 table.dataTable tbody td {
   text-align: center;
 }
 table.dataTable {
-  border-radius: 10px; /* Sesuaikan nilai sesuai keinginan Anda */
-  overflow: hidden; /* Mencegah konten melewati tepi */
+  border-radius: 5px;
+  overflow: hidden;
 }
 
-/* Melengkungkan sudut pada elemen tbody */
 table.dataTable tbody {
-  border-radius: 10px; /* Sesuaikan nilai sesuai keinginan Anda */
+  border-radius: 5px;
 }
 
-/* Melengkungkan sudut pada elemen td */
 table.dataTable tbody td {
-  border-radius: 0 0 10px 10px; /* Hanya melengkungkan sudut bawah */
+  border-radius: 0 0 5px 5px;
+}
+
+.dt-empty {
+  padding: 0.3em 0;
 }

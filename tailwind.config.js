@@ -7,7 +7,7 @@ module.exports = withMT({
     extend: {
       fontFamily: {
         helvetica: ["Helvetica", "Arial", "sans-serif"],
-        popins: 'Poppins'
+        poppins: 'Poppins'
       },
     },
   },
