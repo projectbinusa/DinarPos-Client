@@ -71,6 +71,7 @@ function TransaksiPembelianDinarpos() {
       },
     }),
   };
+  
   return (
     <section className="lg:flex font-popins bg-gray-50 ">
       <SidebarAdmin />

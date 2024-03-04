@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
 import "datatables.net";
-import "./../../../../assets/styles/datatables.css";
+import "./../../../assets/styles/datatables.css";
 import axios from "axios";
-import SidebarAdmin from "../../../../component/SidebarAdmin";
+import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
-import { API_RETURN_EXCELCOM } from "../../../../utils/BaseUrl";
+import { API_RETURN_DINARPOS } from "../../../utils/BaseUrl";
 
 function PenjualanBarangReturn() {
   const tableRef = useRef(null);
@@ -21,9 +21,12 @@ function PenjualanBarangReturn() {
 
   const getAll = async () => {
     try {
-      const response = await axios.get(`${API_RETURN_EXCELCOM}/barang_penjualan`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `${API_RETURN_DINARPOS}/barang_penjualan`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
       setPenjualan(response.data.data);
     } catch (error) {
       console.log("get all", error);
@@ -45,7 +48,7 @@ function PenjualanBarangReturn() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            data transaksi penjualan return excelcom
+            data transaksi penjualan barang return excelcom
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard_admin" className="opacity-60">
@@ -59,7 +62,7 @@ function PenjualanBarangReturn() {
               </svg>
             </a>
             <a href="/penjualan_return_excelcom">
-              <span>Penjualan Return Excelcom</span>
+              <span>Penjualan Barang Return Excelcom</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -75,10 +78,10 @@ function PenjualanBarangReturn() {
                   <th className="py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="py-2 px-3 font-semibold">Tanggal</th>
                   <th className="py-2 px-3 font-semibold">No Faktur</th>
+                  <th className="py-2 px-3 font-semibold">Barcode Barang</th>
+                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
                   <th className="py-2 px-3 font-semibold">Nama Salesman</th>
                   <th className="py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="py-2 px-3 font-semibold">Total Belanja</th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>

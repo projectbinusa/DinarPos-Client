@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -16,9 +16,12 @@ import {
 import axios from "axios";
 import { API_SUPLIER } from "../../../../utils/BaseUrl";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useParams,
+} from "react-router-dom/cjs/react-router-dom.min";
 
-function AddSuplier() {
+function EditSuplier() {
   const [kode, setkode] = useState("");
   const [nama, setnama] = useState("");
   const [noTlp, setnoTlp] = useState("");
@@ -26,8 +29,10 @@ function AddSuplier() {
   const [keterangan, setketerangan] = useState("");
 
   const history = useHistory();
+  const param = useParams();
 
-  const addSuplier = async (e) => {
+  //   EDIT SUPLIER
+  const editSuplier = async (e) => {
     e.preventDefault();
 
     const request = {
@@ -38,35 +43,50 @@ function AddSuplier() {
       keterangan: keterangan,
     };
 
-    try {
-      await axios.post(`${API_SUPLIER}/add`, request, {
+    await axios
+      .put(`${API_SUPLIER}/` + param.id, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Data Berhasil DiTambahkan",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      history.push("/data_suplier");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.clear();
-        history.push("/");
-      } else {
+      })
+      .then(() => {
         Swal.fire({
-          icon: "error",
-          title: "Tambah Data Gagal!",
+          icon: "success",
+          title: "Data Berhasil Diubah!",
           showConfirmButton: false,
           timer: 1500,
         });
-        console.log(error);
-      }
-    }
+        history.push("/data_suplier");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((error) => {
+        if (error.ressponse && error.response.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        } else {
+          console.log(error);
+        }
+      });
   };
+
+  //   GET SUPLIER BY ID
+  useEffect(() => {
+    axios
+      .get(`${API_SUPLIER}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setnama(response.namaSuplier);
+        setkode(response.kodeSuplier);
+        setnoTlp(response.noTelpSuplier);
+        setalamat(response.alamatSuplier);
+        setketerangan(response.keterangan);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -74,7 +94,7 @@ function AddSuplier() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Tambah Suplier
+            Edit Suplier
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard_admin" className="opacity-60">
@@ -90,11 +110,11 @@ function AddSuplier() {
             <a href="/data_suplier">
               <span>Suplier</span>
             </a>
-            <span className="cursor-default">Tambah Suplier</span>
+            <span className="cursor-default">Edit Suplier</span>
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={addSuplier}>
+          <form onSubmit={editSuplier}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
                 label="Kode Suplier"
@@ -102,6 +122,8 @@ function AddSuplier() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Kode Suplier"
+                type="text"
+                defaultValue={kode}
                 onChange={(e) => setkode(e.target.value)}
                 icon={<CodeBracketIcon />}
               />
@@ -111,6 +133,7 @@ function AddSuplier() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Nama Suplier"
+                defaultValue={nama}
                 onChange={(e) => setnama(e.target.value)}
                 icon={<UserCircleIcon />}
               />
@@ -121,6 +144,7 @@ function AddSuplier() {
                 size="lg"
                 type="number"
                 placeholder="Masukkan No Telephone"
+                defaultValue={noTlp}
                 onChange={(e) => setnoTlp(e.target.value)}
                 icon={<PhoneIcon />}
               />
@@ -128,12 +152,14 @@ function AddSuplier() {
                 label="Alamat"
                 variant="static"
                 color="blue"
+                defaultValue={alamat}
                 size="lg"
                 placeholder="Masukkan Alamat Suplier"
                 onChange={(e) => setalamat(e.target.value)}
                 icon={<MapPinIcon />}
               />
               <Input
+                defaultValue={keterangan}
                 label="Keterangan"
                 variant="static"
                 color="blue"
@@ -160,4 +186,4 @@ function AddSuplier() {
   );
 }
 
-export default AddSuplier;
+export default EditSuplier;

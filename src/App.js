@@ -29,7 +29,11 @@ import AddStokMasuk from "./views/admin/data_barang/stok_masuk/AddStokMasuk";
 import StokOpname from "./views/admin/data_barang/stok_opname/StokOpname";
 import AddStokOpname from "./views/admin/data_barang/stok_opname/AddStokOpname";
 import PenjualanReturn from "./views/admin/return_excelcom/penjualan/PenjualanReturn";
-import PenjualanBarangReturn from "./views/admin/return_excelcom/penjualan_barang/PenjualanBarangReturn";
+import PenjualanBarangReturn from "./views/admin/return_excelcom/PenjualanBarangReturn";
+import PembelianReturn from "./views/admin/return_excelcom/pembelian/PembelianReturn";
+import PembelianBarangReturn from "./views/admin/return_excelcom/PembelianBarangReturn";
+import EditSuplier from "./views/admin/data_user/suplier/EditSuplier";
+import EditBarang from "./views/admin/data_barang/barang/EditBarang.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -109,6 +113,11 @@ function App() {
               component={AddSuplier}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/edit_suplier/:id"
+              component={EditSuplier}
+              isAuthenticated={true}
+            />
             {/* END DATA SUPLIER */}
 
             {/* DATA SALESMAN */}
@@ -150,6 +159,11 @@ function App() {
               component={AddBarang}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/edit_barang/:id"
+              component={EditBarang}
+              isAuthenticated={true}
+            />
 
             {/* STOK MASUK BARANG */}
             <PrivateRoute
@@ -188,6 +202,16 @@ function App() {
             <PrivateRoute
               path="/penjualan_barang_return_excelcom"
               component={PenjualanBarangReturn}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/pembelian_return_excelcom"
+              component={PembelianReturn}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/pembelian_barang_return_excelcom"
+              component={PembelianBarangReturn}
               isAuthenticated={true}
             />
             {/* END RETURN EXCELCOM */}

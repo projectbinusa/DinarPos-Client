@@ -373,7 +373,7 @@ function SidebarAdmin() {
                         penjualan return
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/penjualan_barang_return_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -384,7 +384,7 @@ function SidebarAdmin() {
                         penjualan barang return
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/pembelian_return_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -395,7 +395,7 @@ function SidebarAdmin() {
                         pembelian return
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/pembelian_barang_return_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -1108,7 +1108,7 @@ function SidebarAdmin() {
                       penjualan return
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/penjualan_barang_return_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1116,7 +1116,7 @@ function SidebarAdmin() {
                       penjualan barang return
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/pembelian_return_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1124,7 +1124,7 @@ function SidebarAdmin() {
                       pembelian return
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/pembelian_barang_return_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />

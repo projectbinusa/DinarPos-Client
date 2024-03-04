@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -9,8 +9,130 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { InformationCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
+import {
+  API_BARANG,
+  API_STOK_MASUK,
+  API_SUPLIER,
+} from "../../../../utils/BaseUrl";
+import ReactSelect from "react-select";
+import Swal from "sweetalert2";
 
 function AddStokMasuk() {
+  const [stok, setstok] = useState("");
+  const [keterangan, setketerangan] = useState("");
+  const [suplierId, setsuplierId] = useState(0);
+  const [barangId, setbarangId] = useState(0);
+
+  const [suplier, setsuplier] = useState([]);
+  const [barang, setbarang] = useState([]);
+
+  const history = useHistory();
+
+  // GET ALL BARANG
+  const allBarang = async () => {
+    try {
+      const response = await axios.get(`${API_BARANG}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setbarang(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // GET ALL SUPLIER
+  const allSuplier = async () => {
+    try {
+      const response = await axios.get(`${API_SUPLIER}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setsuplier(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    allBarang();
+    allSuplier();
+  }, []);
+
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      background: "transparent",
+      borderBottom: "1px solid #ccc",
+      border: "none",
+      outline: "none",
+      fontSize: "14px",
+      "&:hover": {
+        outline: "none",
+        boxShadow: "none",
+      },
+      "&:focus": {
+        outline: "none",
+        boxShadow: "none",
+      },
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: "14px",
+      "&:hover": {
+        outline: "none",
+        boxShadow: "none",
+      },
+      "&:focus": {
+        outline: "none",
+        boxShadow: "none",
+      },
+    }),
+  };
+
+  // ADD STOK MASUK
+  const addStokMasuk = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      id_barang: barangId,
+      id_suplier: suplierId,
+      jumlah_stok: stok,
+      keterangan: keterangan,
+    };
+
+    try {
+      await axios.post(`${API_STOK_MASUK}/add`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Data Berhasil DiTambahkan",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      history.push("/stok_masuk_barang");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Data Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -37,22 +159,50 @@ function AddStokMasuk() {
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form action="">
+          <form onSubmit={addStokMasuk}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <Select variant="static" label="Data Suplier" color="blue">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-              </Select>
-              <Select variant="static" label="Data Barang" color="blue">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-              </Select>
+              <div>
+                <label
+                  htmlFor="suplier"
+                  className="text-[14px] text-blue-gray-400"
+                >
+                  Data Suplier
+                </label>
+                <ReactSelect
+                  id="suplier"
+                  options={suplier.map((down) => {
+                    return {
+                      value: down.idSuplier,
+                      label: down.namaSuplier,
+                    };
+                  })}
+                  placeholder="Pilih Suplier"
+                  styles={customStyles}
+                  onChange={(selectedOption) => setsuplierId(selectedOption.value)}
+                />
+                <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              </div>
+              <div>
+                <label
+                  htmlFor="barang"
+                  className="text-[14px] text-blue-gray-400"
+                >
+                  Data Barang
+                </label>
+                <ReactSelect
+                  id="barang"
+                  options={barang.map((down) => {
+                    return {
+                      value: down.idBarang,
+                      label: down.barcodeBarang + " / " + down.namaBarang,
+                    };
+                  })}
+                  placeholder="Pilih Barang"
+                  styles={customStyles}
+                  onChange={(selectedOption) => setbarangId(selectedOption.value)}
+                />
+                <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              </div>
               <Input
                 label="Jumlah Stok Masuk"
                 variant="static"
@@ -61,6 +211,7 @@ function AddStokMasuk() {
                 size="lg"
                 placeholder="Masukkan Jumlah Stok Masuk"
                 icon={<PlusIcon />}
+                onChange={(e) => setstok(e.target.value)}
               />
               <Input
                 label="Keterangan"
@@ -69,6 +220,7 @@ function AddStokMasuk() {
                 size="lg"
                 placeholder="Masukkan Keterangan"
                 icon={<InformationCircleIcon />}
+                onChange={(e) => setketerangan(e.target.value)}
               />
             </div>
             <div className="mt-10 flex gap-4">

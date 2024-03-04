@@ -2,16 +2,25 @@ import React, { useRef, useState } from "react";
 import { API_SUPLIER } from "../../../../utils/BaseUrl";
 import { useEffect } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  IconButton,
+  Typography,
+} from "@material-tailwind/react";
 import axios from "axios";
 import $ from "jquery";
 import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
-
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function DataSuplier() {
   const tableRef = useRef(null);
   const [supliers, setSupliers] = useState([]);
+
+  const history = useHistory();
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -21,6 +30,7 @@ function DataSuplier() {
     $(tableRef.current).DataTable({});
   };
 
+  // GET ALL
   const getAll = async () => {
     try {
       const response = await axios.get(`${API_SUPLIER}`, {
@@ -41,6 +51,41 @@ function DataSuplier() {
       initializeDataTable();
     }
   }, [supliers]);
+
+  // DELETE SUPLIER
+  const deleteSuplier = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_SUPLIER}/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/data_suplier");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
+  
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -100,12 +145,31 @@ function DataSuplier() {
                       <td className="py-2 px-3">{suplier.noTelpSuplier}</td>
                       <td className="py-2 px-3">{suplier.alamatSuplier}</td>
                       <td className="py-2 px-3">{suplier.keterangan}</td>
-                      <td className="py-2 px-3">{suplier.keterangan}</td>
+                      <td className="py-2 px-3 flex items-center justify-center">
+                        <div className="flex flex-col lg:flex-row gap-3">
+                          <a href={"/edit_suplier/" + suplier.idSuplier}>
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton
+                            size="md"
+                            color="red"
+                            type="button"
+                            onClick={() => deleteSuplier(suplier.idSuplier)}
+                          >
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton>{" "}
+                        </div>
+                      </td>{" "}
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8" className="text-center capitalize py-2 bg-gray-100 ">
+                    <td
+                      colSpan="8"
+                      className="text-center capitalize py-2 bg-gray-100 "
+                    >
                       Tidak ada data
                     </td>
                   </tr>

@@ -10,11 +10,15 @@ import {
   DialogBody,
   DialogFooter,
   DialogHeader,
+  IconButton,
   Input,
   Typography,
 } from "@material-tailwind/react";
 import { API_BARANG } from "../../../../utils/BaseUrl";
 import axios from "axios";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function DataBarang() {
   const [open, setOpen] = useState(false);
@@ -26,6 +30,8 @@ function DataBarang() {
   const tableRef = useRef(null);
   const [barangs, setBarang] = useState([]);
 
+  const history = useHistory();
+
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
@@ -34,6 +40,7 @@ function DataBarang() {
     $(tableRef.current).DataTable({});
   };
 
+  // GET ALL
   const getAll = async () => {
     try {
       const response = await axios.get(`${API_BARANG}`, {
@@ -54,6 +61,55 @@ function DataBarang() {
       initializeDataTable();
     }
   }, [barangs]);
+
+  // FORMAT RUPIAH
+  const formatRupiah = (number) => {
+    if (isNaN(number)) {
+      return "Invalid input";
+    }
+
+    const formattedNumber = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(number);
+
+    return formattedNumber;
+  };
+
+  // DELETE BARANG
+  const deleteBarang = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_BARANG}/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/data_barang");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -130,13 +186,33 @@ function DataBarang() {
                   barangs.map((barang, index) => (
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{barang.barcode_barang}</td>
-                      <td className="py-2 px-3">{barang.nama_barang}</td>
+                      <td className="py-2 px-3">{barang.barcodeBarang}</td>
+                      <td className="py-2 px-3">{barang.namaBarang}</td>
                       <td className="py-2 px-3">{barang.unit}</td>
-                      <td className="py-2 px-3">{barang.harga_beli}</td>
-                      <td className="py-2 px-3">{barang.harga_jual}</td>
-                      <td className="py-2 px-3">{barang.jumlah_stok}</td>
-                      <td className="py-2 px-3">{barang.telp}</td>
+                      <td className="py-2 px-3">
+                        {formatRupiah(barang.hargaBeli)}
+                      </td>
+                      <td className="py-2 px-3">
+                        {formatRupiah(barang.hargaBarang)}
+                      </td>
+                      <td className="py-2 px-3">{barang.jumlahStok}</td>
+                      <td className="py-2 px-3 flex items-center justify-center">
+                        <div className="flex flex-col lg:flex-row gap-3">
+                          <a href={"/edit_barang/" + barang.idBarang}>
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton
+                            size="md"
+                            color="red"
+                            type="button"
+                            onClick={() => deleteBarang(barang.idBarang)}
+                          >
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton>{" "}
+                        </div>
+                      </td>{" "}
                     </tr>
                   ))
                 ) : (
