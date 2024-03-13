@@ -9,44 +9,69 @@ import {
   Typography,
   Input,
   Card,
+  IconButton,
+  DialogBody,
+  DialogFooter,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { API_BARANG, API_SUPLIER } from "../../../utils/BaseUrl";
+import {
+  API_BARANG,
+  API_SUPLIER,
+  API_TRANSAKSI_BELI_EXCELCOM,
+} from "../../../utils/BaseUrl";
 import axios from "axios";
 import ModalTambahSuplier from "../modal/ModalTambahSuplier";
 import ModalTambahBarang from "../modal/ModalTambahBarang";
+import $ from "jquery";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  CurrencyDollarIcon,
+  PencilIcon,
+  PlusIcon,
+  ReceiptPercentIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 
 function TransaksiPembelianExcelcom() {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
 
   const handleOpen = () => setOpen(!open);
   const handleOpen2 = () => setOpen2(!open2);
+  const handleOpen3 = () => setOpen3(!open3);
+
+  const history = useHistory();
 
   const [suplier, setsuplier] = useState([]);
   const [barang, setbarang] = useState([]);
 
   // TRANSAKSI BELI
   const [suplierId, setsuplierId] = useState(0);
+  const [cashCredit, setcashCredit] = useState("");
+  const [keterangan, setketerangan] = useState("");
+  const [pembayaran, setpembayaran] = useState("");
+  const [potongan, setpotongan] = useState(0);
+  const [sisa, setsisa] = useState(0);
 
-  const TABLE_HEAD = [
-    "Barcode",
-    "Nama",
-    "Harga",
-    "Disc",
-    "Harga Diskon",
-    "Jumlah",
-    "Total Harga",
-    "Aksi",
-  ];
+  // PRODUK
+  const [barcodeBarang, setbarcodeBarang] = useState("");
+  const [diskonBarang, setdiskonBarang] = useState(0);
+  const [hargaBrng, sethargaBrng] = useState("");
+  const [qty, setqty] = useState(0);
 
-  const TABLE_ROWS = [
-    {
-      name: "John Michael",
-      job: "Manager",
-      date: "23/04/18",
-    },
-  ];
+  // EDIT PRODUK
+  const [editBarcode, seteditBarcode] = useState("");
+  const [editJumlah, seteditJumlah] = useState("");
+  const [editNamaProduk, seteditNamaProduk] = useState("");
+  const [editHargaBarang, seteditHargaBarang] = useState("");
+  const [editHargaDiskon, seteditHargaDiskon] = useState("");
+  const [editDiskon, seteditDiskon] = useState("");
+  const [editTotalHarga, seteditTotalHarga] = useState("");
+
+  const [produk, setproduk] = useState([]);
+  const [addProduk, setaddProduk] = useState([]);
 
   const customStyles = {
     control: (provided, state) => ({
@@ -108,6 +133,376 @@ function TransaksiPembelianExcelcom() {
     allBarang();
   }, []);
 
+  const [selectedBarang, setSelectedBarang] = useState(null);
+
+  // PILIH BARANG
+  const handleBarangChange = (selectedOption) => {
+    setSelectedBarang(selectedOption);
+    setbarcodeBarang(selectedOption.value);
+
+    if (selectedOption) {
+      axios
+        .get(`${API_BARANG}/barcode?barcode=` + selectedOption.value, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        })
+        .then((res) => {
+          setsisa(res.data.data.jumlahStok);
+          sethargaBrng(res.data.data.hargaBeli);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  // FORMAT RUPIAH
+  const formatRupiah = (value) => {
+    const formatter = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    return formatter.format(value);
+  };
+
+  // TOTAL HARGA
+  const updateTotalHarga = (produk = []) => {
+    var totale = 0;
+    var totale2 = 0;
+
+    for (var i in produk) {
+      var total_harga = parseInt(produk[i].totalHarga);
+      var jumlah_barang = parseInt(produk[i].jumlah);
+      var harga_barang = parseInt(produk[i].harga);
+
+      totale += parseInt(total_harga);
+      totale2 += parseInt(harga_barang * jumlah_barang);
+    }
+
+    $("#total").html(formatRupiah(totale));
+    $("#total2").html(formatRupiah(totale2));
+    $("#total3").html(totale2);
+    $("#ttl_bayar_hemat").html(formatRupiah(parseInt(totale2 - totale)));
+  };
+
+  // CEK BARANG
+  const checkEmpty = () => {
+    const barcode = selectedBarang?.value || "";
+    const jumlah = qty;
+    if (jumlah > 0 && barcode !== "") {
+      $("#tambah").removeAttr("disabled");
+    } else {
+      $("#tambah").attr("disabled", "disabled");
+    }
+  };
+
+  // CEK BARANG YANG SUDAH DITAMBAHKAN
+  const cekBarangDuplikat = (barcode) => {
+    if (parseInt($("button#" + barcode).length) === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // CEK STOK BARANG & PUSH ARRAY
+  const checkStok = () => {
+    const barcodes = barcodeBarang;
+
+    if (cekBarangDuplikat(barcodes)) {
+      fetch(`${API_BARANG}/barcode?barcode=${barcodes}`, {
+        method: "GET",
+        headers: {
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((res) => {
+          const jumlah = parseInt(qty);
+          const diskon = parseInt(diskonBarang);
+          const hargaBrngs = parseInt(hargaBrng);
+
+          const jmlDiskon = hargaBrngs * (diskon / 100);
+          const hargaDiskon = hargaBrngs - jmlDiskon;
+          const totalHarga = hargaDiskon * jumlah;
+          const totalHargaBarang = hargaBrngs * jumlah;
+
+          const newData = {
+            barcodeBarang: barcodes,
+            diskon: diskon,
+            hargaBrng: hargaBrngs,
+            qty: jumlah,
+            totalHarga: totalHarga,
+            totalHargaBarang: totalHargaBarang,
+          };
+
+          const newData2 = {
+            barcode: res.data.barcodeBarang,
+            nama: res.data.namaBarang,
+            harga: hargaBrngs,
+            disc: diskon,
+            hargaDiskon: hargaDiskon,
+            jumlah: jumlah,
+            totalHarga: totalHarga,
+          };
+
+          setproduk([...produk, newData2]);
+          setaddProduk([...addProduk, newData]);
+
+          updateTotalHarga(produk);
+
+          setqty(0);
+          setdiskonBarang(0);
+          sethargaBrng(0);
+          setsisa(sisa + jumlah);
+
+          document
+            .getElementById("tambah")
+            .setAttribute("disabled", "disabled");
+
+          checkEmptyTransaksi();
+        })
+        .catch((error) => console.error("Error:", error));
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Barang sudah ditambahkan!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  // CEK TRANSAKSI
+  const checkEmptyTransaksi = () => {
+    var pembayaran = $("#pembayaran").val();
+    var id_suplier = $("#id_suplier").val();
+    var sisa = $("#kembalian").html();
+    if (pembayaran <= 0 || pembayaran === "" || id_suplier === "") {
+      $("#bayar").attr("disabled", "disabled");
+    } else if (sisa < 0) {
+      $("#bayar").attr("disabled", "disabled");
+    } else if (produk.length < 0) {
+      $("#bayar").attr("disabled", "disabled");
+    } else {
+      $("#bayar").removeAttr("disabled");
+    }
+  };
+
+  // CONVERT RUPIAH TO ANGKA
+  const convertToAngka = (rupiah) => {
+    return parseInt(rupiah.replace(/,.*|[^0-9]/g, ""), 10);
+  };
+
+  // GET DISKON
+  const getDiskon = () => {
+    var total = convertToAngka($("#total").html());
+    var pembayaran = $("#pembayaran").val();
+    if (pembayaran < total) {
+      $("#kembalian").html("0");
+    } else {
+      var kembalian = parseInt(pembayaran - total);
+      $("#kembalian").html(formatRupiah(kembalian));
+      checkEmptyTransaksi();
+    }
+  };
+
+  // GET POTONGAN HARGA
+  const getPotongan = () => {
+    var pembayaran = parseInt($("#pembayaran").val());
+    var potongan = parseInt($("#potongan").val());
+    var total = convertToAngka($("#total").html());
+    var total2 = convertToAngka($("#total2").html());
+    var kembalian = pembayaran - total;
+
+    $("#kembalian").html(formatRupiah(kembalian + potongan));
+    var ttl_bayar = total - potongan;
+    var ttl_bayar_hemat = total2 - ttl_bayar;
+    $("#ttl_bayar").html(formatRupiah(ttl_bayar));
+    $("#ttl_bayar_hemat").html(formatRupiah(ttl_bayar_hemat));
+    checkEmptyTransaksi();
+  };
+
+  // BUTTON EDIT
+  const edit = (
+    barcode,
+    nama_produk,
+    harga_barang,
+    diskon,
+    harga_diskon,
+    jumlah,
+    total_harga
+  ) => {
+    seteditBarcode(barcode);
+    seteditNamaProduk(nama_produk);
+    seteditHargaBarang(harga_barang);
+    seteditHargaDiskon(harga_diskon);
+    seteditDiskon(diskon);
+    seteditJumlah(jumlah);
+    seteditTotalHarga(total_harga);
+
+    handleOpen3();
+  };
+
+  const removeItemsById = (id) => {
+    const newProduk = produk.filter((item) => item.barcode !== id);
+    setproduk(newProduk);
+    const newProduk2 = addProduk.filter((item) => item.barcodeBarang !== id);
+    setaddProduk(newProduk2);
+  };
+
+  const remove = (barcode) => {
+    if (window.confirm("Apakah anda yakin?")) {
+      removeItemsById(barcode);
+      updateTotalHarga(produk);
+      $("#tambah").attr("disabled", "disabled");
+      if (parseInt(produk.length) === 0) {
+        $("#bayar").attr("disabled", "disabled");
+      }
+    }
+  };
+
+  // BUTTON EDIT BARANG
+  const handleButtonClick = () => {
+    let potongan = 0;
+    if (parseInt(editDiskon) > 0) {
+      potongan = parseInt(editHargaBarang * (editDiskon / 100));
+    }
+
+    const harga_diskon = parseInt(editHargaBarang - potongan);
+    const total_harga = parseInt(harga_diskon * editJumlah);
+    const total_harga_barang = parseInt(editHargaBarang * editJumlah);
+
+    // removeItemsById(editBarcode);
+
+    setproduk((prevState) => {
+      const indexToUpdate = prevState.findIndex((item) => {
+        return item.barcode === editBarcode;
+      });
+      if (indexToUpdate !== -1) {
+        const updatedProduk = [...prevState];
+        updatedProduk[indexToUpdate] = {
+          barcode: editBarcode,
+          disc: editDiskon,
+          harga: editHargaBarang,
+          hargaDiskon: harga_diskon,
+          jumlah: editJumlah,
+          nama: editNamaProduk,
+          totalHarga: total_harga,
+        };
+        return updatedProduk;
+      } else {
+        console.log(
+          "Item dengan barcode tersebut tidak ditemukan dalam array setproduk."
+        );
+        return prevState;
+      }
+    });
+
+    setaddProduk((prevState) => {
+      const indexToUpdate = prevState.findIndex((item) => {
+        return item.barcodeBarang === editBarcode;
+      });
+      if (indexToUpdate !== -1) {
+        const updatedProduk = [...prevState];
+        updatedProduk[indexToUpdate] = {
+          barcodeBarang: editBarcode,
+          diskon: editDiskon,
+          hargaBrng: editHargaBarang,
+          qty: editJumlah,
+          totalHarga: total_harga,
+          totalHargaBarang: total_harga_barang,
+        };
+        return updatedProduk;
+      } else {
+        console.log(
+          "Item dengan barcode tersebut tidak ditemukan dalam array setproduk."
+        );
+        return prevState;
+      }
+    });
+
+    updateTotalHarga(produk);
+
+    handleOpen3();
+  };
+
+  const add = () => {
+    var totalBayarBarang = convertToAngka(
+      document.getElementById("total2").innerHTML
+    );
+    var totalBelanja = convertToAngka(
+      document.getElementById("total").innerHTML
+    );
+    var ttlBayarHemat = convertToAngka(
+      document.getElementById("ttl_bayar_hemat").innerHTML
+    );
+
+    var diskons = 0;
+    for (let index = 0; index < addProduk.length; index++) {
+      const element = addProduk[index];
+      diskons += element.diskon;
+    }
+
+    console.log(addProduk);
+
+    console.log(totalBayarBarang);
+
+    console.log(diskons);
+
+    const request = {
+      cashCredit: cashCredit,
+      diskon: diskons,
+      idSuplier: suplierId,
+      keterangan: keterangan,
+      pembayaran: pembayaran,
+      potongan: potongan,
+      produk: addProduk,
+      sisa: sisa,
+      totalBayarBarang: totalBayarBarang,
+      totalBelanja: totalBelanja,
+      ttlBayarHemat: ttlBayarHemat,
+    };
+
+    axios
+      .post(`${API_TRANSAKSI_BELI_EXCELCOM}`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        if (res.data.code === 200) {
+          // Swal.fire({
+          //   title: "Pembelian Berhasil. Cetak Struk?",
+          //   icon: "success",
+          //   showCancelButton: true,
+          //   confirmButtonColor: "#3085d6",
+          //   cancelButtonColor: "#d33",
+          //   confirmButtonText: "Ya",
+          //   cancelButtonText: "Batal",
+          // }).then((result) => {
+          //   if (result.isConfirmed) {
+          //     window.open("/cetak_struk_transaksi_beli_dinarpos");
+          //   } else {
+          //     window.location.reload();
+          //   }
+          // });
+          Swal.fire({
+            title: "Pembelian Berhasil!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          alert("gagal");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    updateTotalHarga(produk);
+  }, [produk]);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
       <SidebarAdmin />
@@ -133,7 +528,7 @@ function TransaksiPembelianExcelcom() {
           </Breadcrumbs>
         </div>
         {/* FORM */}
-        <form className="my-10">
+        <div className="my-10">
           <div className="my-8">
             <div>
               <label
@@ -187,6 +582,8 @@ function TransaksiPembelianExcelcom() {
                     placeholder="Pilih Barang"
                     styles={customStyles}
                     isDisabled={!suplierId}
+                    value={selectedBarang}
+                    onChange={handleBarangChange}
                   />
                   <hr className="mt-1 bg-gray-400 h-[0.1em]" />
                 </div>
@@ -197,6 +594,9 @@ function TransaksiPembelianExcelcom() {
                   label="Harga"
                   type="number"
                   placeholder="Masukkan Harga"
+                  id="hargabarang"
+                  value={hargaBrng}
+                  onChange={(e) => sethargaBrng(e.target.value)}
                 />
                 <Input
                   color="blue"
@@ -204,12 +604,17 @@ function TransaksiPembelianExcelcom() {
                   label="Diskon (%)"
                   type="number"
                   placeholder="Masukkan Diskon"
+                  value={diskonBarang}
+                  onChange={(e) => setdiskonBarang(e.target.value)}
                 />
                 <Input
                   color="blue"
                   variant="static"
                   label="Stok Barang"
+                  id="stokbarang"
                   type="number"
+                  value={sisa}
+                  onChange={(e) => setsisa(e.target.value)}
                 />
                 <Input
                   color="blue"
@@ -217,11 +622,20 @@ function TransaksiPembelianExcelcom() {
                   label="Jumlah"
                   type="number"
                   placeholder="Masukkan jumlah"
+                  id="jumlahBarang"
+                  value={qty}
+                  onKeyUp={checkEmpty()}
+                  onChange={(e) => setqty(e.target.value)}
                 />
               </div>
               <div className="mt-5 flex flex-col md:flex-row gap-3 ">
                 <div>
-                  <Button variant="gradient" color="blue">
+                  <Button
+                    variant="gradient"
+                    color="blue"
+                    id="tambah"
+                    onClick={checkStok}
+                  >
                     Tambah Barang
                   </Button>
                 </div>
@@ -233,88 +647,104 @@ function TransaksiPembelianExcelcom() {
               </div>
 
               <Card className="overflow-auto my-5">
-                <table className="w-full min-w-max table-auto text-left">
-                  <thead>
+                <table id="example_data" className="rounded table-auto w-full">
+                  <thead className="border-b-2 ">
                     <tr>
-                      {TABLE_HEAD.map((head) => (
-                        <th
-                          key={head}
-                          className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-                        >
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal leading-none opacity-70"
-                          >
-                            {head}
-                          </Typography>
-                        </th>
-                      ))}
+                      <th className="py-3 px-2">Barcode</th>
+                      <th className="py-3 px-2">Nama</th>
+                      <th className="py-3 px-2">Harga</th>
+                      <th className="py-3 px-2">Disc</th>
+                      <th className="py-3 px-2">Harga Diskon</th>
+                      <th className="py-3 px-2">Jumlah</th>
+                      <th className="py-3 px-2">Total Harga</th>
+                      <th className="py-3 px-2">Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {TABLE_ROWS.map(({ name, job, date }, index) => {
-                      const isLast = index === TABLE_ROWS.length - 1;
-                      const classes = isLast
-                        ? "p-4"
-                        : "p-4 border-b border-blue-gray-50";
-
-                      return (
-                        <tr key={name}>
-                          <td className={classes}>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {name}
-                            </Typography>
+                    {produk.length > 0 ? (
+                      produk.map((down, index) => (
+                        <tr key={index}>
+                          <td className="py-3 px-2 text-center border">
+                            {down.barcode}
                           </td>
-                          <td className={classes}>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {job}
-                            </Typography>
+                          <td className="py-3 px-2 text-center border">
+                            {down.nama}
                           </td>
-                          <td className={classes}>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {date}
-                            </Typography>
+                          <td className="py-3 px-2 text-center border">
+                            {formatRupiah(down.harga)}
                           </td>
-                          <td className={classes}>
-                            <Typography
-                              as="a"
-                              href="#"
-                              variant="small"
-                              color="blue-gray"
-                              className="font-medium"
-                            >
-                              Edit
-                            </Typography>
+                          <td className="py-3 px-2 text-center border">
+                            {down.disc}
+                          </td>
+                          <td className="py-3 px-2 text-center border">
+                            {formatRupiah(down.hargaDiskon)}
+                          </td>
+                          <td className="py-3 px-2 text-center border">
+                            {down.jumlah}
+                          </td>
+                          <td className="py-3 px-2 text-center border">
+                            {formatRupiah(down.totalHarga)}
+                          </td>
+                          <td className="py-2 px-3 flex items-center justify-center border">
+                            <div className="flex flex-row gap-3">
+                              <IconButton
+                                id={down.barcode}
+                                size="md"
+                                color="light-blue"
+                                onClick={() =>
+                                  edit(
+                                    down.barcode,
+                                    down.nama,
+                                    down.harga,
+                                    down.disc,
+                                    down.hargaDiskon,
+                                    down.jumlah,
+                                    down.totalHarga
+                                  )
+                                }
+                              >
+                                <PencilIcon className="w-6 h-6 white" />
+                              </IconButton>
+                              <IconButton
+                                id={down.barcode}
+                                size="md"
+                                color="red"
+                                type="button"
+                                onClick={() => remove(down.barcode)}
+                              >
+                                <TrashIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </div>
+                          </td>{" "}
+                        </tr>
+                      ))
+                    ) : (
+                      <>
+                        <tr>
+                          <td colSpan={8} className="text-center py-3">
+                            Tidak ada data
                           </td>
                         </tr>
-                      );
-                    })}
+                      </>
+                    )}
                   </tbody>
                 </table>
               </Card>
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph">Anda Hemat</Typography>
-                  <Typography variant="h6">0</Typography>
+                  <Typography variant="h6" id="ttl_bayar_hemat">
+                    Rp 0,00
+                  </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph" className="capitalize">
                     total Belanja Tanpa diskon
                   </Typography>
-                  <Typography variant="h6">0</Typography>
+                  <Typography variant="h6" id="total2">
+                    Rp 0,00
+                  </Typography>
                 </div>
               </div>
             </div>
@@ -324,9 +754,10 @@ function TransaksiPembelianExcelcom() {
                 label="Cash / Kredit"
                 color="blue"
                 className="w-full"
+                onChange={(selectedOption) => setcashCredit(selectedOption)}
               >
-                <Option>Cash</Option>
-                <Option>Kredit</Option>
+                <Option value="Cash">Cash</Option>
+                <Option value="Kredit">Kredit</Option>
               </Select>
               <div className="flex flex-col gap-y-6 my-6">
                 <Input
@@ -335,6 +766,7 @@ function TransaksiPembelianExcelcom() {
                   label="Keterangan"
                   type="text"
                   placeholder="0"
+                  onChange={(e) => setketerangan(e.target.value)}
                 />
                 <Input
                   color="blue"
@@ -342,6 +774,9 @@ function TransaksiPembelianExcelcom() {
                   label="Pembayaran"
                   type="number"
                   placeholder="0"
+                  id="pembayaran"
+                  onChange={(e) => setpembayaran(e.target.value)}
+                  onKeyUp={getDiskon}
                 />
                 <Input
                   color="blue"
@@ -349,16 +784,24 @@ function TransaksiPembelianExcelcom() {
                   label="Potongan"
                   type="number"
                   placeholder="0"
+                  id="potongan"
+                  value={potongan}
+                  onChange={(e) => setpotongan(e.target.value)}
+                  onKeyUp={getPotongan}
                 />
               </div>
               <div className="flex flex-col gap-y-4">
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph">Total Belanja</Typography>
-                  <Typography variant="h6">0</Typography>
+                  <Typography variant="h6" id="total">
+                    Rp 0,00
+                  </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph">Kembalian</Typography>
-                  <Typography variant="h6">0</Typography>
+                  <Typography variant="h6" id="kembalian">
+                    Rp 0,00
+                  </Typography>
                 </div>
               </div>
               <div className="bg-white shadow rounded px-3 py-2 mt-5">
@@ -366,19 +809,23 @@ function TransaksiPembelianExcelcom() {
                   <b>Nota :</b> <span></span>
                 </p>
                 <hr />
-                <h1 className="text-5xl my-1">0</h1>
+                <h1 className="text-3xl my-3 font-medium" id="ttl_bayar">
+                  Rp 0,00
+                </h1>
               </div>
               <Button
                 variant="gradient"
                 color="blue"
                 className="mt-5"
                 type="submit"
+                id="bayar"
+                onClick={() => add()}
               >
                 <span>Lanjut</span>
               </Button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
       {/* MODAL TAMBAH SUPLIER */}
       <Dialog open={open} handler={handleOpen} size="lg">
@@ -391,6 +838,64 @@ function TransaksiPembelianExcelcom() {
         <ModalTambahBarang handleOpen2={handleOpen2} />
       </Dialog>
       {/* END MODAL TAMBAH BARANG BARU */}
+
+      {/* MODAL EDIT BARANG   */}
+      <Dialog open={open3} handler={handleOpen3} size="lg">
+        <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
+          <Input
+            label="Harga Barang"
+            variant="static"
+            color="blue"
+            size="lg"
+            type="number"
+            placeholder="Masukkan Harga Barang"
+            value={editHargaBarang}
+            onChange={(e) => seteditHargaBarang(e.target.value)}
+            icon={<CurrencyDollarIcon />}
+          />
+          <Input
+            label="Jumlah Barang"
+            variant="static"
+            color="blue"
+            size="lg"
+            placeholder="Masukkan Jumlah Barang"
+            type="number"
+            value={editJumlah}
+            onChange={(e) => seteditJumlah(e.target.value)}
+            icon={<PlusIcon />}
+          />
+          <Input
+            label="Diskon"
+            variant="static"
+            color="blue"
+            size="lg"
+            type="number"
+            placeholder="Masukkan Diskon"
+            value={editDiskon}
+            onChange={(e) => seteditDiskon(e.target.value)}
+            icon={<ReceiptPercentIcon />}
+          />
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="gray"
+            onClick={handleOpen3}
+            className="mr-1"
+          >
+            <span>Kembali</span>
+          </Button>
+          <Button
+            variant="gradient"
+            color="blue"
+            id="btn-simpan-brng"
+            onClick={handleButtonClick}
+          >
+            <span>Simpan</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+      {/* END MODAL EDIT BARANG   */}
     </section>
   );
 }

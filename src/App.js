@@ -36,6 +36,8 @@ import EditSuplier from "./views/admin/data_user/suplier/EditSuplier";
 import EditBarang from "./views/admin/data_barang/barang/EditBarang.js";
 import EditCustomer from "./views/admin/data_user/customer/EditCustomer.js";
 import EditCustomerCp from "./views/admin/data_user/customer/EditCustomerCp.js";
+import EditPengguna from "./views/admin/data_user/pengguna/EditPengguna.js";
+import EditSalesman from "./views/admin/data_user/salesman/EditSalesman.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -113,7 +115,6 @@ function App() {
             />
             {/* END DATA CUSTOMER */}
 
-
             {/* DATA SUPLIER */}
             <PrivateRoute
               path="/data_suplier"
@@ -143,6 +144,11 @@ function App() {
               component={AddSalesman}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/edit_salesman/:id"
+              component={EditSalesman}
+              isAuthenticated={true}
+            />
             {/* END DATA SALESMAN */}
 
             {/* DATA PENGGUNA */}
@@ -154,6 +160,11 @@ function App() {
             <PrivateRoute
               path="/add_pengguna"
               component={AddPengguna}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_pengguna/:id"
+              component={EditPengguna}
               isAuthenticated={true}
             />
             {/* END DATA PENGGUNA */}

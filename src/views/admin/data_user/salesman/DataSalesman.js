@@ -13,10 +13,14 @@ import "./../../../../assets/styles/datatables.css";
 import { API_SALESMAN } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function DataSalesman() {
   const tableRef = useRef(null);
   const [salesmans, setSalesmans] = useState([]);
+
+  const history = useHistory();
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -46,6 +50,41 @@ function DataSalesman() {
       initializeDataTable();
     }
   }, [salesmans]);
+
+  // DELETE SALESMAN
+  const deleteSalesman = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_SALESMAN}/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/data_salesman");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -88,7 +127,6 @@ function DataSalesman() {
                 <tr>
                   <th className="py-2 px-3 font-semibold">No</th>
                   <th className="py-2 px-3 font-semibold">Nama </th>
-                  <th className="py-2 px-3 font-semibold">Kategori</th>
                   <th className="py-2 px-3 font-semibold">Alamat</th>
                   <th className="py-2 px-3 font-semibold">No Telepon</th>
                   <th className="py-2 px-3 font-semibold">Aksi</th>
@@ -100,15 +138,21 @@ function DataSalesman() {
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
                       <td className="py-2 px-3">{salesman.namaSalesman}</td>
-                      <td className="py-2 px-3">{salesman.idSalesman}</td>
                       <td className="py-2 px-3">{salesman.alamatSalesman}</td>
                       <td className="py-2 px-3">{salesman.noTelpSalesman}</td>
                       <td className="py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-col lg:flex-row gap-3">
-                          <IconButton size="md" color="light-blue">
-                            <PencilIcon className="w-6 h-6 white" />
-                          </IconButton>{" "}
-                          <IconButton size="md" color="red">
+                          <a href={"/edit_salesman/" + salesman.idSalesman}>
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton
+                            size="md"
+                            color="red"
+                            type="button"
+                            onClick={() => deleteSalesman(salesman.idSalesman)}
+                          >
                             <TrashIcon className="w-6 h-6 white" />
                           </IconButton>{" "}
                         </div>

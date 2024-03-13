@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -15,7 +15,11 @@ import {
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { API_BARANG, API_SUPLIER } from "../../../utils/BaseUrl";
+import {
+  API_BARANG,
+  API_SUPLIER,
+  API_TRANSAKSI_BELI_DINARPOS,
+} from "../../../utils/BaseUrl";
 import axios from "axios";
 import ModalTambahSuplier from "../modal/ModalTambahSuplier";
 import ModalTambahBarang from "../modal/ModalTambahBarang";
@@ -46,22 +50,16 @@ function TransaksiPembelianDinarpos() {
   // TRANSAKSI BELI
   const [suplierId, setsuplierId] = useState(0);
   const [cashCredit, setcashCredit] = useState("");
-  const [diskon, setdiskon] = useState("");
   const [keterangan, setketerangan] = useState("");
   const [pembayaran, setpembayaran] = useState("");
   const [potongan, setpotongan] = useState(0);
   const [sisa, setsisa] = useState(0);
-  const [totalBayarBarang, settotalBayarBarang] = useState("");
-  const [totalBelanja, settotalBelanja] = useState("");
-  const [ttlBayarHemat, setttlBayarHemat] = useState("");
 
   // PRODUK
   const [barcodeBarang, setbarcodeBarang] = useState("");
   const [diskonBarang, setdiskonBarang] = useState(0);
   const [hargaBrng, sethargaBrng] = useState("");
   const [qty, setqty] = useState(0);
-  const [totalHarga, settotalHarga] = useState(0);
-  const [totalHargaBarang, settotalHargaBarang] = useState(0);
 
   // EDIT PRODUK
   const [editBarcode, seteditBarcode] = useState("");
@@ -175,7 +173,6 @@ function TransaksiPembelianDinarpos() {
       var total_harga = parseInt(produk[i].totalHarga);
       var jumlah_barang = parseInt(produk[i].jumlah);
       var harga_barang = parseInt(produk[i].harga);
-      var diskon = parseInt(produk[i].diskon);
 
       totale += parseInt(total_harga);
       totale2 += parseInt(harga_barang * jumlah_barang);
@@ -280,7 +277,7 @@ function TransaksiPembelianDinarpos() {
     var pembayaran = $("#pembayaran").val();
     var id_suplier = $("#id_suplier").val();
     var sisa = $("#kembalian").html();
-    if (pembayaran <= 0 || pembayaran == "" || id_suplier == "") {
+    if (pembayaran <= 0 || pembayaran === "" || id_suplier === "") {
       $("#bayar").attr("disabled", "disabled");
     } else if (sisa < 0) {
       $("#bayar").attr("disabled", "disabled");
@@ -316,9 +313,6 @@ function TransaksiPembelianDinarpos() {
     var total = convertToAngka($("#total").html());
     var total2 = convertToAngka($("#total2").html());
     var kembalian = pembayaran - total;
-    var total_bayar = parseInt($("#ttl_bayar").html());
-    // var total_bayar_dua = parseInt($("#ttl_bayar_dua").html());
-    // var ttl_bayar_hemat2 = convertToAngka($("#ttl_bayar_hemat").html());
 
     $("#kembalian").html(formatRupiah(kembalian + potongan));
     var ttl_bayar = total - potongan;
@@ -432,6 +426,79 @@ function TransaksiPembelianDinarpos() {
     handleOpen3();
   };
 
+  const add = () => {
+    var totalBayarBarang = convertToAngka(
+      document.getElementById("total2").innerHTML
+    );
+    var totalBelanja = convertToAngka(
+      document.getElementById("total").innerHTML
+    );
+    var ttlBayarHemat = convertToAngka(
+      document.getElementById("ttl_bayar_hemat").innerHTML
+    );
+
+    var diskons = 0;
+    for (let index = 0; index < addProduk.length; index++) {
+      const element = addProduk[index];
+      diskons += element.diskon;
+    }
+
+    console.log(addProduk);
+
+    console.log(totalBayarBarang);
+
+    console.log(diskons);
+
+    const request = {
+      cashCredit: cashCredit,
+      diskon: diskons,
+      idSuplier: suplierId,
+      keterangan: keterangan,
+      pembayaran: pembayaran,
+      potongan: potongan,
+      produk: addProduk,
+      sisa: sisa,
+      totalBayarBarang: totalBayarBarang,
+      totalBelanja: totalBelanja,
+      ttlBayarHemat: ttlBayarHemat,
+    };
+
+    axios
+      .post(`${API_TRANSAKSI_BELI_DINARPOS}`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        if (res.data.code === 200) {
+          // Swal.fire({
+          //   title: "Pembelian Berhasil. Cetak Struk?",
+          //   icon: "success",
+          //   showCancelButton: true,
+          //   confirmButtonColor: "#3085d6",
+          //   cancelButtonColor: "#d33",
+          //   confirmButtonText: "Ya",
+          //   cancelButtonText: "Batal",
+          // }).then((result) => {
+          //   if (result.isConfirmed) {
+          //     window.open("/cetak_struk_transaksi_beli_dinarpos");
+          //   } else {
+          //     window.location.reload();
+          //   }
+          // });
+          Swal.fire({
+            title: "Pembelian Berhasil!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          alert("gagal");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     updateTotalHarga(produk);
   }, [produk]);
@@ -461,7 +528,7 @@ function TransaksiPembelianDinarpos() {
           </Breadcrumbs>
         </div>
         {/* FORM */}
-        <form className="my-10">
+        <div className="my-10">
           <div className="my-8">
             <div>
               <label
@@ -687,9 +754,10 @@ function TransaksiPembelianDinarpos() {
                 label="Cash / Kredit"
                 color="blue"
                 className="w-full"
+                onChange={(selectedOption) => setcashCredit(selectedOption)}
               >
-                <Option>Cash</Option>
-                <Option>Kredit</Option>
+                <Option value="Cash">Cash</Option>
+                <Option value="Kredit">Kredit</Option>
               </Select>
               <div className="flex flex-col gap-y-6 my-6">
                 <Input
@@ -698,6 +766,7 @@ function TransaksiPembelianDinarpos() {
                   label="Keterangan"
                   type="text"
                   placeholder="Masukkan Keterangan"
+                  onChange={(e) => setketerangan(e.target.value)}
                 />
                 <Input
                   color="blue"
@@ -706,6 +775,7 @@ function TransaksiPembelianDinarpos() {
                   type="number"
                   placeholder="0"
                   id="pembayaran"
+                  onChange={(e) => setpembayaran(e.target.value)}
                   onKeyUp={getDiskon}
                 />
                 <Input
@@ -749,12 +819,13 @@ function TransaksiPembelianDinarpos() {
                 className="mt-5"
                 type="submit"
                 id="bayar"
+                onClick={() => add()}
               >
                 <span>Lanjut</span>
               </Button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
 
       {/* MODAL TAMBAH SUPLIER */}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -14,45 +14,69 @@ import {
 import axios from "axios";
 import { API_SALESMAN } from "../../../../utils/BaseUrl";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useParams,
+} from "react-router-dom/cjs/react-router-dom.min";
 
-function AddSalesman() {
+function EditSalesman() {
   const [nama, setNama] = useState("");
   const [notelephone, setNotelephone] = useState("");
   const [alamat, setAlamat] = useState("");
 
   const history = useHistory();
+  const param = useParams();
 
-  const addSalesman = async (e) => {
+  const editSalesman = async (e) => {
     e.preventDefault();
+
     const salesman = {
       namaSalesman: nama,
       alamatSalesman: alamat,
       noTelpSalesman: notelephone,
     };
-    try {
-      await axios.post(`${API_SALESMAN}/add`, salesman, {
+
+    await axios
+      .put(`${API_SALESMAN}/` + param.id, salesman, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Data Berhasil Diubah!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        history.push("/data_salesman");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((error) => {
+        if (error.ressponse && error.response.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        } else {
+          console.log(error);
+        }
       });
-      Swal.fire({
-        icon: "success",
-        title: "Data Berhasil Ditambahkan!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      history.push("/data_salesman");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } catch (error) {
-      if (error.ressponse && error.response.status === 401) {
-        localStorage.clear();
-        history.push("/");
-      } else {
-        console.log(error);
-      }
-    }
   };
+
+  useEffect(() => {
+    axios
+      .get(`${API_SALESMAN}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setNama(response.namaSalesman);
+        setAlamat(response.alamatSalesman);
+        setNotelephone(response.noTelpSalesman);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -60,7 +84,7 @@ function AddSalesman() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Tambah Salesman
+            Edit Salesman
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard_admin" className="opacity-60">
@@ -76,11 +100,11 @@ function AddSalesman() {
             <a href="/data_salesman">
               <span>Salesman</span>
             </a>
-            <span className="cursor-default">Tambah Salesman</span>
+            <span className="cursor-default">Edit Salesman</span>
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={addSalesman}>
+          <form onSubmit={editSalesman}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
                 label="Nama Salesman"
@@ -88,6 +112,7 @@ function AddSalesman() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Nama Salesman"
+                value={nama}
                 onChange={(e) => setNama(e.target.value)}
                 icon={<UserCircleIcon />}
               />
@@ -98,6 +123,7 @@ function AddSalesman() {
                 size="lg"
                 type="number"
                 placeholder="Masukkan No Telephone"
+                value={notelephone}
                 onChange={(e) => setNotelephone(e.target.value)}
                 icon={<PhoneIcon />}
               />
@@ -107,6 +133,7 @@ function AddSalesman() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Alamat Salesman"
+                value={alamat}
                 onChange={(e) => setAlamat(e.target.value)}
                 icon={<MapPinIcon />}
               />
@@ -128,4 +155,4 @@ function AddSalesman() {
   );
 }
 
-export default AddSalesman;
+export default EditSalesman;

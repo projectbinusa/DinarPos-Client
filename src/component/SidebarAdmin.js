@@ -62,7 +62,13 @@ function SidebarAdmin() {
         <Drawer
           open={isDrawerOpen}
           onClose={closeDrawer}
-          className="overflow-y-auto sidebar"
+          overlay={true}
+          overlayRef={(ref) => {
+            if (ref) {
+              document.body.style.overflow = isDrawerOpen ? "hidden" : "auto";
+            }
+          }}
+          className={isDrawerOpen ? "sidebar overflow-y-scroll" : ""}
         >
           <Card
             color="white"
@@ -75,7 +81,7 @@ function SidebarAdmin() {
                 EXCELLENT
               </Typography>
             </div>
-            <List className="mb-5">
+            <List className="pb-12">
               <a href="/dashboard_admin">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   dashboard
@@ -732,13 +738,13 @@ function SidebarAdmin() {
                 icon={
                   <ChevronDownIcon
                     strokeWidth={2.5}
-                    className={`mx-auto h-3 w-3 transition-transform ${
+                    className={`mx-auto  h-3 w-3 transition-transform ${
                       open === 10 ? "rotate-180" : ""
                     }`}
                   />
                 }
               >
-                <ListItem className="p-0 rounded" selected={open === 10}>
+                <ListItem className="p-0 rounded " selected={open === 10}>
                   <AccordionHeader
                     onClick={() => handleOpen(10)}
                     className="border-b-0 px-3 py-2 "

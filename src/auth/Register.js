@@ -1,72 +1,19 @@
-import {
-  Button,
-  Card,
-  Input,
-  Typography,
-} from "@material-tailwind/react";
 import React, { useState } from "react";
-import brand from "../assets/brand.png";
-import { API_PENGGUNA } from "../utils/BaseUrl";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import axios from "axios";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import Swal from "sweetalert2";
+import { Button, Card, Input, Typography } from "@material-tailwind/react";
 
-function Login() {
+function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [nama, setnama] = useState("");
   const history = useHistory();
-
-  // AKSI LOGIN
-  const login = async (e) => {
-    e.preventDefault();
-
-    const data = {
-      username: username,
-      password: password,
-    };
-
-    try {
-      await axios.post(`${API_PENGGUNA}/login`, data).then((res) => {
-        const response = res.data;
-
-        if (response.code === 200) {
-          history.push("/dashboard_admin");
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-
-          // SET LOCAL STORAGE
-          localStorage.setItem("id", response.data.data.id);
-          localStorage.setItem("level", response.data.data.level);
-          localStorage.setItem("token", response.data.token);
-        }
-      });
-    } catch (err) {
-      if (err.response.data.code === 404) {
-        Swal.fire({
-          icon: "error",
-          title: "Username atau Password Salah!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Tidak Bisa Login!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        console.log("Error");
-      }
-    }
-  };
-
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
+
   return (
     <section className="h-screen flex items-center justify-center bg-gray-50 font-helvetica">
       <Card className="p-8">
@@ -122,4 +69,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
