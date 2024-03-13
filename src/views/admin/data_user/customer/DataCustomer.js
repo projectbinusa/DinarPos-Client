@@ -7,25 +7,42 @@ import {
   DialogBody,
   DialogFooter,
   DialogHeader,
+  IconButton,
   Input,
-  Option,
-  Select,
   Typography,
 } from "@material-tailwind/react";
 
 import $ from "jquery";
 import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
-import { API_CUSTOMER } from "../../../../utils/BaseUrl";
+import {
+  API_CUSTOMER,
+  API_CUSTOMER_CP,
+  API_SALESMAN,
+} from "../../../../utils/BaseUrl";
 import axios from "axios";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import ReactSelect from "react-select";
 
 function DataCustomer() {
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => setOpen(!open);
 
   const tableRef = useRef(null);
+
   const [customers, setCustomer] = useState([]);
+  const [salesmans, setsalesmans] = useState([]);
+
+  const [salesmanId, setsalesmanId] = useState(0);
+  const [customerId, setcustomerId] = useState(0);
+  const [namaCp, setnamaCp] = useState("");
+  const [jabatan, setjabatan] = useState("");
+  const [email, setemail] = useState("");
+  const [noTelp, setnoTelp] = useState("");
+
+  const history = useHistory();
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -35,6 +52,7 @@ function DataCustomer() {
     $(tableRef.current).DataTable({});
   };
 
+  // GET ALL CUSTOMER
   const getAll = async () => {
     try {
       const response = await axios.get(`${API_CUSTOMER}`, {
@@ -46,8 +64,22 @@ function DataCustomer() {
     }
   };
 
+  // GET ALL SALESMAN
+  const allSalesman = async () => {
+    try {
+      const response = await axios.get(`${API_SALESMAN}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setsalesmans(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAll();
+    allSalesman();
   }, []);
 
   useEffect(() => {
@@ -55,6 +87,114 @@ function DataCustomer() {
       initializeDataTable();
     }
   }, [customers]);
+
+  // DELETE CUSTOMER
+  const deleteCustomer = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_CUSTOMER}/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/data_customer");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
+
+  // ADD CUSTOMER CP
+  const addCustomerCp = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      email: email,
+      id_salesman: salesmanId,
+      id_customer: customerId,
+      jabatan: jabatan,
+      nama_cp: namaCp,
+      no_telp: noTelp,
+    };
+
+    try {
+      await axios.post(`${API_CUSTOMER_CP}/add`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Data Berhasil DiTambahkan",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      history.push("/data_customer_cp");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Data Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
+
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      background: "transparent",
+      borderBottom: "1px solid #ccc",
+      border: "none",
+      outline: "none",
+      fontSize: "14px",
+      "&:hover": {
+        outline: "none",
+        boxShadow: "none",
+      },
+      "&:focus": {
+        outline: "none",
+        boxShadow: "none",
+      },
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: "14px",
+      "&:hover": {
+        outline: "none",
+        boxShadow: "none",
+      },
+      "&:focus": {
+        outline: "none",
+        boxShadow: "none",
+      },
+    }),
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -80,7 +220,7 @@ function DataCustomer() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
+        <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="flex flex-col lg:flex-row gap-4">
             <a href="/add_customer">
               <Button variant="gradient" color="blue">
@@ -93,7 +233,7 @@ function DataCustomer() {
               </Button>
             </div>
           </div>
-          <div className="rounded my-5 w-full">
+          <div className="rounded my-5 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
@@ -102,6 +242,7 @@ function DataCustomer() {
               <thead className="border-b-2 ">
                 <tr>
                   <th className="py-2 px-3 font-semibold">No</th>
+                  <th className="py-2 px-3 font-semibold">ITC</th>
                   <th className="py-2 px-3 font-semibold">Nama</th>
                   <th className="py-2 px-3 font-semibold">Jenis</th>
                   <th className="py-2 px-3 font-semibold">Alamat</th>
@@ -115,12 +256,29 @@ function DataCustomer() {
                   customers.map((customer, index) => (
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
+                      <td className="py-2 px-3">{customer.salesman.namaSalesman}</td>
                       <td className="py-2 px-3">{customer.nama_customer}</td>
                       <td className="py-2 px-3">{customer.jenis}</td>
                       <td className="py-2 px-3">{customer.alamat}</td>
                       <td className="py-2 px-3">{customer.email}</td>
                       <td className="py-2 px-3">{customer.telp}</td>
-                      <td className="py-2 px-3">{customer.telp}</td>
+                      <td className="py-2 px-3 flex items-center justify-center">
+                        <div className="flex flex-col lg:flex-row gap-3">
+                          <a href={"/edit_customer/" + customer.id}>
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton
+                            size="md"
+                            color="red"
+                            type="button"
+                            onClick={() => deleteCustomer(customer.id)}
+                          >
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton>{" "}
+                        </div>
+                      </td>{" "}
                     </tr>
                   ))
                 ) : (
@@ -141,43 +299,67 @@ function DataCustomer() {
       {/* MODAL TAMBAH CUSTOMER CP */}
       <Dialog open={open} handler={handleOpen} size="lg">
         <DialogHeader>Tambah Customer CP</DialogHeader>
-        <form action="" className="">
+        <form onSubmit={addCustomerCp}>
           <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Select
-              variant="static"
-              label="Salesman"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Select
-              variant="static"
-              label="Customer"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
+            <div>
+              <label
+                htmlFor="salesman"
+                className="text-[14px] text-blue-gray-400"
+              >
+                Salesman
+              </label>
+              <ReactSelect
+                id="salesman"
+                options={salesmans.map((down) => {
+                  return {
+                    value: down.idSalesman,
+                    label: down.namaSalesman,
+                  };
+                })}
+                placeholder="Pilih Salesman"
+                styles={customStyles}
+                onChange={(selectedOption) =>
+                  setsalesmanId(selectedOption.value)
+                }
+              />
+              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+            </div>
+            <div>
+              <label
+                htmlFor="customer"
+                className="text-[14px] text-blue-gray-400"
+              >
+                Customer
+              </label>
+              <ReactSelect
+                id="customer"
+                options={customers.map((down) => {
+                  return {
+                    value: down.id,
+                    label: down.nama_customer,
+                  };
+                })}
+                placeholder="Pilih Customer"
+                styles={customStyles}
+                onChange={(selectedOption) =>
+                  setcustomerId(selectedOption.value)
+                }
+              />
+              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+            </div>
             <Input
               color="blue"
               variant="static"
               label="Nama CP"
               placeholder="Masukkan Nama CP"
+              onChange={(e) => setnamaCp(e.target.value)}
             />
             <Input
               color="blue"
               variant="static"
               label="Jabatan"
               placeholder="Masukkan Jabatan Customer"
+              onChange={(e) => setjabatan(e.target.value)}
             />
             <Input
               color="blue"
@@ -185,6 +367,7 @@ function DataCustomer() {
               label="Email"
               type="email"
               placeholder="Masukkan Email Customer"
+              onChange={(e) => setemail(e.target.value)}
             />
             <Input
               color="blue"
@@ -192,6 +375,7 @@ function DataCustomer() {
               label="No Telp"
               type="number"
               placeholder="Masukkan No Telp Customer"
+              onChange={(e) => setnoTelp(e.target.value)}
             />
           </DialogBody>
           <DialogFooter>

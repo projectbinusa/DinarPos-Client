@@ -63,7 +63,7 @@ function StokOpname() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
+        <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div>
             <a href="/add_stok_keluar">
               <Button variant="gradient" color="blue">
@@ -71,7 +71,7 @@ function StokOpname() {
               </Button>
             </a>
           </div>
-          <div className="rounded my-5 w-full">
+          <div className="rounded my-5 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
@@ -95,10 +95,10 @@ function StokOpname() {
                   stokKeluars.map((stok, index) => (
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{stok.barcode_stok}</td>
-                      <td className="w-[15%] py-2 px-3">{stok.unit}</td>
-                      <td className="py-2 px-3">{stok.harga_beli}</td>
-                      <td className="py-2 px-3">{stok.harga_jual}</td>
+                      <td className="py-2 px-3">{stok.barang.namaBarang}</td>
+                      <td className="w-[15%] py-2 px-3">{stok.jumlahStok}</td>
+                      <td className="py-2 px-3">{stok.keteranganStokKeluar}</td>
+                      <td className="py-2 px-3">{stok.created_date}</td>
                     </tr>
                   ))
                 ) : (

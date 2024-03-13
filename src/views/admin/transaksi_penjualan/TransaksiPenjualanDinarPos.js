@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Button,
   Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
   Option,
   Select,
   Typography,
@@ -14,6 +11,10 @@ import {
   Card,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
+import { API_BARANG, API_CUSTOMER, API_SALESMAN } from "../../../utils/BaseUrl";
+import axios from "axios";
+import ModalTambahCustomer from "../modal/ModalTambahCustomer";
+import ModalTambahCustomerCp from "../modal/ModalTambahCustomerCp";
 
 function TransaksiPenjualanDinarPos() {
   const [open, setOpen] = useState(false);
@@ -21,6 +22,13 @@ function TransaksiPenjualanDinarPos() {
 
   const handleOpen = () => setOpen(!open);
   const handleOpen2 = () => setOpen2(!open2);
+
+  const [salesman, setsalesman] = useState([]);
+  const [barang, setbarang] = useState([]);
+  const [customer, setcustomer] = useState([]);
+
+  // TRANSAKSI JUAL DINAR
+  const [customerId, setcustomerId] = useState(0);
 
   const TABLE_HEAD = [
     "Barcode",
@@ -72,6 +80,48 @@ function TransaksiPenjualanDinarPos() {
     }),
   };
 
+  // GET ALL SALESMAN
+  const allSalesman = async () => {
+    try {
+      const response = await axios.get(`${API_SALESMAN}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setsalesman(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  // GET ALL CUSTOMER
+  const allCustomer = async () => {
+    try {
+      const response = await axios.get(`${API_CUSTOMER}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setcustomer(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  // GET ALL BARANG
+  const allBarang = async () => {
+    try {
+      const response = await axios.get(`${API_BARANG}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setbarang(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    allCustomer();
+    allBarang();
+    allSalesman();
+  }, []);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
       <SidebarAdmin />
@@ -99,18 +149,29 @@ function TransaksiPenjualanDinarPos() {
         {/* FORM */}
         <form className="my-10">
           <div className="my-8">
-            <Select
-              variant="static"
-              label="Data Customer"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
+            <div>
+              <label
+                htmlFor="customer"
+                className="text-[14px] text-blue-gray-400"
+              >
+                Customer
+              </label>
+              <ReactSelect
+                id="customer"
+                options={customer.map((down) => {
+                  return {
+                    value: down.id,
+                    label: down.nama_customer,
+                  };
+                })}
+                placeholder="Pilih Customer"
+                styles={customStyles}
+                onChange={(selectedOption) =>
+                  setcustomerId(selectedOption.value)
+                }
+              />
+              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+            </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
               <Button onClick={handleOpen} variant="gradient" color="blue">
@@ -127,24 +188,25 @@ function TransaksiPenjualanDinarPos() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-5">
             <div className="col-span-2 mt-3">
-            <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
+              <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
                 <div className="lg:col-span-2">
                   <label
                     htmlFor="barang"
                     className="text-[14px] text-blue-gray-400"
                   >
-                    Data Barang
+                    Barang
                   </label>
                   <ReactSelect
                     id="barang"
-                    options={[
-                      { value: "bug", label: "Bug" },
-                      { value: "feature", label: "Feature" },
-                      { value: "documents", label: "Documents" },
-                      { value: "discussion", label: "Discussion" },
-                    ]}
-                    placeholder="Search by tags"
+                    options={barang.map((down) => {
+                      return {
+                        value: down.barcodeBarang,
+                        label: down.barcodeBarang + " / " + down.namaBarang,
+                      };
+                    })}
+                    placeholder="Pilih Barang"
                     styles={customStyles}
+                    isDisabled={!customerId}
                   />
                   <hr className="mt-1 bg-gray-400 h-[0.1em]" />
                 </div>
@@ -252,31 +314,36 @@ function TransaksiPenjualanDinarPos() {
                   </tbody>
                 </table>
               </Card>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
-                <Select
-                  variant="static"
-                  label="Keterangan"
-                  color="blue"
-                  className="w-full"
-                >
-                  <Option>Material Tailwind HTML</Option>
-                  <Option>Material Tailwind React</Option>
-                  <Option>Material Tailwind Vue</Option>
-                  <Option>Material Tailwind Angular</Option>
-                  <Option>Material Tailwind Svelte</Option>
-                </Select>
-                <Select
-                  variant="static"
-                  label="Data Salesman"
-                  color="blue"
-                  className="w-full"
-                >
-                  <Option>Material Tailwind HTML</Option>
-                  <Option>Material Tailwind React</Option>
-                  <Option>Material Tailwind Vue</Option>
-                  <Option>Material Tailwind Angular</Option>
-                  <Option>Material Tailwind Svelte</Option>
-                </Select>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 mb-12">
+                <div className="mt-6">
+                  <Input
+                    color="blue"
+                    variant="static"
+                    label="Keterangan"
+                    placeholder="Masukkan Keterangan"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="salesman"
+                    className="text-[14px] text-blue-gray-400"
+                  >
+                    Salesman
+                  </label>
+                  <ReactSelect
+                    id="salesman"
+                    options={salesman.map((down) => {
+                      return {
+                        value: down.idSalesman,
+                        label: down.namaSalesman,
+                      };
+                    })}
+                    placeholder="Pilih Salesman"
+                    styles={customStyles}
+                  />
+                  <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+                </div>
+
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph">Anda Hemat</Typography>
                   <Typography variant="h6">0</Typography>
@@ -346,157 +413,13 @@ function TransaksiPenjualanDinarPos() {
       </div>
       {/* MODAL TAMBAH CUSTOMER */}
       <Dialog open={open} handler={handleOpen} size="lg">
-        <DialogHeader>Tambah Customer</DialogHeader>
-        <form action="" className="">
-          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Select
-              variant="static"
-              label="Salesman"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Input
-              color="blue"
-              variant="static"
-              label="Nama Customer"
-              placeholder="Masukkan Nama Customer"
-            />
-            <Select
-              variant="static"
-              label="Jenis"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Input
-              color="blue"
-              variant="static"
-              label="Alamat"
-              placeholder="Masukkan Alamat Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Email"
-              type="email"
-              placeholder="Masukkan Email Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="No Telp"
-              type="number"
-              placeholder="Masukkan No Telp Customer"
-            />
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="text"
-              color="gray"
-              onClick={handleOpen}
-              className="mr-1"
-            >
-              <span>Kembali</span>
-            </Button>
-            <Button
-              variant="gradient"
-              color="blue"
-              onClick={handleOpen}
-              type="submit"
-            >
-              <span>Simpan</span>
-            </Button>
-          </DialogFooter>
-        </form>
+        <ModalTambahCustomer handleOpen={handleOpen} />
       </Dialog>
       {/* END MODAL TAMBAH CUSTOMER */}
 
       {/* MODAL TAMBAH CUSTOMER CP */}
       <Dialog open={open2} handler={handleOpen2} size="lg">
-        <DialogHeader>Tambah Customer CP</DialogHeader>
-        <form action="" className="">
-          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Select
-              variant="static"
-              label="Salesman"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Select
-              variant="static"
-              label="Customer"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Input
-              color="blue"
-              variant="static"
-              label="Nama CP"
-              placeholder="Masukkan Nama CP"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Jabatan"
-              placeholder="Masukkan Jabatan Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Email"
-              type="email"
-              placeholder="Masukkan Email Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="No Telp"
-              type="number"
-              placeholder="Masukkan No Telp Customer"
-            />
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="text"
-              color="gray"
-              onClick={handleOpen2}
-              className="mr-1"
-            >
-              <span>Kembali</span>
-            </Button>
-            <Button
-              variant="gradient"
-              color="blue"
-              onClick={handleOpen2}
-              type="submit"
-            >
-              <span>Simpan</span>
-            </Button>
-          </DialogFooter>
-        </form>
+        <ModalTambahCustomerCp handleOpen={handleOpen2} />
       </Dialog>
       {/* END MODAL TAMBAH CUSTOMER CP */}
     </section>

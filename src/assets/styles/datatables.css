@@ -85,9 +85,6 @@ table.dataTable thead th {
   text-align: center !important;
 }
 
-table.dataTable tbody td {
-  text-align: center;
-}
 table.dataTable {
   border-radius: 5px;
   overflow: hidden;

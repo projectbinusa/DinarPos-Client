@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Button,
   Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
   Option,
   Select,
   Typography,
@@ -14,6 +11,10 @@ import {
   Card,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
+import { API_BARANG, API_SUPLIER } from "../../../utils/BaseUrl";
+import axios from "axios";
+import ModalTambahSuplier from "../modal/ModalTambahSuplier";
+import ModalTambahBarang from "../modal/ModalTambahBarang";
 
 function TransaksiPembelianExcelcom() {
   const [open, setOpen] = useState(false);
@@ -21,6 +22,12 @@ function TransaksiPembelianExcelcom() {
 
   const handleOpen = () => setOpen(!open);
   const handleOpen2 = () => setOpen2(!open2);
+
+  const [suplier, setsuplier] = useState([]);
+  const [barang, setbarang] = useState([]);
+
+  // TRANSAKSI BELI
+  const [suplierId, setsuplierId] = useState(0);
 
   const TABLE_HEAD = [
     "Barcode",
@@ -71,6 +78,36 @@ function TransaksiPembelianExcelcom() {
       },
     }),
   };
+
+  // GET ALL SUPLIER
+  const allSuplier = async () => {
+    try {
+      const response = await axios.get(`${API_SUPLIER}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setsuplier(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  // GET ALL BARANG
+  const allBarang = async () => {
+    try {
+      const response = await axios.get(`${API_BARANG}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setbarang(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    allSuplier();
+    allBarang();
+  }, []);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
       <SidebarAdmin />
@@ -98,18 +135,29 @@ function TransaksiPembelianExcelcom() {
         {/* FORM */}
         <form className="my-10">
           <div className="my-8">
-            <Select
-              variant="static"
-              label="Data Suplier"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
+            <div>
+              <label
+                htmlFor="suplier"
+                className="text-[14px] text-blue-gray-400"
+              >
+                Suplier
+              </label>
+              <ReactSelect
+                id="suplier"
+                options={suplier.map((down) => {
+                  return {
+                    value: down.idSuplier,
+                    label: down.namaSuplier,
+                  };
+                })}
+                placeholder="Pilih Suplier"
+                styles={customStyles}
+                onChange={(selectedOption) =>
+                  setsuplierId(selectedOption.value)
+                }
+              />
+              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+            </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH SUPLIER */}
               <Button onClick={handleOpen} variant="gradient" color="blue">
@@ -120,27 +168,29 @@ function TransaksiPembelianExcelcom() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-5">
             <div className="col-span-2 mt-3">
-            <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
+              <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
                 <div className="lg:col-span-2">
                   <label
                     htmlFor="barang"
                     className="text-[14px] text-blue-gray-400"
                   >
-                    Data Barang
+                    Barang
                   </label>
                   <ReactSelect
                     id="barang"
-                    options={[
-                      { value: "bug", label: "Bug" },
-                      { value: "feature", label: "Feature" },
-                      { value: "documents", label: "Documents" },
-                      { value: "discussion", label: "Discussion" },
-                    ]}
-                    placeholder="Search by tags"
+                    options={barang.map((down) => {
+                      return {
+                        value: down.barcodeBarang,
+                        label: down.barcodeBarang + " / " + down.namaBarang,
+                      };
+                    })}
+                    placeholder="Pilih Barang"
                     styles={customStyles}
+                    isDisabled={!suplierId}
                   />
                   <hr className="mt-1 bg-gray-400 h-[0.1em]" />
                 </div>
+
                 <Input
                   color="blue"
                   variant="static"
@@ -169,12 +219,18 @@ function TransaksiPembelianExcelcom() {
                   placeholder="Masukkan jumlah"
                 />
               </div>
-              <Button variant="gradient" color="blue" className="mt-5">
-                <span>Tambah Barang</span>
-              </Button>
-              {/* <Button onClick={handleOpen2} variant="gradient" color="blue">
-                Tambah customer CP
-              </Button> */}
+              <div className="mt-5 flex flex-col md:flex-row gap-3 ">
+                <div>
+                  <Button variant="gradient" color="blue">
+                    Tambah Barang
+                  </Button>
+                </div>
+                <div>
+                  <Button onClick={handleOpen2} variant="gradient" color="blue">
+                    Tambah Barang Baru
+                  </Button>
+                </div>
+              </div>
 
               <Card className="overflow-auto my-5">
                 <table className="w-full min-w-max table-auto text-left">
@@ -324,161 +380,17 @@ function TransaksiPembelianExcelcom() {
           </div>
         </form>
       </div>
-      {/* MODAL TAMBAH CUSTOMER */}
+      {/* MODAL TAMBAH SUPLIER */}
       <Dialog open={open} handler={handleOpen} size="lg">
-        <DialogHeader>Tambah Customer</DialogHeader>
-        <form action="" className="">
-          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Select
-              variant="static"
-              label="Salesman"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Input
-              color="blue"
-              variant="static"
-              label="Nama Customer"
-              placeholder="Masukkan Nama Customer"
-            />
-            <Select
-              variant="static"
-              label="Jenis"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Input
-              color="blue"
-              variant="static"
-              label="Alamat"
-              placeholder="Masukkan Alamat Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Email"
-              type="email"
-              placeholder="Masukkan Email Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="No Telp"
-              type="number"
-              placeholder="Masukkan No Telp Customer"
-            />
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="text"
-              color="gray"
-              onClick={handleOpen}
-              className="mr-1"
-            >
-              <span>Kembali</span>
-            </Button>
-            <Button
-              variant="gradient"
-              color="blue"
-              onClick={handleOpen}
-              type="submit"
-            >
-              <span>Simpan</span>
-            </Button>
-          </DialogFooter>
-        </form>
+        <ModalTambahSuplier handleOpen={handleOpen} />
       </Dialog>
-      {/* END MODAL TAMBAH CUSTOMER */}
+      {/* END MODAL TAMBAH SUPLIER */}
 
-      {/* MODAL TAMBAH CUSTOMER CP */}
+      {/* MODAL TAMBAH BARANG BARU */}
       <Dialog open={open2} handler={handleOpen2} size="lg">
-        <DialogHeader>Tambah Customer CP</DialogHeader>
-        <form action="" className="">
-          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Select
-              variant="static"
-              label="Salesman"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Select
-              variant="static"
-              label="Customer"
-              color="blue"
-              className="w-full"
-            >
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-              <Option>Material Tailwind Vue</Option>
-              <Option>Material Tailwind Angular</Option>
-              <Option>Material Tailwind Svelte</Option>
-            </Select>
-            <Input
-              color="blue"
-              variant="static"
-              label="Nama CP"
-              placeholder="Masukkan Nama CP"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Jabatan"
-              placeholder="Masukkan Jabatan Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Email"
-              type="email"
-              placeholder="Masukkan Email Customer"
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="No Telp"
-              type="number"
-              placeholder="Masukkan No Telp Customer"
-            />
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="text"
-              color="gray"
-              onClick={handleOpen2}
-              className="mr-1"
-            >
-              <span>Kembali</span>
-            </Button>
-            <Button
-              variant="gradient"
-              color="blue"
-              onClick={handleOpen2}
-              type="submit"
-            >
-              <span>Simpan</span>
-            </Button>
-          </DialogFooter>
-        </form>
+        <ModalTambahBarang handleOpen2={handleOpen2} />
       </Dialog>
-      {/* END MODAL TAMBAH CUSTOMER CP */}
+      {/* END MODAL TAMBAH BARANG BARU */}
     </section>
   );
 }

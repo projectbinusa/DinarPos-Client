@@ -91,7 +91,7 @@ function AddStokOpname() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/stok_masuk_barang");
+      history.push("/stok_keluar_barang");
       setTimeout(() => {
         window.location.reload();
       }, 1500);

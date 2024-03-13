@@ -41,8 +41,6 @@ function SidebarAdmin() {
     localStorage.clear();
   };
 
-  // const ref = "p";
-
   return (
     <>
       <div>
@@ -64,12 +62,7 @@ function SidebarAdmin() {
         <Drawer
           open={isDrawerOpen}
           onClose={closeDrawer}
-          overlay={true}
-          overlayRef={(ref) => {
-            if (ref) {
-              document.body.style.overflow = isDrawerOpen ? "hidden" : "auto";
-            }
-          }}
+          className="overflow-y-auto sidebar"
         >
           <Card
             color="white"
@@ -684,17 +677,6 @@ function SidebarAdmin() {
                             className="h-3 w-3"
                           />
                         </ListItemPrefix>
-                        laporan salesman
-                      </ListItem>
-                    </a>
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
                         notifikasi 7
                       </ListItem>
                     </a>
@@ -771,17 +753,6 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        laporan salesman
-                      </ListItem>
-                    </a>
                     <a href="">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>

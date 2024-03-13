@@ -34,6 +34,8 @@ import PembelianReturn from "./views/admin/return_excelcom/pembelian/PembelianRe
 import PembelianBarangReturn from "./views/admin/return_excelcom/PembelianBarangReturn";
 import EditSuplier from "./views/admin/data_user/suplier/EditSuplier";
 import EditBarang from "./views/admin/data_barang/barang/EditBarang.js";
+import EditCustomer from "./views/admin/data_user/customer/EditCustomer.js";
+import EditCustomerCp from "./views/admin/data_user/customer/EditCustomerCp.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -94,13 +96,23 @@ function App() {
               component={AddCustomer}
               isAuthenticated={true}
             />
-            {/* END DATA CUSTOMER */}
-
+            <PrivateRoute
+              path="/edit_customer/:id"
+              component={EditCustomer}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_customer_cp/:id"
+              component={EditCustomerCp}
+              isAuthenticated={true}
+            />
             <PrivateRoute
               path="/data_customer_cp"
               component={DataCustomerCP}
               isAuthenticated={true}
             />
+            {/* END DATA CUSTOMER */}
+
 
             {/* DATA SUPLIER */}
             <PrivateRoute

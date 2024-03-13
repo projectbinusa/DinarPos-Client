@@ -70,7 +70,7 @@ function DataSalesman() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
+        <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="block">
             <a href="/add_salesman">
               <Button variant="gradient" color="blue">
@@ -78,7 +78,7 @@ function DataSalesman() {
               </Button>
             </a>
           </div>
-          <div className="rounded my-5 w-full">
+          <div className="rounded my-5 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}

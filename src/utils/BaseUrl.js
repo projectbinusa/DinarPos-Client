@@ -16,3 +16,9 @@ export const API_STOK_KELUAR = `${url}/stok_keluar`;
 // RETURN
 export const API_RETURN_DINARPOS = `${url}/return/dinarpos`;
 export const API_RETURN_EXCELCOM = `${url}/return/excelcom`;
+
+// TRANSAKSI
+export const API_TRANSAKSI_BELI_EXCELCOM = `${url}/transaksi/pembelian/excelcom`;
+export const API_TRANSAKSI_BELI_DINARPOS = `${url}/transaksi/pembelian/dinarpos`;
+export const API_TRANSAKSI_JUAL_EXCELCOM = `${url}/transaksi/penjualan/excelcom`;
+export const API_TRANSAKSI_JUAL_DINARPOS = `${url}/transaksi/penjualan/dinarpos`;

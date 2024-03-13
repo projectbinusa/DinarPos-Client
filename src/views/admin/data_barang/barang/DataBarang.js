@@ -135,7 +135,7 @@ function DataBarang() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
+        <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="flex justify-between">
             <div className="flex flex-col lg:flex-row gap-4">
               <div>
@@ -163,7 +163,7 @@ function DataBarang() {
               </Button>
             </a>
           </div>
-          <div className="rounded my-5 w-full">
+          <div className="rounded my-5 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}

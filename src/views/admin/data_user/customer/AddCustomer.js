@@ -4,8 +4,6 @@ import {
   Breadcrumbs,
   Button,
   Input,
-  Option,
-  Select,
   Typography,
 } from "@material-tailwind/react";
 import {
@@ -148,7 +146,7 @@ function AddCustomer() {
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form action="">
+          <form onSubmit={addCustomer}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div>
                 <label
@@ -181,6 +179,7 @@ function AddCustomer() {
                   size="lg"
                   icon={<UserCircleIcon />}
                   placeholder="Masukkan Nama Customer"
+                  onChange={(e) => setnamaCustomer(e.target.value)}
                 />
               </div>
               <div>
@@ -221,7 +220,7 @@ function AddCustomer() {
                   placeholder="Pilih Jenis"
                   styles={customStyles}
                   onChange={(selectedOption) =>
-                    setsalesmanId(selectedOption.value)
+                    setjenis(selectedOption.value)
                   }
                 />
                 <hr className="mt-1 bg-gray-400 h-[0.1em]" />
@@ -234,32 +233,39 @@ function AddCustomer() {
                   size="lg"
                   placeholder="Masukkan Alamat Customer"
                   icon={<MapPinIcon />}
+                  onChange={(e) => setalamat(e.target.value)}
                 />
               </div>
-              <Input
-                label="Email Customer"
-                variant="static"
-                color="blue"
-                size="lg"
-                type="email"
-                placeholder="Masukkan Email Customer"
-                icon={<AtSymbolIcon />}
-              />
-              <Input
-                label="No Telephone"
-                variant="static"
-                color="blue"
-                size="lg"
-                type="number"
-                placeholder="Masukkan No Telephone"
-                icon={<PhoneIcon />}
-              />
+              <div className="lg:mt-5">
+                <Input
+                  label="Email Customer"
+                  variant="static"
+                  color="blue"
+                  size="lg"
+                  type="email"
+                  placeholder="Masukkan Email Customer"
+                  onChange={(e) => setemail(e.target.value)}
+                  icon={<AtSymbolIcon />}
+                />
+              </div>
+              <div className="lg:mt-5">
+                <Input
+                  label="No Telephone"
+                  variant="static"
+                  color="blue"
+                  size="lg"
+                  type="number"
+                  placeholder="Masukkan No Telephone"
+                  onChange={(e) => setnoTelp(e.target.value)}
+                  icon={<PhoneIcon />}
+                />
+              </div>
             </div>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>
               </Button>
-              <a href="/data_salesman">
+              <a href="/data_customer">
                 <Button variant="text" color="gray" className="mr-1">
                   <span>Kembali</span>
                 </Button>

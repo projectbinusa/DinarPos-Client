@@ -5,11 +5,16 @@ import "./../../../assets/styles/datatables.css";
 import axios from "axios";
 import { API_CUSTOMER_CP } from "../../../utils/BaseUrl";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function DataCustomerCP() {
   const tableRef = useRef(null);
   const [customerscp, setCustomerCp] = useState([]);
+
+  const history = useHistory();
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -39,6 +44,41 @@ function DataCustomerCP() {
       initializeDataTable();
     }
   }, [customerscp]);
+
+  // DELETE CUSTOMER CP
+  const deleteCustomerCp = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_CUSTOMER_CP}/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/data_customer_cp");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -63,8 +103,8 @@ function DataCustomerCP() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
-          <div className="rounded my-5 w-full">
+        <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <div className="rounded my-5 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
@@ -73,29 +113,53 @@ function DataCustomerCP() {
               <thead className="border-b-2">
                 <tr>
                   <th className="py-2 px-3 font-semibold">No</th>
-                  <th className="py-2 px-3 font-semibold">Nama </th>
-                  <th className="py-2 px-3 font-semibold">Kategori</th>
-                  <th className="py-2 px-3 font-semibold">Alamat</th>
+                  <th className="py-2 px-3 font-semibold">ITC </th>
+                  <th className="py-2 px-3 font-semibold">Customer </th>
+                  <th className="py-2 px-3 font-semibold">Nama CP</th>
+                  <th className="py-2 px-3 font-semibold">Jabatan</th>
+                  <th className="py-2 px-3 font-semibold">Email</th>
                   <th className="py-2 px-3 font-semibold">No Telepon</th>
                   <th className="py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {customerscp.length > 0 ? (
-                  customerscp.map((salesman, index) => (
+                  customerscp.map((down, index) => (
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{salesman.namaSalesman}</td>
-                      <td className="py-2 px-3">{salesman.idSalesman}</td>
-                      <td className="py-2 px-3">{salesman.alamatSalesman}</td>
-                      <td className="py-2 px-3">{salesman.noTelpSalesman}</td>
-                      <td className="py-2 px-3">{salesman.noTelpSalesman}</td>
+                      <td className="py-2 px-3">
+                        {down.salesman.namaSalesman}
+                      </td>
+                      <td className="py-2 px-3">
+                        {down.customer.nama_customer}
+                      </td>
+                      <td className="py-2 px-3">{down.nama_cp}</td>
+                      <td className="py-2 px-3">{down.jabatan}</td>
+                      <td className="py-2 px-3">{down.email}</td>
+                      <td className="py-2 px-3">{down.no_hp}</td>
+                      <td className="py-2 px-3 flex items-center justify-center">
+                        <div className="flex flex-col lg:flex-row gap-3">
+                          <a href={"/edit_customer_cp/" + down.id}>
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton
+                            size="md"
+                            color="red"
+                            type="button"
+                            onClick={() => deleteCustomerCp(down.id)}
+                          >
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton>{" "}
+                        </div>
+                      </td>{" "}
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="6"
+                      colSpan="8"
                       className="text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
