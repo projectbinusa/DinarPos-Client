@@ -629,6 +629,7 @@ function TransaksiPenjualanDinarPos() {
                   type="number"
                   value={sisa}
                   onChange={(e) => setsisa(e.target.value)}
+                  readOnly
                 />
                 <Input
                   color="blue"

@@ -64,6 +64,8 @@ import LaporanSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_sale
 import LaporanCustomerExcelcom from "./views/admin/laporan_excelcom/laporan_customer/LaporanCustomerExcelcom.js";
 import LaporanTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/LaporanTransaksiBeliExcelcom.js";
 import DashboardKasir from "./views/kasir/DashboardKasir.js";
+import CetakStrukExcelcom from "./views/admin/transaksi_pembeliaan/CetakStrukExcelcom.js";
+import CetakStrukDinarpos from "./views/admin/transaksi_pembeliaan/CetakStrukDinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -116,7 +118,16 @@ function App() {
               component={TransaksiPembelianDinarpos}
               isAuthenticated={true}
             />
-
+            <PrivateRoute
+              path="/cetak_struk_pembelian_excelcom/:id"
+              component={CetakStrukExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/cetak_struk_transaksi_beli_dinarpos/:id"
+              component={CetakStrukDinarpos}
+              isAuthenticated={true}
+            />
             {/* DATA USER */}
 
             {/* DATA CUSTOMER */}

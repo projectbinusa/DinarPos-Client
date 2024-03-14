@@ -1,12 +1,22 @@
-import { ClipboardDocumentListIcon, CurrencyDollarIcon, UserCircleIcon } from "@heroicons/react/24/outline";
-import { Button, DialogBody, DialogFooter, DialogHeader, Input } from "@material-tailwind/react";
+import {
+  ClipboardDocumentListIcon,
+  CurrencyDollarIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
+import {
+  Button,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Input,
+} from "@material-tailwind/react";
 import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Swal from "sweetalert2";
 import { API_BARANG } from "../../../utils/BaseUrl";
 
-function ModalTambahBarang({handleOpen2}) {
+function ModalTambahBarang({ handleOpen2 }) {
   // BARANG
   const [barcodeBarang, setbarcodeBarang] = useState("");
   const [namaBarang, setnamaBarang] = useState("");
@@ -28,33 +38,46 @@ function ModalTambahBarang({handleOpen2}) {
       unit: unitBarang,
     };
 
-    try {
-      await axios.post(`${API_BARANG}/add`, request, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Data Berhasil DiTambahkan",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.clear();
-        history.push("/");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Tambah Data Gagal!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        console.log(error);
+    Swal.fire({
+      title: "Tambah Barang Baru?",
+      text: "Perubahan yang Anda buat mungkin tidak disimpan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios.post(`${API_BARANG}/add`, request, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          });
+          Swal.fire({
+            icon: "success",
+            title: "Data Berhasil DiTambahkan",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            localStorage.clear();
+            history.push("/");
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Tambah Data Gagal!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            console.log(error);
+          }
+        }
       }
-    }
+    });
   };
 
   return (

@@ -103,8 +103,8 @@ function Dashboard() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[22rem] pt-12 lg:pt-0">
-        <div className="grid lg:grid-cols-2 grid-cols-1">
+      <div className="lg:ml-[20rem] pt-20 lg:pt-5">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 mx-3 lg:mx-0 w-full">
           <Card>
             <CardHeader
               floated={false}
@@ -138,14 +138,14 @@ function Dashboard() {
             >
               <div>
                 <Typography variant="h6" color="blue-gray">
-                  Penjualan
+                  Pembelian
                 </Typography>
                 <Typography
                   variant="small"
                   color="gray"
                   className="max-w-sm font-normal"
                 >
-                  Total Penjualan :
+                  Total Pembelian :
                 </Typography>
               </div>
             </CardHeader>

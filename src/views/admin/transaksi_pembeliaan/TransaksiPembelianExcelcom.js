@@ -436,18 +436,13 @@ function TransaksiPembelianExcelcom() {
     var ttlBayarHemat = convertToAngka(
       document.getElementById("ttl_bayar_hemat").innerHTML
     );
+    var sisas = convertToAngka(document.getElementById("kembalian").innerHTML);
 
     var diskons = 0;
     for (let index = 0; index < addProduk.length; index++) {
       const element = addProduk[index];
       diskons += element.diskon;
     }
-
-    console.log(addProduk);
-
-    console.log(totalBayarBarang);
-
-    console.log(diskons);
 
     const request = {
       cashCredit: cashCredit,
@@ -457,7 +452,7 @@ function TransaksiPembelianExcelcom() {
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
-      sisa: sisa,
+      sisa: sisas,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
       ttlBayarHemat: ttlBayarHemat,
@@ -469,31 +464,34 @@ function TransaksiPembelianExcelcom() {
       })
       .then((res) => {
         if (res.data.code === 200) {
-          // Swal.fire({
-          //   title: "Pembelian Berhasil. Cetak Struk?",
-          //   icon: "success",
-          //   showCancelButton: true,
-          //   confirmButtonColor: "#3085d6",
-          //   cancelButtonColor: "#d33",
-          //   confirmButtonText: "Ya",
-          //   cancelButtonText: "Batal",
-          // }).then((result) => {
-          //   if (result.isConfirmed) {
-          //     window.open("/cetak_struk_transaksi_beli_dinarpos");
-          //   } else {
-          //     window.location.reload();
-          //   }
-          // });
           Swal.fire({
-            title: "Pembelian Berhasil!",
+            title: "Pembelian Berhasil. Cetak Struk?",
             icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.open(
+                "/cetak_struk_pembelian_excelcom/" +
+                  res.data.data.idTransaksiBeli
+              );
+            } else {
+              window.location.reload();
+            }
           });
-          history.push("/transaksi_pembelian_dinarpos");
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          // Swal.fire({
+          //   title: "Pembelian Berhasil!",
+          //   icon: "success",
+          //   showConfirmButton: false,
+          //   timer: 1500,
+          // });
+          // history.push("/transaksi_pembelian_dinarpos");
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 1500);
         } else {
           alert("gagal");
         }
@@ -619,6 +617,7 @@ function TransaksiPembelianExcelcom() {
                   type="number"
                   value={sisa}
                   onChange={(e) => setsisa(e.target.value)}
+                  readOnly
                 />
                 <Input
                   color="blue"
