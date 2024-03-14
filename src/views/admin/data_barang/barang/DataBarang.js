@@ -111,6 +111,48 @@ function DataBarang() {
     });
   };
 
+  const downloadFormat = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_BARANG}/template`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Template_Barang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
+  const exportDataBarang = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_BARANG}/export`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Data_Barang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -197,7 +239,7 @@ function DataBarang() {
                       </td>
                       <td className="py-2 px-3">{barang.jumlahStok}</td>
                       <td className="py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-col lg:flex-row gap-3">
+                        <div className="flex flex-row gap-3">
                           <a href={"/edit_barang/" + barang.idBarang}>
                             <IconButton size="md" color="light-blue">
                               <PencilIcon className="w-6 h-6 white" />
@@ -235,7 +277,12 @@ function DataBarang() {
         <DialogHeader>Import Data Barang</DialogHeader>
         <DialogBody>
           <p className="text-black">Silahkan download format di bawah ini</p>
-          <Button variant="gradient" color="blue" className="mt-2 mb-5">
+          <Button
+            variant="gradient"
+            color="blue"
+            className="mt-2 mb-5"
+            onClick={downloadFormat}
+          >
             Download Format
           </Button>
           <hr />
@@ -276,7 +323,7 @@ function DataBarang() {
         <DialogHeader>Export Data Barang</DialogHeader>
         <DialogBody>
           <p className="text-black">Silahkan export di bawah ini</p>
-          <Button variant="gradient" color="blue" className="mt-2 mb-5">
+          <Button variant="gradient" color="blue" className="mt-2 mb-5" onClick={exportDataBarang}>
             Export Data Barang
           </Button>
           <hr />

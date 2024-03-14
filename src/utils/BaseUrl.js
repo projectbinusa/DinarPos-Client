@@ -29,3 +29,24 @@ export const LAPORAN_CUSTOMER = `${url}/laporan/customer`;
 export const LAPORAN_SALESMAN = `${url}/laporan/salesman`;
 export const LAPORAN_SUPLIER = `${url}/laporan/suplier`;
 export const LAPORAN_TRANSAKSI_BELI = `${url}/laporan/transaksi_beli`;
+
+// NOTIFIKASI EXCELCOM
+export const NOTIFIKASI_7_EXCELCOM = `${url}/notifikasi/7_hari/excelcom`;
+export const NOTIFIKASI_30_EXCELCOM = `${url}/notifikasi/30_hari/excelcom`;
+export const NOTIFIKASI_90_EXCELCOM = `${url}/notifikasi/90_hari/excelcom`;
+export const NOTIFIKASI_120_EXCELCOM = `${url}/notifikasi/120_hari/excelcom`;
+export const NOTIFIKASI_365_EXCELCOM = `${url}/notifikasi/365_hari/excelcom`;
+
+// NOTIFIKASI DINARPOS
+export const NOTIFIKASI_7_DINARPOS = `${url}/notifikasi/7_hari/dinarpos`;
+export const NOTIFIKASI_30_DINARPOS = `${url}/notifikasi/30_hari/dinarpos`;
+export const NOTIFIKASI_90_DINARPOS = `${url}/notifikasi/90_hari/dinarpos`;
+export const NOTIFIKASI_120_DINARPOS = `${url}/notifikasi/120_hari/dinarpos`;
+export const NOTIFIKASI_365_DINARPOS = `${url}/notifikasi/365_hari/dinarpos`;
+
+// NOTIFIKASI KONFIRMASI
+export const NOTIFIKASI_7_KONFIRMASI = `${url}/notifikasi/konfirmasi/7_hari`;
+export const NOTIFIKASI_30_KONFIRMASI = `${url}/notifikasi/konfirmasi/30_hari`;
+export const NOTIFIKASI_90_KONFIRMASI = `${url}/notifikasi/konfirmasi/90_hari`;
+export const NOTIFIKASI_120_KONFIRMASI = `${url}/notifikasi/konfirmasi/120_hari`;
+export const NOTIFIKASI_365_KONFIRMASI = `${url}/notifikasi/konfirmasi/365_hari`;

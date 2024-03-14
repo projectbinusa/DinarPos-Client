@@ -7,7 +7,7 @@ import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
 import { API_RETURN_DINARPOS } from '../../../../utils/BaseUrl';
 
-function PembelianBarangReturn() {
+function PembelianReturnDinar() {
     const tableRef = useRef(null);
     const [pembelian, setPembelian] = useState([]);
   
@@ -113,4 +113,4 @@ function PembelianBarangReturn() {
   )
 }
 
-export default PembelianBarangReturn
+export default PembelianReturnDinar

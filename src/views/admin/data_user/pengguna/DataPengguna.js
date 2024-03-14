@@ -5,11 +5,21 @@ import "./../../../../assets/styles/datatables.css";
 import axios from "axios";
 import { API_PENGGUNA } from "../../../../utils/BaseUrl";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  IconButton,
+  Typography,
+} from "@material-tailwind/react";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function DataPengguna() {
   const tableRef = useRef(null);
   const [penggunas, setPengguna] = useState([]);
+
+  const history = useHistory();
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -39,6 +49,40 @@ function DataPengguna() {
       initializeDataTable();
     }
   }, [penggunas]);
+
+  // DELETE PENGGUNA
+  const deletePengguna = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_PENGGUNA}/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/data_barang");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -81,9 +125,8 @@ function DataPengguna() {
                 <tr>
                   <th className="py-2 px-3 font-semibold">No</th>
                   <th className="py-2 px-3 font-semibold">Nama </th>
-                  <th className="py-2 px-3 font-semibold">Kategori</th>
-                  <th className="py-2 px-3 font-semibold">Alamat</th>
-                  <th className="py-2 px-3 font-semibold">No Telepon</th>
+                  <th className="py-2 px-3 font-semibold">Username</th>
+                  <th className="py-2 px-3 font-semibold">Level</th>
                   <th className="py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
@@ -92,11 +135,26 @@ function DataPengguna() {
                   penggunas.map((pengguna, index) => (
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{pengguna.namapengguna}</td>
-                      <td className="py-2 px-3">{pengguna.idpengguna}</td>
-                      <td className="py-2 px-3">{pengguna.alamatpengguna}</td>
-                      <td className="py-2 px-3">{pengguna.noTelppengguna}</td>
-                      <td className="py-2 px-3">{pengguna.noTelpPengguna}</td>
+                      <td className="py-2 px-3">{pengguna.namaPengguna}</td>
+                      <td className="py-2 px-3">{pengguna.usernamePengguna}</td>
+                      <td className="py-2 px-3">{pengguna.levelPengguna}</td>
+                      <td className="py-2 px-3 flex items-center justify-center">
+                        <div className="flex flex-row gap-3">
+                          <a href={"/edit_pengguna/" + pengguna.idPengguna}>
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton
+                            size="md"
+                            color="red"
+                            type="button"
+                            onClick={() => deletePengguna(pengguna.idPengguna)}
+                          >
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton>{" "}
+                        </div>
+                      </td>{" "}
                     </tr>
                   ))
                 ) : (

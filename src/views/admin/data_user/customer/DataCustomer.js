@@ -233,7 +233,7 @@ function DataCustomer() {
               </Button>
             </div>
           </div>
-          <div className="rounded my-5 w-full overflow-auto">
+          <div className="rounded my-5 w-full">
             <table
               id="example_data"
               ref={tableRef}

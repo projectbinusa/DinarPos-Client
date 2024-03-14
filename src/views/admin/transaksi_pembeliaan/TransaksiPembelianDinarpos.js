@@ -490,6 +490,10 @@ function TransaksiPembelianDinarpos() {
             showConfirmButton: false,
             timer: 1500,
           });
+          history.push("/transaksi_pembelian_dinarpos");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         } else {
           alert("gagal");
         }

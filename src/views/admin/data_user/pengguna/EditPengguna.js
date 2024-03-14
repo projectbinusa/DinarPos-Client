@@ -118,16 +118,6 @@ function EditPengguna() {
                 icon={<UserIcon />}
               />
               <Input
-                label="Password"
-                variant="static"
-                color="blue"
-                size="lg"
-                placeholder="Masukkan Password"
-                value={password}
-                onChange={(e) => setpassword(e.target.value)}
-                icon={<KeyIcon />}
-              />
-              <Input
                 label="Nama Pengguna"
                 variant="static"
                 color="blue"

@@ -189,7 +189,7 @@ function SidebarKasir() {
                   </List>
                 </AccordionBody>
               </Accordion>
-              <a href="/dashboard_admin">
+              <a href="/data_barang">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   data barang
                 </ListItem>

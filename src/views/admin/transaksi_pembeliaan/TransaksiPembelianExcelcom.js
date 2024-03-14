@@ -490,6 +490,10 @@ function TransaksiPembelianExcelcom() {
             showConfirmButton: false,
             timer: 1500,
           });
+          history.push("/transaksi_pembelian_dinarpos");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         } else {
           alert("gagal");
         }
@@ -765,7 +769,7 @@ function TransaksiPembelianExcelcom() {
                   variant="static"
                   label="Keterangan"
                   type="text"
-                  placeholder="0"
+                  placeholder="Keterangan"
                   onChange={(e) => setketerangan(e.target.value)}
                 />
                 <Input

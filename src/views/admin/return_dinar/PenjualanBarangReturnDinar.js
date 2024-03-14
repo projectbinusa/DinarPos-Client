@@ -7,7 +7,7 @@ import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
 import { API_RETURN_DINARPOS } from "../../../utils/BaseUrl";
 
-function PenjualanBarangReturn() {
+function PenjualanBarangReturnDinar() {
   const tableRef = useRef(null);
   const [penjualans, setPenjualan] = useState([]);
 
@@ -118,4 +118,4 @@ function PenjualanBarangReturn() {
   );
 }
 
-export default PenjualanBarangReturn;
+export default PenjualanBarangReturnDinar;

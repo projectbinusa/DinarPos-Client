@@ -38,6 +38,32 @@ import EditCustomer from "./views/admin/data_user/customer/EditCustomer.js";
 import EditCustomerCp from "./views/admin/data_user/customer/EditCustomerCp.js";
 import EditPengguna from "./views/admin/data_user/pengguna/EditPengguna.js";
 import EditSalesman from "./views/admin/data_user/salesman/EditSalesman.js";
+import Register from "./auth/Register.js";
+import PenjualanReturnDinar from "./views/admin/return_dinar/penjualan/PenjualanReturnDinar.js";
+import PembelianBarangReturnDinar from "./views/admin/return_dinar/PembelianBarangReturnDinar.js";
+import PembelianReturnDinar from "./views/admin/return_dinar/pembelian/PembelianBarangReturn.js";
+import PenjualanBarangReturnDinar from "./views/admin/return_dinar/PenjualanBarangReturnDinar.js";
+import Notifikasi7Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_7/Notifikasi7Excelcom.js";
+import Notifikasi30Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_30/Notifikasi30Excelcom.js";
+import Notifikasi90Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_90/Notifikasi90Excelcom.js";
+import Notifikasi120Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_120/Notifikasi120Excelcom.js";
+import Notifikasi365Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_365/Notifikasi365Excelcom.js";
+import Notifikasi7Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_7/Notifikasi7Dinarpos.js";
+import Notifikasi30Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_30/Notifikasi30Dinarpos.js";
+import Notifikasi90Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_90/Notifikasi90Dinarpos.js";
+import Notifikasi120Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_120/Notifikasi120Dinarpos.js";
+import Notifikasi365Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_365/Notifikasi365Dinarpos.js";
+import LaporanBarangDinar from "./views/admin/laporan_dinarpos/laporan_barang/LaporanBarangDinar.js";
+import LaporanSuplierDinar from "./views/admin/laporan_dinarpos/laporan_suplier/LaporanSuplierDinar.js";
+import LaporanSalesmanDinar from "./views/admin/laporan_dinarpos/laporan_salesman/LaporanSalesmanDinar.js";
+import LaporanCustomerDinar from "./views/admin/laporan_dinarpos/laporan_customer/LaporanCustomerDinar.js";
+import LaporanTransaksiBeliDinar from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/LaporanTransaksiBeliDinar.js";
+import LaporanBarangExcelcom from "./views/admin/laporan_excelcom/laporan_barang/LaporanBarangExcelcom.js";
+import LaporanSuplierExcelcom from "./views/admin/laporan_excelcom/laporan_suplier/LaporanSuplierExcelcom.js";
+import LaporanSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/LaporanSalesmanExcelcom.js";
+import LaporanCustomerExcelcom from "./views/admin/laporan_excelcom/laporan_customer/LaporanCustomerExcelcom.js";
+import LaporanTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/LaporanTransaksiBeliExcelcom.js";
+import DashboardKasir from "./views/kasir/DashboardKasir.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -54,10 +80,16 @@ function App() {
         <main>
           <Switch>
             <Route path="/" component={Login} exact />
+            <Route path="/r3+91s+t3r" component={Register} exact />
             {/* ROLE ADMIN */}
             <PrivateRoute
               path="/dashboard_admin"
               component={Dashboard}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/dashboard_kasir"
+              component={DashboardKasir}
               isAuthenticated={true}
             />
 
@@ -238,6 +270,141 @@ function App() {
               isAuthenticated={true}
             />
             {/* END RETURN EXCELCOM */}
+
+            {/* RETURN DINARPOS */}
+            <PrivateRoute
+              path="/penjualan_return_dinarpos"
+              component={PenjualanReturnDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/penjualan_barang_return_dinarpos"
+              component={PenjualanBarangReturnDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/pembelian_return_dinarpos"
+              component={PembelianReturnDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/pembelian_barang_return_dinarpos"
+              component={PembelianBarangReturnDinar}
+              isAuthenticated={true}
+            />
+            {/* END RETURN EXCELCOM */}
+
+            {/* NOTIFIKASI EXCELCOM */}
+            <PrivateRoute
+              path="/notifikasi_7_excelcom"
+              component={Notifikasi7Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_30_excelcom"
+              component={Notifikasi30Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_90_excelcom"
+              component={Notifikasi90Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_120_excelcom"
+              component={Notifikasi120Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_365_excelcom"
+              component={Notifikasi365Excelcom}
+              isAuthenticated={true}
+            />
+            {/* END NOTIFIKASI EXCELCOM */}
+
+            {/* NOTIFIKASI DINARPOS */}
+            <PrivateRoute
+              path="/notifikasi_7_dinarpos"
+              component={Notifikasi7Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_30_dinarpos"
+              component={Notifikasi30Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_90_dinarpos"
+              component={Notifikasi90Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_120_dinarpos"
+              component={Notifikasi120Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/notifikasi_365_dinarpos"
+              component={Notifikasi365Dinarpos}
+              isAuthenticated={true}
+            />
+            {/* END NOTIFIKASI DINARPOS */}
+
+            {/* LAPORAN DINARPOS */}
+            <PrivateRoute
+              path="/laporan_barang_dinarpos"
+              component={LaporanBarangDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_suplier_dinarpos"
+              component={LaporanSuplierDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_salesman_dinarpos"
+              component={LaporanSalesmanDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_customer_dinarpos"
+              component={LaporanCustomerDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_transaksi_beli_dinarpos"
+              component={LaporanTransaksiBeliDinar}
+              isAuthenticated={true}
+            />
+            {/* END LAPORAN DINARPOS */}
+
+            {/* LAPORAN EXCELCOM */}
+            <PrivateRoute
+              path="/laporan_barang_excelcom"
+              component={LaporanBarangExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_suplier_excelcom"
+              component={LaporanSuplierExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_salesman_excelcom"
+              component={LaporanSalesmanExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_customer_excelcom"
+              component={LaporanCustomerExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_transaksi_beli_excelcom"
+              component={LaporanTransaksiBeliExcelcom}
+              isAuthenticated={true}
+            />
+            {/* END LAPORAN EXCELCOM */}
           </Switch>
         </main>
       </BrowserRouter>

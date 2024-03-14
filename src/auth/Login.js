@@ -1,9 +1,4 @@
-import {
-  Button,
-  Card,
-  Input,
-  Typography,
-} from "@material-tailwind/react";
+import { Button, Card, Input, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import brand from "../assets/brand.png";
 import { API_PENGGUNA } from "../utils/BaseUrl";
@@ -37,8 +32,8 @@ function Login() {
           }, 1000);
 
           // SET LOCAL STORAGE
-          localStorage.setItem("id", response.data.data.id);
-          localStorage.setItem("level", response.data.data.level);
+          localStorage.setItem("id", response.data.data.idPengguna);
+          localStorage.setItem("level", response.data.data.levelPengguna);
           localStorage.setItem("token", response.data.token);
         }
       });
@@ -98,12 +93,12 @@ function Login() {
             <div class="absolute bottom-2 right-3 ">
               {showPassword ? (
                 <EyeIcon
-                  className="text-black h-5 w-5 cursor-pointer"
+                  className="text-blue-500 h-5 w-5 cursor-pointer"
                   onClick={togglePassword}
                 />
               ) : (
                 <EyeSlashIcon
-                  className="text-black h-5 w-5 cursor-pointer"
+                  className="text-blue-500 h-5 w-5 cursor-pointer"
                   onClick={togglePassword}
                 />
               )}

@@ -434,7 +434,7 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
+                    <a href="/penjualan_return_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -445,7 +445,7 @@ function SidebarAdmin() {
                         penjualan return
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/penjualan_barang_return_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -456,7 +456,7 @@ function SidebarAdmin() {
                         penjualan barang return
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/pembelian_return_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -467,7 +467,7 @@ function SidebarAdmin() {
                         pembelian return
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/pembelian_barang_return_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -507,7 +507,7 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
+                    <a href="/laporan_salesman_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -518,7 +518,7 @@ function SidebarAdmin() {
                         laporan salesman
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_barang_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -529,7 +529,7 @@ function SidebarAdmin() {
                         laporan barang
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_suplier_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -540,7 +540,7 @@ function SidebarAdmin() {
                         laporan suplier
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_customer_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -551,7 +551,7 @@ function SidebarAdmin() {
                         laporan customer
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_transaksi_beli_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -591,7 +591,7 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
+                    <a href="/laporan_salesman_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -602,7 +602,7 @@ function SidebarAdmin() {
                         laporan salesman
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_barang_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -613,7 +613,7 @@ function SidebarAdmin() {
                         laporan barang
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_suplier_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -624,7 +624,7 @@ function SidebarAdmin() {
                         laporan suplier
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_customer_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -635,7 +635,7 @@ function SidebarAdmin() {
                         laporan customer
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/laporan_transaksi_beli_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -675,7 +675,7 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
+                    <a href="/notifikasi_7_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -686,7 +686,7 @@ function SidebarAdmin() {
                         notifikasi 7
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_30_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -697,7 +697,7 @@ function SidebarAdmin() {
                         notifikasi 30
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_90_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -708,7 +708,7 @@ function SidebarAdmin() {
                         notifikasi 90
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_120_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -719,7 +719,7 @@ function SidebarAdmin() {
                         notifikasi 120
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_365_excelcom">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -759,7 +759,7 @@ function SidebarAdmin() {
                 </ListItem>
                 <AccordionBody className="py-2">
                   <List className="p-0">
-                    <a href="">
+                    <a href="/notifikasi_7_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -770,7 +770,7 @@ function SidebarAdmin() {
                         notifikasi 7
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_30_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -781,7 +781,7 @@ function SidebarAdmin() {
                         notifikasi 30
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_90_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -792,7 +792,7 @@ function SidebarAdmin() {
                         notifikasi 90
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_120_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -803,7 +803,7 @@ function SidebarAdmin() {
                         notifikasi 120
                       </ListItem>
                     </a>
-                    <a href="">
+                    <a href="/notifikasi_365_dinarpos">
                       <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                         <ListItemPrefix>
                           <ChevronRightIcon
@@ -1138,7 +1138,7 @@ function SidebarAdmin() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
+                  <a href="/penjualan_return_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1146,7 +1146,7 @@ function SidebarAdmin() {
                       penjualan return
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/penjualan_barang_return_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1154,7 +1154,7 @@ function SidebarAdmin() {
                       penjualan barang return
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/pembelian_return_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1162,7 +1162,7 @@ function SidebarAdmin() {
                       pembelian return
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/pembelian_barang_return_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1199,7 +1199,7 @@ function SidebarAdmin() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
+                  <a href="/laporan_salesman_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1207,7 +1207,7 @@ function SidebarAdmin() {
                       laporan salesman
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_barang_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1215,7 +1215,7 @@ function SidebarAdmin() {
                       laporan barang
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_suplier_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1223,7 +1223,7 @@ function SidebarAdmin() {
                       laporan suplier
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_customer_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1231,7 +1231,7 @@ function SidebarAdmin() {
                       laporan customer
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_transaksi_beli_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1268,7 +1268,7 @@ function SidebarAdmin() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
+                  <a href="/laporan_salesman_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1276,7 +1276,7 @@ function SidebarAdmin() {
                       laporan salesman
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_barang_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1284,7 +1284,7 @@ function SidebarAdmin() {
                       laporan barang
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_suplier_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1292,7 +1292,7 @@ function SidebarAdmin() {
                       laporan suplier
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_customer_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1300,7 +1300,7 @@ function SidebarAdmin() {
                       laporan customer
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/laporan_transaksi_beli_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1337,15 +1337,7 @@ function SidebarAdmin() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      laporan salesman
-                    </ListItem>
-                  </a>
-                  <a href="">
+                  <a href="/notifikasi_7_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1353,7 +1345,7 @@ function SidebarAdmin() {
                       notifikasi 7
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_30_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1361,7 +1353,7 @@ function SidebarAdmin() {
                       notifikasi 30
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_90_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1369,7 +1361,7 @@ function SidebarAdmin() {
                       notifikasi 90
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_120_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1377,7 +1369,7 @@ function SidebarAdmin() {
                       notifikasi 120
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_365_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1414,15 +1406,7 @@ function SidebarAdmin() {
               </ListItem>
               <AccordionBody className="py-2">
                 <List className="p-0">
-                  <a href="">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      laporan salesman
-                    </ListItem>
-                  </a>
-                  <a href="">
+                  <a href="/notifikasi_7_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1430,7 +1414,7 @@ function SidebarAdmin() {
                       notifikasi 7
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_30_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1438,7 +1422,7 @@ function SidebarAdmin() {
                       notifikasi 30
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_90_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1446,7 +1430,7 @@ function SidebarAdmin() {
                       notifikasi 90
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_120_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
@@ -1454,7 +1438,7 @@ function SidebarAdmin() {
                       notifikasi 120
                     </ListItem>
                   </a>
-                  <a href="">
+                  <a href="/notifikasi_365_dinarpos">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
