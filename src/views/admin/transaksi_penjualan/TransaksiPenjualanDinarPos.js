@@ -512,6 +512,43 @@ function TransaksiPenjualanDinarPos() {
     updateTotalHarga(produk);
   }, [produk]);
 
+  // const options = [
+  //   { value: "1", label: "Option 1" },
+  //   { value: "2", label: "Option 2" },
+  //   { value: "3", label: "Option 3" },
+  //   { value: "4", label: "Option 4" },
+  //   { value: "5", label: "Option 5" },
+  //   { value: "6", label: "Option 6" },
+  //   { value: "7", label: "Option 7" },
+  //   { value: "8", label: "Option 8" },
+  //   { value: "9", label: "Option 9" },
+  //   { value: "10", label: "Option 10" },
+  //   { value: "11", label: "Option 11" },
+  //   { value: "12", label: "Option 12" },
+  //   { value: "13", label: "Option 13" },
+  //   { value: "14", label: "Option 14" },
+  //   { value: "15", label: "Option 15" },
+  //   { value: "16", label: "Option 16" },
+  //   { value: "17", label: "Option 17" },
+  //   { value: "18", label: "Option 18" },
+  //   { value: "19", label: "Option 19" },
+  //   { value: "20", label: "Option 20" },
+  // ];
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const loadMoreOptions = async () => {
+    setIsLoading(true);
+    // Fetch more data based on page number
+    // Example: const moreData = await fetchMoreData(page);
+    // Update barang state with the fetched data
+    // setBarang([...barang, ...moreData]);
+    setPage(page + 1); // Increment page number
+    setIsLoading(false);
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
       <SidebarAdmin />
@@ -559,6 +596,16 @@ function TransaksiPenjualanDinarPos() {
                 onChange={(selectedOption) =>
                   setcustomerId(selectedOption.value)
                 }
+                isLoading={isLoading}
+                onMenuScroll={({ menuHeight, topReached, bottomReached }) => {
+                  if (bottomReached) {
+                    // Check if the user has reached the bottom of the menu
+                    if (page < totalPages) {
+                      // If there are more pages to load
+                      loadMoreOptions();
+                    }
+                  }
+                }}
               />
               <hr className="mt-1 bg-gray-400 h-[0.1em]" />
             </div>
@@ -659,11 +706,11 @@ function TransaksiPenjualanDinarPos() {
                     <tr>
                       <th className="py-3 px-2">Barcode</th>
                       <th className="py-3 px-2">Nama</th>
-                      <th className="py-3 px-2">Harga</th>
+                      <th className="py-3 px-2">Harga (Rp)</th>
                       <th className="py-3 px-2">Disc</th>
-                      <th className="py-3 px-2">Harga Diskon</th>
+                      <th className="py-3 px-2">Harga Diskon (Rp)</th>
                       <th className="py-3 px-2">Jumlah</th>
-                      <th className="py-3 px-2">Total Harga</th>
+                      <th className="py-3 px-2">Total Harga (Rp)</th>
                       <th className="py-3 px-2">Aksi</th>
                     </tr>
                   </thead>
@@ -678,19 +725,19 @@ function TransaksiPenjualanDinarPos() {
                             {down.nama}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {formatRupiah(down.harga)}
+                            {down.harga}
                           </td>
                           <td className="py-3 px-2 text-center border">
                             {down.disc}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {formatRupiah(down.hargaDiskon)}
+                            {down.hargaDiskon}
                           </td>
                           <td className="py-3 px-2 text-center border">
                             {down.jumlah}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {formatRupiah(down.totalHarga)}
+                            {down.totalHarga}
                           </td>
                           <td className="py-2 px-3 flex items-center justify-center border">
                             <div className="flex flex-row gap-3">

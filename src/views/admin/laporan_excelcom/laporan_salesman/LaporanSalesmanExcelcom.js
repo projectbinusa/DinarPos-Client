@@ -27,11 +27,17 @@ function LaporanSalesmanExcelcom() {
     $(tableRef.current).DataTable({});
   };
 
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+
   const getAll = async () => {
     try {
-      const response = await axios.get(`${LAPORAN_SALESMAN}/excelcom`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `${LAPORAN_SALESMAN}/excelcom?bulan=` + currentMonth,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
       setLaporan(response.data.data);
     } catch (error) {
       console.log("get all", error);
@@ -176,7 +182,9 @@ function LaporanSalesmanExcelcom() {
                   <th className="py-2 px-3 font-semibold">Nama Barang</th>
                   <th className="py-2 px-3 font-semibold">Harga</th>
                   <th className="py-2 px-3 font-semibold">QTY</th>
-                  <th className="py-2 px-3 font-semibold">Total Harga Barang</th>
+                  <th className="py-2 px-3 font-semibold">
+                    Total Harga Barang
+                  </th>
                   <th className="py-2 px-3 font-semibold">Total Belanja</th>
                   <th className="py-2 px-3 font-semibold">Total Keseluruhan</th>
                   <th className="py-2 px-3 font-semibold">Aksi</th>
@@ -189,8 +197,8 @@ function LaporanSalesmanExcelcom() {
                       <td className="w-[4%]">{index + 1}</td>
                       <td className="py-2 px-3">{laporan.created_date}</td>
                       <td className="w-[15%] py-2 px-3">{laporan.noFaktur}</td>
-                      <td className="py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="py-2 px-3">{laporan.namaSalesman}</td>
+                      <td className="py-2 px-3">{laporan.salesman.namaSalesman}</td>
+                      <td className="py-2 px-3">{laporan.customer.nama_customer}</td>
                       <td className="py-2 px-3">{laporan.namaSalesman}</td>
                       <td className="py-2 px-3">{laporan.namaSalesman}</td>
                       <td className="py-2 px-3">{laporan.namaSalesman}</td>
