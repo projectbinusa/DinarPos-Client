@@ -1,4 +1,4 @@
-const url = "http://localhost:2000/api";
+const url = "http://api-dinarpos.excellentsistem.com/api";
 
 // DATA USER
 export const API_USER = `${url}/user`;
