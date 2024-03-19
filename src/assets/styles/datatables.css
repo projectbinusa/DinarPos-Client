@@ -22,6 +22,7 @@
   border-radius: 0.2em;
   color: #ffffff;
 }
+
 @media only screen and (max-width: 1024px) {
   .dt-layout-row:nth-child(1),
   .dt-layout-row:nth-child(3) {
@@ -50,6 +51,9 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
 table.dataTable {
   text-align: center;
   border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  overflow: hidden;
+  width: 100%;
 }
 
 table.dataTable thead th {
@@ -83,11 +87,6 @@ table.dataTable tbody tr:nth-child(odd) {
 }
 table.dataTable thead th {
   text-align: center !important;
-}
-
-table.dataTable {
-  border-radius: 5px;
-  overflow: hidden;
 }
 
 table.dataTable tbody {

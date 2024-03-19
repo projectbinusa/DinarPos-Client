@@ -655,11 +655,11 @@ function TransaksiPembelianExcelcom() {
                     <tr>
                       <th className="py-3 px-2">Barcode</th>
                       <th className="py-3 px-2">Nama</th>
-                      <th className="py-3 px-2">Harga</th>
+                      <th className="py-3 px-2">Harga (Rp)</th>
                       <th className="py-3 px-2">Disc</th>
-                      <th className="py-3 px-2">Harga Diskon</th>
+                      <th className="py-3 px-2">Harga Diskon (Rp)</th>
                       <th className="py-3 px-2">Jumlah</th>
-                      <th className="py-3 px-2">Total Harga</th>
+                      <th className="py-3 px-2">Total Harga (Rp)</th>
                       <th className="py-3 px-2">Aksi</th>
                     </tr>
                   </thead>
@@ -674,19 +674,19 @@ function TransaksiPembelianExcelcom() {
                             {down.nama}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {formatRupiah(down.harga)}
+                            {down.harga}
                           </td>
                           <td className="py-3 px-2 text-center border">
                             {down.disc}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {formatRupiah(down.hargaDiskon)}
+                            {down.hargaDiskon}
                           </td>
                           <td className="py-3 px-2 text-center border">
                             {down.jumlah}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {formatRupiah(down.totalHarga)}
+                            {down.totalHarga}
                           </td>
                           <td className="py-2 px-3 flex items-center justify-center border">
                             <div className="flex flex-row gap-3">

@@ -29,9 +29,12 @@ function LaporanBarangExcelcom() {
     $(tableRef.current).DataTable({});
   };
 
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+
   const getAll = async () => {
     try {
-      const response = await axios.get(`${LAPORAN_BARANG}/excelcom`, {
+      const response = await axios.get(`${LAPORAN_BARANG}/excelcom?bulan=` + currentMonth, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setBarangs(response.data.data);
@@ -169,7 +172,7 @@ function LaporanBarangExcelcom() {
                   <th className="py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="py-2 px-3 font-semibold">Tanggal</th>
                   <th className="py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
+                  <th className="py-2 px-3 font-semibold">Barcode Barang</th>
                   <th className="py-2 px-3 font-semibold">Nama Customer</th>
                   <th className="py-2 px-3 font-semibold">Jumlah</th>
                   <th className="py-2 px-3 font-semibold">Unit</th>
@@ -180,16 +183,19 @@ function LaporanBarangExcelcom() {
               </thead>
               <tbody>
                 {barangs.length > 0 ? (
-                  barangs.map((penjualan, index) => (
+                  barangs.map((row, index) => (
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{penjualan.created_date}</td>
+                      <td className="py-2 px-3">{row.created_date}</td>
                       <td className="w-[15%] py-2 px-3">
-                        {penjualan.noFaktur}
+                        {row.noFaktur}
                       </td>
-                      <td className="py-2 px-3">{penjualan.namaCustomer}</td>
-                      <td className="py-2 px-3">{penjualan.namaSalesman}</td>
-                      <td className="py-2 px-3">{penjualan.namaSalesman}</td>
+                      <td className="py-2 px-3">{row.barcodeBarang}</td>
+                      <td className="py-2 px-3">{row.transaksi.customer.nama_customer}</td>
+                      <td className="py-2 px-3">{row.qty}</td>
+                      <td className="py-2 px-3">{row.qty}</td>
+                      <td className="py-2 px-3">{row.hargaBrng}</td>
+                      <td className="py-2 px-3">{row.totalHargaBarang}</td>
                       <td className="py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <IconButton size="md" color="light-blue">

@@ -62,21 +62,6 @@ function DataBarang() {
     }
   }, [barangs]);
 
-  // FORMAT RUPIAH
-  const formatRupiah = (number) => {
-    if (isNaN(number)) {
-      return "Invalid input";
-    }
-
-    const formattedNumber = new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(number);
-
-    return formattedNumber;
-  };
-
   // DELETE BARANG
   const deleteBarang = async (id) => {
     Swal.fire({
@@ -217,8 +202,8 @@ function DataBarang() {
                   <th className="py-2 px-3 font-semibold">Barcode Barang</th>
                   <th className="py-2 px-3 font-semibold">Nama Barang</th>
                   <th className="py-2 px-3 font-semibold">Unit Barang</th>
-                  <th className="py-2 px-3 font-semibold">Harga Beli</th>
-                  <th className="py-2 px-3 font-semibold">Harga Jual</th>
+                  <th className="py-2 px-3 font-semibold">Harga Beli <span className="block">(Rp)</span></th>
+                  <th className="py-2 px-3 font-semibold">Harga Jual <span className="block">(Rp)</span></th>
                   <th className="py-2 px-3 font-semibold">Jumlah Stok</th>
                   <th className="py-2 px-3 font-semibold">Aksi</th>
                 </tr>
@@ -231,12 +216,8 @@ function DataBarang() {
                       <td className="py-2 px-3">{barang.barcodeBarang}</td>
                       <td className="py-2 px-3">{barang.namaBarang}</td>
                       <td className="py-2 px-3">{barang.unit}</td>
-                      <td className="py-2 px-3">
-                        {formatRupiah(barang.hargaBeli)}
-                      </td>
-                      <td className="py-2 px-3">
-                        {formatRupiah(barang.hargaBarang)}
-                      </td>
+                      <td className="py-2 px-3">{barang.hargaBeli}</td>
+                      <td className="py-2 px-3">{barang.hargaBarang}</td>
                       <td className="py-2 px-3">{barang.jumlahStok}</td>
                       <td className="py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
@@ -323,7 +304,12 @@ function DataBarang() {
         <DialogHeader>Export Data Barang</DialogHeader>
         <DialogBody>
           <p className="text-black">Silahkan export di bawah ini</p>
-          <Button variant="gradient" color="blue" className="mt-2 mb-5" onClick={exportDataBarang}>
+          <Button
+            variant="gradient"
+            color="blue"
+            className="mt-2 mb-5"
+            onClick={exportDataBarang}
+          >
             Export Data Barang
           </Button>
           <hr />
