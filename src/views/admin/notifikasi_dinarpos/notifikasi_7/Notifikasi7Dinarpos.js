@@ -9,38 +9,38 @@ import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import { NOTIFIKASI_7_DINARPOS } from "../../../../utils/BaseUrl";
 
 function Notifikasi7Dinarpos() {
-    const tableRef = useRef(null);
-    const [notifikasis, setNotifikasi] = useState([]);
-  
-    const initializeDataTable = () => {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-  
-      $(tableRef.current).DataTable({});
-    };
-  
-    const getAll = async () => {
-      try {
-        const response = await axios.get(`${NOTIFIKASI_7_DINARPOS}`, {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        });
-        setNotifikasi(response.data.data);
-      } catch (error) {
-        console.log("get all", error);
-      }
-    };
-  
-    useEffect(() => {
-      getAll();
-    }, []);
-  
-    useEffect(() => {
-      if (notifikasis && notifikasis.length > 0) {
-        initializeDataTable();
-      }
-    }, [notifikasis]);
-  
+  const tableRef = useRef(null);
+  const [notifikasis, setNotifikasi] = useState([]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
+
+    $(tableRef.current).DataTable({});
+  };
+
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${NOTIFIKASI_7_DINARPOS}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setNotifikasi(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
+  useEffect(() => {
+    if (notifikasis && notifikasis.length > 0) {
+      initializeDataTable();
+    }
+  }, [notifikasis]);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -104,7 +104,23 @@ function Notifikasi7Dinarpos() {
                             <CheckIcon className="w-6 h-6 white" />
                           </IconButton>
                           <IconButton size="md" color="orange">
-                            <PhoneIcon className="w-6 h-6 white" />
+                            <IconButton
+                              size="md"
+                              color="orange"
+                              onClick={() => {
+                                const phone = encodeURIComponent(
+                                  penjualan.noTelpCustomer
+                                ); // Mengkodekan nomor telepon
+                                const message = encodeURIComponent(
+                                  `Selamat pagi kak ${penjualan.namaCustomer}%0APerkenalkan saya ${penjualan.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                );
+                                window.open(
+                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                                );
+                              }}
+                            >
+                              <PhoneIcon className="w-6 h-6 white" />
+                            </IconButton>
                           </IconButton>
                         </div>
                       </td>{" "}
@@ -190,7 +206,7 @@ function Notifikasi7Dinarpos() {
         </main>
       </div>
     </section>
-  )
+  );
 }
 
-export default Notifikasi7Dinarpos
+export default Notifikasi7Dinarpos;

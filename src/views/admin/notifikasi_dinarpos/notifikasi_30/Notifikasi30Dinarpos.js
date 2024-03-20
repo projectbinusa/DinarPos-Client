@@ -104,7 +104,23 @@ function Notifikasi30Dinarpos() {
                             <CheckIcon className="w-6 h-6 white" />
                           </IconButton>
                           <IconButton size="md" color="orange">
-                            <PhoneIcon className="w-6 h-6 white" />
+                          <IconButton
+                              size="md"
+                              color="orange"
+                              onClick={() => {
+                                const phone = encodeURIComponent(
+                                  penjualan.noTelpCustomer
+                                ); // Mengkodekan nomor telepon
+                                const message = encodeURIComponent(
+                                  `Selamat pagi kak ${penjualan.namaCustomer}%0APerkenalkan saya ${penjualan.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                );
+                                window.open(
+                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                                );
+                              }}
+                            >
+                              <PhoneIcon className="w-6 h-6 white" />
+                            </IconButton>
                           </IconButton>
                         </div>
                       </td>{" "}
