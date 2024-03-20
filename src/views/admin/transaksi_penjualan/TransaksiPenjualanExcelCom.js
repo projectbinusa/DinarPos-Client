@@ -455,7 +455,7 @@ function TransaksiPenjualanExcelCom() {
       cashCredit: cashCredit,
       diskon: diskons,
       idCustomer: customerId,
-      idMarketting: markettingId,
+      idSalesman: markettingId,
       keterangan: keterangan,
       pembayaran: pembayaran,
       potongan: potongan,
