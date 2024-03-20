@@ -1,8 +1,8 @@
 // Local
 const url = "http://localhost:2000/api";
 
-//Deploy
-//  const url = "http://41.216.186.59:2000/api";
+// Deploy
+// const url = "http://41.216.186.59:2000/api";
 // const url = "http://api-dinarpos.excellentsistem.com/api";
 
 // DATA USER
@@ -28,6 +28,7 @@ export const API_TRANSAKSI_BELI_DINARPOS = `${url}/transaksi/pembelian/dinarpos`
 export const API_TRANSAKSI_JUAL_EXCELCOM = `${url}/transaksi/penjualan/excelcom`;
 export const API_TRANSAKSI_JUAL_DINARPOS = `${url}/transaksi/penjualan/dinarpos`;
 export const GET_TRANSAKSI_BELI = `${url}/transaksi/pembelian`;
+export const GET_TRANSAKSI_JUAL = `${url}/transaksi/penjualan`;
 export const GET_BARANG_TRANSAKSI_BELI_EXCELCOM = `${url}/transaksi/barang/pembelian/excelcom`;
 export const GET_BARANG_TRANSAKSI_BELI_DINARPOS = `${url}/transaksi/barang/pembelian/dinarpos`;
 

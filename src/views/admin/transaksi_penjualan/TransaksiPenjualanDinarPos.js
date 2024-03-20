@@ -856,6 +856,7 @@ function TransaksiPenjualanDinarPos() {
                   id="pembayaran"
                   onChange={(e) => setpembayaran(e.target.value)}
                   onKeyUp={getDiskon}
+                  defaultValue={0}
                 />
                 <Input
                   color="blue"
@@ -864,7 +865,7 @@ function TransaksiPenjualanDinarPos() {
                   type="number"
                   placeholder="Potongan"
                   id="potongan"
-                  value={potongan}
+                  defaultValue={0}
                   onChange={(e) => setpotongan(e.target.value)}
                   onKeyUp={getPotongan}
                 />

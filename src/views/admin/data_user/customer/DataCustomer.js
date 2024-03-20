@@ -153,6 +153,14 @@ function DataCustomer() {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
         history.push("/");
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Data Sudah Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
       } else {
         Swal.fire({
           icon: "error",
@@ -256,7 +264,9 @@ function DataCustomer() {
                   customers.map((customer, index) => (
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{customer.salesman.namaSalesman}</td>
+                      <td className="py-2 px-3">
+                        {customer.salesman.namaSalesman}
+                      </td>
                       <td className="py-2 px-3">{customer.nama_customer}</td>
                       <td className="py-2 px-3">{customer.jenis}</td>
                       <td className="py-2 px-3">{customer.alamat}</td>

@@ -77,7 +77,15 @@ function AddCustomer() {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
         history.push("/");
-      } else {
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Data Sudah Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }else {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",

@@ -37,7 +37,6 @@ function AddStokMasuk() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setbarang(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +49,6 @@ function AddStokMasuk() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setsuplier(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -133,6 +131,45 @@ function AddStokMasuk() {
     }
   };
 
+  // SELECT
+  const [value, setValue] = useState("");
+  const [options, setOptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]); // Fetch data when currentPage changes
+
+  const fetchData = async () => {
+    const response = await fetch(
+      `http://localhost:2000/api/supplier/pagination?limit=${itemsPerPage}&page=${currentPage}&search=S-&sort=id`,
+      {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      }
+    );
+    const data = await response.json();
+    setOptions(data.data);
+    setTotalPages(Math.ceil(data.pagination.total / itemsPerPage));
+  };
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setValue(value);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleOptionSelect = (selectedValue) => {
+    setValue(selectedValue);
+    setOptions([]);
+    
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -161,7 +198,63 @@ function AddStokMasuk() {
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addStokMasuk}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div>
+              <div className="relative">
+                <Input
+                  variant="static"
+                  label="Suplier"
+                  placeholder="Masukkan Kode Suplier"
+                  value={value}
+                  onChange={handleChange}
+                  color="blue"
+                />
+                {options.length > 0 && (
+                  <>
+                    <ul style={{ listStyle: "none", padding: 0 }} className="absolute z-30 bg-white w-full">
+                      {options.map((option, index) => (
+                        <li
+                          key={index}
+                          onClick={() => handleOptionSelect(option.kodeSuplier)}
+                          className="cursor-pointer py-1.5 px-1 hover:bg-blue-50"
+                        >
+                          {option.kodeSuplier}
+                        </li>
+                      ))}
+                    </ul>
+                    {totalPages > 1 && (
+                      <ul
+                        style={{
+                          listStyle: "none",
+                          padding: 0,
+                          marginTop: "8px",
+                        }}
+                      >
+                        {Array.from(
+                          { length: totalPages },
+                          (_, index) => index + 1
+                        ).map((pageNumber) => (
+                          <li
+                            key={pageNumber}
+                            onClick={() => handlePageChange(pageNumber)}
+                            style={{
+                              display: "inline-block",
+                              margin: "0 4px",
+                              padding: "4px 8px",
+                              border: "1px solid #ccc",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              backgroundColor:
+                                pageNumber === currentPage ? "#ccc" : "#fff",
+                            }}
+                          >
+                            {pageNumber}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                )}
+              </div>
+              {/* <div>
                 <label
                   htmlFor="suplier"
                   className="text-[14px] text-blue-gray-400"
@@ -181,7 +274,7 @@ function AddStokMasuk() {
                   onChange={(selectedOption) => setsuplierId(selectedOption.value)}
                 />
                 <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-              </div>
+              </div> */}
               <div>
                 <label
                   htmlFor="barang"
@@ -199,7 +292,9 @@ function AddStokMasuk() {
                   })}
                   placeholder="Pilih Barang"
                   styles={customStyles}
-                  onChange={(selectedOption) => setbarangId(selectedOption.value)}
+                  onChange={(selectedOption) =>
+                    setbarangId(selectedOption.value)
+                  }
                 />
                 <hr className="mt-1 bg-gray-400 h-[0.1em]" />
               </div>

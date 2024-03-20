@@ -22,6 +22,7 @@ function AddBarang() {
   const [unit, setunit] = useState("");
   const [hargaBeli, sethargaBeli] = useState("");
   const [hargaJual, sethargaJual] = useState("");
+  const [duplikat, setduplikat] = useState(true);
 
   const history = useHistory();
 
@@ -54,6 +55,14 @@ function AddBarang() {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
         history.push("/");
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Data Sudah Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
       } else {
         Swal.fire({
           icon: "error",
@@ -65,9 +74,6 @@ function AddBarang() {
       }
     }
   };
-
-  
-
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />

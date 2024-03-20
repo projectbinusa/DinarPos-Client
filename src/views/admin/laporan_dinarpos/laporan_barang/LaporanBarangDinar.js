@@ -31,7 +31,7 @@ function LaporanBarangDinar() {
 
   const getAll = async () => {
     try {
-      const response = await axios.get(`${LAPORAN_BARANG}/dinarpos`, {
+      const response = await axios.get(`${LAPORAN_BARANG}/dinarpos?bulan=`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setBarangs(response.data.data);
@@ -169,7 +169,7 @@ function LaporanBarangDinar() {
                   <th className="py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="py-2 px-3 font-semibold">Tanggal</th>
                   <th className="py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
+                  <th className="py-2 px-3 font-semibold">Barcode Barang</th>
                   <th className="py-2 px-3 font-semibold">Nama Customer</th>
                   <th className="py-2 px-3 font-semibold">Jumlah</th>
                   <th className="py-2 px-3 font-semibold">Unit</th>
@@ -187,9 +187,9 @@ function LaporanBarangDinar() {
                       <td className="w-[15%] py-2 px-3">
                         {penjualan.noFaktur}
                       </td>
-                      <td className="py-2 px-3">{penjualan.namaCustomer}</td>
-                      <td className="py-2 px-3">{penjualan.namaSalesman}</td>
-                      <td className="py-2 px-3">{penjualan.namaSalesman}</td>
+                      <td className="py-2 px-3">{penjualan.barcodeBarang}</td>
+                      <td className="py-2 px-3">{penjualan.customer.nama_customer}</td>
+                      <td className="py-2 px-3">{penjualan.qty}</td>
                       <td className="py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <IconButton size="md" color="light-blue">
