@@ -139,25 +139,32 @@ function AddStokMasuk() {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    fetchData();
-  }, [currentPage]); // Fetch data when currentPage changes
+    if (value !== "") {
+      fetchData();
+    }
+  }, [currentPage]);
 
   const fetchData = async () => {
-    const response = await fetch(
-      `http://localhost:2000/api/supplier/pagination?limit=${itemsPerPage}&page=${currentPage}&search=S-&sort=id`,
-      {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      }
-    );
-    const data = await response.json();
-    setOptions(data.data);
-    setTotalPages(Math.ceil(data.pagination.total / itemsPerPage));
+    if (value.trim() !== "") {
+      const response = await fetch(
+        `${API_SUPLIER}/pagination?limit=${itemsPerPage}&page=${currentPage}&search=${value}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setOptions(data.data);
+      setTotalPages(Math.ceil(data.pagination.total / itemsPerPage));
+    } else {
+      return;
+    }
   };
 
   const handleChange = (e) => {
     const { value } = e.target;
     setValue(value);
     setCurrentPage(1);
+    fetchData();
   };
 
   const handlePageChange = (pageNumber) => {
@@ -167,7 +174,6 @@ function AddStokMasuk() {
   const handleOptionSelect = (selectedValue) => {
     setValue(selectedValue);
     setOptions([]);
-    
   };
 
   return (
@@ -209,7 +215,10 @@ function AddStokMasuk() {
                 />
                 {options.length > 0 && (
                   <>
-                    <ul style={{ listStyle: "none", padding: 0 }} className="absolute z-30 bg-white w-full">
+                    <ul
+                      style={{ listStyle: "none", padding: 0 }}
+                      className="absolute z-30 bg-white w-full border shadow-sm"
+                    >
                       {options.map((option, index) => (
                         <li
                           key={index}

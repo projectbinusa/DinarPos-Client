@@ -5,7 +5,12 @@ import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
   IconButton,
+  Input,
   Typography,
 } from "@material-tailwind/react";
 import axios from "axios";
@@ -17,8 +22,12 @@ import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function DataSuplier() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(!open);
+
   const tableRef = useRef(null);
   const [supliers, setSupliers] = useState([]);
+  const [excel, setExcel] = useState("");
 
   const history = useHistory();
 
@@ -85,7 +94,88 @@ function DataSuplier() {
       }
     });
   };
-  
+
+  // DOWNLOAD FORMAT
+  const downloadFormat = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_SUPLIER}/template`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Template_Suplier.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
+  // EXPORT SUPLIER
+  const exportDataSuplier = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_SUPLIER}/export`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Data_Suplier.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
+  // IMPORT SUPLIER
+  const importFromExcel = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("file", excel);
+
+    await axios
+      .post(`${API_SUPLIER}/import`, formData, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Sukses!",
+          text: " Berhasil Ditambahkan",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Import Barang Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(err);
+      });
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -111,7 +201,27 @@ function DataSuplier() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <div className="block">
+          <div className="flex justify-between">
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div>
+                <Button
+                  onClick={handleOpen}
+                  variant="gradient"
+                  color="light-blue"
+                >
+                  Import
+                </Button>
+              </div>
+              <div>
+                <Button
+                  variant="gradient"
+                  color="light-blue"
+                  onClick={exportDataSuplier}
+                >
+                  Export
+                </Button>
+              </div>
+            </div>
             <a href="/add_suplier">
               <Button variant="gradient" color="blue">
                 Tambah Suplier
@@ -179,6 +289,55 @@ function DataSuplier() {
           </div>
         </main>
       </div>
+
+      {/* MODAL IMPORT */}
+      <Dialog open={open} handler={handleOpen} size="md">
+        <DialogHeader>Import Data Suplier</DialogHeader>
+        <DialogBody>
+          <p className="text-black">Silahkan download format di bawah ini</p>
+          <Button
+            variant="gradient"
+            color="blue"
+            className="mt-2 mb-5"
+            onClick={downloadFormat}
+          >
+            Download Format
+          </Button>
+          <hr />
+        </DialogBody>
+        <form onSubmit={importFromExcel}>
+          <DialogBody>
+            <Input
+              label="Pilih File"
+              variant="static"
+              color="blue"
+              type="file"
+              required
+              accept=".xlsx"
+              onChange={(e) => setExcel(e.target.files[0])}
+            />{" "}
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="text"
+              color="gray"
+              onClick={handleOpen}
+              className="mr-1"
+            >
+              <span>Kembali</span>
+            </Button>
+            <Button
+              variant="gradient"
+              color="blue"
+              onClick={handleOpen}
+              type="submit"
+            >
+              <span>Import</span>
+            </Button>
+          </DialogFooter>
+        </form>
+      </Dialog>
+      {/* END MODAL IMPORT */}
     </section>
   );
 }

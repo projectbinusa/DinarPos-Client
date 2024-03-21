@@ -31,6 +31,8 @@ export const GET_TRANSAKSI_BELI = `${url}/transaksi/pembelian`;
 export const GET_TRANSAKSI_JUAL = `${url}/transaksi/penjualan`;
 export const GET_BARANG_TRANSAKSI_BELI_EXCELCOM = `${url}/transaksi/barang/pembelian/excelcom`;
 export const GET_BARANG_TRANSAKSI_BELI_DINARPOS = `${url}/transaksi/barang/pembelian/dinarpos`;
+export const GET_BARANG_TRANSAKSI_JUAL_EXCELCOM = `${url}/transaksi/barang/penjualan/excelcom`;
+export const GET_BARANG_TRANSAKSI_JUAL_DINARPOS = `${url}/transaksi/barang/penjualan/dinarpos`;
 
 // LAPORAN
 export const LAPORAN_BARANG = `${url}/laporan/barang`;

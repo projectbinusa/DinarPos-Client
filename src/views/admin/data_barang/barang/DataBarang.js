@@ -29,6 +29,7 @@ function DataBarang() {
 
   const tableRef = useRef(null);
   const [barangs, setBarang] = useState([]);
+  const [excel, setExcel] = useState("");
 
   const history = useHistory();
 
@@ -96,6 +97,7 @@ function DataBarang() {
     });
   };
 
+  // DOWNLOAD FORMAT
   const downloadFormat = async (e) => {
     e.preventDefault();
     try {
@@ -117,6 +119,7 @@ function DataBarang() {
     }
   };
 
+  // EXPORT BARANG
   const exportDataBarang = async (e) => {
     e.preventDefault();
     try {
@@ -136,6 +139,43 @@ function DataBarang() {
     } catch (error) {
       console.error("Error saat mengunduh file:", error);
     }
+  };
+
+  // IMPORT BARANG
+  const importFromExcel = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("file", excel);
+
+    await axios
+      .post(`${API_BARANG}/import`, formData, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Sukses!",
+          text: " Berhasil Ditambahkan",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Import Barang Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(err);
+      });
   };
 
   return (
@@ -202,8 +242,12 @@ function DataBarang() {
                   <th className="py-2 px-3 font-semibold">Barcode Barang</th>
                   <th className="py-2 px-3 font-semibold">Nama Barang</th>
                   <th className="py-2 px-3 font-semibold">Unit Barang</th>
-                  <th className="py-2 px-3 font-semibold">Harga Beli <span className="block">(Rp)</span></th>
-                  <th className="py-2 px-3 font-semibold">Harga Jual <span className="block">(Rp)</span></th>
+                  <th className="py-2 px-3 font-semibold">
+                    Harga Beli <span className="block">(Rp)</span>
+                  </th>
+                  <th className="py-2 px-3 font-semibold">
+                    Harga Jual <span className="block">(Rp)</span>
+                  </th>
                   <th className="py-2 px-3 font-semibold">Jumlah Stok</th>
                   <th className="py-2 px-3 font-semibold">Aksi</th>
                 </tr>
@@ -268,13 +312,16 @@ function DataBarang() {
           </Button>
           <hr />
         </DialogBody>
-        <form action="" className="">
+        <form onSubmit={importFromExcel}>
           <DialogBody>
             <Input
               label="Pilih File"
               variant="static"
               color="blue"
               type="file"
+              required
+              accept=".xlsx"
+              onChange={(e) => setExcel(e.target.files[0])}
             />{" "}
           </DialogBody>
           <DialogFooter>
@@ -346,7 +393,7 @@ function DataBarang() {
               onClick={handleOpen2}
               type="submit"
             >
-              <span>EXPORT persediaan barang</span>
+              <span>Export Barang</span>
             </Button>
           </DialogFooter>
         </form>

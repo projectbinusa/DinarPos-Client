@@ -66,6 +66,8 @@ import LaporanTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan
 import DashboardKasir from "./views/kasir/DashboardKasir.js";
 import CetakStrukExcelcom from "./views/admin/transaksi_pembeliaan/CetakStrukExcelcom.js";
 import CetakStrukDinarpos from "./views/admin/transaksi_pembeliaan/CetakStrukDinarpos.js";
+import CetakStrukPenjualanDinar from "./views/admin/transaksi_penjualan/CetakStrukPenjualanDinar.js";
+import CetakStrukPenjualanExcelcom from "./views/admin/transaksi_penjualan/CetakSturkPenjualanExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -104,6 +106,16 @@ function App() {
             <PrivateRoute
               path="/transaksi_penjualan_dinarpos"
               component={TransaksiPenjualanDinarPos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/cetak_struk_transaksi_penjualan_dinarpos/:id"
+              component={CetakStrukPenjualanDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/cetak_struk_transaksi_penjualan_excelcom/:id"
+              component={CetakStrukPenjualanExcelcom}
               isAuthenticated={true}
             />
 

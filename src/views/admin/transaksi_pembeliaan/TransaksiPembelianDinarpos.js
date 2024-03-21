@@ -488,16 +488,6 @@ function TransaksiPembelianDinarpos() {
               window.location.reload();
             }
           });
-          // Swal.fire({
-          //   title: "Pembelian Berhasil!",
-          //   icon: "success",
-          //   showConfirmButton: false,
-          //   timer: 1500,
-          // });
-          // history.push("/transaksi_pembelian_dinarpos");
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1500);
         } else {
           alert("gagal");
         }
