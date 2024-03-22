@@ -72,11 +72,11 @@ function StokMasuk() {
               </Button>
             </a>
           </div>
-          <div className="rounded my-5 w-full overflow-auto">
+          <div className="rounded my-5 w-full overflow-x-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto w-full"
+              className="rounded-sm table-auto min-w-full"
             >
               <thead className="border-b-2 ">
                 <tr>

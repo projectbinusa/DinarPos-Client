@@ -253,7 +253,7 @@ function TransaksiPenjualanDinarPos() {
             nama: res.data.namaBarang,
             harga: hargaBrngs,
             disc: diskon,
-            hargaDiskon: hargaDiskon,
+            hargaDiskon: jmlDiskon,
             jumlah: jumlah,
             totalHarga: totalHarga,
           };
@@ -515,43 +515,34 @@ function TransaksiPenjualanDinarPos() {
     updateTotalHarga(produk);
   }, [produk]);
 
-  // const options = [
-  //   { value: "1", label: "Option 1" },
-  //   { value: "2", label: "Option 2" },
-  //   { value: "3", label: "Option 3" },
-  //   { value: "4", label: "Option 4" },
-  //   { value: "5", label: "Option 5" },
-  //   { value: "6", label: "Option 6" },
-  //   { value: "7", label: "Option 7" },
-  //   { value: "8", label: "Option 8" },
-  //   { value: "9", label: "Option 9" },
-  //   { value: "10", label: "Option 10" },
-  //   { value: "11", label: "Option 11" },
-  //   { value: "12", label: "Option 12" },
-  //   { value: "13", label: "Option 13" },
-  //   { value: "14", label: "Option 14" },
-  //   { value: "15", label: "Option 15" },
-  //   { value: "16", label: "Option 16" },
-  //   { value: "17", label: "Option 17" },
-  //   { value: "18", label: "Option 18" },
-  //   { value: "19", label: "Option 19" },
-  //   { value: "20", label: "Option 20" },
-  // ];
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const loadMoreOptions = async () => {
-    setIsLoading(true);
-    // Fetch more data based on page number
-    // Example: const moreData = await fetchMoreData(page);
-    // Update barang state with the fetched data
-    // setBarang([...barang, ...moreData]);
-    setPage(page + 1); // Increment page number
-    setIsLoading(false);
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_CUSTOMER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
   };
 
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
       <SidebarAdmin />
@@ -579,7 +570,47 @@ function TransaksiPenjualanDinarPos() {
         {/* FORM */}
         <div className="my-10">
           <div className="my-8">
-            <div>
+            <div className="flex gap-2 items-end">
+              <Input
+                label="Customer"
+                variant="static"
+                color="blue"
+                list="customer-list"
+                id="customer"
+                name="customer"
+                onChange={(event) => {
+                  handleChange(event);
+                  setcustomerId(event.target.value);
+                }}
+                placeholder="Pilih Customer"
+              />
+              <datalist id="customer-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.id}>{option.nama_customer}</option>
+                    ))}
+                  </>
+                )}
+              </datalist>
+
+              <div className="flex gap-2">
+                <button className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                {/* <span>Page {currentPage}</span> */}
+                <button className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+            {/* <div>
               <label
                 htmlFor="customer"
                 className="text-[14px] text-blue-gray-400"
@@ -599,19 +630,9 @@ function TransaksiPenjualanDinarPos() {
                 onChange={(selectedOption) =>
                   setcustomerId(selectedOption.value)
                 }
-                isLoading={isLoading}
-                onMenuScroll={({ menuHeight, topReached, bottomReached }) => {
-                  if (bottomReached) {
-                    // Check if the user has reached the bottom of the menu
-                    if (page < totalPages) {
-                      // If there are more pages to load
-                      loadMoreOptions();
-                    }
-                  }
-                }}
               />
               <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-            </div>
+            </div> */}
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
               <Button onClick={handleOpen} variant="gradient" color="blue">

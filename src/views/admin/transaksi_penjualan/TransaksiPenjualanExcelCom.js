@@ -14,7 +14,12 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { API_BARANG, API_CUSTOMER, API_SALESMAN, API_TRANSAKSI_JUAL_EXCELCOM } from "../../../utils/BaseUrl";
+import {
+  API_BARANG,
+  API_CUSTOMER,
+  API_SALESMAN,
+  API_TRANSAKSI_JUAL_EXCELCOM,
+} from "../../../utils/BaseUrl";
 import axios from "axios";
 import ModalTambahCustomer from "../modal/ModalTambahCustomer";
 import ModalTambahCustomerCp from "../modal/ModalTambahCustomerCp";
@@ -248,7 +253,7 @@ function TransaksiPenjualanExcelCom() {
             nama: res.data.namaBarang,
             harga: hargaBrngs,
             disc: diskon,
-            hargaDiskon: hargaDiskon,
+            hargaDiskon: jmlDiskon,
             jumlah: jumlah,
             totalHarga: totalHarga,
           };
