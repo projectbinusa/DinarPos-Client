@@ -160,7 +160,7 @@ function TransaksiPenjualanExcelCom() {
         })
         .then((res) => {
           setsisa(res.data.data.jumlahStok);
-          sethargaBrng(res.data.data.hargaBeli);
+          sethargaBrng(res.data.data.hargaBarang);
         })
         .catch((err) => {
           console.error(err);
@@ -311,7 +311,8 @@ function TransaksiPenjualanExcelCom() {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
     if (pembayaran < total) {
-      $("#kembalian").html("0");
+      $("#kembalian").html("Rp 0,00");
+      $("#bayar").attr("disabled", "disabled");
     } else {
       var kembalian = parseInt(pembayaran - total);
       $("#kembalian").html(formatRupiah(kembalian));

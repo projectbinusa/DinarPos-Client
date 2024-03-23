@@ -160,7 +160,7 @@ function TransaksiPenjualanDinarPos() {
         })
         .then((res) => {
           setsisa(res.data.data.jumlahStok);
-          sethargaBrng(res.data.data.hargaBeli);
+          sethargaBrng(res.data.data.hargaBarang);
         })
         .catch((err) => {
           console.error(err);

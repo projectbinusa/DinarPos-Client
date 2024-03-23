@@ -68,6 +68,7 @@ import CetakStrukExcelcom from "./views/admin/transaksi_pembeliaan/CetakStrukExc
 import CetakStrukDinarpos from "./views/admin/transaksi_pembeliaan/CetakStrukDinarpos.js";
 import CetakStrukPenjualanDinar from "./views/admin/transaksi_penjualan/CetakStrukPenjualanDinar.js";
 import CetakStrukPenjualanExcelcom from "./views/admin/transaksi_penjualan/CetakSturkPenjualanExcelcom.js";
+import PrintByTanggal from "./views/admin/laporan_excelcom/laporan_salesman/PrintByTanggal.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -412,9 +413,15 @@ function App() {
               component={LaporanSuplierExcelcom}
               isAuthenticated={true}
             />
+            {/* LAPORAN SALESMAN */}
             <PrivateRoute
               path="/laporan_salesman_excelcom"
               component={LaporanSalesmanExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/tanggalfilter_salesman_excelcom"
+              component={PrintByTanggal}
               isAuthenticated={true}
             />
             <PrivateRoute

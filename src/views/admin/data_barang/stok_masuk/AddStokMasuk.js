@@ -131,49 +131,62 @@ function AddStokMasuk() {
     }
   };
 
-  // SELECT
-  const [value, setValue] = useState("");
-  const [options, setOptions] = useState([]);
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 10;
 
-  useEffect(() => {
-    if (value !== "") {
-      fetchData();
-    }
-  }, [currentPage]);
+  const [values2, setvalues2] = useState("");
+  const [options2, setoptions2] = useState([]);
+  const [currentPage2, setCurrentPage2] = useState(1);
 
-  const fetchData = async () => {
-    if (value.trim() !== "") {
+  const handle = async () => {
+    if (values.trim() !== "") {
       const response = await fetch(
-        `${API_SUPLIER}/pagination?limit=${itemsPerPage}&page=${currentPage}&search=${value}&sort=1`,
+        `${API_SUPLIER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
       const data = await response.json();
-      setOptions(data.data);
-      setTotalPages(Math.ceil(data.pagination.total / itemsPerPage));
+      setoptions(data.data);
+      console.log(data);
     } else {
       return;
     }
   };
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setValue(value);
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
     setCurrentPage(1);
-    fetchData();
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handleBarang = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_BARANG}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions2(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
   };
 
-  const handleOptionSelect = (selectedValue) => {
-    setValue(selectedValue);
-    setOptions([]);
+  useEffect(() => {
+    handleBarang();
+  }, [currentPage2, values2]);
+
+  const handleChangeBarang = (event) => {
+    setvalues2(event.target.value);
+    setCurrentPage2(1);
   };
 
   return (
@@ -204,108 +217,94 @@ function AddStokMasuk() {
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addStokMasuk}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="relative">
+              <div className="flex gap-2 items-end">
                 <Input
-                  variant="static"
                   label="Suplier"
-                  placeholder="Masukkan Kode Suplier"
-                  value={value}
-                  onChange={handleChange}
+                  variant="static"
                   color="blue"
-                />
-                {options.length > 0 && (
-                  <>
-                    <ul
-                      style={{ listStyle: "none", padding: 0 }}
-                      className="absolute z-30 bg-white w-full border shadow-sm"
-                    >
-                      {options.map((option, index) => (
-                        <li
-                          key={index}
-                          onClick={() => handleOptionSelect(option.kodeSuplier)}
-                          className="cursor-pointer py-1.5 px-1 hover:bg-blue-50"
-                        >
-                          {option.kodeSuplier}
-                        </li>
-                      ))}
-                    </ul>
-                    {totalPages > 1 && (
-                      <ul
-                        style={{
-                          listStyle: "none",
-                          padding: 0,
-                          marginTop: "8px",
-                        }}
-                      >
-                        {Array.from(
-                          { length: totalPages },
-                          (_, index) => index + 1
-                        ).map((pageNumber) => (
-                          <li
-                            key={pageNumber}
-                            onClick={() => handlePageChange(pageNumber)}
-                            style={{
-                              display: "inline-block",
-                              margin: "0 4px",
-                              padding: "4px 8px",
-                              border: "1px solid #ccc",
-                              borderRadius: "4px",
-                              cursor: "pointer",
-                              backgroundColor:
-                                pageNumber === currentPage ? "#ccc" : "#fff",
-                            }}
-                          >
-                            {pageNumber}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                )}
-              </div>
-              {/* <div>
-                <label
-                  htmlFor="suplier"
-                  className="text-[14px] text-blue-gray-400"
-                >
-                  Data Suplier
-                </label>
-                <ReactSelect
+                  list="suplier-list"
                   id="suplier"
-                  options={suplier.map((down) => {
-                    return {
-                      value: down.idSuplier,
-                      label: down.namaSuplier,
-                    };
-                  })}
+                  name="suplier"
+                  onChange={(event) => {
+                    handleChange(event);
+                    setsuplierId(event.target.value);
+                  }}
                   placeholder="Pilih Suplier"
-                  styles={customStyles}
-                  onChange={(selectedOption) => setsuplierId(selectedOption.value)}
+                  required
                 />
-                <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-              </div> */}
-              <div>
-                <label
-                  htmlFor="barang"
-                  className="text-[14px] text-blue-gray-400"
-                >
-                  Data Barang
-                </label>
-                <ReactSelect
+                <datalist id="suplier-list">
+                  {options.length > 0 && (
+                    <>
+                      {options.map((option) => (
+                        <option value={option.idSuplier}>
+                          {option.kodeSuplier} - {option.namaSuplier}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </datalist>
+
+                <div className="flex gap-2">
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={!options.length}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex gap-2 items-end">
+                <Input
+                  label="Barang"
+                  variant="static"
+                  color="blue"
+                  list="barang-list"
                   id="barang"
-                  options={barang.map((down) => {
-                    return {
-                      value: down.idBarang,
-                      label: down.barcodeBarang + " / " + down.namaBarang,
-                    };
-                  })}
+                  name="barang"
+                  onChange={(event) => {
+                    handleChangeBarang(event);
+                    setbarangId(event.target.value);
+                  }}
                   placeholder="Pilih Barang"
-                  styles={customStyles}
-                  onChange={(selectedOption) =>
-                    setbarangId(selectedOption.value)
-                  }
+                  required
                 />
-                <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+                <datalist id="barang-list">
+                  {options2.length > 0 && (
+                    <>
+                      {options2.map((option) => (
+                        <option value={option.idBarang}>
+                          {option.barcodeBarang} - {option.namaBarang}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </datalist>
+
+                <div className="flex gap-2">
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={!options.length}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
               <Input
                 label="Jumlah Stok Masuk"
@@ -316,6 +315,7 @@ function AddStokMasuk() {
                 placeholder="Masukkan Jumlah Stok Masuk"
                 icon={<PlusIcon />}
                 onChange={(e) => setstok(e.target.value)}
+                required
               />
               <Input
                 label="Keterangan"
@@ -325,6 +325,7 @@ function AddStokMasuk() {
                 placeholder="Masukkan Keterangan"
                 icon={<InformationCircleIcon />}
                 onChange={(e) => setketerangan(e.target.value)}
+                required
               />
             </div>
             <div className="mt-10 flex gap-4">

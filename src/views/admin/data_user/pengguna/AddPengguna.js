@@ -33,6 +33,7 @@ function AddPengguna() {
       passwordPengguna: password,
       usernamePengguna: username,
       namaPengguna: namapengguna,
+      roleToko: level
     };
 
     try {

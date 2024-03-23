@@ -150,7 +150,7 @@ function DataSuplier() {
     await axios
       .post(`${API_SUPLIER}/import`, formData, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        responseType: "blob",
+        // responseType: "blob",
       })
       .then(() => {
         Swal.fire({
@@ -228,13 +228,13 @@ function DataSuplier() {
               </Button>
             </a>
           </div>
-          <div className="rounded my-5 w-full overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
               className="rounded-sm table-auto w-full"
             >
-              <thead className="border-b-2 ">
+              <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="py-2 px-3 font-semibold">No</th>
                   <th className="py-2 px-3 font-semibold">Kode Suplier </th>

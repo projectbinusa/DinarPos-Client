@@ -36,10 +36,11 @@ function Register() {
     }
 
     const requestPengguna = {
-      levelPengguna: "Admin",
+      levelPengguna: "Superadmin",
       passwordPengguna: password,
       usernamePengguna: username,
       namaPengguna: nama,
+      roleToko: "Superadmin"
     };
 
     try {

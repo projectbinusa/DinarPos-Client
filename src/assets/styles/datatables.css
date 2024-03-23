@@ -101,11 +101,16 @@ table.dataTable tbody td {
   padding: 0.3em 0;
 } */
 
-table.dataTable{
+table.dataTable {
   margin: 2rem 0;
 }
 
-table.dataTable tbody tr td{
+table.dataTable thead tr {
+  background: #2196f3;
+  color: white;
+}
+
+table.dataTable tbody tr td {
   text-align: center;
 }
 
@@ -146,4 +151,5 @@ table.dataTable tbody tr:nth-child(odd) {
   border-radius: 0.25rem;
   background: #2196f3 !important;
   border: 1px solid transparent;
+  margin: 0 0.5em;
 }

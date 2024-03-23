@@ -34,9 +34,12 @@ function LaporanBarangExcelcom() {
 
   const getAll = async () => {
     try {
-      const response = await axios.get(`${LAPORAN_BARANG}/excelcom?bulan=` + currentMonth, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `${LAPORAN_BARANG}/excelcom?bulan=` + currentMonth,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
       setBarangs(response.data.data);
     } catch (error) {
       console.log("get all", error);
@@ -159,7 +162,9 @@ function LaporanBarangExcelcom() {
                 label="Tanggal Akhir"
               />
             </div>
-            <Button className="mt-5" color="blue">Print</Button>
+            <Button className="mt-5" color="blue">
+              Print
+            </Button>
           </form>
           <div className="rounded mb-5 mt-12 overflow-auto">
             <table
@@ -167,7 +172,7 @@ function LaporanBarangExcelcom() {
               ref={tableRef}
               className="rounded-sm table-auto overflow-auto"
             >
-              <thead className="border-b-2">
+              <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="py-2 px-3 font-semibold">Tanggal</th>
@@ -187,11 +192,11 @@ function LaporanBarangExcelcom() {
                     <tr key={index}>
                       <td className="w-[4%]">{index + 1}</td>
                       <td className="py-2 px-3">{row.created_date}</td>
-                      <td className="w-[15%] py-2 px-3">
-                        {row.noFaktur}
-                      </td>
+                      <td className="w-[15%] py-2 px-3">{row.noFaktur}</td>
                       <td className="py-2 px-3">{row.barcodeBarang}</td>
-                      <td className="py-2 px-3">{row.transaksi.customer.nama_customer}</td>
+                      <td className="py-2 px-3">
+                        {row.transaksi.customer.nama_customer}
+                      </td>
                       <td className="py-2 px-3">{row.qty}</td>
                       <td className="py-2 px-3">{row.qty}</td>
                       <td className="py-2 px-3">{row.hargaBrng}</td>

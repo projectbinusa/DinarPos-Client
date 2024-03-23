@@ -164,7 +164,7 @@ function LaporanBarangDinar() {
               ref={tableRef}
               className="rounded-sm table-auto overflow-auto"
             >
-              <thead className="border-b-2">
+              <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="py-2 px-3 font-semibold">Tanggal</th>
