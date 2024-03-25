@@ -11,10 +11,9 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
   API_SALESMAN,
-  GET_BARANG_TRANSAKSI_BELI_EXCELCOM,
+  GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
   LAPORAN_SALESMAN,
 } from "../../../../utils/BaseUrl";
 import {
@@ -49,12 +48,6 @@ function LaporanSalesmanExcelcom() {
   useEffect(() => {
     getAll();
   }, []);
-
-  useEffect(() => {
-    if (laporans && laporans.length > 0) {
-      initializeDataTable();
-    }
-  }, [laporans]);
 
   const customStyles = {
     control: (provided, state) => ({
@@ -118,13 +111,12 @@ function LaporanSalesmanExcelcom() {
   };
 
   const [barang, setbarang] = useState([]);
-  const [id, setid] = useState(0);
 
   // GET BARANG TRANSAKSI
-  const barangTransaksi = async () => {
+  const barangTransaksi = async (transactionId) => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_BELI_EXCELCOM}?id_transaksi=${id}`,
+        `${GET_BARANG_TRANSAKSI_JUAL_EXCELCOM}?id_transaksi=${transactionId}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -136,26 +128,32 @@ function LaporanSalesmanExcelcom() {
   };
 
   useEffect(() => {
-    barangTransaksi();
-  }, [id]);
+    if (laporans && laporans.length > 0) {
+      initializeDataTable();
+      laporans.map((laporan) => {
+        barangTransaksi(laporan.idTransaksi);
+      });
+    }
+  }, [laporans]);
 
   const [salesmanId, setsalesmanId] = useState(0);
   const [tglAwal, settglAwal] = useState(null);
   const [tglAkhir, settglAkhir] = useState(null);
 
-  const tanggalFilterSalesman = async () => {
-    try {
-      const response = await axios.get(
-        `${LAPORAN_SALESMAN}/tanggal/excelcom?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
+  // const tanggalFilterSalesman = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${LAPORAN_SALESMAN}/tanggal/excelcom?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
+  //       {
+  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.log("get all", error);
+  //   }
+  // };
 
+  console.log(barang);
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -252,101 +250,110 @@ function LaporanSalesmanExcelcom() {
               Print
             </Button>
           </form>
-          <div className="rounded mb-5 mt-12 overflow-auto">
+          <div className="rounded mb-5 p-1 mt-12 overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
               className="rounded-sm table-auto overflow-auto"
             >
-              <thead className="bg-blue-500 text-white">
+              <thead className="bg-blue-500 text-white w-full">
                 <tr>
-                  <th className="py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="py-2 px-3 font-semibold">Tanggal</th>
-                  <th className="py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="py-2 px-3 font-semibold">Nama Salesman</th>
-                  <th className="py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="py-2 px-3 font-semibold">Harga</th>
-                  <th className="py-2 px-3 font-semibold">QTY</th>
-                  <th className="py-2 px-3 font-semibold">
-                    Total Harga Barang
-                  </th>
-                  <th className="py-2 px-3 font-semibold">Total Belanja</th>
-                  <th className="py-2 px-3 font-semibold">Total Keseluruhan</th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Tanggal</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">No Faktur</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Nama Salesman</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Nama Customer</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Barcode Barang</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Harga</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">QTY</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Total Harga Barang</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Total Belanja</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Total Keseluruhan</th>
+                  <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {laporans.length > 0 ? (
-                  laporans.map((laporan, index) => (
-                    <tr key={index}>
-                      {setid(laporan.idTransaksi)}
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{laporan.created_date}</td>
-                      <td className="w-[15%] py-2 px-3">{laporan.noFaktur}</td>
-                      <td className="py-2 px-3">
-                        {laporan.salesman.namaSalesman}
-                      </td>
-                      <td className="py-2 px-3">
-                        {laporan.customer.nama_customer}
-                      </td>
-                      <td className="py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="py-2 px-3">
-                        {barang.length > 0
-                          ? barang.map((brg, index) => (
-                              <ul key={index}>
-                                <li>{brg.hargaBrng}</li>
-                              </ul>
-                            ))
-                          : ""}
-                      </td>
-                      <td className="py-2 px-3">
-                        {barang.length > 0
-                          ? barang.map((brg, index) => (
-                              <ul key={index}>
-                                <li>{brg.qty}</li>
-                              </ul>
-                            ))
-                          : ""}
-                      </td>
-                      <td className="py-2 px-3">
-                        {barang.length > 0
-                          ? barang.map((brg, index) => (
-                              <ul key={index}>
-                                <li>{brg.totalHargaBarang}</li>
-                              </ul>
-                            ))
-                          : ""}
-                      </td>{" "}
-                      <td className="py-2 px-3">{laporan.totalBelanja}</td>
-                      <td className="py-2 px-3">{laporan.totalBelanja}</td>
-                      <td className="py-2 px-3 flex flex-col gap-2">
-                        <a
-                          href={
-                            "/detail_histori_laporan_salesman/" +
-                            laporan.idTransaksi
-                          }
-                        >
-                          <IconButton size="md" color="light-blue">
-                            <EyeIcon className="w-6 h-6 white" />
+                  laporans.map((laporan, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">{laporan.created_date}</td>
+                        <td className="text-sm w-[15%] py-2 px-3">
+                          {laporan.noFaktur}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.salesman.namaSalesman}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barang.length > 0
+                            ? barang.map((brg, index) => (
+                                <ul key={index}>
+                                  <li>{brg.barcodeBarang}</li>
+                                </ul>
+                              ))
+                            : ""}
+                        </td>{" "}
+                        <td className="text-sm py-2 px-3">
+                          {barang.length > 0
+                            ? barang.map((brg, index) => (
+                                <ul key={index}>
+                                  <li>{brg.hargaBrng}</li>
+                                </ul>
+                              ))
+                            : ""}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barang.length > 0
+                            ? barang.map((brg, index) => (
+                                <ul key={index}>
+                                  <li>{brg.qty}</li>
+                                </ul>
+                              ))
+                            : ""}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barang.length > 0
+                            ? barang.map((brg, index) => (
+                                <ul key={index}>
+                                  <li>{brg.totalHargaBarang}</li>
+                                </ul>
+                              ))
+                            : ""}
+                        </td>{" "}
+                        <td className="text-sm py-2 px-3">{laporan.totalBelanja}</td>
+                        <td className="text-sm py-2 px-3">{laporan.totalBelanja}</td>
+                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
+                          <a
+                            href={
+                              "/detail_histori_salesman_excelcom/" +
+                              laporan.idTransaksi
+                            }
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <EyeIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <a
+                            href={
+                              "/print_histori_laporan_salesman_excelcom/" +
+                              laporan.idTransaksi
+                            }
+                          >
+                            <IconButton size="md" color="green">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton size="md" color="red">
+                            <ArrowPathIcon className="w-6 h-6 white" />
                           </IconButton>
-                        </a>
-                        <a
-                          href={
-                            "/print_histori_laporan_salesman_excelcom/" +
-                            laporan.idTransaksi
-                          }
-                        >
-                          <IconButton size="md" color="green">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </a>
-                        <IconButton size="md" color="red">
-                          <ArrowPathIcon className="w-6 h-6 white" />
-                        </IconButton>
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td
