@@ -14,7 +14,12 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { API_BARANG, API_CUSTOMER, API_SALESMAN, API_TRANSAKSI_JUAL_EXCELCOM } from "../../../utils/BaseUrl";
+import {
+  API_BARANG,
+  API_CUSTOMER,
+  API_SALESMAN,
+  API_TRANSAKSI_JUAL_EXCELCOM,
+} from "../../../utils/BaseUrl";
 import axios from "axios";
 import ModalTambahCustomer from "../modal/ModalTambahCustomer";
 import ModalTambahCustomerCp from "../modal/ModalTambahCustomerCp";
@@ -155,7 +160,7 @@ function TransaksiPenjualanExcelCom() {
         })
         .then((res) => {
           setsisa(res.data.data.jumlahStok);
-          sethargaBrng(res.data.data.hargaBeli);
+          sethargaBrng(res.data.data.hargaBarang);
         })
         .catch((err) => {
           console.error(err);
@@ -248,7 +253,7 @@ function TransaksiPenjualanExcelCom() {
             nama: res.data.namaBarang,
             harga: hargaBrngs,
             disc: diskon,
-            hargaDiskon: hargaDiskon,
+            hargaDiskon: jmlDiskon,
             jumlah: jumlah,
             totalHarga: totalHarga,
           };
@@ -306,7 +311,8 @@ function TransaksiPenjualanExcelCom() {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
     if (pembayaran < total) {
-      $("#kembalian").html("0");
+      $("#kembalian").html("Rp 0,00");
+      $("#bayar").attr("disabled", "disabled");
     } else {
       var kembalian = parseInt(pembayaran - total);
       $("#kembalian").html(formatRupiah(kembalian));

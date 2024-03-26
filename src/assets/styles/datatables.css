@@ -1,4 +1,4 @@
-.dt-layout-row:nth-child(1),
+/* .dt-layout-row:nth-child(1),
 .dt-layout-row:nth-child(3) {
   display: flex;
   justify-content: space-between;
@@ -99,4 +99,57 @@ table.dataTable tbody td {
 
 .dt-empty {
   padding: 0.3em 0;
+} */
+
+table.dataTable {
+  margin: 2rem 0;
+}
+
+table.dataTable thead tr {
+  background: #2196f3;
+  color: white;
+}
+
+table.dataTable tbody tr td {
+  text-align: center;
+}
+
+table.dataTable tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Warna latar belakang untuk baris genap */
+}
+
+table.dataTable tbody tr:nth-child(odd) {
+  background-color: #ffffff; /* Warna latar belakang untuk baris ganjil */
+}
+
+.dataTables_wrapper select,
+.dataTables_wrapper .dataTables_filter input {
+  border-width: 2px;
+  border-radius: 0.25rem !important;
+  border-color: #f5f7f8;
+  background-color: #f5f7f8;
+  padding: 0.2em;
+  line-height: 1.25;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  margin-top: 9px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  font-weight: 700;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  height: 39px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  color: white !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  font-weight: 700;
+  padding: 0.2em;
+  border-radius: 0.25rem;
+  background: #2196f3 !important;
+  border: 1px solid transparent;
+  margin: 0 0.5em;
 }
