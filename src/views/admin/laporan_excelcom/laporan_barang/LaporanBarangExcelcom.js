@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { API_BARANG, LAPORAN_BARANG } from "../../../../utils/BaseUrl";
 
 function LaporanBarangExcelcom() {
@@ -99,10 +99,12 @@ function LaporanBarangExcelcom() {
     }),
   };
 
+  console.log(barangs);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             LAPORAN BARANG Excelcom
@@ -166,7 +168,7 @@ function LaporanBarangExcelcom() {
               Print
             </Button>
           </form>
-          <div className="rounded mb-5 mt-12 overflow-auto">
+          <div className="rounded mb-5 p-2 mt-12 overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
@@ -174,45 +176,49 @@ function LaporanBarangExcelcom() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="py-2 px-3 font-semibold">Tanggal</th>
-                  <th className="py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="py-2 px-3 font-semibold">Barcode Barang</th>
-                  <th className="py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="py-2 px-3 font-semibold">Jumlah</th>
-                  <th className="py-2 px-3 font-semibold">Unit</th>
-                  <th className="py-2 px-3 font-semibold">Harga Satuan</th>
-                  <th className="py-2 px-3 font-semibold">Total Harga</th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Customer
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Jumlah</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Unit</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Harga Satuan
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Harga
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {barangs.length > 0 ? (
                   barangs.map((row, index) => (
                     <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{row.created_date}</td>
-                      <td className="w-[15%] py-2 px-3">{row.noFaktur}</td>
-                      <td className="py-2 px-3">{row.barcodeBarang}</td>
-                      <td className="py-2 px-3">
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{row.created_date}</td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {row.transaksi.noFaktur}
+                      </td>
+                      <td className="text-sm py-2 px-3">{row.barcodeBarang}</td>
+                      <td className="text-sm py-2 px-3">
                         {row.transaksi.customer.nama_customer}
                       </td>
-                      <td className="py-2 px-3">{row.qty}</td>
-                      <td className="py-2 px-3">{row.qty}</td>
-                      <td className="py-2 px-3">{row.hargaBrng}</td>
-                      <td className="py-2 px-3">{row.totalHargaBarang}</td>
-                      <td className="py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="orange">
-                            <PhoneIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
+                      <td className="text-sm py-2 px-3">{row.qty}</td>
+                      <td className="text-sm py-2 px-3">{row.qty}</td>
+                      <td className="text-sm py-2 px-3">{row.hargaBrng}</td>
+                      <td className="text-sm py-2 px-3">
+                        {row.totalHargaBarang}
+                      </td>
+                      <td className="text-sm py-2 px-3 text-center">
+                        <IconButton size="md" color="red">
+                          <ArrowPathIcon className="w-6 h-6 white" />
+                        </IconButton>
                       </td>{" "}
                     </tr>
                   ))

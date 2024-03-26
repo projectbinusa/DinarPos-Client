@@ -155,9 +155,9 @@ function LaporanSalesmanExcelcom() {
 
   console.log(barang);
   return (
-    <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
+    <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             LAPORAN SALESMAN Excelcom
@@ -178,7 +178,7 @@ function LaporanSalesmanExcelcom() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded">
+        <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <form>
             <div className="w-72 lg:w-[50%]">
               <div className="flex gap-2 items-end">
@@ -250,11 +250,11 @@ function LaporanSalesmanExcelcom() {
               Print
             </Button>
           </form>
-          <div className="rounded mb-5 p-1 mt-12 overflow-auto">
+          <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto overflow-x-auto"
             >
               <thead className="bg-blue-500 text-white w-full">
                 <tr>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import {
@@ -17,9 +17,6 @@ function DetailHistoriSalesmanExcelcom() {
   const [potongan, setpotongan] = useState("");
   const [ttlBelanja, setttlBelanja] = useState("");
   const [kembalian, setkembalian] = useState("");
-
-  const [barcodeBrg, setbarcodeBrg] = useState("");
-  const [namaBrg, setnamaBrg] = useState("");
 
   const param = useParams();
 
@@ -69,19 +66,30 @@ function DetailHistoriSalesmanExcelcom() {
       });
   }, []);
 
-  const namaBarang = (barcode) => {
-    axios
-      .get(`${API_BARANG}/barcode?barcode=` + barcode, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      })
-      .then((res) => {
-        const response = res.data;
-        return response.data.namaBarang;
-      })
-      .catch((error) => {
+  const [namaBarangList, setNamaBarangList] = useState([]);
+
+  const fetchNamaBarangList = async () => {
+    const newNamaBarangList = [];
+    for (const brg of barang) {
+      try {
+        const response = await axios.get(
+          `${API_BARANG}/barcode?barcode=${brg.barcodeBarang}`,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        );
+        newNamaBarangList.push(response.data.data.namaBarang);
+      } catch (error) {
         console.log(error);
-      });
+        newNamaBarangList.push("Nama Barang Tidak Ditemukan");
+      }
+    }
+    setNamaBarangList(newNamaBarangList);
   };
+
+  useEffect(() => {
+    fetchNamaBarangList();
+  }, [barang]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -110,11 +118,32 @@ function DetailHistoriSalesmanExcelcom() {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <Typography variant="small">Nama Barang</Typography>
-          <p>
-            {barang.map((brg) => (
-              <span>{namaBarang(brg.barcodeBarang)} ||</span>
+          <p className="mt-2">
+            {namaBarangList.map((nama) => (
+              <span>{nama} || </span>
             ))}
           </p>
+          <hr /> <br />
+          <Typography variant="small">Total Bayar Barang</Typography>
+          <p className="mt-2">{formatRupiah(ttlBayarBrg)}</p>
+          <hr /> <br />
+          <Typography variant="small">Pembayaran</Typography>
+          <p className="mt-2">{formatRupiah(pembayaran)}</p>
+          <hr /> <br />
+          <Typography variant="small">Potongan</Typography>
+          <p className="mt-2">{formatRupiah(potongan)}</p>
+          <hr /> <br />
+          <Typography variant="small">Total Belanja</Typography>
+          <p className="mt-2">{formatRupiah(ttlBelanja)}</p>
+          <hr /> <br />
+          <Typography variant="small">Kembalian</Typography>
+          <p className="mt-2">{formatRupiah(kembalian)}</p>
+          <hr /> <br />
+          <a href="/laporan_salesman_excelcom">
+            <Button variant="gradient" color="blue">
+              Kembali
+            </Button>
+          </a>
         </main>
       </div>
     </section>

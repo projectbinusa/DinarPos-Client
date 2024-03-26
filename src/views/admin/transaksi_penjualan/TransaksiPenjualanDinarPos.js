@@ -439,6 +439,7 @@ function TransaksiPenjualanDinarPos() {
     handleOpen3();
   };
 
+  // BUTTON TRANSAKSI JUAL DINARPOS
   const add = () => {
     var totalBayarBarang = convertToAngka(
       document.getElementById("total2").innerHTML
@@ -495,13 +496,6 @@ function TransaksiPenjualanDinarPos() {
               window.location.reload();
             }
           });
-          // Swal.fire({
-          //   title: "Penjualan Berhasil!",
-          //   icon: "success",
-          //   showConfirmButton: false,
-          //   timer: 1500,
-          // });
-          // window.location.reload();
         } else {
           alert("gagal");
         }
