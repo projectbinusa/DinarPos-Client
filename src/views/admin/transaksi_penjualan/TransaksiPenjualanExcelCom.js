@@ -472,28 +472,31 @@ function TransaksiPenjualanExcelCom() {
       })
       .then((res) => {
         if (res.data.code === 200) {
-          // Swal.fire({
-          //   title: "Pembelian Berhasil. Cetak Struk?",
-          //   icon: "success",
-          //   showCancelButton: true,
-          //   confirmButtonColor: "#3085d6",
-          //   cancelButtonColor: "#d33",
-          //   confirmButtonText: "Ya",
-          //   cancelButtonText: "Batal",
-          // }).then((result) => {
-          //   if (result.isConfirmed) {
-          //     window.open("/cetak_struk_transaksi_beli_dinarpos");
-          //   } else {
-          //     window.location.reload();
-          //   }
-          // });
           Swal.fire({
-            title: "Penjualan Berhasil!",
+            title: "Transaksi Penjualan Berhasil. Cetak Struk?",
             icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.open(
+                "/cetak_struk_transaksi_penjualan_excelcom/" +
+                  res.data.data.idTransaksi
+              );
+            } else {
+              window.location.reload();
+            }
           });
-          window.location.reload();
+          // Swal.fire({
+          //   title: "Penjualan Berhasil!",
+          //   icon: "success",
+          //   showConfirmButton: false,
+          //   timer: 1500,
+          // });
+          // window.location.reload();
         } else {
           alert("gagal");
         }
