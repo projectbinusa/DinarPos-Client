@@ -1,58 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import {
-  GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
-  GET_TRANSAKSI_JUAL,
+  GET_BARANG_TRANSAKSI_BELI_EXCELCOM,
+  GET_TRANSAKSI_BELI,
 } from "../../../../utils/BaseUrl";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
-function PrintHistoriTransaksiExcelcom() {
+function PrintHistoriTransaksiBeliExcelcom() {
   const [reportData, setReportData] = useState(null);
-  const [telp, settelp] = useState(null);
-  const [nama, setnama] = useState(null);
   const [barang, setbarang] = useState([]);
   const param = useParams();
 
   useEffect(() => {
     fetchData();
     getAllBarang();
-    openWhatsapp();
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${GET_TRANSAKSI_JUAL}/` + param.id, {
+      const response = await axios.get(`${GET_TRANSAKSI_BELI}/` + param.id, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setReportData(response.data.data);
-      settelp(response.data.data.customer.telp);
-      setnama(response.data.data.customer.nama_customer);
       console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const openWhatsapp = () => {
-    Swal.fire({
-      title: "Tekan Ok Untuk Notifikasi WA",
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonText: "Ok",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const whatsappURL = `https://api.whatsapp.com/send?phone=${telp}&text=Terimakasih%20Kak%20${nama}%20Telah%20Berbelanja%20di%20Excellent%20Computer`;
-        window.open(whatsappURL);
-      }
-    });
-  };
-
   const getAllBarang = async () => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_JUAL_EXCELCOM}?id_transaksi=` + param.id,
+        `${GET_BARANG_TRANSAKSI_BELI_EXCELCOM}?id_transaksi=` + param.id,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -77,46 +56,58 @@ function PrintHistoriTransaksiExcelcom() {
     return formatter.format(value);
   };
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString("id-ID");
+  console.log(reportData);
   return (
     <div className="mx-5 my-3">
-      <h3 className="text-center">FAKTUR PENJUALAN</h3>
-      <div className="flex justify-between items-center my-3">
+      <div className=" my-3">
         <h3 className="text-sm">
           EXCEL COM{" "}
           <span className="block">
             Jl. Bulustalan 1 No.27 Semarang 087729244899
           </span>
         </h3>
-        <div>
-          <h3 className="text-sm">
-            Kepada Yth.
-            <span className="block">{reportData.customer.nama_customer}</span>
-            <span className="block">{reportData.customer.alamat}</span>
-            <span className="block">{reportData.customer.telp}</span>
-          </h3>
-        </div>
       </div>
+      <hr /> <br />
+      <h1 className="text-center">BUKTI PEMBELIAN</h1>
+      <h1 className="underline">Printed Date : {formattedDate}</h1>
       <div className="flex justify-between items-center my-3">
-        <h3 className="text-sm">
-          Banker's:{" "}
-          <span className="block">
-            Bank BCA : 836-0344-518 a/n INNANI LU'LU'UL CHASANAH{" "}
-          </span>
-        </h3>
         <div>
           <ul>
             <li className="flex">
-              <p>NO. FAKTUR :</p>
-              <p>{reportData.noFaktur}</p>
+              <p>NO. Transaksi :</p>
+              <p className="ml-2"> {reportData.noFaktur}</p>
             </li>
             <li className="flex">
-              <p>TGL FAKTUR :</p>
-              <p>{reportData.created_date}</p>
+              <p>Tanggal :</p>
+              <p className="ml-2"> {reportData.created_date}</p>
+            </li>
+            <li className="flex">
+              <p>Suplier :</p>
+              <p className="ml-2"> {reportData.suplier.namaSuplier}</p>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li className="flex">
+              <p>Pembayaran :</p>
+              <p className="ml-2">{reportData.cashCredit}</p>
+            </li>
+            <li className="flex">
+              <p>Status :</p>
+              <p className="ml-2">Status</p>
+            </li>
+            <li className="flex">
+              <p>NO. Faktur :</p>
+              <p className="ml-2"> {reportData.noFaktur}</p>
             </li>
           </ul>
         </div>
       </div>
-      <hr />
+      <br />
+      <br />
       <table className="table-auto w-full">
         <thead>
           <tr className="border-b py-1">
@@ -147,69 +138,77 @@ function PrintHistoriTransaksiExcelcom() {
           ))}
         </tbody>
       </table>
-      <hr />
-      <div className="flex justify-between items-start my-3">
+      <br />
+      <br />
+      <div className="flex justify-between items-center my-3">
         <div>
-          <ul className="list-inside list-decimal text-sm">
-            <li>Barang yang sudah dibeli tidak dapat ditukar / dikembalikan</li>
-            <li>
-              Pembayaran melalui cek, giro, transfer dianggap sah jika sudah
-              dapat dicairkan
+          <ul>
+            <li className="flex">
+              <p>No. Adm :</p>
+              <p className="ml-2"> {reportData.noFaktur}</p>
             </li>
-            <li>
-              Tidak menjual / install software bajakan, tidak bertanggung jawab
-              atas software dalam komputer
+            <li className="flex">
+              <p>Tanggal Faktur :</p>
+              <p className="ml-2"> {reportData.created_date}</p>
             </li>
-            <li>
-              Jam operasional 06.00 - 21.00 WIB ( Senin - Sabtu ), Minggu 08.00
-              - 21.00 WIB
+            <li className="flex">
+              <p>Keterangan :</p>
+              <p className="ml-2"> {reportData.keterangan}</p>
             </li>
           </ul>
         </div>
         <div>
-          <ul className="text-sm">
+          <ul>
             <li className="flex">
-              <p className="w-36">Total</p>
-              <p>{reportData.totalBelanja}</p>
+              <p className="w-36">Sub Total </p>
+              <p className="ml-2">: {reportData.totalBelanja}</p>
             </li>
             <li className="flex">
-              <p className="w-36">Potongan</p>
-              <p>{reportData.potongan}</p>
+              <p className="w-36">Pot Lain-lain </p>
+              <p className="ml-2">: {reportData.potongan}</p>
             </li>
             <li className="flex">
-              <p className="w-36">Total Bayar</p>
-              <p>{reportData.totalBayarBarang}</p>
+              <p className="w-36">Total </p>
+              <p className="ml-2">: {reportData.totalBayarBarang}</p>
+            </li>
+            <li className="flex">
+              <p className="w-36">Bayar </p>
+              <p className="ml-2">: {reportData.pembayaran}</p>
+            </li>
+            <li className="flex">
+              <p className="w-36">Kembali / Kurang </p>
+              <p className="ml-2">: {reportData.sisa}</p>
             </li>
           </ul>
         </div>
       </div>
+      <br />
+      <br />
       <div className="flex justify-between items-start my-5">
         <div>
-          <p>Penerima</p>
+          <p className="text-center">Di Bukukan :</p>
+          <p className="text-center">Adm. Gudang</p>
           <br />
           <br />
           <br />
-          <p>{reportData.customer.nama_customer}</p>
+          <p>(..............................................)</p>
         </div>
         <div>
-          <p>Hormat Kami</p>
+          <p className="text-center">Penerima :</p>
+          <p className="text-center">Ka. Gudang</p> <br />
           <br />
           <br />
-          <br />
-          <p>{reportData.salesman.namaSalesman}</p>
+          <p>(..............................................)</p>
         </div>
         <div>
-          <p>Catatan</p>
-          <p>{reportData.keterangan}</p>
+          <p className="text-center">Mengetahui :</p>
+          <p className="text-center">Ka. Departement</p> <br />
+          <br />
+          <br /> <p>(..............................................)</p>
         </div>
-      </div>
-      <hr />
-      <div className="flex justify-between items-start my-5">
-        <p>Tanggal Cetak : {reportData.created_date}</p>
-        <p>Dicetak Oleh : {reportData.salesman.namaSalesman}</p>
       </div>
     </div>
   );
 }
 
-export default PrintHistoriTransaksiExcelcom;
+export default PrintHistoriTransaksiBeliExcelcom;

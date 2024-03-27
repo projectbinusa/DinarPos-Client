@@ -367,6 +367,7 @@ function LaporanSalesmanExcelcom() {
                               "/print_histori_laporan_salesman_excelcom/" +
                               laporan.idTransaksi
                             }
+                            target="_blank"
                           >
                             <IconButton size="md" color="green">
                               <PrinterIcon className="w-6 h-6 white" />
