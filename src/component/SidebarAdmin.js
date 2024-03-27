@@ -1231,7 +1231,7 @@ function SidebarAdmin() {
                       laporan customer
                     </ListItem>
                   </a>
-                  <a href="/laporan_transaksi_beli_dinarpos">
+                  <a href="/laporan_transaksi_beli_excelcom">
                     <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />

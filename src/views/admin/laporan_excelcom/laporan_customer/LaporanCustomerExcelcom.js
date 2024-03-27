@@ -11,7 +11,12 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { API_CUSTOMER, LAPORAN_CUSTOMER } from "../../../../utils/BaseUrl";
+import {
+  API_BARANG,
+  API_CUSTOMER,
+  GET_BARANG_TRANSAKSI_BELI_EXCELCOM,
+  LAPORAN_CUSTOMER,
+} from "../../../../utils/BaseUrl";
 
 function LaporanCustomerExcelcom() {
   const tableRef = useRef(null);
@@ -91,8 +96,78 @@ function LaporanCustomerExcelcom() {
     }),
   };
 
-  console.log(laporans);
+  const [barang, setBarang] = useState([]);
 
+  const barangTransaksiBeli = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${GET_BARANG_TRANSAKSI_BELI_EXCELCOM}?id_transaksi=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        laporans.map(async (laporan) => {
+          const barangData = await barangTransaksiBeli(laporan.idTransaksi);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
+  }, [laporans]);
+
+  const [unit, setUnit] = useState([]);
+
+  const unitBarang = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${API_BARANG}/barcode?barcode=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchUnitBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        laporans.map(async (laporan) => {
+          const barangData = await barangTransaksiBeli(laporan.idTransaksi);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+
+      const unitList = await Promise.all(
+        barang.map(async (brg) => {
+          const barangData = await unitBarang(brg.barcodeBarang);
+          return barangData;
+        })
+      );
+      setUnit(unitList);
+    };
+
+    fetchUnitBarangTransaksi();
+  }, [laporans]);
+
+  console.log(unit);
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -166,36 +241,78 @@ function LaporanCustomerExcelcom() {
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto overflow-auto w-full"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
                   <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Jumlah Barang</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Customer
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Jumlah Barang
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">Unit</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Harga Satuan</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Total</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Harga Satuan (Rp)
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total (Rp)
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {laporans.length > 0 ? (
-                  laporans.map((laporan, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{laporan.created_date}</td>
-                      <td className="text-sm w-[15%] py-2 px-3">{laporan.noFaktur}</td>
-                      <td className="text-sm py-2 px-3">{laporan.customer.nama_customer}</td>
-                      <td className="text-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{laporan.totalBelanja}</td>
-                    </tr>
-                  ))
+                  laporans.map((laporan, index) => {
+                    const barangLaporan = barang[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.created_date}
+                        </td>
+                        <td className="text-sm w-[15%] py-2 px-3">
+                          {laporan.noFaktur}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.barcodeBarang}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.qty}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.namaSalesman}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.hargaBrng}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.totalBelanja}
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td

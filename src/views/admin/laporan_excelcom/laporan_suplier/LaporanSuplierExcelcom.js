@@ -95,6 +95,38 @@ function LaporanSuplierExcelcom() {
     }),
   };
 
+  const [barang, setBarang] = useState([]);
+
+  const barangTransaksi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${API_BARANG}/barcode?barcode=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        laporans.map(async (laporan) => {
+          const barangData = await barangTransaksi(laporan.barcodeBarang);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
+  }, [laporans]);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -168,7 +200,7 @@ function LaporanSuplierExcelcom() {
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto overflow-auto w-full"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -191,23 +223,31 @@ function LaporanSuplierExcelcom() {
               </thead>
               <tbody>
                 {laporans.length > 0 ? (
-                  laporans.map((laporan, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-3 px-3">
-                        {laporan.created_date}
-                      </td>
-                      <td className="text-sm w-[15%] py-3 px-3">
-                        {laporan.transaksiBeli.suplier.namaSuplier}
-                      </td>
-                      <td className="text-sm py-3 px-3">
-                        {laporan.namaBarang}
-                      </td>
-                      <td className="text-sm py-3 px-3">{laporan.qty}</td>
-                      <td className="text-sm py-3 px-3"></td>
-                      <td className="text-sm py-3 px-3">{laporan.hargaBrng}</td>
-                    </tr>
-                  ))
+                  laporans.map((laporan, index) => {
+                    const barangLaporan = barang[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-3 px-3">
+                          {laporan.created_date}
+                        </td>
+                        <td className="text-sm w-[15%] py-3 px-3">
+                          {laporan.transaksiBeli.suplier.namaSuplier}
+                        </td>
+                        <td className="text-sm py-3 px-3">
+                          {laporan.namaBarang}
+                        </td>
+                        <td className="text-sm py-3 px-3">{laporan.qty}</td>
+                        <td className="text-sm py-2 px-3">
+                          <span>{barangLaporan.unit}</span>
+                        </td>{" "}
+                        <td className="text-sm py-3 px-3">
+                          {laporan.hargaBrng}
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td

@@ -172,7 +172,7 @@ function LaporanBarangExcelcom() {
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto overflow-auto w-full"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
