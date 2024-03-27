@@ -12,8 +12,16 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { API_SUPLIER, LAPORAN_TRANSAKSI_BELI } from "../../../../utils/BaseUrl";
-import { ArrowPathIcon, EyeIcon, PrinterIcon } from "@heroicons/react/24/outline";
+import {
+  API_SUPLIER,
+  GET_BARANG_TRANSAKSI_BELI_EXCELCOM,
+  LAPORAN_TRANSAKSI_BELI,
+} from "../../../../utils/BaseUrl";
+import {
+  ArrowPathIcon,
+  EyeIcon,
+  PrinterIcon,
+} from "@heroicons/react/24/outline";
 
 function LaporanTransaksiBeliExcelcom() {
   const tableRef = useRef(null);
@@ -92,6 +100,39 @@ function LaporanTransaksiBeliExcelcom() {
       },
     }),
   };
+
+  const [barang, setBarang] = useState([]);
+
+  const barangTransaksi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${GET_BARANG_TRANSAKSI_BELI_EXCELCOM}?id_transaksi=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        laporans.map(async (laporan) => {
+          const barangData = await barangTransaksi(laporan.idTransaksiBeli);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
+  }, [laporans]);
+
+  console.log(barang);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -173,47 +214,108 @@ function LaporanTransaksiBeliExcelcom() {
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
                   <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Suplier</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Harga Beli</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Suplier
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Harga Beli (Rp)
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">QTY</th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    Total Harga Barang
+                    Total Harga Barang (Rp)
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Total Belanja</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Total Keseluruhan</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Belanja (Rp)
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Keseluruhan (Rp)
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {laporans.length > 0 ? (
-                  laporans.map((laporan, index) => (
-                    <tr key={index}>
-                      <td className="test-sm w-[4%]">{index + 1}</td>
-                      <td className="test-sm py-2 px-3">{laporan.created_date}</td>
-                      <td className="test-sm w-[15%] py-2 px-3">{laporan.noFaktur}</td>
-                      <td className="test-sm py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="test-sm py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="test-sm py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="test-sm py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="test-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="test-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="test-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="test-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-col gap-3">
-                          <IconButton size="md" color="green" type="button">
-                            <EyeIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
+                  laporans.map((laporan, index) => {
+                    const barangLaporan = barang[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.created_date}
+                        </td>
+                        <td className="text-sm w-[15%] py-2 px-3">
+                          {laporan.noFaktur}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.suplier.namaSuplier}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.barcodeBarang}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.hargaBrng}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.qty}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.totalHargaBarang}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.totalBelanja}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.totalBelanja}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex flex-col gap-2 items-center">
+                          <a
+                            href={
+                              "/detail_histori_transaksi_beli_excelcom/" +
+                              laporan.idTransaksiBeli
+                            }
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <EyeIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <a
+                            href={
+                              "/print_histori_laporan_transaksi_beli_excelcom/" +
+                              laporan.idTransaksiBeli
+                            }
+                            target="_blank"
+                          >
+                            <IconButton size="md" color="green">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                           <IconButton size="md" color="red">
                             <ArrowPathIcon className="w-6 h-6 white" />
                           </IconButton>
-                        </div>
-                      </td>{" "}
-                    </tr>
-                  ))
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import $ from "jquery";
+import $, { data } from "jquery";
 import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import axios from "axios";
@@ -129,10 +129,10 @@ function LaporanCustomerExcelcom() {
 
   const [unit, setUnit] = useState([]);
 
-  const unitBarang = async (transactionId) => {
+  const unitBarang = async (barcodeBarang) => {
     try {
       const response = await axios.get(
-        `${API_BARANG}/barcode?barcode=${transactionId}`,
+        `${API_BARANG}/barcode?barcode=${barcodeBarang}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -148,26 +148,22 @@ function LaporanCustomerExcelcom() {
   useEffect(() => {
     const fetchUnitBarangTransaksi = async () => {
       const barangList = await Promise.all(
-        laporans.map(async (laporan) => {
-          const barangData = await barangTransaksiBeli(laporan.idTransaksi);
-          return barangData;
-        })
-      );
-      setBarang(barangList);
-
-      const unitList = await Promise.all(
         barang.map(async (brg) => {
-          const barangData = await unitBarang(brg.barcodeBarang);
-          return barangData;
+          // Memeriksa apakah brg dan brg.barcodeBarang tidak undefined
+          if (brg && brg.barcodeBarang) {
+            const barangData = await unitBarang(brg.barcodeBarang);
+            return barangData;
+          } else {
+            return "";
+          }
         })
       );
-      setUnit(unitList);
+      setUnit(barangList);
     };
 
     fetchUnitBarangTransaksi();
-  }, [laporans]);
+  }, [barang]);
 
-  console.log(unit);
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -270,7 +266,6 @@ function LaporanCustomerExcelcom() {
                 {laporans.length > 0 ? (
                   laporans.map((laporan, index) => {
                     const barangLaporan = barang[index] || [];
-
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
@@ -297,9 +292,7 @@ function LaporanCustomerExcelcom() {
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm py-2 px-3">
-                          {laporan.namaSalesman}
-                        </td>
+                        <td className="text-sm py-2 px-3">{unit.unit}</td>
                         <td className="text-sm py-2 px-3">
                           {barangLaporan.map((brg, idx) => (
                             <ul key={idx}>

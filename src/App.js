@@ -71,6 +71,8 @@ import CetakStrukPenjualanExcelcom from "./views/admin/transaksi_penjualan/Cetak
 import PrintByTglSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/PrintByTglSalesmanExcelcom.js";
 import DetailHistoriSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/DetailHistoriSalesmanExcelcom.js";
 import PrintHistoriTransaksiExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/PrintHistoriTransaksiExcelcom.js";
+import DetailHistoriTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/DetailHistoriTransaksiBeliExcelcom.js";
+import PrintHistoriTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/PrintHistoriTransaksiBeliExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -442,11 +444,23 @@ function App() {
               component={LaporanCustomerExcelcom}
               isAuthenticated={true}
             />
+            {/* LAPORAN TRANSAKSI BELI */}
             <PrivateRoute
               path="/laporan_transaksi_beli_excelcom"
               component={LaporanTransaksiBeliExcelcom}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/detail_histori_transaksi_beli_excelcom/:id"
+              component={DetailHistoriTransaksiBeliExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/print_histori_laporan_transaksi_beli_excelcom/:id"
+              component={PrintHistoriTransaksiBeliExcelcom}
+              isAuthenticated={true}
+            />
+            {/* END LAPORAN TRANSAKSI BELI */}
             {/* END LAPORAN EXCELCOM */}
           </Switch>
         </main>
