@@ -149,7 +149,6 @@ function LaporanCustomerExcelcom() {
     const fetchUnitBarangTransaksi = async () => {
       const barangList = await Promise.all(
         barang.map(async (brg) => {
-          // Memeriksa apakah brg dan brg.barcodeBarang tidak undefined
           if (brg && brg.barcodeBarang) {
             const barangData = await unitBarang(brg.barcodeBarang);
             return barangData;
