@@ -4,7 +4,10 @@ import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import axios from "axios";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { NOTIFIKASI_7_EXCELCOM,  GET_BARANG_TRANSAKSI_JUAL_EXCELCOM } from "../../../../utils/BaseUrl";
+import {
+  NOTIFIKASI_7_EXCELCOM,
+  GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
+} from "../../../../utils/BaseUrl";
 import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
 
@@ -76,7 +79,7 @@ function Notifikasi7Excelcom() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             KETERANGAN NOTIFIKASI 7 HARI EXCELCOM
@@ -106,72 +109,84 @@ function Notifikasi7Excelcom() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="py-2 px-3 font-semibold">Tanggal</th>
-                  <th className="py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="py-2 px-3 font-semibold">Nama Salesman</th>
-                  <th className="py-2 px-3 font-semibold">Barcode Barang</th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Customer
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Salesman
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {notifikasis.length > 0 ? (
                   notifikasis.map((penjualan, index) => {
                     const barangLaporan = barang[index] || [];
-                    return(
-                    <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{penjualan.created_date}</td>
-                      <td className="w-[15%] py-2 px-3">
-                        {penjualan.noFaktur}
-                      </td>
-                      <td className="py-2 px-3">{penjualan.customer.nama_customer}</td>
-                      <td className="py-2 px-3">{penjualan.salesman.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {penjualan.created_date}
+                        </td>
+                        <td className="text-sm w-[15%] py-2 px-3">
+                          {penjualan.noFaktur}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {penjualan.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {penjualan.salesman.namaSalesman}
+                        </td>
+                        <td className="text-sm py-2 px-3">
                           {barangLaporan.map((brg, idx) => (
                             <ul key={idx}>
                               <li>{brg.barcodeBarang}</li>
                             </ul>
                           ))}
                         </td>
-                      <td className="py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="orange">
-                          <IconButton
-                              size="md"
-                              color="orange"
-                              onClick={() => {
-                                const phone = encodeURIComponent(
-                                  penjualan.customer.telp
-                                ); // Mengkodekan nomor telepon
-                                const message = encodeURIComponent(
-                                  `Selamat pagi kak ${penjualan.customer.nama_customer}%0APerkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                );
-                                window.open(
-                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                );
-                              }}
-                            >
-                              <PhoneIcon className="w-6 h-6 white" />
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <div className="flex flex-row gap-3">
+                            <IconButton size="md" color="light-blue">
+                              <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
-                          </IconButton>
-                        </div>
-                      </td>{" "}
-                    </tr>
-                    )
-})
+                            <IconButton size="md" color="red" type="button">
+                              <CheckIcon className="w-6 h-6 white" />
+                            </IconButton>
+                            <IconButton size="md" color="orange">
+                              <IconButton
+                                size="md"
+                                color="orange"
+                                onClick={() => {
+                                  const phone = encodeURIComponent(
+                                    penjualan.customer.telp
+                                  ); // Mengkodekan nomor telepon
+                                  const message = encodeURIComponent(
+                                    `Selamat pagi kak ${penjualan.customer.nama_customer}%0APerkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  );
+                                  window.open(
+                                    `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                                  );
+                                }}
+                              >
+                                <PhoneIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </IconButton>
+                          </div>
+                        </td>{" "}
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td
                       colSpan="7"
-                      className="text-center capitalize py-3 bg-gray-100"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>
@@ -195,28 +210,28 @@ function Notifikasi7Excelcom() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="py-2 px-3 font-semibold">
+                  <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
                   </th>
-                  <th className="py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="py-2 px-3 font-semibold">Nama Salesman</th>
-                  <th className="py-2 px-3 font-semibold">Keterangan</th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Nama Customer</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Nama Salesman</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Keterangan</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {notifikasis.length > 0 ? (
                   notifikasis.map((penjualan, index) => (
                     <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{penjualan.created_date}</td>
-                      <td className="w-[15%] py-2 px-3">
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{penjualan.created_date}</td>
+                      <td className="text-sm w-[15%] py-2 px-3">
                         {penjualan.noFaktur}
                       </td>
-                      <td className="py-2 px-3">{penjualan.namaCustomer}</td>
-                      <td className="py-2 px-3">{penjualan.namaSalesman}</td>
-                      <td className="py-2 px-3 flex items-center justify-center">
+                      <td className="text-sm py-2 px-3">{penjualan.namaCustomer}</td>
+                      <td className="text-sm py-2 px-3">{penjualan.namaSalesman}</td>
+                      <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <IconButton size="md" color="light-blue">
                             <PrinterIcon className="w-6 h-6 white" />
@@ -235,7 +250,7 @@ function Notifikasi7Excelcom() {
                   <tr>
                     <td
                       colSpan="6"
-                      className="text-center capitalize py-3 bg-gray-100"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

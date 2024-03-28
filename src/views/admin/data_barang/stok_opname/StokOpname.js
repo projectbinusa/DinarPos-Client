@@ -40,9 +40,9 @@ function StokOpname() {
     }
   }, [stokKeluars]);
   return (
-    <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
+    <section className="lg:flex font-poppins bg-gray-50 min-h-screen ">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             Stok barang opname
@@ -71,41 +71,49 @@ function StokOpname() {
               </Button>
             </a>
           </div>
-          <div className="rounded my-5 w-full overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto w-full"
+              className="rounded-sm table-auto min-w-full"
             >
-              <thead className="border-b-2 ">
+              <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="py-2 px-3 font-semibold w-[15%]">
+                  <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold w-[15%]">
                     Jumlah Stok Opname
                   </th>
-                  <th className="py-2 px-3 font-semibold">
+                  <th className="text-sm py-2 px-3 font-semibold">
                     Keterangan Stok Masuk
                   </th>
-                  <th className="py-2 px-3 font-semibold">Waktu</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Waktu</th>
                 </tr>
               </thead>
               <tbody>
                 {stokKeluars.length > 0 ? (
                   stokKeluars.map((stok, index) => (
                     <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{stok.barang.namaBarang}</td>
-                      <td className="w-[15%] py-2 px-3">{stok.jumlahStok}</td>
-                      <td className="py-2 px-3">{stok.keteranganStokKeluar}</td>
-                      <td className="py-2 px-3">{stok.created_date}</td>
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">
+                        {stok.barang.namaBarang}
+                      </td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {stok.jumlahStok}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {stok.keteranganStokKeluar}
+                      </td>
+                      <td className="text-sm py-2 px-3">{stok.created_date}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
                       colSpan="5"
-                      className="text-center capitalize py-3 bg-gray-100"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

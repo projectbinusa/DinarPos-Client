@@ -43,7 +43,7 @@ function StokMasuk() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             Stok barang masuk
@@ -80,35 +80,35 @@ function StokMasuk() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="py-2 px-3 font-semibold">Nama Suplier</th>
-                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="py-2 px-3 font-semibold w-[15%]">
+                  <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Nama Suplier</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Nama Barang</th>
+                  <th className="text-sm py-2 px-3 font-semibold w-[15%]">
                     Jumlah Stok Masuk
                   </th>
-                  <th className="py-2 px-3 font-semibold">
+                  <th className="text-sm py-2 px-3 font-semibold">
                     Keterangan Stok Masuk
                   </th>
-                  <th className="py-2 px-3 font-semibold">Waktu</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Waktu</th>
                 </tr>
               </thead>
               <tbody>
                 {stokMasuks.length > 0 ? (
                   stokMasuks.map((stok, index) => (
                     <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{stok.suplier.namaSuplier}</td>
-                      <td className="py-2 px-3">{stok.barang.namaBarang}</td>
-                      <td className="w-[15%] py-2 px-3">{stok.jumlahStok}</td>
-                      <td className="py-2 px-3">{stok.keteranganStokMasuk}</td>
-                      <td className="py-2 px-3">{stok.created_date}</td>
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{stok.suplier.namaSuplier}</td>
+                      <td className="text-sm py-2 px-3">{stok.barang.namaBarang}</td>
+                      <td className="text-sm w-[15%] py-2 px-3">{stok.jumlahStok}</td>
+                      <td className="text-sm py-2 px-3">{stok.keteranganStokMasuk}</td>
+                      <td className="text-sm py-2 px-3">{stok.created_date}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
                       colSpan="6"
-                      className="text-center capitalize py-3 bg-gray-100"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>
