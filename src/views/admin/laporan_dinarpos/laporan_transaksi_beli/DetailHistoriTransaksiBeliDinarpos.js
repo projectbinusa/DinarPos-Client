@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { API_BARANG, GET_BARANG_TRANSAKSI_BELI_EXCELCOM, GET_TRANSAKSI_BELI } from "../../../../utils/BaseUrl";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API_BARANG, GET_BARANG_TRANSAKSI_BELI_DINARPOS, GET_TRANSAKSI_BELI } from "../../../../utils/BaseUrl";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
 
-function DetailHistoriTransaksiBeliExcelcom() {
+function DetailHistoriTransaksiBeliDinarpos() {
   const [barang, setbarang] = useState([]);
 
   const [ttlBayarBrg, setttlBayarBrg] = useState("");
@@ -29,7 +29,7 @@ function DetailHistoriTransaksiBeliExcelcom() {
   const barangTransaksi = async () => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_BELI_EXCELCOM}?id_transaksi=` + param.id,
+        `${GET_BARANG_TRANSAKSI_BELI_DINARPOS}?id_transaksi=` + param.id,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -93,7 +93,7 @@ function DetailHistoriTransaksiBeliExcelcom() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Detail Histori LAPORAN TRANSAKSI BELI Excelcom
+            Detail Histori LAPORAN TRANSAKSI BELI dinarpos
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard_admin" className="opacity-60">
@@ -106,7 +106,7 @@ function DetailHistoriTransaksiBeliExcelcom() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/laporan_transaksi_beli_excelcom">
+            <a href="/laporan_transaksi_beli_dinarpos">
               <span>Laporan Transaksi Beli</span>
             </a>
             <span className="cursor-default">Detail Histori</span>
@@ -135,7 +135,7 @@ function DetailHistoriTransaksiBeliExcelcom() {
           <Typography variant="small">Kembalian</Typography>
           <p className="mt-2">{formatRupiah(kembalian)}</p>
           <hr /> <br />
-          <a href="/laporan_transaksi_beli_excelcom">
+          <a href="/laporan_transaksi_beli_dinarpos">
             <Button variant="gradient" color="blue">
               Kembali
             </Button>
@@ -146,4 +146,4 @@ function DetailHistoriTransaksiBeliExcelcom() {
   );
 }
 
-export default DetailHistoriTransaksiBeliExcelcom;
+export default DetailHistoriTransaksiBeliDinarpos;

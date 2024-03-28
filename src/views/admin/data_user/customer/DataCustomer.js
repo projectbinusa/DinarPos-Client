@@ -207,7 +207,7 @@ function DataCustomer() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             Data Customer
@@ -249,30 +249,30 @@ function DataCustomer() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold">No</th>
-                  <th className="py-2 px-3 font-semibold">ITC</th>
-                  <th className="py-2 px-3 font-semibold">Nama</th>
-                  <th className="py-2 px-3 font-semibold">Jenis</th>
-                  <th className="py-2 px-3 font-semibold">Alamat</th>
-                  <th className="py-2 px-3 font-semibold">Email</th>
-                  <th className="py-2 px-3 font-semibold">No Telepon</th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">ITC</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Nama</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Jenis</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Alamat</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Email</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No Telepon</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {customers.length > 0 ? (
                   customers.map((customer, index) => (
                     <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">
                         {customer.salesman.namaSalesman}
                       </td>
-                      <td className="py-2 px-3">{customer.nama_customer}</td>
-                      <td className="py-2 px-3">{customer.jenis}</td>
-                      <td className="py-2 px-3">{customer.alamat}</td>
-                      <td className="py-2 px-3">{customer.email}</td>
-                      <td className="py-2 px-3">{customer.telp}</td>
-                      <td className="py-2 px-3 flex items-center justify-center">
+                      <td className="text-sm py-2 px-3">{customer.nama_customer}</td>
+                      <td className="text-sm py-2 px-3">{customer.jenis}</td>
+                      <td className="text-sm py-2 px-3">{customer.alamat}</td>
+                      <td className="text-sm py-2 px-3">{customer.email}</td>
+                      <td className="text-sm py-2 px-3">{customer.telp}</td>
+                      <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-col lg:flex-row gap-3">
                           <a href={"/edit_customer/" + customer.id}>
                             <IconButton size="md" color="light-blue">
@@ -295,7 +295,7 @@ function DataCustomer() {
                   <tr>
                     <td
                       colSpan="8"
-                      className="text-center capitalize py-3 bg-gray-100"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

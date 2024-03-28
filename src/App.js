@@ -73,6 +73,10 @@ import DetailHistoriSalesmanExcelcom from "./views/admin/laporan_excelcom/lapora
 import PrintHistoriTransaksiExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/PrintHistoriTransaksiExcelcom.js";
 import DetailHistoriTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/DetailHistoriTransaksiBeliExcelcom.js";
 import PrintHistoriTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/PrintHistoriTransaksiBeliExcelcom.js";
+import DetailHistoriSalesmanDinarpos from "./views/admin/laporan_dinarpos/laporan_salesman/DetailHistoriSalesmanDinarpos.js";
+import PrintHistoriTransaksiDinarpos from "./views/admin/laporan_dinarpos/laporan_salesman/PrintHistoriTransaksiDinarpos.js";
+import DetailHistoriTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/DetailHistoriTransaksiBeliDinarpos.js";
+import PrintHistoriTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/PrintHistoriTransaksiBeliDinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -389,21 +393,45 @@ function App() {
               component={LaporanSuplierDinar}
               isAuthenticated={true}
             />
+            {/* LAPORAN SALESMAN */}
             <PrivateRoute
               path="/laporan_salesman_dinarpos"
               component={LaporanSalesmanDinar}
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/detail_histori_salesman_dinarpos/:id"
+              component={DetailHistoriSalesmanDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/print_histori_laporan_salesman_dinarpos/:id"
+              component={PrintHistoriTransaksiDinarpos}
+              isAuthenticated={true}
+            />
+            {/* END LAPORAN SALESMAN */}
+            <PrivateRoute
               path="/laporan_customer_dinarpos"
               component={LaporanCustomerDinar}
               isAuthenticated={true}
             />
+            {/* LAPORAN TRANSAKSI BELI */}
             <PrivateRoute
               path="/laporan_transaksi_beli_dinarpos"
               component={LaporanTransaksiBeliDinar}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/detail_histori_transaksi_beli_dinarpos/:id"
+              component={DetailHistoriTransaksiBeliDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/print_histori_laporan_transaksi_beli_dinarpos/:id"
+              component={PrintHistoriTransaksiBeliDinarpos}
+              isAuthenticated={true}
+            />
+            {/* END LAPORAN TRANSAKSI BELI */}
             {/* END LAPORAN DINARPOS */}
 
             {/* LAPORAN EXCELCOM */}

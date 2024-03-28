@@ -310,10 +310,16 @@ function TransaksiPenjualanDinarPos() {
   const getDiskon = () => {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
-    if (pembayaran < total) {
-      $("#kembalian").html("0");
+    var cashKredit = $("#cashKredit").val();
+    if (cashKredit == "Cash" && pembayaran < total) {
+      $("#bayar").attr("disabled", "disabled");
+    } else if (pembayaran < total) {
+      $("#title").html("Kekurangan");
+      var kekurangan = parseInt(total - pembayaran);
+      $("#kembalian").html(formatRupiah(kekurangan));
     } else {
       var kembalian = parseInt(pembayaran - total);
+      $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian));
       checkEmptyTransaksi();
     }
@@ -326,13 +332,25 @@ function TransaksiPenjualanDinarPos() {
     var total = convertToAngka($("#total").html());
     var total2 = convertToAngka($("#total2").html());
     var kembalian = pembayaran - total;
+    var kekurangan = total - pembayaran;
+    var cashKredit = $("#cashKredit").val();
 
-    $("#kembalian").html(formatRupiah(kembalian + potongan));
+    if (cashKredit == "Cash" && pembayaran < total) {
+      $("#bayar").attr("disabled", "disabled");
+    } else if (pembayaran < total) {
+      $("#title").html("Kekurangan");
+      $("#kembalian").html(formatRupiah(kekurangan - potongan));
+    } else {
+      $("#title").html("Kembalian");
+      $("#kembalian").html(formatRupiah(kembalian + potongan));
+    }
+
+    // $("#kembalian").html(formatRupiah(kembalian + potongan));
     var ttl_bayar = total - potongan;
     var ttl_bayar_hemat = total2 - ttl_bayar;
     $("#ttl_bayar").html(formatRupiah(ttl_bayar));
     $("#ttl_bayar_hemat").html(formatRupiah(ttl_bayar_hemat));
-    checkEmptyTransaksi();
+    // checkEmptyTransaksi();
   };
 
   // BUTTON EDIT
@@ -537,6 +555,7 @@ function TransaksiPenjualanDinarPos() {
     setvalues(event.target.value);
     setCurrentPage(1);
   };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
       <SidebarAdmin />
@@ -589,14 +608,16 @@ function TransaksiPenjualanDinarPos() {
               </datalist>
 
               <div className="flex gap-2">
-                <button className="text-sm bg-gray-400 px-1"
+                <button
+                  className="text-sm bg-gray-400 px-1"
                   onClick={() => setCurrentPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
                   Prev
                 </button>
                 {/* <span>Page {currentPage}</span> */}
-                <button className="text-sm bg-gray-400 px-1"
+                <button
+                  className="text-sm bg-gray-400 px-1"
                   onClick={() => setCurrentPage(currentPage + 1)}
                   disabled={!options.length}
                 >
@@ -859,6 +880,7 @@ function TransaksiPenjualanDinarPos() {
                 label="Cash / Kredit"
                 color="blue"
                 className="w-full"
+                id="cashKredit"
                 onChange={(selectedOption) => setcashCredit(selectedOption)}
               >
                 <Option value="Cash">Cash</Option>
@@ -896,7 +918,9 @@ function TransaksiPenjualanDinarPos() {
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Kembalian</Typography>
+                  <Typography variant="paragraph" id="title">
+                    Kembalian / Kekurangan{" "}
+                  </Typography>
                   <Typography variant="h6" id="kembalian">
                     Rp 0,00
                   </Typography>

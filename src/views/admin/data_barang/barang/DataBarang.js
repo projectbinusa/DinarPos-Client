@@ -181,7 +181,7 @@ function DataBarang() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             Data Barang
@@ -238,30 +238,30 @@ function DataBarang() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold">No</th>
-                  <th className="py-2 px-3 font-semibold">Barcode Barang</th>
-                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="py-2 px-3 font-semibold">Unit Barang</th>
-                  <th className="py-2 px-3 font-semibold">Harga Beli (Rp)</th>
-                  <th className="py-2 px-3 font-semibold">Harga Jual (Rp)</th>
-                  <th className="py-2 px-3 font-semibold">
-                    Jumlah <span className="block">Stok</span>
+                  <th className="text-sm py-2 px-3 font-semibold">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Barcode Barang</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Nama Barang</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Unit Barang</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Harga Beli (Rp)</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Harga Jual (Rp)</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Jumlah <span className="text-sm block">Stok</span>
                   </th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {barangs.length > 0 ? (
                   barangs.map((barang, index) => (
                     <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{barang.barcodeBarang}</td>
-                      <td className="py-2 px-3">{barang.namaBarang}</td>
-                      <td className="py-2 px-3">{barang.unit}</td>
-                      <td className="py-2 px-3">{barang.hargaBeli}</td>
-                      <td className="py-2 px-3">{barang.hargaBarang}</td>
-                      <td className="py-2 px-3">{barang.jumlahStok}</td>
-                      <td className="py-2 px-3 flex items-center justify-center">
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{barang.barcodeBarang}</td>
+                      <td className="text-sm py-2 px-3">{barang.namaBarang}</td>
+                      <td className="text-sm py-2 px-3">{barang.unit}</td>
+                      <td className="text-sm py-2 px-3">{barang.hargaBeli}</td>
+                      <td className="text-sm py-2 px-3">{barang.hargaBarang}</td>
+                      <td className="text-sm py-2 px-3">{barang.jumlahStok}</td>
+                      <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <a href={"/edit_barang/" + barang.idBarang}>
                             <IconButton size="md" color="light-blue">
@@ -284,7 +284,7 @@ function DataBarang() {
                   <tr>
                     <td
                       colSpan="8"
-                      className="text-center capitalize py-3 bg-gray-100"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

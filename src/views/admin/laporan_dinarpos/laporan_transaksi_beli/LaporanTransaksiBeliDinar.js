@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { API_SUPLIER, LAPORAN_TRANSAKSI_BELI } from "../../../../utils/BaseUrl";
+import { API_SUPLIER, GET_BARANG_TRANSAKSI_BELI_DINARPOS, LAPORAN_TRANSAKSI_BELI } from "../../../../utils/BaseUrl";
 import { ArrowPathIcon, EyeIcon, PrinterIcon } from "@heroicons/react/24/outline";
 
 function LaporanTransaksiBeliDinar() {
@@ -93,10 +93,42 @@ function LaporanTransaksiBeliDinar() {
     }),
   };
 
+  const [barang, setBarang] = useState([]);
+
+  const barangTransaksi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${GET_BARANG_TRANSAKSI_BELI_DINARPOS}?id_transaksi=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        laporans.map(async (laporan) => {
+          const barangData = await barangTransaksi(laporan.idTransaksiBeli);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
+  }, [laporans]);
+
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             LAPORAN Transaksi Beli DINARPOS
@@ -162,58 +194,119 @@ function LaporanTransaksiBeliDinar() {
               Print
             </Button>
           </form>
-          <div className="rounded mb-5 mt-12 overflow-auto">
+          <div className="rounded mb-5 p-2 mt-12 overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto overflow-auto w-full"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="py-2 px-3 font-semibold">Tanggal</th>
-                  <th className="py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="py-2 px-3 font-semibold">Nama Suplier</th>
-                  <th className="py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="py-2 px-3 font-semibold">Harga Beli</th>
-                  <th className="py-2 px-3 font-semibold">QTY</th>
-                  <th className="py-2 px-3 font-semibold">
-                    Total Harga Barang
+                  <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Suplier
                   </th>
-                  <th className="py-2 px-3 font-semibold">Total Belanja</th>
-                  <th className="py-2 px-3 font-semibold">Total Keseluruhan</th>
-                  <th className="py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Harga Beli (Rp)
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">QTY</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Harga Barang (Rp)
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Belanja (Rp)
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Keseluruhan (Rp)
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {laporans.length > 0 ? (
-                  laporans.map((laporan, index) => (
-                    <tr key={index}>
-                      <td className="w-[4%]">{index + 1}</td>
-                      <td className="py-2 px-3">{laporan.created_date}</td>
-                      <td className="w-[15%] py-2 px-3">{laporan.noFaktur}</td>
-                      <td className="py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <IconButton size="md" color="green" type="button">
-                            <EyeIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
+                  laporans.map((laporan, index) => {
+                    const barangLaporan = barang[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.created_date}
+                        </td>
+                        <td className="text-sm w-[15%] py-2 px-3">
+                          {laporan.noFaktur}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.suplier.namaSuplier}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.barcodeBarang}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.hargaBrng}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.qty}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.totalHargaBarang}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.totalBelanja}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {laporan.totalBelanja}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex flex-col gap-2 items-center">
+                          <a
+                            href={
+                              "/detail_histori_transaksi_beli_dinarpos/" +
+                              laporan.idTransaksiBeli
+                            }
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <EyeIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <a
+                            href={
+                              "/print_histori_laporan_transaksi_beli_dinarpos/" +
+                              laporan.idTransaksiBeli
+                            }
+                            target="_blank"
+                          >
+                            <IconButton size="md" color="green">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                           <IconButton size="md" color="red">
                             <ArrowPathIcon className="w-6 h-6 white" />
                           </IconButton>
-                        </div>
-                      </td>{" "}
-                    </tr>
-                  ))
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td
