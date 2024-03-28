@@ -1,9 +1,9 @@
 // Local
-const url = "http://localhost:2000/api";
+// const url = "http://localhost:2000/api";
 
 // Deploy
 // const url = "http://41.216.186.59:2000/api";
-// const url = "http://api-dinarpos.excellentsistem.com/api";
+const url = "http://api-dinarpos.excellentsistem.com/api";
 
 // DATA USER
 export const API_USER = `${url}/user`;
@@ -61,4 +61,18 @@ export const NOTIFIKASI_30_KONFIRMASI = `${url}/notifikasi/konfirmasi/30_hari`;
 export const NOTIFIKASI_90_KONFIRMASI = `${url}/notifikasi/konfirmasi/90_hari`;
 export const NOTIFIKASI_120_KONFIRMASI = `${url}/notifikasi/konfirmasi/120_hari`;
 export const NOTIFIKASI_365_KONFIRMASI = `${url}/notifikasi/konfirmasi/365_hari`;
+
+// NOTIFIKASI KONFIRMASI EXCELCOM
+export const NOTIFIKASI_KONFIRMASI_7_EXCELCOM = `${url}/notifikasi/konfirmasi/7_hari/excelcom`;
+export const NOTIFIKASI_KONFIRMASI_30_EXCELCOM = `${url}/notifikasi/konfirmasi/30_hari/excelcom`;
+export const NOTIFIKASI_KONFIRMASI_90_EXCELCOM = `${url}/notifikasi/konfirmasi/90_hari/excelcom`;
+export const NOTIFIKASI_KONFIRMASI_120_EXCELCOM = `${url}/notifikasi/konfirmasi/120_hari/excelcom`;
+export const NOTIFIKASI_KONFIRMASI_365_EXCELCOM = `${url}/notifikasi/konfirmasi/365_hari/excelcom`;
+
+// NOTIFIKASI KONFIRMASI DINARPOS
+export const NOTIFIKASI_KONFIRMASI_7_DINARPOS = `${url}/notifikasi/konfirmasi/7_hari/dinarpos`;
+export const NOTIFIKASI_KONFIRMASI_30_DINARPOS = `${url}/notifikasi/konfirmasi/30_hari/dinarpos`;
+export const NOTIFIKASI_KONFIRMASI_90_DINARPOS = `${url}/notifikasi/konfirmasi/90_hari/dinarpos`;
+export const NOTIFIKASI_KONFIRMASI_120_DINARPOS = `${url}/notifikasi/konfirmasi/120_hari/dinarpos`;
+export const NOTIFIKASI_KONFIRMASI_365_DINARPOS = `${url}/notifikasi/konfirmasi/365_hari/dinarpos`;
 

@@ -7,13 +7,16 @@ import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   NOTIFIKASI_7_EXCELCOM,
   GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
+  NOTIFIKASI_KONFIRMASI_7_EXCELCOM
 } from "../../../../utils/BaseUrl";
 import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
 
 function Notifikasi7Excelcom() {
   const tableRef = useRef(null);
+  const tableRef2 = useRef(null);
   const [notifikasis, setNotifikasi] = useState([]);
+  const [konfirmasi, setKonfirmasi] = useState([]);
   const [barang, setBarang] = useState([]);
 
   const initializeDataTable = () => {
@@ -23,6 +26,13 @@ function Notifikasi7Excelcom() {
 
     $(tableRef.current).DataTable({});
   };
+  const initializeDataTable2 = () => {
+    if ($.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable().destroy();
+    }
+
+    $(tableRef2.current).DataTable({});
+  };
 
   const getAll = async () => {
     try {
@@ -30,6 +40,16 @@ function Notifikasi7Excelcom() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setNotifikasi(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+  const getAllNotifikasi = async () => {
+    try {
+      const response = await axios.get(`${NOTIFIKASI_KONFIRMASI_7_EXCELCOM}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setKonfirmasi(response.data.data);
     } catch (error) {
       console.log("get all", error);
     }
@@ -67,6 +87,7 @@ function Notifikasi7Excelcom() {
 
   useEffect(() => {
     getAll();
+    getAllNotifikasi();
   }, []);
 
   useEffect(() => {
@@ -75,6 +96,12 @@ function Notifikasi7Excelcom() {
       initializeDataTable();
     }
   }, [notifikasis]);
+  useEffect(() => {
+    if (konfirmasi && konfirmasi.length > 0) {
+      // Initialize DataTable only when notifikasis data is available
+      initializeDataTable2();
+    }
+  }, [konfirmasi]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -204,8 +231,8 @@ function Notifikasi7Excelcom() {
 
           <div className="rounded my-5 overflow-auto">
             <table
-              id="example_data"
-              ref={tableRef}
+              id="example_data1"
+              ref={tableRef2}
               className="rounded-sm table-auto overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
@@ -221,16 +248,16 @@ function Notifikasi7Excelcom() {
                 </tr>
               </thead>
               <tbody>
-                {notifikasis.length > 0 ? (
-                  notifikasis.map((penjualan, index) => (
+                {konfirmasi.length > 0 ? (
+                  konfirmasi.map((notifikasi, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.created_date}</td>
+                      <td className="text-sm py-2 px-3">{notifikasi.tanggalKonfirmasi7}</td>
                       <td className="text-sm w-[15%] py-2 px-3">
-                        {penjualan.noFaktur}
+                        {notifikasi.noFaktur}
                       </td>
-                      <td className="text-sm py-2 px-3">{penjualan.namaCustomer}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.namaSalesman}</td>
+                      <td className="text-sm py-2 px-3">{notifikasi.customer.nama_customer}</td>
+                      <td className="text-sm py-2 px-3">{notifikasi.salesman.namaSalesman}</td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <IconButton size="md" color="light-blue">
