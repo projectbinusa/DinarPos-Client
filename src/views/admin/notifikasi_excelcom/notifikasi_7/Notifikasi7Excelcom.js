@@ -254,10 +254,10 @@ function Notifikasi7Excelcom() {
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">{notifikasi.tanggalKonfirmasi7}</td>
                       <td className="text-sm w-[15%] py-2 px-3">
-                        {notifikasi.noFaktur}
+                      {notifikasi.customer.nama_customer}
                       </td>
-                      <td className="text-sm py-2 px-3">{notifikasi.customer.nama_customer}</td>
                       <td className="text-sm py-2 px-3">{notifikasi.salesman.namaSalesman}</td>
+                      <td className="text-sm py-2 px-3">{notifikasi.ket7Hari}</td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <IconButton size="md" color="light-blue">
