@@ -184,7 +184,7 @@ function Notifikasi7Excelcom() {
 
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <Typography variant="lead" className="uppercase">
-            KONFIRMASI NOTIFIKASI 30 HARI EXCELCOM
+            KONFIRMASI NOTIFIKASI 7 HARI EXCELCOM
           </Typography>
 
           <div className="rounded my-5 overflow-auto">

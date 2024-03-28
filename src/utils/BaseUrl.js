@@ -61,3 +61,4 @@ export const NOTIFIKASI_30_KONFIRMASI = `${url}/notifikasi/konfirmasi/30_hari`;
 export const NOTIFIKASI_90_KONFIRMASI = `${url}/notifikasi/konfirmasi/90_hari`;
 export const NOTIFIKASI_120_KONFIRMASI = `${url}/notifikasi/konfirmasi/120_hari`;
 export const NOTIFIKASI_365_KONFIRMASI = `${url}/notifikasi/konfirmasi/365_hari`;
+
