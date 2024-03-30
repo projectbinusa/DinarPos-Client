@@ -16,7 +16,6 @@ import {
   API_STOK_MASUK,
   API_SUPLIER,
 } from "../../../../utils/BaseUrl";
-import ReactSelect from "react-select";
 import Swal from "sweetalert2";
 
 function AddStokMasuk() {

@@ -148,26 +148,6 @@ function TransaksiPenjualanExcelCom() {
     allSalesman();
   }, []);
 
-  // PILIH BARANG
-  const handleBarangChange = (selectedOption) => {
-    setSelectedBarang(selectedOption);
-    setbarcodeBarang(selectedOption.value);
-
-    if (selectedOption) {
-      axios
-        .get(`${API_BARANG}/barcode?barcode=` + selectedOption.value, {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        })
-        .then((res) => {
-          setsisa(res.data.data.jumlahStok);
-          sethargaBrng(res.data.data.hargaBarang);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  };
-
   // FORMAT RUPIAH
   const formatRupiah = (value) => {
     const formatter = new Intl.NumberFormat("id-ID", {
@@ -496,13 +476,6 @@ function TransaksiPenjualanExcelCom() {
               window.location.reload();
             }
           });
-          // Swal.fire({
-          //   title: "Penjualan Berhasil!",
-          //   icon: "success",
-          //   showConfirmButton: false,
-          //   timer: 1500,
-          // });
-          // window.location.reload();
         } else {
           alert("gagal");
         }
@@ -515,6 +488,88 @@ function TransaksiPenjualanExcelCom() {
   useEffect(() => {
     updateTotalHarga(produk);
   }, [produk]);
+
+  // ALL CUSTOMER
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_CUSTOMER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
+  // END ALL CUSTOMER
+
+  // ALL SALESMAN
+  const [valuesSalesman, setvaluesSalesman] = useState("");
+  const [optionsSalesman, setoptionsSalesman] = useState([]);
+  const [currentPageSalesman, setCurrentPageSalesman] = useState(1);
+
+  const handleSalesman = async () => {
+    if (valuesSalesman.trim() !== "") {
+      const response = await fetch(
+        `${API_SALESMAN}/pagination?limit=10&page=${currentPageSalesman}&search=${valuesSalesman}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsSalesman(data.data);
+      console.log(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleSalesman();
+  }, [currentPageSalesman, valuesSalesman]);
+
+  const handleChangeSalesman = (event) => {
+    setvaluesSalesman(event.target.value);
+    setCurrentPageSalesman(1);
+  };
+  // END ALL SALESMAN
+
+  // PILIH BARANG
+  const handleBarangChange = (selectedOption) => {
+    setSelectedBarang(selectedOption);
+    setbarcodeBarang(selectedOption.value);
+
+    if (selectedOption) {
+      axios
+        .get(`${API_BARANG}/barcode?barcode=` + selectedOption.value, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        })
+        .then((res) => {
+          setsisa(res.data.data.jumlahStok);
+          sethargaBrng(res.data.data.hargaBarang);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
@@ -543,28 +598,46 @@ function TransaksiPenjualanExcelCom() {
         {/* FORM */}
         <div className="my-10">
           <div className="my-8">
-            <div>
-              <label
-                htmlFor="customer"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Customer
-              </label>
-              <ReactSelect
+            <div className="flex gap-2 items-end">
+              <Input
+                label="Customer"
+                variant="static"
+                color="blue"
+                list="customer-list"
                 id="customer"
-                options={customer.map((down) => {
-                  return {
-                    value: down.id,
-                    label: down.nama_customer,
-                  };
-                })}
+                name="customer"
+                onChange={(event) => {
+                  handleChange(event);
+                  setcustomerId(event.target.value);
+                }}
                 placeholder="Pilih Customer"
-                styles={customStyles}
-                onChange={(selectedOption) =>
-                  setcustomerId(selectedOption.value)
-                }
               />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              <datalist id="customer-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.id}>{option.nama_customer}</option>
+                    ))}
+                  </>
+                )}
+              </datalist>
+
+              <div className="flex gap-2">
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
+                >
+                  Next
+                </button>
+              </div>
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
@@ -751,30 +824,49 @@ function TransaksiPenjualanExcelCom() {
                     onChange={(e) => setketerangan(e.target.value)}
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="salesman"
-                    className="text-[14px] text-blue-gray-400"
-                  >
-                    Salesman
-                  </label>
-                  <ReactSelect
+                <div className="flex gap-2 items-end">
+                  <Input
+                    label="Salesman"
+                    variant="static"
+                    color="blue"
+                    list="salesman-list"
                     id="salesman"
-                    options={salesman.map((down) => {
-                      return {
-                        value: down.idSalesman,
-                        label: down.namaSalesman,
-                      };
-                    })}
+                    name="salesman"
+                    onChange={(event) => {
+                      handleChangeSalesman(event);
+                      setmarkettingId(event.target.value);
+                    }}
                     placeholder="Pilih Salesman"
-                    styles={customStyles}
-                    onChange={(selectedOption) =>
-                      setmarkettingId(selectedOption.value)
-                    }
                   />
-                  <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-                </div>
+                  <datalist id="salesman-list">
+                    {optionsSalesman.length > 0 && (
+                      <>
+                        {optionsSalesman.map((option) => (
+                          <option value={option.idSalesman}>
+                            {option.namaSalesman}
+                          </option>
+                        ))}
+                      </>
+                    )}
+                  </datalist>
 
+                  <div className="flex gap-2">
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPageSalesman(currentPageSalesman - 1)}
+                      disabled={currentPageSalesman === 1}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPageSalesman(currentPageSalesman + 1)}
+                      disabled={!optionsSalesman.length}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph">Anda Hemat</Typography>
                   <Typography variant="h6" id="ttl_bayar_hemat">

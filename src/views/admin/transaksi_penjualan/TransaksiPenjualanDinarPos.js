@@ -615,7 +615,6 @@ function TransaksiPenjualanDinarPos() {
                 >
                   Prev
                 </button>
-                {/* <span>Page {currentPage}</span> */}
                 <button
                   className="text-sm bg-gray-400 px-1"
                   onClick={() => setCurrentPage(currentPage + 1)}

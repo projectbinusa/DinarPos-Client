@@ -3,11 +3,22 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { API_CUSTOMER, API_SALESMAN } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
-import { Button, DialogBody, DialogFooter, DialogHeader, Input } from "@material-tailwind/react";
+import {
+  Button,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Input,
+} from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { AtSymbolIcon, MapPinIcon, PhoneIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import {
+  AtSymbolIcon,
+  MapPinIcon,
+  PhoneIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 
-function ModalTambahCustomer({handleOpen}) {
+function ModalTambahCustomer({ handleOpen }) {
   const [alamat, setalamat] = useState("");
   const [email, setemail] = useState("");
   const [jenis, setjenis] = useState("");
@@ -73,7 +84,7 @@ function ModalTambahCustomer({handleOpen}) {
           timer: 1500,
         });
         console.log(error);
-      }else {
+      } else {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",
@@ -115,31 +126,85 @@ function ModalTambahCustomer({handleOpen}) {
       },
     }),
   };
+
+  // ALL SALESMAN
+  const [valuesSalesmanModal, setvaluesSalesmanModal] = useState("");
+  const [optionsSalesmanModal, setoptionsSalesmanModal] = useState([]);
+  const [currentPageSalesmanModal, setCurrentPageSalesmanModal] = useState(1);
+
+  const handleSalesmanmodal = async () => {
+    if (valuesSalesmanModal.trim() !== "") {
+      const response = await fetch(
+        `${API_SALESMAN}/pagination?limit=10&page=${currentPageSalesmanModal}&search=${valuesSalesmanModal}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsSalesmanModal(data.data);
+      console.log(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleSalesmanmodal();
+  }, [currentPageSalesmanModal, valuesSalesmanModal]);
+
+  const handleChangeSalesmanmodal = (event) => {
+    setvaluesSalesmanModal(event.target.value);
+    setCurrentPageSalesmanModal(1);
+  };
+  // END ALL SALESMAN
+
   return (
     <div>
       <DialogHeader>Tambah Customer</DialogHeader>
       <form onSubmit={addCustomer}>
         <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
-            <label
-              htmlFor="salesman"
-              className="text-[14px] text-blue-gray-400"
-            >
-              Nama Salesman
-            </label>
-            <ReactSelect
-              id="salesman"
-              options={salesman.map((down) => {
-                return {
-                  value: down.idSalesman,
-                  label: down.namaSalesman,
-                };
-              })}
+          <div className="flex gap-2 items-end">
+            <Input
+              label="Salesman"
+              variant="static"
+              color="blue"
+              list="modal-salesman-list"
+              id="salesman-modal"
+              name="salesman-modal"
+              onChange={(event) => {
+                handleChangeSalesmanmodal(event);
+                setsalesmanId(event.target.value);
+              }}
               placeholder="Pilih Salesman"
-              styles={customStyles}
-              onChange={(selectedOption) => setsalesmanId(selectedOption.value)}
             />
-            <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+            <datalist id="modal-salesman-list">
+              {optionsSalesmanModal.length > 0 && (
+                <>
+                  {optionsSalesmanModal.map((option2) => (
+                    <option value={option2.idSalesman}>
+                      {option2.namaSalesman}
+                    </option>
+                  ))}
+                </>
+              )}
+            </datalist>
+
+            <div className="flex gap-2">
+              <button
+                className="text-sm bg-gray-400 px-1"
+                onClick={() => setCurrentPageSalesmanModal(currentPageSalesmanModal - 1)}
+                disabled={currentPageSalesmanModal === 1}
+              >
+                Prev
+              </button>
+              <button
+                className="text-sm bg-gray-400 px-1"
+                onClick={() => setCurrentPageSalesmanModal(currentPageSalesmanModal + 1)}
+                disabled={!optionsSalesmanModal.length}
+              >
+                Next
+              </button>
+            </div>
           </div>
           <div className="lg:mt-5">
             <Input
