@@ -6,11 +6,16 @@ import axios from "axios";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
-import { NOTIFIKASI_365_EXCELCOM } from "../../../../utils/BaseUrl";
+import {
+  NOTIFIKASI_365_EXCELCOM,
+  NOTIFIKASI_KONFIRMASI_365_EXCELCOM,
+} from "../../../../utils/BaseUrl";
 
 function Notifikasi365Excelcom() {
   const tableRef = useRef(null);
+  const tableRef2 = useRef(null);
   const [notifikasis, setNotifikasi] = useState([]);
+  const [konfirmasis, setKonfirmasis] = useState([]);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -18,6 +23,14 @@ function Notifikasi365Excelcom() {
     }
 
     $(tableRef.current).DataTable({});
+  };
+
+  const initializeDataTable2 = () => {
+    if ($.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable().destroy();
+    }
+
+    $(tableRef2.current).DataTable({});
   };
 
   const getAll = async () => {
@@ -31,14 +44,68 @@ function Notifikasi365Excelcom() {
     }
   };
 
+  // GET ALL KONFIRMASI
+  const getAllKonfirmasi = async () => {
+    try {
+      const response = await axios.get(
+        `${NOTIFIKASI_KONFIRMASI_365_EXCELCOM}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setKonfirmasis(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
   useEffect(() => {
     getAll();
+    getAllKonfirmasi();
   }, []);
 
   useEffect(() => {
     if (notifikasis && notifikasis.length > 0) {
       initializeDataTable();
     }
+  }, [notifikasis]);
+
+  useEffect(() => {
+    if (konfirmasis && konfirmasis.length > 0) {
+      initializeDataTable2();
+    }
+  }, [konfirmasis]);
+
+  // GET BARANG
+  const [barang, setBarang] = useState([]);
+
+  const barangTransaksi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${GET_BARANG_TRANSAKSI_JUAL_EXCELCOM}?id_transaksi=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        notifikasis.map(async (notif) => {
+          const barangData = await barangTransaksi(notif.idTransaksi);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
   }, [notifikasis]);
 
   return (
@@ -86,60 +153,68 @@ function Notifikasi365Excelcom() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Nama Barang
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 w-[15%] font-semibold">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {notifikasis.length > 0 ? (
-                  notifikasis.map((penjualan, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">
-                        {penjualan.created_date}
-                      </td>
-                      <td className="text-sm w-[15%] py-2 px-3">
-                        {penjualan.noFaktur}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {penjualan.namaCustomer}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {penjualan.namaSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {penjualan.namaSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="orange">
-                            <IconButton
-                              size="md"
-                              color="orange"
-                              onClick={() => {
-                                const phone = encodeURIComponent(
-                                  penjualan.noTelpCustomer
-                                ); // Mengkodekan nomor telepon
-                                const message = encodeURIComponent(
-                                  `Selamat pagi kak ${penjualan.namaCustomer}%0APerkenalkan saya ${penjualan.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                );
-                                window.open(
-                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                );
-                              }}
-                            >
-                              <PhoneIcon className="w-6 h-6 white" />
+                  notifikasis.map((row, index) => {
+                    const dataBrg = barang[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {row.created_date}
+                        </td>
+                        <td className="text-sm py-2 px-3">{row.noFaktur}</td>
+                        <td className="text-sm py-2 px-3">
+                          {row.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.salesman.namaSalesman}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {dataBrg.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.namaBarang}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <div className="flex flex-row gap-3">
+                            <IconButton size="md" color="light-blue">
+                              <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
-                          </IconButton>
-                        </div>
-                      </td>{" "}
-                    </tr>
-                  ))
+                            <IconButton size="md" color="red" type="button">
+                              <CheckIcon className="w-6 h-6 white" />
+                            </IconButton>
+                            <IconButton size="md" color="orange">
+                              <IconButton
+                                size="md"
+                                color="orange"
+                                onClick={() => {
+                                  const phone = encodeURIComponent(
+                                    row.noTelpCustomer
+                                  ); // Mengkodekan nomor telepon
+                                  const message = encodeURIComponent(
+                                    `Hallo kak ${row.customer.nama_customer}%0APerkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  );
+                                  window.open(
+                                    `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                                  );
+                                }}
+                              >
+                                <PhoneIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </IconButton>
+                          </div>
+                        </td>{" "}
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td
@@ -185,34 +260,26 @@ function Notifikasi365Excelcom() {
                 </tr>
               </thead>
               <tbody>
-                {notifikasis.length > 0 ? (
-                  notifikasis.map((penjualan, index) => (
+                {konfirmasis.length > 0 ? (
+                  konfirmasis.map((down, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.created_date}
+                        {down.tanggalKonfirmasi365}
                       </td>
                       <td className="text-sm w-[15%] py-2 px-3">
-                        {penjualan.noFaktur}
+                        {down.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.namaCustomer}
+                        {down.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.namaSalesman}
+                        {down.salesman.namaSalesman}
                       </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="orange">
-                            <PhoneIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
+                        <IconButton size="md" color="light-blue">
+                          <PrinterIcon className="w-6 h-6 white" />
+                        </IconButton>
                       </td>{" "}
                     </tr>
                   ))

@@ -9,7 +9,7 @@ import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import {
   GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
   NOTIFIKASI_30_EXCELCOM,
-  NOTIFIKASI_KONFIRMASI_7_EXCELCOM,
+  NOTIFIKASI_KONFIRMASI_30_EXCELCOM,
 } from "../../../../utils/BaseUrl";
 
 function Notifikasi30Excelcom() {
@@ -49,7 +49,7 @@ function Notifikasi30Excelcom() {
   // GET ALL KONFIRMASI
   const getAllKonfirmasi = async () => {
     try {
-      const response = await axios.get(`${NOTIFIKASI_KONFIRMASI_7_EXCELCOM}`, {
+      const response = await axios.get(`${NOTIFIKASI_KONFIRMASI_30_EXCELCOM}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setKonfirmasis(response.data.data);
