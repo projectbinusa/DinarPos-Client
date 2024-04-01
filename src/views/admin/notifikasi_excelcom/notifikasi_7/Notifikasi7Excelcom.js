@@ -19,6 +19,7 @@ function Notifikasi7Excelcom() {
   const [konfirmasi, setKonfirmasi] = useState([]);
   const [barang, setBarang] = useState([]);
 
+
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
@@ -64,6 +65,7 @@ function Notifikasi7Excelcom() {
         }
       );
       return response.data.data;
+      
     } catch (error) {
       console.log("get all", error);
       return [];
@@ -144,7 +146,7 @@ function Notifikasi7Excelcom() {
                     Nama Salesman
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    Barcode Barang
+                    Nama Barang
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
@@ -171,7 +173,7 @@ function Notifikasi7Excelcom() {
                         <td className="text-sm py-2 px-3">
                           {barangLaporan.map((brg, idx) => (
                             <ul key={idx}>
-                              <li>{brg.barcodeBarang}</li>
+                              <li>{brg.namaBarang}</li>
                             </ul>
                           ))}
                         </td>

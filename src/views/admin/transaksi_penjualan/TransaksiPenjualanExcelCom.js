@@ -315,6 +315,8 @@ function TransaksiPenjualanExcelCom() {
     var kekurangan = total - pembayaran;
     var cashKredit = $("#cashKredit").val();
 
+    console.log(cashCredit);
+
     if (cashKredit == "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
