@@ -40,7 +40,7 @@ function Register() {
       passwordPengguna: password,
       usernamePengguna: username,
       namaPengguna: nama,
-      roleToko: "Superadmin"
+      roleToko: "Superadmin",
     };
 
     try {
@@ -56,10 +56,23 @@ function Register() {
         window.location.reload();
       }, 1500);
     } catch (error) {
-      if (error.response.data.code === 400) {
+      if (error.response.data.data === "Password not valid!") {
         Swal.fire({
           icon: "warning",
-          title: "Username Sudah Digunakan!",
+          title: "Password Tidak Sesuai!",
+          text: "Password minimal 8 karakter dengan kombinasi angka, huruf kecil & besar ",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else if (
+        error.response.data.data === "Username Pengguna sudah digunakan"
+      ) {
+        Swal.fire({
+          icon: "warning",
+          title: "Username Pengguna Sudah Digunakan!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -126,7 +139,8 @@ function Register() {
             </div>
           </div>
           <Typography variant="small" className="mt-6 text-red-400">
-            * Password minimal 8 karakter dengan kombinasi angka, huruf besar dan kecil{" "}
+            * Password minimal 8 karakter dengan kombinasi angka, huruf besar
+            dan kecil{" "}
           </Typography>
 
           <Button
