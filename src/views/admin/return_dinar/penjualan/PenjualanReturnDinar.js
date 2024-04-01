@@ -4,41 +4,81 @@ import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import axios from "axios";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Typography } from "@material-tailwind/react";
-import { API_RETURN_DINARPOS } from '../../../../utils/BaseUrl';
+import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
+import { API_RETURN_DINARPOS } from "../../../../utils/BaseUrl";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Swal from "sweetalert2";
+import { EyeIcon, PrinterIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 function PenjualanReturnDinar() {
-    const tableRef = useRef(null);
-    const [penjualans, setPenjualan] = useState([]);
-  
-    const initializeDataTable = () => {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
+  const tableRef = useRef(null);
+  const [penjualans, setPenjualan] = useState([]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
+
+    $(tableRef.current).DataTable({});
+  };
+
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_RETURN_DINARPOS}/penjualan`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setPenjualan(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
+  useEffect(() => {
+    if (penjualans && penjualans.length > 0) {
+      initializeDataTable();
+    }
+  }, [penjualans]);
+
+  const history = useHistory();
+
+  // DELETE
+  const deleted = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_RETURN_DINARPOS}/penjualan/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/pembelian_return_dinarpos");
+              window.location.reload();
+            }, 1500);
+          });
       }
-  
-      $(tableRef.current).DataTable({});
-    };
-  
-    const getAll = async () => {
-      try {
-        const response = await axios.get(`${API_RETURN_DINARPOS}/penjualan`, {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        });
-        setPenjualan(response.data.data);
-      } catch (error) {
-        console.log("get all", error);
-      }
-    };
-  
-    useEffect(() => {
-      getAll();
-    }, []);
-  
-    useEffect(() => {
-      if (penjualans && penjualans.length > 0) {
-        initializeDataTable();
-      }
-    }, [penjualans]);
+    });
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -75,9 +115,15 @@ function PenjualanReturnDinar() {
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
                   <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Salesman</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Total Belanja</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Salesman
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Customer
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Belanja
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
@@ -86,12 +132,51 @@ function PenjualanReturnDinar() {
                   penjualans.map((penjualan, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.barcode_penjualan}</td>
-                      <td className="text-sm w-[15%] py-2 px-3">{penjualan.unit}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_beli}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_jual}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_jual}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_jual}</td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.created_date}
+                      </td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {penjualan.noFaktur}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.salesman.namaSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.customer.nama_customer}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.totalBelanja}
+                      </td>
+                      <td className="text-sm py-2 px-3 flex flex-col gap-2">
+                        <a
+                          href={
+                            "/detail_histori_salesman_dinarpos/" +
+                            penjualan.idTransaksi
+                          }
+                        >
+                          <IconButton size="md" color="light-blue">
+                            <EyeIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
+                        <a
+                          href={
+                            "/print_histori_laporan_salesman_dinarpos/" +
+                            penjualan.idTransaksi
+                          }
+                          target="_blank"
+                        >
+                          <IconButton size="md" color="green">
+                            <PrinterIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
+                        <IconButton
+                          size="md"
+                          color="red"
+                          onClick={() => deleted(penjualan.idTransaksi)}
+                        >
+                          <TrashIcon className="w-6 h-6 white" />
+                        </IconButton>
+                      </td>
                     </tr>
                   ))
                 ) : (
@@ -110,7 +195,7 @@ function PenjualanReturnDinar() {
         </main>
       </div>
     </section>
-  )
+  );
 }
 
-export default PenjualanReturnDinar
+export default PenjualanReturnDinar;

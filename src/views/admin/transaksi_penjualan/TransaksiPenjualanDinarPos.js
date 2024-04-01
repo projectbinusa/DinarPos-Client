@@ -468,11 +468,22 @@ function TransaksiPenjualanDinarPos() {
     var ttlBayarHemat = convertToAngka(
       document.getElementById("ttl_bayar_hemat").innerHTML
     );
+    var title = document.getElementById("title").innerHTML;
+    var kekurangans = convertToAngka(
+      document.getElementById("kembalian").innerHTML
+    );
 
     var diskons = 0;
     for (let index = 0; index < addProduk.length; index++) {
       const element = addProduk[index];
       diskons += element.diskon;
+    }
+
+    var kekurangan = 0;
+    if (title === "Kekurangan") {
+      kekurangan = kekurangans;
+    } else {
+      kekurangan = 0;
     }
 
     const request = {
@@ -484,6 +495,7 @@ function TransaksiPenjualanDinarPos() {
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
+      kekurangan: kekurangan,
       sisa: sisa,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
@@ -615,7 +627,6 @@ function TransaksiPenjualanDinarPos() {
                 >
                   Prev
                 </button>
-                {/* <span>Page {currentPage}</span> */}
                 <button
                   className="text-sm bg-gray-400 px-1"
                   onClick={() => setCurrentPage(currentPage + 1)}

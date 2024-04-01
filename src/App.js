@@ -68,7 +68,6 @@ import CetakStrukExcelcom from "./views/admin/transaksi_pembeliaan/CetakStrukExc
 import CetakStrukDinarpos from "./views/admin/transaksi_pembeliaan/CetakStrukDinarpos.js";
 import CetakStrukPenjualanDinar from "./views/admin/transaksi_penjualan/CetakStrukPenjualanDinar.js";
 import CetakStrukPenjualanExcelcom from "./views/admin/transaksi_penjualan/CetakSturkPenjualanExcelcom.js";
-import PrintByTglSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/PrintByTglSalesmanExcelcom.js";
 import DetailHistoriSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/DetailHistoriSalesmanExcelcom.js";
 import PrintHistoriTransaksiExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/PrintHistoriTransaksiExcelcom.js";
 import DetailHistoriTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/DetailHistoriTransaksiBeliExcelcom.js";
@@ -77,6 +76,7 @@ import DetailHistoriSalesmanDinarpos from "./views/admin/laporan_dinarpos/lapora
 import PrintHistoriTransaksiDinarpos from "./views/admin/laporan_dinarpos/laporan_salesman/PrintHistoriTransaksiDinarpos.js";
 import DetailHistoriTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/DetailHistoriTransaksiBeliDinarpos.js";
 import PrintHistoriTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/PrintHistoriTransaksiBeliDinarpos.js";
+import TanggalFilterSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/TanggalFilterSalesmanExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -453,7 +453,7 @@ function App() {
             />
             <PrivateRoute
               path="/tanggalfilter_salesman_excelcom"
-              component={PrintByTglSalesmanExcelcom}
+              component={TanggalFilterSalesmanExcelcom}
               isAuthenticated={true}
             />
             <PrivateRoute

@@ -95,19 +95,19 @@ function PembelianBarangReturn() {
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {pembelian.barcode_pembelian}
+                        {pembelian.created_date}
                       </td>
                       <td className="text-sm w-[15%] py-2 px-3">
-                        {pembelian.unit}
+                        {pembelian.transaksiBeli.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {pembelian.harga_beli}
+                        {pembelian.barcodeBarang}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {pembelian.harga_jual}
+                        {pembelian.namaBarang}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {pembelian.harga_jual}
+                        {pembelian.transaksiBeli.suplier.namaSuplier}
                       </td>
                     </tr>
                   ))

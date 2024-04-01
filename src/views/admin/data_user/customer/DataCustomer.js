@@ -204,6 +204,37 @@ function DataCustomer() {
     }),
   };
 
+  // ALL SALESMAN
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
+  // END ALL SALESMAN
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -255,7 +286,9 @@ function DataCustomer() {
                   <th className="text-sm py-2 px-3 font-semibold">Jenis</th>
                   <th className="text-sm py-2 px-3 font-semibold">Alamat</th>
                   <th className="text-sm py-2 px-3 font-semibold">Email</th>
-                  <th className="text-sm py-2 px-3 font-semibold">No Telepon</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    No Telepon
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
@@ -267,7 +300,9 @@ function DataCustomer() {
                       <td className="text-sm py-2 px-3">
                         {customer.salesman.namaSalesman}
                       </td>
-                      <td className="text-sm py-2 px-3">{customer.nama_customer}</td>
+                      <td className="text-sm py-2 px-3">
+                        {customer.nama_customer}
+                      </td>
                       <td className="text-sm py-2 px-3">{customer.jenis}</td>
                       <td className="text-sm py-2 px-3">{customer.alamat}</td>
                       <td className="text-sm py-2 px-3">{customer.email}</td>
@@ -311,28 +346,48 @@ function DataCustomer() {
         <DialogHeader>Tambah Customer CP</DialogHeader>
         <form onSubmit={addCustomerCp}>
           <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div>
-              <label
-                htmlFor="salesman"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Salesman
-              </label>
-              <ReactSelect
+            <div className="flex gap-2 items-end">
+              <Input
+                label="Salesman"
+                variant="static"
+                color="blue"
+                list="salesman-list"
                 id="salesman"
-                options={salesmans.map((down) => {
-                  return {
-                    value: down.idSalesman,
-                    label: down.namaSalesman,
-                  };
-                })}
+                name="salesman"
+                onChange={(event) => {
+                  handleChange(event);
+                  setsalesmanId(event.target.value);
+                }}
                 placeholder="Pilih Salesman"
-                styles={customStyles}
-                onChange={(selectedOption) =>
-                  setsalesmanId(selectedOption.value)
-                }
               />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              <datalist id="salesman-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.idSalesman}>
+                        {option.namaSalesman}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </datalist>
+
+              <div className="flex gap-2">
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
+                >
+                  Next
+                </button>
+              </div>
             </div>
             <div>
               <label

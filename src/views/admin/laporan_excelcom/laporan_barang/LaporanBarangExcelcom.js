@@ -46,20 +46,20 @@ function LaporanBarangExcelcom() {
     }
   };
 
-  const getAllBarang = async () => {
-    try {
-      const response = await axios.get(`${API_BARANG}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setBarang(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
+  // const getAllBarang = async () => {
+  //   try {
+  //     const response = await axios.get(`${API_BARANG}`, {
+  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //     });
+  //     setBarang(response.data.data);
+  //   } catch (error) {
+  //     console.log("get all", error);
+  //   }
+  // };
 
   useEffect(() => {
     getAll();
-    getAllBarang();
+    // getAllBarang();
   }, []);
 
   useEffect(() => {
@@ -99,7 +99,33 @@ function LaporanBarangExcelcom() {
     }),
   };
 
-  console.log(barangs);
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_BARANG}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -127,8 +153,50 @@ function LaporanBarangExcelcom() {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <form action="">
-            <div className="w-72 lg:w-[50%]">
-              <label
+            <div className="w-72 lg:w-[50%] flex gap-2 items-end">
+              <Input
+                label="Barang"
+                variant="static"
+                color="blue"
+                list="barang-list"
+                id="barang"
+                name="barang"
+                onChange={(event) => {
+                  handleChange(event);
+                  setbarangId(event.target.value);
+                }}
+                placeholder="Pilih Barang"
+                required
+              />
+              <datalist id="barang-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.idBarang}>
+                        {option.namaBarang}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </datalist>
+
+              <div className="flex gap-2">
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
+                >
+                  Next
+                </button>
+              </div>
+              {/* <label
                 htmlFor="barang"
                 className="text-[14px] text-blue-gray-400"
               >
@@ -146,7 +214,7 @@ function LaporanBarangExcelcom() {
                 styles={customStyles}
                 onChange={(selectedOption) => setbarangId(selectedOption.value)}
               />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              <hr className="mt-1 bg-gray-400 h-[0.1em]" /> */}
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
@@ -154,6 +222,7 @@ function LaporanBarangExcelcom() {
                 color="blue"
                 type="date"
                 label="Tanggal Awal"
+                required
               />
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
@@ -162,6 +231,7 @@ function LaporanBarangExcelcom() {
                 color="blue"
                 type="date"
                 label="Tanggal Akhir"
+                required
               />
             </div>
             <Button className="mt-5" color="blue">

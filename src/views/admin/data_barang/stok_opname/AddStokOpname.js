@@ -71,6 +71,36 @@ function AddStokOpname() {
     }),
   };
 
+  // ALL BARANG
+  const [values2, setvalues2] = useState("");
+  const [options2, setoptions2] = useState([]);
+  const [currentPage2, setCurrentPage2] = useState(1);
+
+  const handleBarang = async () => {
+    if (values2.trim() !== "") {
+      const response = await fetch(
+        `${API_BARANG}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions2(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleBarang();
+  }, [currentPage2, values2]);
+
+  const handleChangeBarang = (event) => {
+    setvalues2(event.target.value);
+    setCurrentPage2(1);
+  };
+
   // ADD STOK OPNAME
   const addStokOpname = async (e) => {
     e.preventDefault();
@@ -139,29 +169,50 @@ function AddStokOpname() {
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addStokOpname}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div>
-                <label
-                  htmlFor="barang"
-                  className="text-[14px] text-blue-gray-400"
-                >
-                  Data Barang
-                </label>
-                <ReactSelect
+              <div className="flex gap-2 items-end">
+                <Input
+                  label="Barang"
+                  variant="static"
+                  color="blue"
+                  list="barang-list"
                   id="barang"
-                  options={barang.map((down) => {
-                    return {
-                      value: down.idBarang,
-                      label: down.barcodeBarang + " / " + down.namaBarang,
-                    };
-                  })}
+                  name="barang"
+                  onChange={(event) => {
+                    handleChangeBarang(event);
+                    setbarangId(event.target.value);
+                  }}
                   placeholder="Pilih Barang"
-                  styles={customStyles}
-                  onChange={(selectedOption) =>
-                    setbarangId(selectedOption.value)
-                  }
+                  required
                 />
-                <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-              </div>{" "}
+                <datalist id="barang-list">
+                  {options2.length > 0 && (
+                    <>
+                      {options2.map((option) => (
+                        <option value={option.idBarang}>
+                          {option.barcodeBarang} - {option.namaBarang}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </datalist>
+
+                <div className="flex gap-2">
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage2(currentPage2 - 1)}
+                    disabled={currentPage2 === 1}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage2(currentPage2 + 1)}
+                    disabled={!options2.length}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
               <div className="lg:mt-5">
                 <Input
                   label="Jumlah Stok Opname"

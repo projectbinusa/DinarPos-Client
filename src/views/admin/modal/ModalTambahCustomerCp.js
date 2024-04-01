@@ -6,7 +6,13 @@ import {
 } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Button, DialogBody, DialogFooter, DialogHeader, Input } from "@material-tailwind/react";
+import {
+  Button,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Input,
+} from "@material-tailwind/react";
 import ReactSelect from "react-select";
 import {
   AcademicCapIcon,
@@ -97,7 +103,7 @@ function ModalTambahCustomerCp({ handleOpen }) {
           timer: 1500,
         });
         console.log(error);
-      }else {
+      } else {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",
@@ -140,53 +146,167 @@ function ModalTambahCustomerCp({ handleOpen }) {
     }),
   };
 
+  // ALL CUSTOMER
+  const [valuesCustomerModalCP, setvaluesCustomerModalCP] = useState("");
+  const [optionsCustomerModalCP, setoptionsCustomerModalCP] = useState([]);
+  const [currentPageCustomerModalCP, setCurrentPageCustomerModalCP] =
+    useState(1);
+
+  const handleCustomermodalCP = async () => {
+    if (valuesCustomerModalCP.trim() !== "") {
+      const response = await fetch(
+        `${API_CUSTOMER}/pagination?limit=10&page=${currentPageCustomerModalCP}&search=${valuesCustomerModalCP}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsCustomerModalCP(data.data);
+      console.log(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleCustomermodalCP();
+  }, [currentPageCustomerModalCP, valuesCustomerModalCP]);
+
+  const handleChangeCustomermodalCP = (event) => {
+    setvaluesCustomerModalCP(event.target.value);
+    setCurrentPageCustomerModalCP(1);
+  };
+  // END ALL CUSTOMER
+
+  // ALL SALESMAN
+  const [valuesSalesmanModalCP, setvaluesSalesmanModalCP] = useState("");
+  const [optionsSalesmanModalCP, setoptionsSalesmanModalCP] = useState([]);
+  const [currentPageSalesmanModalCP, setCurrentPageSalesmanModalCP] =
+    useState(1);
+
+  const handleSalesmanmodalCP = async () => {
+    if (valuesSalesmanModalCP.trim() !== "") {
+      const response = await fetch(
+        `${API_SALESMAN}/pagination?limit=10&page=${currentPageSalesmanModalCP}&search=${valuesSalesmanModalCP}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsSalesmanModalCP(data.data);
+      console.log(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleSalesmanmodalCP();
+  }, [currentPageSalesmanModalCP, valuesSalesmanModalCP]);
+
+  const handleChangeSalesmanmodalCP = (event) => {
+    setvaluesSalesmanModalCP(event.target.value);
+    setCurrentPageSalesmanModalCP(1);
+  };
+  // END ALL SALESMAN
+
   return (
     <div>
       {" "}
       <DialogHeader>Tambah Customer CP</DialogHeader>
       <form onSubmit={addCustomerCp}>
         <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
-            <label
-              htmlFor="salesman"
-              className="text-[14px] text-blue-gray-400"
-            >
-              Salesman
-            </label>
-            <ReactSelect
-              id="salesman"
-              options={salesmans.map((down) => {
-                return {
-                  value: down.idSalesman,
-                  label: down.namaSalesman,
-                };
-              })}
+          <div className="flex gap-2 items-end">
+            <Input
+              label="Salesman"
+              variant="static"
+              color="blue"
+              list="modal-salesman-list"
+              id="salesman-modal"
+              name="salesman-modal"
+              onChange={(event) => {
+                handleChangeSalesmanmodalCP(event);
+                setsalesmanId(event.target.value);
+              }}
               placeholder="Pilih Salesman"
-              styles={customStyles}
-              onChange={(selectedOption) => setsalesmanId(selectedOption.value)}
             />
-            <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+            <datalist id="modal-salesman-list">
+              {optionsSalesmanModalCP.length > 0 && (
+                <>
+                  {optionsSalesmanModalCP.map((option2) => (
+                    <option value={option2.idSalesman}>
+                      {option2.namaSalesman}
+                    </option>
+                  ))}
+                </>
+              )}
+            </datalist>
+
+            <div className="flex gap-2">
+              <button
+                className="text-sm bg-gray-400 px-1"
+                onClick={() =>
+                  setCurrentPageSalesmanModalCP(currentPageSalesmanModalCP - 1)
+                }
+                disabled={currentPageSalesmanModalCP === 1}
+              >
+                Prev
+              </button>
+              <button
+                className="text-sm bg-gray-400 px-1"
+                onClick={() =>
+                  setCurrentPageSalesmanModalCP(currentPageSalesmanModalCP + 1)
+                }
+                disabled={!optionsSalesmanModalCP.length}
+              >
+                Next
+              </button>
+            </div>
           </div>
-          <div>
-            <label
-              htmlFor="customer"
-              className="text-[14px] text-blue-gray-400"
-            >
-              Customer
-            </label>
-            <ReactSelect
-              id="customer"
-              options={customers.map((down) => {
-                return {
-                  value: down.id,
-                  label: down.nama_customer,
-                };
-              })}
+          <div className="flex gap-2 items-end">
+            <Input
+              label="Customer"
+              variant="static"
+              color="blue"
+              list="modal-customer-list"
+              id="customer-modal"
+              name="customer-modal"
+              onChange={(event) => {
+                handleChangeCustomermodalCP(event);
+                setcustomerId(event.target.value);
+              }}
               placeholder="Pilih Customer"
-              styles={customStyles}
-              onChange={(selectedOption) => setcustomerId(selectedOption.value)}
             />
-            <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+            <datalist id="modal-customer-list">
+              {optionsCustomerModalCP.length > 0 && (
+                <>
+                  {optionsCustomerModalCP.map((option2) => (
+                    <option value={option2.id}>{option2.nama_customer}</option>
+                  ))}
+                </>
+              )}
+            </datalist>
+
+            <div className="flex gap-2">
+              <button
+                className="text-sm bg-gray-400 px-1"
+                onClick={() =>
+                  setCurrentPageCustomerModalCP(currentPageCustomerModalCP - 1)
+                }
+                disabled={currentPageCustomerModalCP === 1}
+              >
+                Prev
+              </button>
+              <button
+                className="text-sm bg-gray-400 px-1"
+                onClick={() =>
+                  setCurrentPageCustomerModalCP(currentPageCustomerModalCP + 1)
+                }
+                disabled={!optionsCustomerModalCP.length}
+              >
+                Next
+              </button>
+            </div>
           </div>
           <Input
             color="blue"

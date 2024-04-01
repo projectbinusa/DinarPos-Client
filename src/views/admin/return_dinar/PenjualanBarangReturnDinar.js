@@ -78,10 +78,18 @@ function PenjualanBarangReturnDinar() {
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
                   <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Barcode Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Salesman</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Customer</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Salesman
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Customer
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -90,13 +98,23 @@ function PenjualanBarangReturnDinar() {
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.barcode_penjualan}
+                        {penjualan.created_date}
                       </td>
-                      <td className="text-sm w-[15%] py-2 px-3">{penjualan.unit}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_beli}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_jual}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_jual}</td>
-                      <td className="text-sm py-2 px-3">{penjualan.harga_jual}</td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {penjualan.transaksi.noFaktur}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.barcodeBarang}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.namaBarang}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.salesman.namaSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.transaksi.customer.nama_customer}
+                      </td>
                     </tr>
                   ))
                 ) : (

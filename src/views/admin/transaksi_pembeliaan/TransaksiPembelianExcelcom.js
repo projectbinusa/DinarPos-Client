@@ -297,10 +297,16 @@ function TransaksiPembelianExcelcom() {
   const getDiskon = () => {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
-    if (pembayaran < total) {
-      $("#kembalian").html("0");
+    var cashKredit = $("#cashKredit").val();
+    if (cashKredit == "Cash" && pembayaran < total) {
+      $("#bayar").attr("disabled", "disabled");
+    } else if (pembayaran < total) {
+      $("#title").html("Kekurangan");
+      var kekurangan = parseInt(total - pembayaran);
+      $("#kembalian").html(formatRupiah(kekurangan));
     } else {
       var kembalian = parseInt(pembayaran - total);
+      $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian));
       checkEmptyTransaksi();
     }
@@ -313,13 +319,25 @@ function TransaksiPembelianExcelcom() {
     var total = convertToAngka($("#total").html());
     var total2 = convertToAngka($("#total2").html());
     var kembalian = pembayaran - total;
+    var kekurangan = total - pembayaran;
+    var cashKredit = $("#cashKredit").val();
 
-    $("#kembalian").html(formatRupiah(kembalian + potongan));
+    if (cashKredit == "Cash" && pembayaran < total) {
+      $("#bayar").attr("disabled", "disabled");
+    } else if (pembayaran < total) {
+      $("#title").html("Kekurangan");
+      $("#kembalian").html(formatRupiah(kekurangan - potongan));
+    } else {
+      $("#title").html("Kembalian");
+      $("#kembalian").html(formatRupiah(kembalian + potongan));
+    }
+
+    // $("#kembalian").html(formatRupiah(kembalian + potongan));
     var ttl_bayar = total - potongan;
     var ttl_bayar_hemat = total2 - ttl_bayar;
     $("#ttl_bayar").html(formatRupiah(ttl_bayar));
     $("#ttl_bayar_hemat").html(formatRupiah(ttl_bayar_hemat));
-    checkEmptyTransaksi();
+    // checkEmptyTransaksi();
   };
 
   // BUTTON EDIT
@@ -437,11 +455,22 @@ function TransaksiPembelianExcelcom() {
       document.getElementById("ttl_bayar_hemat").innerHTML
     );
     var sisas = convertToAngka(document.getElementById("kembalian").innerHTML);
+    var title = document.getElementById("title").innerHTML;
+    var kekurangans = convertToAngka(
+      document.getElementById("kembalian").innerHTML
+    );
 
     var diskons = 0;
     for (let index = 0; index < addProduk.length; index++) {
       const element = addProduk[index];
       diskons += element.diskon;
+    }
+
+    var kekurangan = 0;
+    if (title === "Kekurangan") {
+      kekurangan = kekurangans;
+    } else {
+      kekurangan = 0;
     }
 
     const request = {
@@ -452,6 +481,7 @@ function TransaksiPembelianExcelcom() {
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
+      kekurangan: kekurangan,
       sisa: sisas,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
@@ -482,16 +512,6 @@ function TransaksiPembelianExcelcom() {
               window.location.reload();
             }
           });
-          // Swal.fire({
-          //   title: "Pembelian Berhasil!",
-          //   icon: "success",
-          //   showConfirmButton: false,
-          //   timer: 1500,
-          // });
-          // history.push("/transaksi_pembelian_dinarpos");
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1500);
         } else {
           alert("gagal");
         }
@@ -504,6 +524,37 @@ function TransaksiPembelianExcelcom() {
   useEffect(() => {
     updateTotalHarga(produk);
   }, [produk]);
+
+  // ALL SUPLIER
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_SUPLIER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
+  // END ALL SUPLIER
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
@@ -532,28 +583,48 @@ function TransaksiPembelianExcelcom() {
         {/* FORM */}
         <div className="my-10">
           <div className="my-8">
-            <div>
-              <label
-                htmlFor="suplier"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Suplier
-              </label>
-              <ReactSelect
+            <div className="flex gap-2 items-end">
+              <Input
+                label="Suplier"
+                variant="static"
+                color="blue"
+                list="suplier-list"
                 id="suplier"
-                options={suplier.map((down) => {
-                  return {
-                    value: down.idSuplier,
-                    label: down.namaSuplier,
-                  };
-                })}
+                name="suplier"
+                onChange={(event) => {
+                  handleChange(event);
+                  setsuplierId(event.target.value);
+                }}
                 placeholder="Pilih Suplier"
-                styles={customStyles}
-                onChange={(selectedOption) =>
-                  setsuplierId(selectedOption.value)
-                }
               />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              <datalist id="suplier-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.idSuplier}>
+                        {option.namaSuplier}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </datalist>
+
+              <div className="flex gap-2">
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
+                >
+                  Next
+                </button>
+              </div>
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH SUPLIER */}
@@ -757,6 +828,7 @@ function TransaksiPembelianExcelcom() {
                 label="Cash / Kredit"
                 color="blue"
                 className="w-full"
+                id="cashKredit"
                 onChange={(selectedOption) => setcashCredit(selectedOption)}
               >
                 <Option value="Cash">Cash</Option>
@@ -801,7 +873,9 @@ function TransaksiPembelianExcelcom() {
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Kembalian</Typography>
+                  <Typography variant="paragraph" id="title">
+                    Kembalian / Kekurangan{" "}
+                  </Typography>{" "}
                   <Typography variant="h6" id="kembalian">
                     Rp 0,00
                   </Typography>

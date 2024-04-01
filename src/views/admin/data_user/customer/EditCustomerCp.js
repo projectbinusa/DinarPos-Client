@@ -186,8 +186,8 @@ function EditCustomerCp() {
               DATA CUSTOMER CP
             </Typography>
             <form onSubmit={editDataCustomerCp}>
-              <div className="mt-2 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="lg:mt-5">
+              <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
                   <Input
                     label="Nama Customer CP"
                     variant="static"

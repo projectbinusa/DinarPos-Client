@@ -55,13 +55,6 @@ export const NOTIFIKASI_90_DINARPOS = `${url}/notifikasi/90_hari/dinarpos`;
 export const NOTIFIKASI_120_DINARPOS = `${url}/notifikasi/120_hari/dinarpos`;
 export const NOTIFIKASI_365_DINARPOS = `${url}/notifikasi/365_hari/dinarpos`;
 
-// NOTIFIKASI KONFIRMASI
-export const NOTIFIKASI_7_KONFIRMASI = `${url}/notifikasi/konfirmasi/7_hari`;
-export const NOTIFIKASI_30_KONFIRMASI = `${url}/notifikasi/konfirmasi/30_hari`;
-export const NOTIFIKASI_90_KONFIRMASI = `${url}/notifikasi/konfirmasi/90_hari`;
-export const NOTIFIKASI_120_KONFIRMASI = `${url}/notifikasi/konfirmasi/120_hari`;
-export const NOTIFIKASI_365_KONFIRMASI = `${url}/notifikasi/konfirmasi/365_hari`;
-
 // NOTIFIKASI KONFIRMASI EXCELCOM
 export const NOTIFIKASI_KONFIRMASI_7_EXCELCOM = `${url}/notifikasi/konfirmasi/7_hari/excelcom`;
 export const NOTIFIKASI_KONFIRMASI_30_EXCELCOM = `${url}/notifikasi/konfirmasi/30_hari/excelcom`;
