@@ -1,9 +1,9 @@
 // Local
-// const url = "http://localhost:2000/api";
+const url = "http://localhost:2000/api";
 
 // Deploy
 // const url = "http://41.216.186.59:2000/api";
-const url = "https://api-dinarpos.excellentsistem.com/api";
+// const url = "https://api-dinarpos.excellentsistem.com/api";
 
 // DATA USER
 export const API_USER = `${url}/user`;
