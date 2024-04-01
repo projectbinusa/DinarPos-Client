@@ -1,12 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { API_RETURN_DINARPOS, GET_BARANG_TRANSAKSI_BELI_DINARPOS } from "../../../../utils/BaseUrl";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import {
-  GET_BARANG_TRANSAKSI_BELI_DINARPOS,
-  GET_TRANSAKSI_BELI,
-} from "../../../../utils/BaseUrl";
+import axios from "axios";
 
-function PrintHistoriTransaksiBeliDinarpos() {
+function PrintPembelianReturnDinarpos() {
   const [reportData, setReportData] = useState(null);
   const [barang, setbarang] = useState([]);
   const param = useParams();
@@ -18,7 +15,7 @@ function PrintHistoriTransaksiBeliDinarpos() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${GET_TRANSAKSI_BELI}/` + param.id, {
+      const response = await axios.get(`${API_RETURN_DINARPOS}/pembelian/` + param.id, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setReportData(response.data.data);
@@ -211,4 +208,4 @@ function PrintHistoriTransaksiBeliDinarpos() {
   );
 }
 
-export default PrintHistoriTransaksiBeliDinarpos;
+export default PrintPembelianReturnDinarpos;

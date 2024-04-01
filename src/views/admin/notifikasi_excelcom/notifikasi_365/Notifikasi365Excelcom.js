@@ -7,6 +7,7 @@ import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import {
+  GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
   NOTIFIKASI_365_EXCELCOM,
   NOTIFIKASI_KONFIRMASI_365_EXCELCOM,
 } from "../../../../utils/BaseUrl";

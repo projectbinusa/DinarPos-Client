@@ -77,6 +77,10 @@ import PrintHistoriTransaksiDinarpos from "./views/admin/laporan_dinarpos/lapora
 import DetailHistoriTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/DetailHistoriTransaksiBeliDinarpos.js";
 import PrintHistoriTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/PrintHistoriTransaksiBeliDinarpos.js";
 import TanggalFilterSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/TanggalFilterSalesmanExcelcom.js";
+import PrintPembelianReturnDinarpos from "./views/admin/return_dinar/pembelian/PrintPembelianReturnDinarpos.js";
+import DetailPembelianReturnDinarpos from "./views/admin/return_dinar/pembelian/DetailPembelianReturnDinarpos.js";
+import PrintPenjualanReturnDinarpos from "./views/admin/return_dinar/penjualan/PrintPenjualanReturnDinarpos.js";
+import DetailPenjualanReturnDinarpos from "./views/admin/return_dinar/penjualan/DetailPenjualanReturnDinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -310,6 +314,17 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/print_histori_penjualan_return_dinarpos/:id"
+              component={PrintPenjualanReturnDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_histori_penjualan_return_dinarpos/:id"
+              component={DetailPenjualanReturnDinarpos}
+              isAuthenticated={true}
+            />
+
+            <PrivateRoute
               path="/penjualan_barang_return_dinarpos"
               component={PenjualanBarangReturnDinar}
               isAuthenticated={true}
@@ -317,6 +332,16 @@ function App() {
             <PrivateRoute
               path="/pembelian_return_dinarpos"
               component={PembelianReturnDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/print_histori_pembelian_return_dinarpos/:id"
+              component={PrintPembelianReturnDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_histori_pembelian_return_dinarpos/:id"
+              component={DetailPembelianReturnDinarpos}
               isAuthenticated={true}
             />
             <PrivateRoute

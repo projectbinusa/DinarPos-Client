@@ -155,7 +155,7 @@ function PembelianReturnDinar() {
                       <td className="text-sm py-2 px-3 flex flex-row items-center justify-center gap-2">
                         <a
                           href={
-                            "/detail_histori_transaksi_beli_dinarpos/" +
+                            "/detail_histori_pembelian_return_dinarpos/" +
                             pembelian.idTransaksiBeli
                           }
                         >
@@ -165,7 +165,7 @@ function PembelianReturnDinar() {
                         </a>
                         <a
                           href={
-                            "/print_histori_laporan_transaksi_beli_dinarpos/" +
+                            "/print_histori_pembelian_return_dinarpos/" +
                             pembelian.idTransaksiBeli
                           }
                           target="_blank"
