@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import {
+  API_RETURN_EXCELCOM,
   API_SALESMAN,
   GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
   LAPORAN_SALESMAN,
@@ -21,6 +22,8 @@ import {
   EyeIcon,
   PrinterIcon,
 } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function LaporanSalesmanExcelcom() {
   const tableRef = useRef(null);
@@ -162,6 +165,42 @@ function LaporanSalesmanExcelcom() {
 
     fetchBarangTransaksi();
   }, [laporans]);
+
+  const history = useHistory();
+
+  // AKSI RETURN
+  const returnSalesman = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Return?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Return",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .put(`${API_RETURN_EXCELCOM}/retur_penjualan/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil Return!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/laporan_salesman_excelcom");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -374,7 +413,10 @@ function LaporanSalesmanExcelcom() {
                             </IconButton>
                           </a>
                           <IconButton size="md" color="red">
-                            <ArrowPathIcon className="w-6 h-6 white" />
+                            <ArrowPathIcon
+                              className="w-6 h-6 white"
+                              onClick={() => returnSalesman(laporan.idTransaksi)}
+                            />
                           </IconButton>
                         </td>
                       </tr>

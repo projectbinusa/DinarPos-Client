@@ -12,8 +12,15 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { ArrowPathIcon, CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
-import { API_BARANG, LAPORAN_BARANG } from "../../../../utils/BaseUrl";
+import {
+  ArrowPathIcon,
+  CheckIcon,
+  PhoneIcon,
+  PrinterIcon,
+} from "@heroicons/react/24/outline";
+import { API_BARANG, API_RETURN_DINARPOS, LAPORAN_BARANG } from "../../../../utils/BaseUrl";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Swal from "sweetalert2";
 
 function LaporanBarangDinar() {
   const tableRef = useRef(null);
@@ -91,6 +98,42 @@ function LaporanBarangDinar() {
         boxShadow: "none",
       },
     }),
+  };
+
+  const history = useHistory();
+
+  // AKSI RETURN
+  const returnBarang = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Return?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Return",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .put(`${API_RETURN_DINARPOS}/retur_barang_penjualan/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil Return!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/laporan_barang_dinarpos");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
   };
 
   return (
@@ -209,7 +252,10 @@ function LaporanBarangDinar() {
                       </td>
                       <td className="text-sm py-2 px-3 text-center">
                         <IconButton size="md" color="red">
-                          <ArrowPathIcon className="w-6 h-6 white" />
+                          <ArrowPathIcon
+                            className="w-6 h-6 white"
+                            onClick={() => returnBarang(row.idBrgTransaksi)}
+                          />
                         </IconButton>
                       </td>{" "}
                     </tr>

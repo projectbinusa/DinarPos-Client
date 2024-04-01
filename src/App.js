@@ -41,7 +41,7 @@ import EditSalesman from "./views/admin/data_user/salesman/EditSalesman.js";
 import Register from "./auth/Register.js";
 import PenjualanReturnDinar from "./views/admin/return_dinar/penjualan/PenjualanReturnDinar.js";
 import PembelianBarangReturnDinar from "./views/admin/return_dinar/PembelianBarangReturnDinar.js";
-import PembelianReturnDinar from "./views/admin/return_dinar/pembelian/PembelianBarangReturn.js";
+import PembelianReturnDinar from "./views/admin/return_dinar/pembelian/PembelianReturn.js";
 import PenjualanBarangReturnDinar from "./views/admin/return_dinar/PenjualanBarangReturnDinar.js";
 import Notifikasi7Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_7/Notifikasi7Excelcom.js";
 import Notifikasi30Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_30/Notifikasi30Excelcom.js";

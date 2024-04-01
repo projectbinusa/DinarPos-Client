@@ -12,8 +12,19 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReactSelect from "react-select";
-import { API_SUPLIER, GET_BARANG_TRANSAKSI_BELI_DINARPOS, LAPORAN_TRANSAKSI_BELI } from "../../../../utils/BaseUrl";
-import { ArrowPathIcon, EyeIcon, PrinterIcon } from "@heroicons/react/24/outline";
+import {
+  API_RETURN_DINARPOS,
+  API_SUPLIER,
+  GET_BARANG_TRANSAKSI_BELI_DINARPOS,
+  LAPORAN_TRANSAKSI_BELI,
+} from "../../../../utils/BaseUrl";
+import {
+  ArrowPathIcon,
+  EyeIcon,
+  PrinterIcon,
+} from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function LaporanTransaksiBeliDinar() {
   const tableRef = useRef(null);
@@ -124,6 +135,44 @@ function LaporanTransaksiBeliDinar() {
     fetchBarangTransaksi();
   }, [laporans]);
 
+  const history = useHistory();
+
+  // AKSI RETURN
+  const returnTransaksiBeli = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Return?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Return",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .put(`${API_RETURN_DINARPOS}/retur_pembelian/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil Return!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/laporan_transaksi_beli_dinarpos");
+              window.location.reload();
+            }, 1500);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -301,7 +350,12 @@ function LaporanTransaksiBeliDinar() {
                             </IconButton>
                           </a>
                           <IconButton size="md" color="red">
-                            <ArrowPathIcon className="w-6 h-6 white" />
+                            <ArrowPathIcon
+                              className="w-6 h-6 white"
+                              onClick={() =>
+                                returnTransaksiBeli(laporan.idTransaksiBeli)
+                              }
+                            />
                           </IconButton>
                         </td>
                       </tr>

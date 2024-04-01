@@ -382,14 +382,25 @@ function TransaksiPenjualanDinarPos() {
   };
 
   const remove = (barcode) => {
-    if (window.confirm("Apakah anda yakin?")) {
-      removeItemsById(barcode);
-      updateTotalHarga(produk);
-      $("#tambah").attr("disabled", "disabled");
-      if (parseInt(produk.length) === 0) {
-        $("#bayar").attr("disabled", "disabled");
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeItemsById(barcode);
+        updateTotalHarga(produk);
+        $("#tambah").attr("disabled", "disabled");
+        if (parseInt(produk.length) === 0) {
+          $("#bayar").attr("disabled", "disabled");
+        }
       }
-    }
+    });
   };
 
   // BUTTON EDIT BARANG
@@ -567,6 +578,37 @@ function TransaksiPenjualanDinarPos() {
     setvalues(event.target.value);
     setCurrentPage(1);
   };
+
+  // ALL SALESMAN
+  const [valuesSalesman, setvaluesSalesman] = useState("");
+  const [optionsSalesman, setoptionsSalesman] = useState([]);
+  const [currentPageSalesman, setCurrentPageSalesman] = useState(1);
+
+  const handleSalesman = async () => {
+    if (valuesSalesman.trim() !== "") {
+      const response = await fetch(
+        `${API_SALESMAN}/pagination?limit=10&page=${currentPageSalesman}&search=${valuesSalesman}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsSalesman(data.data);
+      console.log(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleSalesman();
+  }, [currentPageSalesman, valuesSalesman]);
+
+  const handleChangeSalesman = (event) => {
+    setvaluesSalesman(event.target.value);
+    setCurrentPageSalesman(1);
+  };
+  // END ALL SALESMAN
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
@@ -789,36 +831,34 @@ function TransaksiPenjualanDinarPos() {
                           <td className="py-3 px-2 text-center border">
                             {down.totalHarga}
                           </td>
-                          <td className="py-2 px-3 flex items-center justify-center border">
-                            <div className="flex flex-row gap-3">
-                              <IconButton
-                                id={down.barcode}
-                                size="md"
-                                color="light-blue"
-                                onClick={() =>
-                                  edit(
-                                    down.barcode,
-                                    down.nama,
-                                    down.harga,
-                                    down.disc,
-                                    down.hargaDiskon,
-                                    down.jumlah,
-                                    down.totalHarga
-                                  )
-                                }
-                              >
-                                <PencilIcon className="w-6 h-6 white" />
-                              </IconButton>
-                              <IconButton
-                                id={down.barcode}
-                                size="md"
-                                color="red"
-                                type="button"
-                                onClick={() => remove(down.barcode)}
-                              >
-                                <TrashIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </div>
+                          <td className="py-2 px-3 flex flex-col items-center gap-3 border">
+                            <IconButton
+                              id={down.barcode}
+                              size="md"
+                              color="light-blue"
+                              onClick={() =>
+                                edit(
+                                  down.barcode,
+                                  down.nama,
+                                  down.harga,
+                                  down.disc,
+                                  down.hargaDiskon,
+                                  down.jumlah,
+                                  down.totalHarga
+                                )
+                              }
+                            >
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                            <IconButton
+                              id={down.barcode}
+                              size="md"
+                              color="red"
+                              type="button"
+                              onClick={() => remove(down.barcode)}
+                            >
+                              <TrashIcon className="w-6 h-6 white" />
+                            </IconButton>
                           </td>{" "}
                         </tr>
                       ))
@@ -845,30 +885,53 @@ function TransaksiPenjualanDinarPos() {
                     onChange={(e) => setketerangan(e.target.value)}
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="salesman"
-                    className="text-[14px] text-blue-gray-400"
-                  >
-                    Salesman
-                  </label>
-                  <ReactSelect
+                <div className="flex gap-2 items-end">
+                  <Input
+                    label="Salesman"
+                    variant="static"
+                    color="blue"
+                    list="salesman-list"
                     id="salesman"
-                    options={salesman.map((down) => {
-                      return {
-                        value: down.idSalesman,
-                        label: down.namaSalesman,
-                      };
-                    })}
+                    name="salesman"
+                    onChange={(event) => {
+                      handleChangeSalesman(event);
+                      setmarkettingId(event.target.value);
+                    }}
                     placeholder="Pilih Salesman"
-                    styles={customStyles}
-                    onChange={(selectedOption) =>
-                      setmarkettingId(selectedOption.value)
-                    }
                   />
-                  <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-                </div>
+                  <datalist id="salesman-list">
+                    {optionsSalesman.length > 0 && (
+                      <>
+                        {optionsSalesman.map((option) => (
+                          <option value={option.idSalesman}>
+                            {option.namaSalesman}
+                          </option>
+                        ))}
+                      </>
+                    )}
+                  </datalist>
 
+                  <div className="flex gap-2">
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() =>
+                        setCurrentPageSalesman(currentPageSalesman - 1)
+                      }
+                      disabled={currentPageSalesman === 1}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() =>
+                        setCurrentPageSalesman(currentPageSalesman + 1)
+                      }
+                      disabled={!optionsSalesman.length}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph">Anda Hemat</Typography>
                   <Typography variant="h6" id="ttl_bayar_hemat">

@@ -78,6 +78,7 @@ function PembelianReturn() {
       }
     });
   };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -103,13 +104,13 @@ function PembelianReturn() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
               className="rounded-sm table-auto overflow-auto"
             >
-              <thead className="bg-blue-500 text-white">
+              <thead className="bg-blue-500 w-full text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
@@ -123,7 +124,9 @@ function PembelianReturn() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Cash / Kredit
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold w-[15%]">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -134,7 +137,7 @@ function PembelianReturn() {
                       <td className="text-sm py-2 px-3">
                         {pembelian.created_date}
                       </td>
-                      <td className="text-sm w-[15%] py-2 px-3">
+                      <td className="text-sm py-2 px-3">
                         {pembelian.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
@@ -146,7 +149,7 @@ function PembelianReturn() {
                       <td className="text-sm py-2 px-3">
                         {pembelian.cashCredit}
                       </td>
-                      <td className="text-sm py-2 px-3 flex flex-col gap-2">
+                      <td className="text-sm py-2 px-3 flex flex-row justify-center items-center gap-2">
                         <a
                           href={
                             "/detail_histori_transaksi_beli_excelcom/" +

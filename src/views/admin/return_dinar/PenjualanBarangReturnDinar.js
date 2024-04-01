@@ -67,11 +67,11 @@ function PenjualanBarangReturnDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>

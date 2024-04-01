@@ -104,11 +104,11 @@ function PenjualanReturnDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -124,7 +124,9 @@ function PenjualanReturnDinar() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Total Belanja
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold w-[15%]">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -135,7 +137,7 @@ function PenjualanReturnDinar() {
                       <td className="text-sm py-2 px-3">
                         {penjualan.created_date}
                       </td>
-                      <td className="text-sm w-[15%] py-2 px-3">
+                      <td className="text-sm py-2 px-3">
                         {penjualan.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
@@ -147,7 +149,7 @@ function PenjualanReturnDinar() {
                       <td className="text-sm py-2 px-3">
                         {penjualan.totalBelanja}
                       </td>
-                      <td className="text-sm py-2 px-3 flex flex-col gap-2">
+                      <td className="text-sm py-2 px-3 flex flex-row items-center justify-center gap-2">
                         <a
                           href={
                             "/detail_histori_salesman_dinarpos/" +

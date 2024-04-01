@@ -368,14 +368,25 @@ function TransaksiPembelianDinarpos() {
   };
 
   const remove = (barcode) => {
-    if (window.confirm("Apakah anda yakin?")) {
-      removeItemsById(barcode);
-      updateTotalHarga(produk);
-      $("#tambah").attr("disabled", "disabled");
-      if (parseInt(produk.length) === 0) {
-        $("#bayar").attr("disabled", "disabled");
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeItemsById(barcode);
+        updateTotalHarga(produk);
+        $("#tambah").attr("disabled", "disabled");
+        if (parseInt(produk.length) === 0) {
+          $("#bayar").attr("disabled", "disabled");
+        }
       }
-    }
+    });
   };
 
   // BUTTON EDIT BARANG
@@ -545,7 +556,6 @@ function TransaksiPembelianDinarpos() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -764,36 +774,34 @@ function TransaksiPembelianDinarpos() {
                           <td className="py-3 px-2 text-center border">
                             {down.totalHarga}
                           </td>
-                          <td className="py-2 px-3 flex items-center justify-center border">
-                            <div className="flex flex-row gap-3">
-                              <IconButton
-                                id={down.barcode}
-                                size="md"
-                                color="light-blue"
-                                onClick={() =>
-                                  edit(
-                                    down.barcode,
-                                    down.nama,
-                                    down.harga,
-                                    down.disc,
-                                    down.hargaDiskon,
-                                    down.jumlah,
-                                    down.totalHarga
-                                  )
-                                }
-                              >
-                                <PencilIcon className="w-6 h-6 white" />
-                              </IconButton>
-                              <IconButton
-                                id={down.barcode}
-                                size="md"
-                                color="red"
-                                type="button"
-                                onClick={() => remove(down.barcode)}
-                              >
-                                <TrashIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </div>
+                          <td className="py-2 px-3 flex flex-col items-center gap-3 border">
+                            <IconButton
+                              id={down.barcode}
+                              size="md"
+                              color="light-blue"
+                              onClick={() =>
+                                edit(
+                                  down.barcode,
+                                  down.nama,
+                                  down.harga,
+                                  down.disc,
+                                  down.hargaDiskon,
+                                  down.jumlah,
+                                  down.totalHarga
+                                )
+                              }
+                            >
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                            <IconButton
+                              id={down.barcode}
+                              size="md"
+                              color="red"
+                              type="button"
+                              onClick={() => remove(down.barcode)}
+                            >
+                              <TrashIcon className="w-6 h-6 white" />
+                            </IconButton>
                           </td>{" "}
                         </tr>
                       ))
