@@ -148,7 +148,6 @@ function AddStokMasuk() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -164,9 +163,9 @@ function AddStokMasuk() {
   };
 
   const handleBarang = async () => {
-    if (values.trim() !== "") {
+    if (values2.trim() !== "") {
       const response = await fetch(
-        `${API_BARANG}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        `${API_BARANG}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=1`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -291,15 +290,15 @@ function AddStokMasuk() {
                 <div className="flex gap-2">
                   <button
                     className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage2(currentPage2 - 1)}
+                    disabled={currentPage2 === 1}
                   >
                     Prev
                   </button>
                   <button
                     className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={!options.length}
+                    onClick={() => setCurrentPage2(currentPage2 + 1)}
+                    disabled={!options2.length}
                   >
                     Next
                   </button>

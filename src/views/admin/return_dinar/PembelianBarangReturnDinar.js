@@ -78,9 +78,15 @@ function PembelianBarangReturnDinar() {
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
                   <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Barcode Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Suplier</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Suplier
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -89,12 +95,20 @@ function PembelianBarangReturnDinar() {
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {pembelian.barcode_pembelian}
+                        {pembelian.created_date}
                       </td>
-                      <td className="text-sm w-[15%] py-2 px-3">{pembelian.unit}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.harga_beli}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.harga_jual}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.harga_jual}</td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {pembelian.transaksiBeli.noFaktur}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {pembelian.barcodeBarang}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {pembelian.namaBarang}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {pembelian.transaksiBeli.suplier.namaSuplier}
+                      </td>
                     </tr>
                   ))
                 ) : (

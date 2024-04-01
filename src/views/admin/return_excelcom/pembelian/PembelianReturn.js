@@ -4,8 +4,11 @@ import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import axios from "axios";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { API_RETURN_EXCELCOM } from "../../../../utils/BaseUrl";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Swal from "sweetalert2";
+import { EyeIcon, PrinterIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 function PembelianReturn() {
   const tableRef = useRef(null);
@@ -40,6 +43,41 @@ function PembelianReturn() {
     }
   }, [pembelian]);
 
+  const history = useHistory();
+
+  // DELETE
+  const deleted = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_RETURN_EXCELCOM}/pembelian/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              history.push("/pembelian_return_excelcom");
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -76,9 +114,15 @@ function PembelianReturn() {
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
                   <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Suplier</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Total Belanja</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Cash / Kredit</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Suplier
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Total Belanja
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Cash / Kredit
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
@@ -87,12 +131,51 @@ function PembelianReturn() {
                   pembelian.map((pembelian, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.barcode_pembelian}</td>
-                      <td className="text-sm w-[15%] py-2 px-3">{pembelian.unit}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.harga_beli}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.harga_jual}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.harga_jual}</td>
-                      <td className="text-sm py-2 px-3">{pembelian.harga_jual}</td>
+                      <td className="text-sm py-2 px-3">
+                        {pembelian.created_date}
+                      </td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {pembelian.noFaktur}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {pembelian.suplier.namaSuplier}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {pembelian.totalBelanja}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {pembelian.cashCredit}
+                      </td>
+                      <td className="text-sm py-2 px-3 flex flex-col gap-2">
+                        <a
+                          href={
+                            "/detail_histori_transaksi_beli_excelcom/" +
+                            pembelian.idTransaksiBeli
+                          }
+                        >
+                          <IconButton size="md" color="light-blue">
+                            <EyeIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
+                        <a
+                          href={
+                            "/print_histori_laporan_transaksi_beli_excelcom/" +
+                            pembelian.idTransaksiBeli
+                          }
+                          target="_blank"
+                        >
+                          <IconButton size="md" color="green">
+                            <PrinterIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
+                        <IconButton
+                          size="md"
+                          color="red"
+                          onClick={() => deleted(pembelian.idTransaksiBeli)}
+                        >
+                          <TrashIcon className="w-6 h-6 white" />
+                        </IconButton>
+                      </td>
                     </tr>
                   ))
                 ) : (

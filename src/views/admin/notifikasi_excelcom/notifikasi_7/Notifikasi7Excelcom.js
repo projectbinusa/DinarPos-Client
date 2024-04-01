@@ -7,7 +7,7 @@ import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   NOTIFIKASI_7_EXCELCOM,
   GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
-  NOTIFIKASI_KONFIRMASI_7_EXCELCOM
+  NOTIFIKASI_KONFIRMASI_7_EXCELCOM,
 } from "../../../../utils/BaseUrl";
 import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { CheckIcon, PhoneIcon, PrinterIcon } from "@heroicons/react/24/outline";
@@ -55,7 +55,6 @@ function Notifikasi7Excelcom() {
     }
   };
 
-  // Fetch additional data for each notification, in this case barang information
   const barangTransaksi = async (transactionId) => {
     try {
       const response = await axios.get(
@@ -92,13 +91,12 @@ function Notifikasi7Excelcom() {
 
   useEffect(() => {
     if (notifikasis && notifikasis.length > 0) {
-      // Initialize DataTable only when notifikasis data is available
       initializeDataTable();
     }
   }, [notifikasis]);
+
   useEffect(() => {
     if (konfirmasi && konfirmasi.length > 0) {
-      // Initialize DataTable only when notifikasis data is available
       initializeDataTable2();
     }
   }, [konfirmasi]);
@@ -241,9 +239,15 @@ function Notifikasi7Excelcom() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Customer</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Salesman</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Keterangan</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Customer
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Salesman
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Keterangan
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
@@ -252,12 +256,18 @@ function Notifikasi7Excelcom() {
                   konfirmasi.map((notifikasi, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{notifikasi.tanggalKonfirmasi7}</td>
-                      <td className="text-sm w-[15%] py-2 px-3">
-                      {notifikasi.customer.nama_customer}
+                      <td className="text-sm py-2 px-3">
+                        {notifikasi.tanggalKonfirmasi7}
                       </td>
-                      <td className="text-sm py-2 px-3">{notifikasi.salesman.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{notifikasi.ket7Hari}</td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {notifikasi.customer.nama_customer}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {notifikasi.salesman.namaSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {notifikasi.ket7Hari}
+                      </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <IconButton size="md" color="light-blue">

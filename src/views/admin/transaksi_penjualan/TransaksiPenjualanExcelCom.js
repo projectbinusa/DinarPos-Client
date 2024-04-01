@@ -290,11 +290,16 @@ function TransaksiPenjualanExcelCom() {
   const getDiskon = () => {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
-    if (pembayaran < total) {
-      $("#kembalian").html("Rp 0,00");
+    var cashKredit = $("#cashKredit").val();
+    if (cashKredit == "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
+    } else if (pembayaran < total) {
+      $("#title").html("Kekurangan");
+      var kekurangan = parseInt(total - pembayaran);
+      $("#kembalian").html(formatRupiah(kekurangan));
     } else {
       var kembalian = parseInt(pembayaran - total);
+      $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian));
       checkEmptyTransaksi();
     }
@@ -307,13 +312,25 @@ function TransaksiPenjualanExcelCom() {
     var total = convertToAngka($("#total").html());
     var total2 = convertToAngka($("#total2").html());
     var kembalian = pembayaran - total;
+    var kekurangan = total - pembayaran;
+    var cashKredit = $("#cashKredit").val();
 
-    $("#kembalian").html(formatRupiah(kembalian + potongan));
+    if (cashKredit == "Cash" && pembayaran < total) {
+      $("#bayar").attr("disabled", "disabled");
+    } else if (pembayaran < total) {
+      $("#title").html("Kekurangan");
+      $("#kembalian").html(formatRupiah(kekurangan - potongan));
+    } else {
+      $("#title").html("Kembalian");
+      $("#kembalian").html(formatRupiah(kembalian + potongan));
+    }
+
+    // $("#kembalian").html(formatRupiah(kembalian + potongan));
     var ttl_bayar = total - potongan;
     var ttl_bayar_hemat = total2 - ttl_bayar;
     $("#ttl_bayar").html(formatRupiah(ttl_bayar));
     $("#ttl_bayar_hemat").html(formatRupiah(ttl_bayar_hemat));
-    checkEmptyTransaksi();
+    // checkEmptyTransaksi();
   };
 
   // BUTTON EDIT
@@ -430,11 +447,22 @@ function TransaksiPenjualanExcelCom() {
     var ttlBayarHemat = convertToAngka(
       document.getElementById("ttl_bayar_hemat").innerHTML
     );
+    var title = document.getElementById("title").innerHTML;
+    var kekurangans = convertToAngka(
+      document.getElementById("kembalian").innerHTML
+    );
 
     var diskons = 0;
     for (let index = 0; index < addProduk.length; index++) {
       const element = addProduk[index];
       diskons += element.diskon;
+    }
+
+    var kekurangan = 0;
+    if (title === "Kekurangan") {
+      kekurangan = kekurangans;
+    } else {
+      kekurangan = 0;
     }
 
     const request = {
@@ -446,6 +474,7 @@ function TransaksiPenjualanExcelCom() {
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
+      kekurangan: kekurangan,
       sisa: sisa,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
@@ -853,14 +882,18 @@ function TransaksiPenjualanExcelCom() {
                   <div className="flex gap-2">
                     <button
                       className="text-sm bg-gray-400 px-1"
-                      onClick={() => setCurrentPageSalesman(currentPageSalesman - 1)}
+                      onClick={() =>
+                        setCurrentPageSalesman(currentPageSalesman - 1)
+                      }
                       disabled={currentPageSalesman === 1}
                     >
                       Prev
                     </button>
                     <button
                       className="text-sm bg-gray-400 px-1"
-                      onClick={() => setCurrentPageSalesman(currentPageSalesman + 1)}
+                      onClick={() =>
+                        setCurrentPageSalesman(currentPageSalesman + 1)
+                      }
                       disabled={!optionsSalesman.length}
                     >
                       Next
@@ -925,7 +958,9 @@ function TransaksiPenjualanExcelCom() {
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Kembalian</Typography>
+                  <Typography variant="paragraph" id="title">
+                    Kembalian / Kekurangan
+                  </Typography>
                   <Typography variant="h6" id="kembalian">
                     Rp 0,00
                   </Typography>

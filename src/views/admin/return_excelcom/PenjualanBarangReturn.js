@@ -98,22 +98,22 @@ function PenjualanBarangReturn() {
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.barcode_penjualan}
+                        {penjualan.created_date}
                       </td>
                       <td className="text-sm w-[15%] py-2 px-3">
-                        {penjualan.unit}
+                        {penjualan.transaksi.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.harga_beli}
+                        {penjualan.barcodeBarang}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.harga_jual}
+                        {penjualan.namaBarang}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.harga_jual}
+                        {penjualan.salesman.namaSalesman}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.harga_jual}
+                        {penjualan.transaksi.customer.nama_customer}
                       </td>
                     </tr>
                   ))
