@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   API_BARANG,
   API_RETURN_DINARPOS,
+  API_RETURN_EXCELCOM,
   GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
 } from "../../../../utils/BaseUrl";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
@@ -33,7 +34,7 @@ function DetailPenjualanReturnDinarpos() {
   const barangTransaksi = async () => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_JUAL_DINARPOS}?id_transaksi=` + param.id,
+        `${API_RETURN_EXCELCOM}/penjualan/barang?id_transaksi=` + param.id,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -66,31 +67,6 @@ function DetailPenjualanReturnDinarpos() {
       });
   }, []);
 
-  const [namaBarangList, setNamaBarangList] = useState([]);
-
-  const fetchNamaBarangList = async () => {
-    const newNamaBarangList = [];
-    for (const brg of barang) {
-      try {
-        const response = await axios.get(
-          `${API_BARANG}/barcode?barcode=${brg.barcodeBarang}`,
-          {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-          }
-        );
-        newNamaBarangList.push(response.data.data.namaBarang);
-      } catch (error) {
-        console.log(error);
-        newNamaBarangList.push("Nama Barang Tidak Ditemukan");
-      }
-    }
-    setNamaBarangList(newNamaBarangList);
-  };
-
-  useEffect(() => {
-    fetchNamaBarangList();
-  }, [barang]);
-
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -119,8 +95,8 @@ function DetailPenjualanReturnDinarpos() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <Typography variant="small">Nama Barang</Typography>
           <p className="mt-2">
-            {namaBarangList.map((nama) => (
-              <span>{nama} || </span>
+            {barang.map((row) => (
+              <span>{row.namaBarang} || </span>
             ))}
           </p>
           <hr /> <br />

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { API_RETURN_DINARPOS, GET_BARANG_TRANSAKSI_BELI_DINARPOS } from "../../../../utils/BaseUrl";
+import {
+  API_RETURN_DINARPOS,
+  API_RETURN_EXCELCOM,
+  GET_BARANG_TRANSAKSI_BELI_DINARPOS,
+} from "../../../../utils/BaseUrl";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 
@@ -15,9 +19,12 @@ function PrintPembelianReturnDinarpos() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_RETURN_DINARPOS}/pembelian/` + param.id, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `${API_RETURN_DINARPOS}/pembelian/` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
       setReportData(response.data.data);
       console.log(response.data.data);
     } catch (error) {
@@ -28,7 +35,7 @@ function PrintPembelianReturnDinarpos() {
   const getAllBarang = async () => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_BELI_DINARPOS}?id_transaksi=` + param.id,
+        `${API_RETURN_EXCELCOM}/pembelian/barang?id_transaksi_beli=` + param.id,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }

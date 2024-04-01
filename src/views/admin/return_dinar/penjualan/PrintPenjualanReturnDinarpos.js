@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import {
   API_RETURN_DINARPOS,
+  API_RETURN_EXCELCOM,
   GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
 } from "../../../../utils/BaseUrl";
 import { useEffect } from "react";
@@ -35,7 +36,7 @@ function PrintPenjualanReturnDinarpos() {
   const getAllBarang = async () => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_JUAL_DINARPOS}?id_transaksi=` + param.id,
+        `${API_RETURN_EXCELCOM}/penjualan/barang?id_transaksi=` + param.id,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
