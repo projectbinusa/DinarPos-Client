@@ -134,11 +134,11 @@ function Notifikasi120Excelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -154,9 +154,7 @@ function Notifikasi120Excelcom() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Nama Barang
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold w-[15%]">
-                    Aksi
-                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -184,34 +182,37 @@ function Notifikasi120Excelcom() {
                             </ul>
                           ))}{" "}
                         </td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
-                          <div className="flex flex-row gap-3">
+                        <td className="text-sm py-2 px-3 flex flex-col gap-2 items-center justify-center">
+                          <a
+                            href={"/print_histori_excelcom/" + down.idTransaksi}
+                            target="_blank"
+                          >
                             <IconButton size="md" color="light-blue">
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
-                            <IconButton size="md" color="red" type="button">
-                              <CheckIcon className="w-6 h-6 white" />
+                          </a>
+                          <IconButton size="md" color="red" type="button">
+                            <CheckIcon className="w-6 h-6 white" />
+                          </IconButton>
+                          <IconButton size="md" color="orange">
+                            <IconButton
+                              size="md"
+                              color="orange"
+                              onClick={() => {
+                                const phone = encodeURIComponent(
+                                  down.noTelpCustomer
+                                ); // Mengkodekan nomor telepon
+                                const message = encodeURIComponent(
+                                  `Hallo kak ${down.customer.nama_customer} Perkenalkan saya ${down.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                );
+                                window.open(
+                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                                );
+                              }}
+                            >
+                              <PhoneIcon className="w-6 h-6 white" />
                             </IconButton>
-                            <IconButton size="md" color="orange">
-                              <IconButton
-                                size="md"
-                                color="orange"
-                                onClick={() => {
-                                  const phone = encodeURIComponent(
-                                    down.noTelpCustomer
-                                  ); // Mengkodekan nomor telepon
-                                  const message = encodeURIComponent(
-                                    `Hallo kak ${down.customer.nama_customer}%0APerkenalkan saya ${down.salesman.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                  );
-                                  window.open(
-                                    `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                  );
-                                }}
-                              >
-                                <PhoneIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </IconButton>
-                          </div>
+                          </IconButton>
                         </td>{" "}
                       </tr>
                     );
@@ -236,11 +237,11 @@ function Notifikasi120Excelcom() {
             KONFIRMASI NOTIFIKASI 120 HARI EXCELCOM
           </Typography>
 
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
-              id="example_data"
-              ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              id="example_data2"
+              ref={tableRef2}
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -267,7 +268,7 @@ function Notifikasi120Excelcom() {
                   konfirmasis.map((row, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{row.created_date}</td>
+                      <td className="text-sm py-2 px-3">{row.noFaktur}</td>
                       <td className="text-sm py-2 px-3">
                         {row.tanggalKonfirmasi120}
                       </td>
@@ -277,17 +278,23 @@ function Notifikasi120Excelcom() {
                       <td className="text-sm py-2 px-3">
                         {row.salesman.namaSalesman}
                       </td>
+                      <td className="text-sm py-2 px-3">{row.ket120Hari}</td>
                       <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                        <IconButton size="md" color="light-blue">
-                          <PrinterIcon className="w-6 h-6 white" />
-                        </IconButton>
+                        <a
+                          href={"/print_histori_excelcom/" + row.idTransaksi}
+                          target="_blank"
+                        >
+                          <IconButton size="md" color="light-blue">
+                            <PrinterIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
                       </td>{" "}
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="6"
+                      colSpan="7"
                       className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

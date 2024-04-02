@@ -132,11 +132,11 @@ function Notifikasi30Excelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -166,9 +166,7 @@ function Notifikasi30Excelcom() {
                         <td className="text-sm py-2 px-3">
                           {row.created_date}
                         </td>
-                        <td className="text-sm w-[15%] py-2 px-3">
-                          {row.noFaktur}
-                        </td>
+                        <td className="text-sm py-2 px-3">{row.noFaktur}</td>
                         <td className="text-sm py-2 px-3">
                           {row.customer.nama_customer}
                         </td>
@@ -182,10 +180,15 @@ function Notifikasi30Excelcom() {
                             </ul>
                           ))}{" "}
                         </td>
-                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
+                        <td className="text-sm py-2 px-3 flex flex-col items-center justify-center gap-2">
+                          <a
+                            href={"/print_histori_excelcom/" + row.idTransaksi}
+                            target="_blank"
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                           <IconButton size="md" color="red" type="button">
                             <CheckIcon className="w-6 h-6 white" />
                           </IconButton>
@@ -198,7 +201,7 @@ function Notifikasi30Excelcom() {
                                   row.customer.telp
                                 ); // Mengkodekan nomor telepon
                                 const message = encodeURIComponent(
-                                  `Halo kak ${row.customer.nama_customer}%0APerkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  `Halo kak ${row.customer.nama_customer} Perkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );
                                 window.open(
                                   `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
@@ -232,15 +235,16 @@ function Notifikasi30Excelcom() {
             KONFIRMASI NOTIFIKASI 30 HARI EXCELCOM
           </Typography>
 
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef2}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-ful overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
                   </th>
@@ -261,10 +265,11 @@ function Notifikasi30Excelcom() {
                   konfirmasis.map((row, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{row.noFaktur}</td>
                       <td className="text-sm py-2 px-3">
                         {row.tanggalKonfirmasi30}
                       </td>
-                      <td className="text-sm w-[15%] py-2 px-3">
+                      <td className="text-sm py-2 px-3">
                         {row.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">
@@ -272,16 +277,21 @@ function Notifikasi30Excelcom() {
                       </td>
                       <td className="text-sm py-2 px-3">{row.ket30Hari}</td>
                       <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                        <IconButton size="md" color="light-blue">
-                          <PrinterIcon className="w-6 h-6 white" />
-                        </IconButton>
+                        <a
+                          href={"/print_histori_excelcom/" + row.idTransaksi}
+                          target="_blank"
+                        >
+                          <IconButton size="md" color="light-blue">
+                            <PrinterIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="6"
+                      colSpan="7"
                       className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

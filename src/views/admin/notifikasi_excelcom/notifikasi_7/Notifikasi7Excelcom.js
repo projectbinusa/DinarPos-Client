@@ -19,7 +19,6 @@ function Notifikasi7Excelcom() {
   const [konfirmasi, setKonfirmasi] = useState([]);
   const [barang, setBarang] = useState([]);
 
-
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
@@ -65,7 +64,6 @@ function Notifikasi7Excelcom() {
         }
       );
       return response.data.data;
-      
     } catch (error) {
       console.log("get all", error);
       return [];
@@ -128,11 +126,11 @@ function Notifikasi7Excelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 w-full p-2 overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -161,7 +159,7 @@ function Notifikasi7Excelcom() {
                         <td className="text-sm py-2 px-3">
                           {penjualan.created_date}
                         </td>
-                        <td className="text-sm w-[15%] py-2 px-3">
+                        <td className="text-sm py-2 px-3">
                           {penjualan.noFaktur}
                         </td>
                         <td className="text-sm py-2 px-3">
@@ -179,9 +177,17 @@ function Notifikasi7Excelcom() {
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-row gap-3">
-                            <IconButton size="md" color="light-blue">
-                              <PrinterIcon className="w-6 h-6 white" />
-                            </IconButton>
+                            <a
+                              href={
+                                "/print_histori_excelcom/" +
+                                penjualan.idTransaksi
+                              }
+                              target="_blank"
+                            >
+                              <IconButton size="md" color="light-blue">
+                                <PrinterIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </a>
                             <IconButton size="md" color="red" type="button">
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
@@ -229,15 +235,18 @@ function Notifikasi7Excelcom() {
             KONFIRMASI NOTIFIKASI 7 HARI EXCELCOM
           </Typography>
 
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data1"
               ref={tableRef2}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    No Faktur{" "}
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
                   </th>
@@ -259,9 +268,12 @@ function Notifikasi7Excelcom() {
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
+                        {notifikasi.noFaktur}
+                      </td>
+                      <td className="text-sm py-2 px-3">
                         {notifikasi.tanggalKonfirmasi7}
                       </td>
-                      <td className="text-sm w-[15%] py-2 px-3">
+                      <td className="text-sm py-2 px-3">
                         {notifikasi.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">
@@ -271,24 +283,23 @@ function Notifikasi7Excelcom() {
                         {notifikasi.ket7Hari}
                       </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
+                        <a
+                          href={
+                            "/print_histori_excelcom/" + notifikasi.idTransaksi
+                          }
+                          target="_blank"
+                        >
                           <IconButton size="md" color="light-blue">
                             <PrinterIcon className="w-6 h-6 white" />
                           </IconButton>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="orange">
-                            <PhoneIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
+                        </a>
                       </td>{" "}
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="6"
+                      colSpan="7"
                       className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

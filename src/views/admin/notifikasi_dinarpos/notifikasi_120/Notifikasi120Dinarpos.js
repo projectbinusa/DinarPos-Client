@@ -134,11 +134,11 @@ function Notifikasi120Dinarpos() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 w-full p-2 overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -168,7 +168,7 @@ function Notifikasi120Dinarpos() {
                         <td className="text-sm py-2 px-3">
                           {penjualan.created_date}
                         </td>
-                        <td className="text-sm w-[15%] py-2 px-3">
+                        <td className="text-sm py-2 px-3">
                           {penjualan.noFaktur}
                         </td>
                         <td className="text-sm py-2 px-3">
@@ -184,10 +184,17 @@ function Notifikasi120Dinarpos() {
                             </ul>
                           ))}{" "}
                         </td>
-                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
+                        <td className="text-sm py-2 px-3 flex flex-col items-center justify-center gap-2">
+                          <a
+                            href={
+                              "/print_histori_dinarpos/" + penjualan.idTransaksi
+                            }
+                            target="_blank"
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                           <IconButton size="md" color="red" type="button">
                             <CheckIcon className="w-6 h-6 white" />
                           </IconButton>
@@ -200,7 +207,7 @@ function Notifikasi120Dinarpos() {
                                   penjualan.customer.telp
                                 ); // Mengkodekan nomor telepon
                                 const message = encodeURIComponent(
-                                  `Halo kak ${penjualan.customer.nama_customer}%0APerkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  `Hallo kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );
                                 window.open(
                                   `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
@@ -234,15 +241,18 @@ function Notifikasi120Dinarpos() {
             KONFIRMASI NOTIFIKASI 120 HARI DINARPOS
           </Typography>
 
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 w-full p-2 overflow-auto">
             <table
-              id="example_data"
+              id="example_data2"
               ref={tableRef2}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    No Faktur{" "}
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
                   </th>
@@ -259,57 +269,37 @@ function Notifikasi120Dinarpos() {
                 </tr>
               </thead>
               <tbody>
-                {notifikasis.length > 0 ? (
-                  notifikasis.map((penjualan, index) => (
+                {konfirmasis.length > 0 ? (
+                  konfirmasis.map((row, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{row.noFaktur}</td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.created_date}
+                        {row.tanggalKonfirmasi120}
                       </td>
                       <td className="text-sm w-[15%] py-2 px-3">
-                        {penjualan.noFaktur}
+                        {row.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.namaCustomer}
+                        {row.salesman.namaSalesman}
                       </td>
-                      <td className="text-sm py-2 px-3">
-                        {penjualan.namaSalesman}
-                      </td>
+                      <td className="text-sm py-2 px-3">{row.ket120Hari}</td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
+                        <a
+                          href={"/print_histori_dinarpos/" + row.idTransaksi}
+                          target="_blank"
+                        >
                           <IconButton size="md" color="light-blue">
                             <PrinterIcon className="w-6 h-6 white" />
                           </IconButton>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="orange">
-                            <IconButton
-                              size="md"
-                              color="orange"
-                              onClick={() => {
-                                const phone = encodeURIComponent(
-                                  penjualan.noTelpCustomer
-                                ); // Mengkodekan nomor telepon
-                                const message = encodeURIComponent(
-                                  `Selamat pagi kak ${penjualan.namaCustomer}%0APerkenalkan saya ${penjualan.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                );
-                                window.open(
-                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                );
-                              }}
-                            >
-                              <PhoneIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </IconButton>
-                        </div>
+                        </a>{" "}
                       </td>{" "}
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="6"
+                      colSpan="7"
                       className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

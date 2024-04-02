@@ -52,6 +52,7 @@ function Notifikasi30Dinarpos() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setKonfirmasis(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log("get all", error);
     }
@@ -131,11 +132,11 @@ function Notifikasi30Dinarpos() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
               ref={tableRef}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
@@ -165,7 +166,7 @@ function Notifikasi30Dinarpos() {
                         <td className="text-sm py-2 px-3">
                           {penjualan.created_date}
                         </td>
-                        <td className="text-sm w-[15%] py-2 px-3">
+                        <td className="text-sm py-2 px-3">
                           {penjualan.noFaktur}
                         </td>
                         <td className="text-sm py-2 px-3">
@@ -181,10 +182,17 @@ function Notifikasi30Dinarpos() {
                             </ul>
                           ))}{" "}
                         </td>
-                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          <IconButton size="md" color="light-blue">
-                            <PrinterIcon className="w-6 h-6 white" />
-                          </IconButton>
+                        <td className="text-sm py-2 px-3 flex flex-col items-center gap-2">
+                          <a
+                            href={
+                              "/print_histori_dinarpos/" + penjualan.idTransaksi
+                            }
+                            target="_blank"
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                           <IconButton size="md" color="red" type="button">
                             <CheckIcon className="w-6 h-6 white" />
                           </IconButton>
@@ -197,7 +205,7 @@ function Notifikasi30Dinarpos() {
                                   penjualan.customer.telp
                                 ); // Mengkodekan nomor telepon
                                 const message = encodeURIComponent(
-                                  `Halo kak ${penjualan.customer.nama_customer}%0APerkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  `Hallo kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );
                                 window.open(
                                   `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
@@ -231,15 +239,16 @@ function Notifikasi30Dinarpos() {
             KONFIRMASI NOTIFIKASI 30 HARI DINARPOS
           </Typography>
 
-          <div className="rounded my-5 overflow-auto">
+          <div className="rounded p-2 w-full my-5 overflow-auto">
             <table
-              id="example_data"
+              id="example_data2"
               ref={tableRef2}
-              className="rounded-sm table-auto overflow-auto"
+              className="rounded-sm w-full table-auto overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No Faktur</th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
                   </th>
@@ -261,36 +270,38 @@ function Notifikasi30Dinarpos() {
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.created_date}
-                      </td>
-                      <td className="text-sm w-[15%] py-2 px-3">
                         {penjualan.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.namaCustomer}
+                        {penjualan.tanggalKonfirmasi30}
+                      </td>
+                      <td className="text-sm w-[15%] py-2 px-3">
+                        {penjualan.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.namaSalesman}
+                        {penjualan.salesman.namaSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {penjualan.ket30Hari}
                       </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
+                        <a
+                          href={
+                            "/print_histori_dinarpos/" + penjualan.idTransaksi
+                          }
+                          target="_blank"
+                        >
                           <IconButton size="md" color="light-blue">
                             <PrinterIcon className="w-6 h-6 white" />
                           </IconButton>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
-                          <IconButton size="md" color="orange">
-                            <PhoneIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
-                      </td>{" "}
+                        </a>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="6"
+                      colSpan="7"
                       className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

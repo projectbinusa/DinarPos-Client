@@ -85,6 +85,8 @@ import PrintPembelianReturnExcelcom from "./views/admin/return_excelcom/pembelia
 import DetailPembelianReturnExcelcom from "./views/admin/return_excelcom/pembelian/DetailPembelianReturnExcelcom.js";
 import PrintPenjualanReturnExcelcom from "./views/admin/return_excelcom/penjualan/PrintPenjualanReturnExcelcom.js";
 import DetailPenjualanReturnExcelcom from "./views/admin/return_excelcom/penjualan/DetailPenjualanReturnExcelcom.js";
+import PrintHistoriDinarpos from "./views/admin/notifikasi_dinarpos/PrintHistoriDinarpos.js";
+import PrintHistoriExcelcom from "./views/admin/notifikasi_excelcom/PrintHistoriExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -294,7 +296,7 @@ function App() {
               component={PenjualanReturn}
               isAuthenticated={true}
             />
-             <PrivateRoute
+            <PrivateRoute
               path="/print_histori_penjualan_return_excelcom/:id"
               component={PrintPenjualanReturnExcelcom}
               isAuthenticated={true}
@@ -376,6 +378,11 @@ function App() {
 
             {/* NOTIFIKASI EXCELCOM */}
             <PrivateRoute
+              path="/print_histori_excelcom/:id"
+              component={PrintHistoriExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/notifikasi_7_excelcom"
               component={Notifikasi7Excelcom}
               isAuthenticated={true}
@@ -403,6 +410,11 @@ function App() {
             {/* END NOTIFIKASI EXCELCOM */}
 
             {/* NOTIFIKASI DINARPOS */}
+            <PrivateRoute
+              path="/print_histori_dinarpos/:id"
+              component={PrintHistoriDinarpos}
+              isAuthenticated={true}
+            />
             <PrivateRoute
               path="/notifikasi_7_dinarpos"
               component={Notifikasi7Dinarpos}
