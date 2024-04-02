@@ -182,7 +182,7 @@ function LaporanSalesmanExcelcom() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(`${API_RETURN_EXCELCOM}/retur_penjualan/` + id, {
+          .put(`${API_RETURN_EXCELCOM}/retur_penjualan/` + id, null, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {
@@ -197,6 +197,9 @@ function LaporanSalesmanExcelcom() {
               history.push("/laporan_salesman_excelcom");
               window.location.reload();
             }, 1500);
+          })
+          .catch((err) => {
+            console.log(err);
           });
       }
     });
@@ -415,7 +418,9 @@ function LaporanSalesmanExcelcom() {
                           <IconButton size="md" color="red">
                             <ArrowPathIcon
                               className="w-6 h-6 white"
-                              onClick={() => returnSalesman(laporan.idTransaksi)}
+                              onClick={() =>
+                                returnSalesman(laporan.idTransaksi)
+                              }
                             />
                           </IconButton>
                         </td>

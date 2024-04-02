@@ -81,6 +81,10 @@ import PrintPembelianReturnDinarpos from "./views/admin/return_dinar/pembelian/P
 import DetailPembelianReturnDinarpos from "./views/admin/return_dinar/pembelian/DetailPembelianReturnDinarpos.js";
 import PrintPenjualanReturnDinarpos from "./views/admin/return_dinar/penjualan/PrintPenjualanReturnDinarpos.js";
 import DetailPenjualanReturnDinarpos from "./views/admin/return_dinar/penjualan/DetailPenjualanReturnDinarpos.js";
+import PrintPembelianReturnExcelcom from "./views/admin/return_excelcom/pembelian/PrintPembelianReturnExcelcom.js";
+import DetailPembelianReturnExcelcom from "./views/admin/return_excelcom/pembelian/DetailPembelianReturnExcelcom.js";
+import PrintPenjualanReturnExcelcom from "./views/admin/return_excelcom/penjualan/PrintPenjualanReturnExcelcom.js";
+import DetailPenjualanReturnExcelcom from "./views/admin/return_excelcom/penjualan/DetailPenjualanReturnExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -290,6 +294,16 @@ function App() {
               component={PenjualanReturn}
               isAuthenticated={true}
             />
+             <PrivateRoute
+              path="/print_histori_penjualan_return_excelcom/:id"
+              component={PrintPenjualanReturnExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_histori_penjualan_return_excelcom/:id"
+              component={DetailPenjualanReturnExcelcom}
+              isAuthenticated={true}
+            />
             <PrivateRoute
               path="/penjualan_barang_return_excelcom"
               component={PenjualanBarangReturn}
@@ -298,6 +312,16 @@ function App() {
             <PrivateRoute
               path="/pembelian_return_excelcom"
               component={PembelianReturn}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/print_histori_pembelian_return_excelcom/:id"
+              component={PrintPembelianReturnExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_histori_pembelian_return_excelcom/:id"
+              component={DetailPembelianReturnExcelcom}
               isAuthenticated={true}
             />
             <PrivateRoute
@@ -323,7 +347,6 @@ function App() {
               component={DetailPenjualanReturnDinarpos}
               isAuthenticated={true}
             />
-
             <PrivateRoute
               path="/penjualan_barang_return_dinarpos"
               component={PenjualanBarangReturnDinar}
@@ -349,7 +372,7 @@ function App() {
               component={PembelianBarangReturnDinar}
               isAuthenticated={true}
             />
-            {/* END RETURN EXCELCOM */}
+            {/* END RETURN DINARPOS */}
 
             {/* NOTIFIKASI EXCELCOM */}
             <PrivateRoute

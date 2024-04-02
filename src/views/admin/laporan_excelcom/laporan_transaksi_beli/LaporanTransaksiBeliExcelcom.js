@@ -151,7 +151,7 @@ function LaporanTransaksiBeliExcelcom() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(`${API_RETURN_EXCELCOM}/retur_pembelian/` + id, {
+          .put(`${API_RETURN_EXCELCOM}/retur_pembelian/` + id, null, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {

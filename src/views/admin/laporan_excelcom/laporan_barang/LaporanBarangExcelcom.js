@@ -149,7 +149,7 @@ function LaporanBarangExcelcom() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(`${API_RETURN_EXCELCOM}/retur_barang_penjualan/` + id, {
+          .put(`${API_RETURN_EXCELCOM}/retur_barang_penjualan/` + id, null, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {
@@ -164,6 +164,9 @@ function LaporanBarangExcelcom() {
               history.push("/laporan_barang_excelcom");
               window.location.reload();
             }, 1500);
+          })
+          .catch((err) => {
+            console.log(err);
           });
       }
     });

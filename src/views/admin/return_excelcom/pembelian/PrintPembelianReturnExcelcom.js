@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  API_RETURN_DINARPOS,
-  API_RETURN_EXCELCOM,
-} from "../../../../utils/BaseUrl";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API_RETURN_EXCELCOM } from "../../../../utils/BaseUrl";
 import axios from "axios";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
-function PrintPembelianReturnDinarpos() {
+function PrintPembelianReturnExcelcom() {
   const [reportData, setReportData] = useState(null);
   const [barang, setbarang] = useState([]);
   const param = useParams();
@@ -19,7 +16,7 @@ function PrintPembelianReturnDinarpos() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${API_RETURN_DINARPOS}/pembelian/` + param.id,
+        `${API_RETURN_EXCELCOM}/pembelian/` + param.id,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -66,10 +63,10 @@ function PrintPembelianReturnDinarpos() {
     <div className="mx-5 my-3">
       <div className=" my-3">
         <h3 className="text-sm">
-          PT DINARTECH SHARE-E /
-          <span className="block">Jl. Bulustalan I No 27 Semarang</span>
-          <span className="block">(024) 3511176. Fax (024) 3546330</span>
-          <span>PT. DINARTECH SHARE-E</span>
+          EXCEL COM{" "}
+          <span className="block">
+            Jl. Bulustalan 1 No.27 Semarang 087729244899
+          </span>
         </h3>
       </div>
       <hr /> <br />
@@ -214,4 +211,4 @@ function PrintPembelianReturnDinarpos() {
   );
 }
 
-export default PrintPembelianReturnDinarpos;
+export default PrintPembelianReturnExcelcom;

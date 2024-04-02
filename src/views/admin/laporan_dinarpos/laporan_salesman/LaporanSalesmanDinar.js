@@ -151,7 +151,7 @@ function LaporanSalesmanDinar() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(`${API_RETURN_DINARPOS}/retur_penjualan/` + id, {
+          .put(`${API_RETURN_DINARPOS}/retur_penjualan/` + id, null, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {
@@ -166,6 +166,9 @@ function LaporanSalesmanDinar() {
               history.push("/laporan_salesman_dinarpos");
               window.location.reload();
             }, 1500);
+          })
+          .catch((err) => {
+            console.log(err);
           });
       }
     });

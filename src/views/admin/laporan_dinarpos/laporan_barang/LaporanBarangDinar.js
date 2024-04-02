@@ -18,7 +18,11 @@ import {
   PhoneIcon,
   PrinterIcon,
 } from "@heroicons/react/24/outline";
-import { API_BARANG, API_RETURN_DINARPOS, LAPORAN_BARANG } from "../../../../utils/BaseUrl";
+import {
+  API_BARANG,
+  API_RETURN_DINARPOS,
+  LAPORAN_BARANG,
+} from "../../../../utils/BaseUrl";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Swal from "sweetalert2";
 
@@ -116,7 +120,7 @@ function LaporanBarangDinar() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put(`${API_RETURN_DINARPOS}/retur_barang_penjualan/` + id, {
+          .put(`${API_RETURN_DINARPOS}/retur_barang_penjualan/` + id, null, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {
@@ -131,6 +135,9 @@ function LaporanBarangDinar() {
               history.push("/laporan_barang_dinarpos");
               window.location.reload();
             }, 1500);
+          })
+          .catch((err) => {
+            console.log(err);
           });
       }
     });
