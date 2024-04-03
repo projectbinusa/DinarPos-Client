@@ -87,6 +87,16 @@ import PrintPenjualanReturnExcelcom from "./views/admin/return_excelcom/penjuala
 import DetailPenjualanReturnExcelcom from "./views/admin/return_excelcom/penjualan/DetailPenjualanReturnExcelcom.js";
 import PrintHistoriDinarpos from "./views/admin/notifikasi_dinarpos/PrintHistoriDinarpos.js";
 import PrintHistoriExcelcom from "./views/admin/notifikasi_excelcom/PrintHistoriExcelcom.js";
+import Konfirmasi7Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_7/Konfirmasi7Excelcom.js";
+import Konfirmasi30Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_30/Konfirmasi30Excelcom.js";
+import Konfirmasi90Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_90/Konfirmasi90Excelcom.js";
+import Konfirmasi120Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_120/Konfirmasi120Excelcom.js";
+import Konfirmasi365Excelcom from "./views/admin/notifikasi_excelcom/notifikasi_365/Konfirmasi365Excelcom.js";
+import Konfirmasi7Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_7/Konfirmasi7Dinarpos.js";
+import Konfirmasi30Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_30/Konfirmasi30Dinarpos.js";
+import Konfirmasi90Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_90/Konfirmasi90Dinarpos.js";
+import Konfirmasi365Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_365/Konfirmasi365Dinarpos.js";
+import Konfirmasi120Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_120/Konfirmasi120Dinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -388,8 +398,18 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/konfirmasi_7_excelcom/:id"
+              component={Konfirmasi7Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/notifikasi_30_excelcom"
               component={Notifikasi30Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/konfirmasi_30_excelcom/:id"
+              component={Konfirmasi30Excelcom}
               isAuthenticated={true}
             />
             <PrivateRoute
@@ -398,13 +418,28 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/konfirmasi_90_excelcom/:id"
+              component={Konfirmasi90Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/notifikasi_120_excelcom"
               component={Notifikasi120Excelcom}
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/konfirmasi_120_excelcom/:id"
+              component={Konfirmasi120Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/notifikasi_365_excelcom"
               component={Notifikasi365Excelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/konfirmasi_365_excelcom/:id"
+              component={Konfirmasi365Excelcom}
               isAuthenticated={true}
             />
             {/* END NOTIFIKASI EXCELCOM */}
@@ -421,8 +456,18 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/konfirmasi_7_dinarpos/:id"
+              component={Konfirmasi7Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/notifikasi_30_dinarpos"
               component={Notifikasi30Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/konfirmasi_30_dinarpos/:id"
+              component={Konfirmasi30Dinarpos}
               isAuthenticated={true}
             />
             <PrivateRoute
@@ -431,13 +476,28 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/konfirmasi_90_dinarpos/:id"
+              component={Konfirmasi90Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/notifikasi_120_dinarpos"
               component={Notifikasi120Dinarpos}
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/konfirmasi_120_dinarpos/:id"
+              component={Konfirmasi120Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/notifikasi_365_dinarpos"
               component={Notifikasi365Dinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/konfirmasi_365_dinarpos/:id"
+              component={Konfirmasi365Dinarpos}
               isAuthenticated={true}
             />
             {/* END NOTIFIKASI DINARPOS */}

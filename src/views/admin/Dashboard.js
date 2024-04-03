@@ -464,7 +464,7 @@ function Dashboard() {
     try {
       // JANUARI
       const jan = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=01&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=01&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -474,7 +474,7 @@ function Dashboard() {
 
       // FEBRUARI
       const feb = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=02&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=02&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -484,7 +484,7 @@ function Dashboard() {
 
       // MARET
       const mar = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=03&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=03&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -494,7 +494,7 @@ function Dashboard() {
 
       // APRIL
       const apr = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=04&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=04&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -504,7 +504,7 @@ function Dashboard() {
 
       // MEI
       const may = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=05&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=05&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -514,7 +514,7 @@ function Dashboard() {
 
       // JUNI
       const jun = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=06&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=06&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -524,7 +524,7 @@ function Dashboard() {
 
       // JULI
       const jul = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=07&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=07&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -534,7 +534,7 @@ function Dashboard() {
 
       // AGUSTUS
       const agus = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=08&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=08&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -544,7 +544,7 @@ function Dashboard() {
 
       // SEPTEMBER
       const sep = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=09&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=09&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -554,7 +554,7 @@ function Dashboard() {
 
       // OKTOBER
       const okto = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=10&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=10&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -564,7 +564,7 @@ function Dashboard() {
 
       // NOVEMBER
       const nov = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=11&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=11&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -574,7 +574,7 @@ function Dashboard() {
 
       // DESEMBER
       const des = await axios.get(
-        `${GET_TRANSAKSI_BELI}/dinarpos/bulan?bulan=12&tahun=` + currentYear,
+        `${GET_TRANSAKSI_BELI}/excelcom/bulan?bulan=12&tahun=` + currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }

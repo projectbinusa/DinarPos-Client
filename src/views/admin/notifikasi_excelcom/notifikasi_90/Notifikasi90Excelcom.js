@@ -106,6 +106,22 @@ function Notifikasi90Excelcom() {
     fetchBarangTransaksi();
   }, [notifikasis]);
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return formattedDate;
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -137,7 +153,7 @@ function Notifikasi90Excelcom() {
               ref={tableRef}
               className="rounded-sm table-auto w-full overflow-auto"
             >
-              <thead className="border-b-2">
+              <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
@@ -151,9 +167,7 @@ function Notifikasi90Excelcom() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Nama Barang
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold w-[15%]">
-                    Aksi
-                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -183,7 +197,7 @@ function Notifikasi90Excelcom() {
                             </ul>
                           ))}{" "}
                         </td>
-                        <td className="text-sm py-2 px-3 flex flex-col gap-2 items-center justify-center">
+                        <td className="text-sm py-2 px-3 flex gap-2 items-center justify-center">
                           <a
                             href={
                               "/print_histori_excelcom/" + penjualan.idTransaksi
@@ -195,9 +209,15 @@ function Notifikasi90Excelcom() {
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
+                          <a
+                            href={
+                              "/konfirmasi_90_excelcom/" + penjualan.idTransaksi
+                            }
+                          >
+                            <IconButton size="md" color="red" type="button">
+                              <CheckIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                           <IconButton size="md" color="orange">
                             <IconButton
                               size="md"
@@ -217,7 +237,7 @@ function Notifikasi90Excelcom() {
                               <PhoneIcon className="w-6 h-6 white" />
                             </IconButton>
                           </IconButton>
-                        </td>{" "}
+                        </td>
                       </tr>
                     );
                   })
@@ -247,7 +267,7 @@ function Notifikasi90Excelcom() {
               ref={tableRef2}
               className="rounded-sm table-auto w-full overflow-auto"
             >
-              <thead className="border-b-2">
+              <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">
@@ -275,7 +295,7 @@ function Notifikasi90Excelcom() {
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">{row.noFaktur}</td>
                       <td className="text-sm py-2 px-3">
-                        {row.tanggalKonfirmasi90}
+                        {formatDate(row.tanggalKonfirmasi90)}
                       </td>
                       <td className="text-sm  py-2 px-3">
                         {row.customer.nama_customer}

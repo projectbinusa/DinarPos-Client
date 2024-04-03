@@ -55,17 +55,23 @@ export const NOTIFIKASI_90_DINARPOS = `${url}/notifikasi/90_hari/dinarpos`;
 export const NOTIFIKASI_120_DINARPOS = `${url}/notifikasi/120_hari/dinarpos`;
 export const NOTIFIKASI_365_DINARPOS = `${url}/notifikasi/365_hari/dinarpos`;
 
-// NOTIFIKASI KONFIRMASI EXCELCOM
+// GET NOTIFIKASI KONFIRMASI EXCELCOM
 export const NOTIFIKASI_KONFIRMASI_7_EXCELCOM = `${url}/notifikasi/konfirmasi/7_hari/excelcom`;
 export const NOTIFIKASI_KONFIRMASI_30_EXCELCOM = `${url}/notifikasi/konfirmasi/30_hari/excelcom`;
 export const NOTIFIKASI_KONFIRMASI_90_EXCELCOM = `${url}/notifikasi/konfirmasi/90_hari/excelcom`;
 export const NOTIFIKASI_KONFIRMASI_120_EXCELCOM = `${url}/notifikasi/konfirmasi/120_hari/excelcom`;
 export const NOTIFIKASI_KONFIRMASI_365_EXCELCOM = `${url}/notifikasi/konfirmasi/365_hari/excelcom`;
 
-// NOTIFIKASI KONFIRMASI DINARPOS
+// GET NOTIFIKASI KONFIRMASI DINARPOS
 export const NOTIFIKASI_KONFIRMASI_7_DINARPOS = `${url}/notifikasi/konfirmasi/7_hari/dinarpos`;
 export const NOTIFIKASI_KONFIRMASI_30_DINARPOS = `${url}/notifikasi/konfirmasi/30_hari/dinarpos`;
 export const NOTIFIKASI_KONFIRMASI_90_DINARPOS = `${url}/notifikasi/konfirmasi/90_hari/dinarpos`;
 export const NOTIFIKASI_KONFIRMASI_120_DINARPOS = `${url}/notifikasi/konfirmasi/120_hari/dinarpos`;
 export const NOTIFIKASI_KONFIRMASI_365_DINARPOS = `${url}/notifikasi/konfirmasi/365_hari/dinarpos`;
 
+// KONFIRMASI NOTIFIKASI
+export const KONFIRMASI_7 = `${url}/notifikasi/konfirmasi/7_hari`;
+export const KONFIRMASI_30 = `${url}/notifikasi/konfirmasi/30_hari`;
+export const KONFIRMASI_90 = `${url}/notifikasi/konfirmasi/90_hari`;
+export const KONFIRMASI_120 = `${url}/notifikasi/konfirmasi/120_hari`;
+export const KONFIRMASI_365 = `${url}/notifikasi/konfirmasi/365_hari`;

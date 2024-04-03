@@ -107,6 +107,22 @@ function Notifikasi30Dinarpos() {
     fetchBarangTransaksi();
   }, [notifikasis]);
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return formattedDate;
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -182,7 +198,7 @@ function Notifikasi30Dinarpos() {
                             </ul>
                           ))}{" "}
                         </td>
-                        <td className="text-sm py-2 px-3 flex flex-col items-center gap-2">
+                        <td className="text-sm py-2 px-3 flex justify-center items-center gap-2">
                           <a
                             href={
                               "/print_histori_dinarpos/" + penjualan.idTransaksi
@@ -193,9 +209,15 @@ function Notifikasi30Dinarpos() {
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="red" type="button">
-                            <CheckIcon className="w-6 h-6 white" />
-                          </IconButton>
+                          <a
+                            href={
+                              "/konfirmasi_30_dinarpos/" + penjualan.idTransaksi
+                            }
+                          >
+                            <IconButton size="md" color="red" type="button">
+                              <CheckIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                           <IconButton size="md" color="orange">
                             <IconButton
                               size="md"
@@ -273,7 +295,7 @@ function Notifikasi30Dinarpos() {
                         {penjualan.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.tanggalKonfirmasi30}
+                        {formatDate(penjualan.tanggalKonfirmasi30)}
                       </td>
                       <td className="text-sm w-[15%] py-2 px-3">
                         {penjualan.customer.nama_customer}

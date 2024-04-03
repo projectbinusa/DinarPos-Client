@@ -101,6 +101,22 @@ function Notifikasi7Excelcom() {
     }
   }, [konfirmasi]);
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return formattedDate;
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -175,42 +191,45 @@ function Notifikasi7Excelcom() {
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
-                          <div className="flex flex-row gap-3">
-                            <a
-                              href={
-                                "/print_histori_excelcom/" +
-                                penjualan.idTransaksi
-                              }
-                              target="_blank"
-                            >
-                              <IconButton size="md" color="light-blue">
-                                <PrinterIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </a>
-                            <IconButton size="md" color="red" type="button">
+                        <td className="text-sm py-2 px-3 flex gap-2 items-center justify-center">
+                          <a
+                            href={
+                              "/print_histori_excelcom/" + penjualan.idTransaksi
+                            }
+                            target="_blank"
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <a
+                            href={
+                              "/konfirmasi_7_excelcom/" + penjualan.idTransaksi
+                            }
+                          >
+                            <IconButton size="md" color="red">
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
-                            <IconButton size="md" color="orange">
-                              <IconButton
-                                size="md"
-                                color="orange"
-                                onClick={() => {
-                                  const phone = encodeURIComponent(
-                                    penjualan.customer.telp
-                                  ); // Mengkodekan nomor telepon
-                                  const message = encodeURIComponent(
-                                    `Selamat pagi kak ${penjualan.customer.nama_customer}%0APerkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                  );
-                                  window.open(
-                                    `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                  );
-                                }}
-                              >
-                                <PhoneIcon className="w-6 h-6 white" />
-                              </IconButton>
+                          </a>
+                          <IconButton size="md" color="orange">
+                            <IconButton
+                              size="md"
+                              color="orange"
+                              onClick={() => {
+                                const phone = encodeURIComponent(
+                                  penjualan.customer.telp
+                                ); // Mengkodekan nomor telepon
+                                const message = encodeURIComponent(
+                                  `Selamat pagi kak ${penjualan.customer.nama_customer}%0APerkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                );
+                                window.open(
+                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                                );
+                              }}
+                            >
+                              <PhoneIcon className="w-6 h-6 white" />
                             </IconButton>
-                          </div>
+                          </IconButton>
                         </td>{" "}
                       </tr>
                     );
@@ -271,7 +290,7 @@ function Notifikasi7Excelcom() {
                         {notifikasi.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {notifikasi.tanggalKonfirmasi7}
+                        {formatDate(notifikasi.tanggalKonfirmasi7)}
                       </td>
                       <td className="text-sm py-2 px-3">
                         {notifikasi.customer.nama_customer}
@@ -282,7 +301,7 @@ function Notifikasi7Excelcom() {
                       <td className="text-sm py-2 px-3">
                         {notifikasi.ket7Hari}
                       </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                      <td className="text-sm py-2 px-3 items-center justify-center">
                         <a
                           href={
                             "/print_histori_excelcom/" + notifikasi.idTransaksi
