@@ -97,6 +97,7 @@ import Konfirmasi30Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_3
 import Konfirmasi90Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_90/Konfirmasi90Dinarpos.js";
 import Konfirmasi365Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_365/Konfirmasi365Dinarpos.js";
 import Konfirmasi120Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_120/Konfirmasi120Dinarpos.js";
+import TglFilterSalesmanDinarpos from "./views/admin/laporan_dinarpos/laporan_salesman/TglFilterSalesmanDinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -527,6 +528,11 @@ function App() {
             <PrivateRoute
               path="/print_histori_laporan_salesman_dinarpos/:id"
               component={PrintHistoriTransaksiDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/tanggalfilter_salesman_dinarpos"
+              component={TglFilterSalesmanDinarpos}
               isAuthenticated={true}
             />
             {/* END LAPORAN SALESMAN */}

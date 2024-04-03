@@ -122,19 +122,6 @@ function LaporanSalesmanExcelcom() {
   const [tglAwal, settglAwal] = useState(null);
   const [tglAkhir, settglAkhir] = useState(null);
 
-  // const tanggalFilterSalesman = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${LAPORAN_SALESMAN}/tanggal/excelcom?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
-  //       {
-  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.log("get all", error);
-  //   }
-  // };
-
   const [barang, setBarang] = useState([]);
 
   const barangTransaksi = async (transactionId) => {
@@ -205,6 +192,15 @@ function LaporanSalesmanExcelcom() {
     });
   };
 
+  const tglFilter = (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("salesmanId", salesmanId);
+    sessionStorage.setItem("tglAwal", tglAwal);
+    sessionStorage.setItem("tglAkhir", tglAkhir);
+
+    window.open("/tanggalfilter_salesman_excelcom", "_blank");
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -230,7 +226,7 @@ function LaporanSalesmanExcelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <form>
+          <form onSubmit={tglFilter}>
             <div className="w-72 lg:w-[50%]">
               <div className="flex gap-2 items-end">
                 <Input

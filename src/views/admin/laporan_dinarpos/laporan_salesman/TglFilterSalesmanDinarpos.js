@@ -1,11 +1,11 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
-  GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
+  GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
   LAPORAN_SALESMAN,
 } from "../../../../utils/BaseUrl";
-import axios from "axios";
 
-function TanggalFilterSalesmanExcelcom() {
+function TglFilterSalesmanDinarpos() {
   const salesmanId = sessionStorage.getItem("salesmanId");
   const tglAwal = sessionStorage.getItem("tglAwal");
   const tglAkhir = sessionStorage.getItem("tglAkhir");
@@ -35,7 +35,7 @@ function TanggalFilterSalesmanExcelcom() {
   const barangTransaksi = async (transactionId) => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_JUAL_EXCELCOM}?id_transaksi=${transactionId}`,
+        `${GET_BARANG_TRANSAKSI_JUAL_DINARPOS}?id_transaksi=${transactionId}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -81,13 +81,13 @@ function TanggalFilterSalesmanExcelcom() {
   return (
     <div className="mx-5 my-3">
       <h3 className="text-sm">
-        EXCEL COM{" "}
-        <span className="block">
-          Jl. Bulustalan 1 No.27 Semarang 087729244899
-        </span>
+        PT DINARTECH SHARE-E
+        <span className="block">Jl. Bulustalan I No 27 Semarang</span>
+        <span className="block">(024) 3511176. Fax (024) 3546330</span>
+        <span className="block">PT. DINARTECH SHARE-E</span>
       </h3>
       <br /> <hr /> <br />
-      <h3 className="text-center">LAPORAN PENJUALAN PER SALES EXCELCOM</h3>
+      <h3 className="text-center">LAPORAN PENJUALAN PER SALES DINARPOS</h3>
       <br />
       <h3 className="text-sm">
         Periode {tglAwal} sampai {tglAkhir}
@@ -204,9 +204,11 @@ function TanggalFilterSalesmanExcelcom() {
         </tbody>
       </table>
       <br />
-      <h3 className="text-center">Total Keseluruhan : {formatRupiah(totalAll)}</h3>
+      <h3 className="text-center">
+        Total Keseluruhan : {formatRupiah(totalAll)}
+      </h3>
     </div>
   );
 }
 
-export default TanggalFilterSalesmanExcelcom;
+export default TglFilterSalesmanDinarpos;
