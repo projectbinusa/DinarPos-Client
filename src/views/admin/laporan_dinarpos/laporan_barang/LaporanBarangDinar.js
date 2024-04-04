@@ -31,6 +31,8 @@ function LaporanBarangDinar() {
   const [barangs, setBarangs] = useState([]);
   const [barang, setBarang] = useState([]);
   const [barangId, setbarangId] = useState(0);
+  const [tglAwal, settglAwal] = useState(0);
+  const [tglAkhir, settglAkhir] = useState(0);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -106,6 +108,34 @@ function LaporanBarangDinar() {
 
   const history = useHistory();
 
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_BARANG}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
+
   // AKSI RETURN
   const returnBarang = async (id) => {
     Swal.fire({
@@ -143,6 +173,16 @@ function LaporanBarangDinar() {
     });
   };
 
+  // FILTER TANGGAL
+  const tglFilter = (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("barcode_barang", barangId);
+    sessionStorage.setItem("tglAwal", tglAwal);
+    sessionStorage.setItem("tglAkhir", tglAkhir);
+
+    window.open("/tanggalfilter_barang_dinarpos", "_blank");
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">
       <SidebarAdmin />
@@ -168,27 +208,50 @@ function LaporanBarangDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <form action="">
-            <div className="w-72 lg:w-[50%]">
-              <label
-                htmlFor="barang"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Data Barang
-              </label>
-              <ReactSelect
+          <form onSubmit={tglFilter}>
+            <div className="w-72 lg:w-[50%] flex gap-2 items-end">
+              <Input
+                label="Barang"
+                variant="static"
+                color="blue"
+                list="barang-list"
                 id="barang"
-                options={barang.map((down) => {
-                  return {
-                    value: down.idBarang,
-                    label: down.barcodeBarang + " / " + down.namaBarang,
-                  };
-                })}
+                name="barang"
+                onChange={(event) => {
+                  handleChange(event);
+                  setbarangId(event.target.value);
+                }}
                 placeholder="Pilih Barang"
-                styles={customStyles}
-                onChange={(selectedOption) => setbarangId(selectedOption.value)}
+                required
               />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              <datalist id="barang-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.barcodeBarang}>
+                        {option.namaBarang}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </datalist>
+
+              <div className="flex gap-2">
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
+                >
+                  Next
+                </button>
+              </div>
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
@@ -196,6 +259,8 @@ function LaporanBarangDinar() {
                 color="blue"
                 type="date"
                 label="Tanggal Awal"
+                onChange={(e) => settglAwal(e.target.value)}
+                required
               />
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
@@ -204,9 +269,11 @@ function LaporanBarangDinar() {
                 color="blue"
                 type="date"
                 label="Tanggal Akhir"
+                onChange={(e) => settglAkhir(e.target.value)}
+                required
               />
             </div>
-            <Button className="mt-5" color="blue">
+            <Button className="mt-5" color="blue" type="submit">
               Print
             </Button>
           </form>

@@ -15,14 +15,16 @@ import {
   API_BARANG,
   API_CUSTOMER,
   GET_BARANG_TRANSAKSI_BELI_DINARPOS,
+  GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
   LAPORAN_CUSTOMER,
 } from "../../../../utils/BaseUrl";
 
 function LaporanCustomerDinar() {
   const tableRef = useRef(null);
   const [laporans, setLaporan] = useState([]);
-  const [customer, setcustomer] = useState([]);
   const [customerId, setcustomerId] = useState(0);
+  const [tglAwal, settglAwal] = useState(0);
+  const [tglAkhir, settglAkhir] = useState(0);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -43,20 +45,8 @@ function LaporanCustomerDinar() {
     }
   };
 
-  const getAllCustomer = async () => {
-    try {
-      const response = await axios.get(`${API_CUSTOMER}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setcustomer(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
   useEffect(() => {
     getAll();
-    getAllCustomer();
   }, []);
 
   useEffect(() => {
@@ -65,43 +55,12 @@ function LaporanCustomerDinar() {
     }
   }, [laporans]);
 
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-  };
-
   const [barang, setBarang] = useState([]);
 
-  const barangTransaksiBeli = async (transactionId) => {
+  const barangTransaksi = async (transactionId) => {
     try {
       const response = await axios.get(
-        `${GET_BARANG_TRANSAKSI_BELI_DINARPOS}?id_transaksi=${transactionId}`,
+        `${GET_BARANG_TRANSAKSI_JUAL_DINARPOS}?id_transaksi=${transactionId}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -117,7 +76,7 @@ function LaporanCustomerDinar() {
     const fetchBarangTransaksi = async () => {
       const barangList = await Promise.all(
         laporans.map(async (laporan) => {
-          const barangData = await barangTransaksiBeli(laporan.idTransaksi);
+          const barangData = await barangTransaksi(laporan.idTransaksi);
           return barangData;
         })
       );
@@ -127,41 +86,43 @@ function LaporanCustomerDinar() {
     fetchBarangTransaksi();
   }, [laporans]);
 
-  const [unit, setUnit] = useState([]);
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const unitBarang = async (barcodeBarang) => {
-    try {
-      const response = await axios.get(
-        `${API_BARANG}/barcode?barcode=${barcodeBarang}`,
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_CUSTOMER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response.data.data);
-      return response.data.data;
-    } catch (error) {
-      console.log("get all", error);
-      return [];
+      const data = await response.json();
+      setoptions(data.data);
+    } else {
+      return;
     }
   };
 
   useEffect(() => {
-    const fetchUnitBarangTransaksi = async () => {
-      const barangList = await Promise.all(
-        barang.map(async (brg) => {
-          if (brg && brg.barcodeBarang) {
-            const barangData = await unitBarang(brg.barcodeBarang);
-            return barangData;
-          } else {
-            return "";
-          }
-        })
-      );
-      setUnit(barangList);
-    };
+    handle();
+  }, [currentPage, values]);
 
-    fetchUnitBarangTransaksi();
-  }, [barang]);
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
+
+  // FILTER TANGGAL
+  const tglFilter = (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("customerId", customerId);
+    sessionStorage.setItem("tglAwal", tglAwal);
+    sessionStorage.setItem("tglAkhir", tglAkhir);
+
+    window.open("/tanggalfilter_customer_dinarpos", "_blank");
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -188,29 +149,50 @@ function LaporanCustomerDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <form action="">
-            <div className="w-72 lg:w-[50%]">
-              <label
-                htmlFor="customer"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Data Customer
-              </label>
-              <ReactSelect
+          <form onSubmit={tglFilter}>
+            <div className="w-72 lg:w-[50%] flex gap-2 items-end">
+              <Input
+                label="Customer"
+                variant="static"
+                color="blue"
+                list="customer-list"
                 id="customer"
-                options={customer.map((down) => {
-                  return {
-                    value: down.id,
-                    label: down.nama_customer,
-                  };
-                })}
+                name="customer"
+                onChange={(event) => {
+                  handleChange(event);
+                  setcustomerId(event.target.value);
+                }}
                 placeholder="Pilih Customer"
-                styles={customStyles}
-                onChange={(selectedOption) =>
-                  setcustomerId(selectedOption.value)
-                }
+                required
               />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              <datalist id="customer-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.id}>
+                        {option.nama_customer}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </datalist>
+
+              <div className="flex gap-2">
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
+                >
+                  Next
+                </button>
+              </div>
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
@@ -218,6 +200,8 @@ function LaporanCustomerDinar() {
                 color="blue"
                 type="date"
                 label="Tanggal Awal"
+                onChange={(e) => settglAwal(e.target.value)}
+                required
               />
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
@@ -226,9 +210,11 @@ function LaporanCustomerDinar() {
                 color="blue"
                 type="date"
                 label="Tanggal Akhir"
+                onChange={(e) => settglAkhir(e.target.value)}
+                required
               />
             </div>
-            <Button className="mt-5" color="blue">
+            <Button className="mt-5" color="blue" type="submit">
               Print
             </Button>
           </form>
@@ -271,7 +257,7 @@ function LaporanCustomerDinar() {
                         <td className="text-sm py-2 px-3">
                           {laporan.created_date}
                         </td>
-                        <td className="text-sm w-[15%] py-2 px-3">
+                        <td className="text-sm py-2 px-3">
                           {laporan.noFaktur}
                         </td>
                         <td className="text-sm py-2 px-3">
@@ -291,7 +277,13 @@ function LaporanCustomerDinar() {
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm py-2 px-3">{unit.unit}</td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.unit}</li>
+                            </ul>
+                          ))}
+                        </td>
                         <td className="text-sm py-2 px-3">
                           {barangLaporan.map((brg, idx) => (
                             <ul key={idx}>

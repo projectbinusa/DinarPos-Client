@@ -98,6 +98,14 @@ import Konfirmasi90Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_9
 import Konfirmasi365Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_365/Konfirmasi365Dinarpos.js";
 import Konfirmasi120Dinarpos from "./views/admin/notifikasi_dinarpos/notifikasi_120/Konfirmasi120Dinarpos.js";
 import TglFilterSalesmanDinarpos from "./views/admin/laporan_dinarpos/laporan_salesman/TglFilterSalesmanDinarpos.js";
+import TanggalFilterBarangExcelcom from "./views/admin/laporan_excelcom/laporan_barang/TanggalFilterBarangExcelcom.js";
+import TanggalFilterBarangDinarpos from "./views/admin/laporan_dinarpos/laporan_barang/TanggalFilterBarangDinarpos.js";
+import TanggalFilterSuplierDinarpos from "./views/admin/laporan_dinarpos/laporan_suplier/TanggalFilterSuplierDinarpos.js";
+import TanggalFilterCustomerDinarpos from "./views/admin/laporan_dinarpos/laporan_customer/TanggalFilterCustomerDinarpos.js";
+import TglFilterTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/laporan_transaksi_beli/TglFilterTransaksiBeliDinarpos.js";
+import TanggalFilterSuplierExcelcom from "./views/admin/laporan_excelcom/laporan_suplier/TanggalFilterSuplierExcelcom.js";
+import TanggalFilterCustomerExcelcom from "./views/admin/laporan_excelcom/laporan_customer/TanggalFilterCustomerExcelcom.js";
+import TglFilterTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/TglFilterTransaksiBeliExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -510,8 +518,18 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/tanggalfilter_barang_dinarpos"
+              component={TanggalFilterBarangDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/laporan_suplier_dinarpos"
               component={LaporanSuplierDinar}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/tanggalfilter_suplier_dinarpos"
+              component={TanggalFilterSuplierDinarpos}
               isAuthenticated={true}
             />
             {/* LAPORAN SALESMAN */}
@@ -541,6 +559,11 @@ function App() {
               component={LaporanCustomerDinar}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/tanggalfilter_customer_dinarpos"
+              component={TanggalFilterCustomerDinarpos}
+              isAuthenticated={true}
+            />
             {/* LAPORAN TRANSAKSI BELI */}
             <PrivateRoute
               path="/laporan_transaksi_beli_dinarpos"
@@ -557,6 +580,11 @@ function App() {
               component={PrintHistoriTransaksiBeliDinarpos}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/tanggalfilter_transaksi_beli_dinarpos"
+              component={TglFilterTransaksiBeliDinarpos}
+              isAuthenticated={true}
+            />
             {/* END LAPORAN TRANSAKSI BELI */}
             {/* END LAPORAN DINARPOS */}
 
@@ -567,8 +595,18 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/tanggalfilter_barang_excelcom"
+              component={TanggalFilterBarangExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/laporan_suplier_excelcom"
               component={LaporanSuplierExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/tanggalfilter_suplier_excelcom"
+              component={TanggalFilterSuplierExcelcom}
               isAuthenticated={true}
             />
             {/* LAPORAN SALESMAN */}
@@ -598,6 +636,11 @@ function App() {
               component={LaporanCustomerExcelcom}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/tanggalfilter_customer_excelcom"
+              component={TanggalFilterCustomerExcelcom}
+              isAuthenticated={true}
+            />
             {/* LAPORAN TRANSAKSI BELI */}
             <PrivateRoute
               path="/laporan_transaksi_beli_excelcom"
@@ -612,6 +655,11 @@ function App() {
             <PrivateRoute
               path="/print_histori_laporan_transaksi_beli_excelcom/:id"
               component={PrintHistoriTransaksiBeliExcelcom}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/tanggalfilter_transaksi_beli_excelcom"
+              component={TglFilterTransaksiBeliExcelcom}
               isAuthenticated={true}
             />
             {/* END LAPORAN TRANSAKSI BELI */}

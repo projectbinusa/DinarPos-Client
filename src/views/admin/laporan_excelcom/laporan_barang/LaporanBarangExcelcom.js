@@ -24,8 +24,9 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 function LaporanBarangExcelcom() {
   const tableRef = useRef(null);
   const [barangs, setBarangs] = useState([]);
-  const [barang, setBarang] = useState([]);
   const [barangId, setbarangId] = useState(0);
+  const [tglAwal, settglAwal] = useState("");
+  const [tglAkhir, settglAkhir] = useState("");
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -52,20 +53,8 @@ function LaporanBarangExcelcom() {
     }
   };
 
-  // const getAllBarang = async () => {
-  //   try {
-  //     const response = await axios.get(`${API_BARANG}`, {
-  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //     });
-  //     setBarang(response.data.data);
-  //   } catch (error) {
-  //     console.log("get all", error);
-  //   }
-  // };
-
   useEffect(() => {
     getAll();
-    // getAllBarang();
   }, []);
 
   useEffect(() => {
@@ -73,37 +62,6 @@ function LaporanBarangExcelcom() {
       initializeDataTable();
     }
   }, [barangs]);
-
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-  };
 
   const [values, setvalues] = useState("");
   const [options, setoptions] = useState([]);
@@ -172,6 +130,15 @@ function LaporanBarangExcelcom() {
     });
   };
 
+  const tglFilter = (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("barcode_barang", barangId);
+    sessionStorage.setItem("tglAwal", tglAwal);
+    sessionStorage.setItem("tglAkhir", tglAkhir);
+
+    window.open("/tanggalfilter_barang_excelcom", "_blank");
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -197,7 +164,7 @@ function LaporanBarangExcelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <form action="">
+          <form onSubmit={tglFilter}>
             <div className="w-72 lg:w-[50%] flex gap-2 items-end">
               <Input
                 label="Barang"
@@ -217,7 +184,7 @@ function LaporanBarangExcelcom() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.idBarang}>
+                      <option value={option.barcodeBarang}>
                         {option.namaBarang}
                       </option>
                     ))}
@@ -241,25 +208,6 @@ function LaporanBarangExcelcom() {
                   Next
                 </button>
               </div>
-              {/* <label
-                htmlFor="barang"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Data Barang
-              </label>
-              <ReactSelect
-                id="barang"
-                options={barang.map((down) => {
-                  return {
-                    value: down.idBarang,
-                    label: down.barcodeBarang + " / " + down.namaBarang,
-                  };
-                })}
-                placeholder="Pilih Barang"
-                styles={customStyles}
-                onChange={(selectedOption) => setbarangId(selectedOption.value)}
-              />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" /> */}
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
@@ -267,6 +215,7 @@ function LaporanBarangExcelcom() {
                 color="blue"
                 type="date"
                 label="Tanggal Awal"
+                onChange={(e) => settglAwal(e.target.value)}
                 required
               />
             </div>
@@ -276,10 +225,11 @@ function LaporanBarangExcelcom() {
                 color="blue"
                 type="date"
                 label="Tanggal Akhir"
+                onChange={(e) => settglAkhir(e.target.value)}
                 required
               />
             </div>
-            <Button className="mt-5" color="blue">
+            <Button className="mt-5" color="blue" type="submit">
               Print
             </Button>
           </form>

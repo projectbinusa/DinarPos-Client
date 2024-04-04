@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { API_BARANG, LAPORAN_BARANG } from "../../../../utils/BaseUrl";
 import axios from "axios";
 
-function TanggalFilterBarangExcelcom() {
+function TanggalFilterBarangDinarpos() {
   const barcode_barang = sessionStorage.getItem("barcode_barang");
   const tglAwal = sessionStorage.getItem("tglAwal");
   const tglAkhir = sessionStorage.getItem("tglAkhir");
@@ -13,7 +13,7 @@ function TanggalFilterBarangExcelcom() {
   const getAll = async () => {
     try {
       const response = await axios.get(
-        `${LAPORAN_BARANG}/tanggal/excelcom?barcode_barang=${barcode_barang}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
+        `${LAPORAN_BARANG}/tanggal/dinarpos?barcode_barang=${barcode_barang}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -63,13 +63,13 @@ function TanggalFilterBarangExcelcom() {
   return (
     <div className="mx-5 my-3">
       <h3 className="text-sm">
-        EXCEL COM{" "}
-        <span className="block">
-          Jl. Bulustalan 1 No.27 Semarang 087729244899
-        </span>
+        PT DINARTECH SHARE-E
+        <span className="block">Jl. Bulustalan I No 27 Semarang</span>
+        <span className="block">(024) 3511176. Fax (024) 3546330</span>
+        <span className="block">PT. DINARTECH SHARE-E</span>
       </h3>
       <br /> <hr /> <br />
-      <h3 className="text-center">LAPORAN PENJUALAN PER BARANG EXCELCOM</h3>
+      <h3 className="text-center">LAPORAN PENJUALAN PER BARANG DINARPOS</h3>
       <br />
       <h3 className="text-sm">Nama Barang : {namaBarang}</h3> <br />
       <h3 className="text-sm">
@@ -152,4 +152,4 @@ function TanggalFilterBarangExcelcom() {
   );
 }
 
-export default TanggalFilterBarangExcelcom;
+export default TanggalFilterBarangDinarpos;

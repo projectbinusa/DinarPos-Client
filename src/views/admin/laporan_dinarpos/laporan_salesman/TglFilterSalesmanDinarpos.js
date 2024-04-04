@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
+  API_SALESMAN,
   GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
   LAPORAN_SALESMAN,
 } from "../../../../utils/BaseUrl";
@@ -11,6 +12,7 @@ function TglFilterSalesmanDinarpos() {
   const tglAkhir = sessionStorage.getItem("tglAkhir");
   const [laporan, setlaporan] = useState([]);
   const [totalAll, setTotalAll] = useState(0);
+  const [namaSalesman, setnamaSalesman] = useState(0);
 
   const getAll = async () => {
     try {
@@ -26,8 +28,20 @@ function TglFilterSalesmanDinarpos() {
     }
   };
 
+  const getSalesman = async () => {
+    try {
+      const response = await axios.get(`${API_SALESMAN}/` + salesmanId, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setnamaSalesman(response.data.data.namaSalesman);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
   useEffect(() => {
     getAll();
+    getSalesman();
   }, []);
 
   const [barang, setBarang] = useState([]);
@@ -89,6 +103,7 @@ function TglFilterSalesmanDinarpos() {
       <br /> <hr /> <br />
       <h3 className="text-center">LAPORAN PENJUALAN PER SALES DINARPOS</h3>
       <br />
+      <h3 className="text-sm">Nama Salesman : {namaSalesman}</h3> <br />
       <h3 className="text-sm">
         Periode {tglAwal} sampai {tglAkhir}
       </h3>

@@ -29,7 +29,6 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 function LaporanSalesmanDinar() {
   const tableRef = useRef(null);
   const [laporans, setLaporan] = useState([]);
-  const [salesman, setsalesman] = useState([]);
   const [salesmanId, setsalesmanId] = useState(0);
   const [tglAwal, settglAwal] = useState("");
   const [tglAkhir, settglAkhir] = useState("");
@@ -53,20 +52,8 @@ function LaporanSalesmanDinar() {
     }
   };
 
-  const getAllSalesman = async () => {
-    try {
-      const response = await axios.get(`${API_SALESMAN}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsalesman(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
   useEffect(() => {
     getAll();
-    getAllSalesman();
   }, []);
 
   useEffect(() => {
@@ -74,37 +61,6 @@ function LaporanSalesmanDinar() {
       initializeDataTable();
     }
   }, [laporans]);
-
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-  };
 
   const [barang, setBarang] = useState([]);
 
@@ -243,20 +199,20 @@ function LaporanSalesmanDinar() {
             <div className="w-72 lg:w-[50%]">
               <div className="flex gap-2 items-end">
                 <Input
-                  label="Suplier"
+                  label="Salesman"
                   variant="static"
                   color="blue"
-                  list="suplier-list"
-                  id="suplier"
-                  name="suplier"
+                  list="salesman-list"
+                  id="salesman"
+                  name="salesman"
                   onChange={(event) => {
                     handleChange(event);
                     setsalesmanId(event.target.value);
                   }}
-                  placeholder="Pilih Suplier"
+                  placeholder="Pilih Salesman"
                   required
                 />
-                <datalist id="suplier-list">
+                <datalist id="salesman-list">
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (

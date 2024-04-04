@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { API_BARANG, LAPORAN_BARANG } from "../../../../utils/BaseUrl";
+import {
+  API_SUPLIER,
+  GET_BARANG_TRANSAKSI_BELI_DINARPOS,
+  LAPORAN_SUPLIER,
+} from "../../../../utils/BaseUrl";
 import axios from "axios";
 
-function TanggalFilterBarangExcelcom() {
-  const barcode_barang = sessionStorage.getItem("barcode_barang");
+function TglFilterTransaksiBeliDinarpos() {
+  const suplierId = sessionStorage.getItem("suplierId");
   const tglAwal = sessionStorage.getItem("tglAwal");
   const tglAkhir = sessionStorage.getItem("tglAkhir");
   const [laporan, setlaporan] = useState([]);
   const [totalAll, setTotalAll] = useState(0);
-  const [namaBarang, setnamaBarang] = useState("");
+  const [namaSuplier, setnamaSuplier] = useState(0);
 
   const getAll = async () => {
     try {
       const response = await axios.get(
-        `${LAPORAN_BARANG}/tanggal/excelcom?barcode_barang=${barcode_barang}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
+        `${LAPORAN_SUPLIER}/tanggal/excelcom?id_suplier=${suplierId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -24,15 +28,12 @@ function TanggalFilterBarangExcelcom() {
     }
   };
 
-  const getBarang = async () => {
+  const getSuplier = async () => {
     try {
-      const response = await axios.get(
-        `${API_BARANG}/barcode?barcode=${barcode_barang}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      setnamaBarang(response.data.data.namaBarang);
+      const response = await axios.get(`${API_SUPLIER}/` + suplierId, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setnamaSuplier(response.data.data.namaSuplier);
     } catch (error) {
       console.log("get all", error);
     }
@@ -40,13 +41,44 @@ function TanggalFilterBarangExcelcom() {
 
   useEffect(() => {
     getAll();
-    getBarang();
+    getSuplier();
   }, []);
+
+  const [barang, setBarang] = useState([]);
+
+  const barangTransaksi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${GET_BARANG_TRANSAKSI_BELI_DINARPOS}?id_transaksi=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        laporan.map(async (row) => {
+          const barangData = await barangTransaksi(row.idTransaksiBeli);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
+  }, [laporan]);
 
   useEffect(() => {
     let total = 0;
     laporan.forEach((row) => {
-      total += row.totalHargaBarang;
+      total += row.totalBelanja;
     });
     setTotalAll(total);
   }, [laporan]);
@@ -63,15 +95,15 @@ function TanggalFilterBarangExcelcom() {
   return (
     <div className="mx-5 my-3">
       <h3 className="text-sm">
-        EXCEL COM{" "}
-        <span className="block">
-          Jl. Bulustalan 1 No.27 Semarang 087729244899
-        </span>
+        PT DINARTECH SHARE-E
+        <span className="block">Jl. Bulustalan I No 27 Semarang</span>
+        <span className="block">(024) 3511176. Fax (024) 3546330</span>
+        <span className="block">PT. DINARTECH SHARE-E</span>
       </h3>
       <br /> <hr /> <br />
-      <h3 className="text-center">LAPORAN PENJUALAN PER BARANG EXCELCOM</h3>
+      <h3 className="text-center">LAPORAN PEMBELIAN PER SUPLIER DINARPOS</h3>
       <br />
-      <h3 className="text-sm">Nama Barang : {namaBarang}</h3> <br />
+      <h3 className="text-sm">Nama Suplier : {namaSuplier}</h3> <br />
       <h3 className="text-sm">
         Periode {tglAwal} sampai {tglAkhir}
       </h3>
@@ -89,27 +121,38 @@ function TanggalFilterBarangExcelcom() {
               No Faktur
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
+              Nama Suplier
+            </th>
+            <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
               Nama Barang
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Nama Customer
+              Harga Beli (Rp){" "}
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Jumlah
+              Diskon{" "}
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Unit{" "}
+              QTY{" "}
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Harga Satuan (Rp)
+              Total Harga Barang (Rp){" "}
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Total Harga (Rp)
+              Total Belanja (Rp){" "}
+            </th>
+            <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
+              Potongan Harga (Rp){" "}
+            </th>
+            <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
+              Total Keseluruhan (Rp){" "}
             </th>
           </tr>
         </thead>
         <tbody>
           {laporan.map((row, index) => {
+            const barangLaporan = barang[index] || [];
+
             return (
               <tr key={index} className="border py-2">
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
@@ -119,25 +162,50 @@ function TanggalFilterBarangExcelcom() {
                   {row.created_date}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-                  {row.transaksi.noFaktur}
+                  {row.noFaktur}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-                  {row.namaBarang}
+                  {row.suplier.namaSuplier}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-                  {row.transaksi.customer.nama_customer}
+                  {barangLaporan.map((brg, idx) => (
+                    <ul key={idx}>
+                      <li>{brg.namaBarang}</li>
+                    </ul>
+                  ))}{" "}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-                  {row.qty}
+                  {barangLaporan.map((brg, idx) => (
+                    <ul key={idx}>
+                      <li>{brg.hargaBrng}</li>
+                    </ul>
+                  ))}{" "}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-                  {row.unit}
+                  {barangLaporan.map((brg, idx) => (
+                    <ul key={idx}>
+                      <li>{brg.diskon}</li>
+                    </ul>
+                  ))}{" "}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-                  {row.hargaBrng}
+                  {barangLaporan.map((brg, idx) => (
+                    <ul key={idx}>
+                      <li>{brg.qty}</li>
+                    </ul>
+                  ))}{" "}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {row.totalHargaBarang}
+                </td>
+                <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
+                  {row.totalBelanja}
+                </td>
+                <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
+                  {row.potongan}
+                </td>
+                <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
+                  {row.totalBelanja}
                 </td>
               </tr>
             );
@@ -152,4 +220,4 @@ function TanggalFilterBarangExcelcom() {
   );
 }
 
-export default TanggalFilterBarangExcelcom;
+export default TglFilterTransaksiBeliDinarpos;
