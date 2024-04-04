@@ -17,7 +17,7 @@ function TanggalFilterSuplierDinarpos() {
   const getAll = async () => {
     try {
       const response = await axios.get(
-        `${LAPORAN_SUPLIER}/tanggal/excelcom?id_suplier=${suplierId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
+        `${LAPORAN_SUPLIER}/tanggal/dinarpos?id_suplier=${suplierId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }

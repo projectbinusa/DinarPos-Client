@@ -10,7 +10,6 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
   API_BARANG,
   API_SUPLIER,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   API_SUPLIER,
   GET_BARANG_TRANSAKSI_BELI_DINARPOS,
-  LAPORAN_SUPLIER,
+  LAPORAN_TRANSAKSI_BELI,
 } from "../../../../utils/BaseUrl";
 import axios from "axios";
 
@@ -17,7 +17,7 @@ function TglFilterTransaksiBeliDinarpos() {
   const getAll = async () => {
     try {
       const response = await axios.get(
-        `${LAPORAN_SUPLIER}/tanggal/excelcom?id_suplier=${suplierId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
+        `${LAPORAN_TRANSAKSI_BELI}/tanggal/dinarpos?id_suplier=${suplierId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }

@@ -11,7 +11,6 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
   API_RETURN_DINARPOS,
   API_SUPLIER,

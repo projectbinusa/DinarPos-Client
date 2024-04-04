@@ -20,8 +20,9 @@ import {
 function LaporanSuplierExcelcom() {
   const tableRef = useRef(null);
   const [laporans, setLaporan] = useState([]);
-  const [suplier, setsuplier] = useState([]);
   const [suplierId, setsuplierId] = useState(0);
+  const [tglAwal, settglAwal] = useState(0);
+  const [tglAkhir, settglAkhir] = useState(0);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -42,20 +43,8 @@ function LaporanSuplierExcelcom() {
     }
   };
 
-  const getAllSuplier = async () => {
-    try {
-      const response = await axios.get(`${API_SUPLIER}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsuplier(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
   useEffect(() => {
     getAll();
-    getAllSuplier();
   }, []);
 
   useEffect(() => {
@@ -127,6 +116,44 @@ function LaporanSuplierExcelcom() {
     fetchBarangTransaksi();
   }, [laporans]);
 
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // SELECT
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_SUPLIER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const tglFilter = (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("suplierId", suplierId);
+    sessionStorage.setItem("tglAwal", tglAwal);
+    sessionStorage.setItem("tglAkhir", tglAkhir);
+
+    window.open("/tanggalfilter_suplier_excelcom", "_blank");
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -152,29 +179,52 @@ function LaporanSuplierExcelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <form action="">
+          <form onSubmit={tglFilter}>
             <div className="w-72 lg:w-[50%]">
-              <label
-                htmlFor="suplier"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Data Suplier
-              </label>
-              <ReactSelect
-                id="suplier"
-                options={suplier.map((down) => {
-                  return {
-                    value: down.idSuplier,
-                    label: down.namaSuplier,
-                  };
-                })}
-                placeholder="Pilih Suplier"
-                styles={customStyles}
-                onChange={(selectedOption) =>
-                  setsuplierId(selectedOption.value)
-                }
-              />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              <div className="flex gap-2 items-end">
+                <Input
+                  label="Suplier"
+                  variant="static"
+                  color="blue"
+                  list="suplier-list"
+                  id="suplier"
+                  name="suplier"
+                  onChange={(event) => {
+                    handleChange(event);
+                    setsuplierId(event.target.value);
+                  }}
+                  placeholder="Pilih Suplier"
+                  required
+                />
+                <datalist id="suplier-list">
+                  {options.length > 0 && (
+                    <>
+                      {options.map((option) => (
+                        <option value={option.idSuplier}>
+                          {option.namaSuplier}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </datalist>
+
+                <div className="flex gap-2">
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={!options.length}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
@@ -182,6 +232,8 @@ function LaporanSuplierExcelcom() {
                 color="blue"
                 type="date"
                 label="Tanggal Awal"
+                required
+                onChange={(e) => settglAwal(e.target.value)}
               />
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
@@ -190,9 +242,11 @@ function LaporanSuplierExcelcom() {
                 color="blue"
                 type="date"
                 label="Tanggal Akhir"
+                required
+                onChange={(e) => settglAkhir(e.target.value)}
               />
             </div>
-            <Button className="mt-5" color="blue">
+            <Button className="mt-5" color="blue" type="submit">
               Print
             </Button>
           </form>
