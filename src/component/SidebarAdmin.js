@@ -825,6 +825,7 @@ function SidebarAdmin() {
             </div>{" "}
           </Card>
         </Drawer>
+
         {/* SIDEBAR */}
         <Card className="fixed z-15 lg:block hidden h-screen w-full max-w-[18rem] p-2 shadow-xl rounded-none overflow-y-auto sidebar ">
           <div className="mb-2 flex items-center gap-4 p-2">

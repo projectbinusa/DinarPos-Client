@@ -8,11 +8,7 @@ import {
   Select,
   Typography,
 } from "@material-tailwind/react";
-import {
-  KeyIcon,
-  UserCircleIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { KeyIcon, UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
 import { API_PENGGUNA } from "../../../../utils/BaseUrl";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
@@ -22,6 +18,7 @@ function AddPengguna() {
   const [username, setusername] = useState("");
   const [namapengguna, setnamapengguna] = useState("");
   const [level, setlevel] = useState("");
+  const [roleToko, setroleToko] = useState("");
   const [password, setpassword] = useState("");
 
   const history = useHistory();
@@ -33,7 +30,7 @@ function AddPengguna() {
       passwordPengguna: password,
       usernamePengguna: username,
       namaPengguna: namapengguna,
-      roleToko: level
+      roleToko: roleToko,
     };
 
     try {
@@ -120,12 +117,21 @@ function AddPengguna() {
                 label="Level Pengguna"
                 color="blue"
                 size="lg"
-                onChange={(e) => setlevel(e.target.value)}
+                onChange={(selectedOption) => setlevel(selectedOption)}
               >
-                <Option value="Level">Kasir</Option>
-                <Option value="Admin">Admin</Option>
-                <Option value="Warehouse">Warehouse</Option>
-                <Option value="Warehouse">Warehouse</Option>
+                <Option value="kasir">Kasir</Option>
+                <Option value="warehouse">Warehouse</Option>
+                <Option value="accounting">Accounting</Option>
+              </Select>
+              <Select
+                variant="static"
+                label="Role Toko"
+                color="blue"
+                size="lg"
+                onChange={(selectedOption) => setroleToko(selectedOption)}
+              >
+                <Option value="excelcom">Excelcom</Option>
+                <Option value="dinarpos">Dinarpos</Option>
               </Select>
             </div>
             <div className="mt-10 flex gap-4">
