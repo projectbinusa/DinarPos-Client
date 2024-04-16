@@ -287,29 +287,29 @@ function Notifikasi30Dinarpos() {
                 </tr>
               </thead>
               <tbody>
-                {notifikasis.length > 0 ? (
-                  notifikasis.map((penjualan, index) => (
+                {konfirmasis.length > 0 ? (
+                  konfirmasis.map((konfirmasi, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.noFaktur}
+                        {konfirmasi.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {formatDate(penjualan.tanggalKonfirmasi30)}
+                        {formatDate(konfirmasi.tanggalKonfirmasi30)}
                       </td>
                       <td className="text-sm w-[15%] py-2 px-3">
-                        {penjualan.customer.nama_customer}
+                        {konfirmasi.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.salesman.namaSalesman}
+                        {konfirmasi.salesman.namaSalesman}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.ket30Hari}
+                        {konfirmasi.ket30Hari}
                       </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <a
                           href={
-                            "/print_histori_dinarpos/" + penjualan.idTransaksi
+                            "/print_histori_dinarpos/" + konfirmasi.idTransaksi
                           }
                           target="_blank"
                         >

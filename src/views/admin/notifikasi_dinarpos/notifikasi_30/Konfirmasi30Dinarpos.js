@@ -152,7 +152,7 @@ function Konfirmasi30Dinarpos() {
                     setsalesmanId(event.target.value);
                   }}
                   placeholder="Pilih Salesman"
-required
+                  required
                 />
                 <datalist id="salesman-list">
                   {optionsSalesman.length > 0 && (

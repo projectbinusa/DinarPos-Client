@@ -97,7 +97,7 @@ function StokMasuk() {
                   stokMasuks.map((stok, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{stok.suplier.namaSuplier}</td>
+                      <td className="text-sm py-2 px-3">{stok.suplier?.namaSuplier}</td>
                       <td className="text-sm py-2 px-3">{stok.barang.namaBarang}</td>
                       <td className="text-sm w-[15%] py-2 px-3">{stok.jumlahStok}</td>
                       <td className="text-sm py-2 px-3">{stok.keteranganStokMasuk}</td>

@@ -262,7 +262,7 @@ function Notifikasi7Dinarpos() {
 
           <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
-              id="example_data2"
+              id="example_data1"
               ref={tableRef2}
               className="rounded-sm table-auto w-full overflow-auto"
             >
@@ -286,29 +286,29 @@ function Notifikasi7Dinarpos() {
                 </tr>
               </thead>
               <tbody>
-                {notifikasis.length > 0 ? (
-                  notifikasis.map((penjualan, index) => (
+                {konfirmasis.length > 0 ? (
+                  konfirmasis.map((konfirmasi, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.noFaktur}
+                        {konfirmasi.noFaktur}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {formatDate(penjualan.tanggalKonfirmasi7)}
+                        {formatDate(konfirmasi.tanggalKonfirmasi7)}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.customer.nama_customer}
+                        {konfirmasi.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.salesman.namaSalesman}
+                        {konfirmasi.salesman.namaSalesman}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {penjualan.ket7Hari}
+                        {konfirmasi.ket7Hari}
                       </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <a
                           href={
-                            "/print_histori_dinarpos/" + penjualan.idTransaksi
+                            "/print_histori_dinarpos/" + konfirmasi.idTransaksi
                           }
                           target="_blank"
                         >
