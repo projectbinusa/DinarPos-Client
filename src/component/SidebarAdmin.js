@@ -91,8 +91,8 @@ function SidebarAdmin() {
                 </ListItem>
               </a>
               {level === "Superadmin" ||
-              level === "Kasir" ||
-              level === "Gudang" ? (
+              level === "Gudang" ||
+              level === "Kasir" ? (
                 <>
                   {" "}
                   <Accordion
@@ -237,103 +237,117 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
-              <Accordion
-                open={open === 3}
-                icon={
-                  <ChevronDownIcon
-                    strokeWidth={2.5}
-                    className={`mx-auto h-3 w-3 transition-transform ${
-                      open === 3 ? "rotate-180" : ""
-                    }`}
-                  />
-                }
-              >
-                <ListItem className="p-0 rounded" selected={open === 3}>
-                  <AccordionHeader
-                    onClick={() => handleOpen(3)}
-                    className="border-b-0 px-3 py-2 "
+              {level === "Superadmin" ||
+              level === "Kasir" ||
+              level === "Gudang" ? (
+                <>
+                  {" "}
+                  <Accordion
+                    open={open === 3}
+                    icon={
+                      <ChevronDownIcon
+                        strokeWidth={2.5}
+                        className={`mx-auto h-3 w-3 transition-transform ${
+                          open === 3 ? "rotate-180" : ""
+                        }`}
+                      />
+                    }
                   >
-                    <Typography
-                      color="blue-gray"
-                      className="font-poppins uppercase mr-auto text-sm font-normal"
-                    >
-                      data user
-                    </Typography>
-                  </AccordionHeader>
-                </ListItem>
-                <AccordionBody className="py-2">
-                  <List className="p-0">
-                    {level === "Superadmin" || level === "Kasir" ? (
-                      <>
-                        <a href="/data_customer">
-                          <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                            <ListItemPrefix>
-                              <ChevronRightIcon
-                                strokeWidth={3}
-                                className="h-3 w-3"
-                              />
-                            </ListItemPrefix>
-                            data customer
-                          </ListItem>
-                        </a>
-                        <a href="/data_customer_cp">
-                          <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                            <ListItemPrefix>
-                              <ChevronRightIcon
-                                strokeWidth={3}
-                                className="h-3 w-3"
-                              />
-                            </ListItemPrefix>
-                            data customer cp
-                          </ListItem>
-                        </a>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                    {level === "Superadmin" || level === "Gudang" ? (
-                      <>
-                        <a href="/data_suplier">
-                          <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                            <ListItemPrefix>
-                              <ChevronRightIcon
-                                strokeWidth={3}
-                                className="h-3 w-3"
-                              />
-                            </ListItemPrefix>
-                            data suplier
-                          </ListItem>
-                        </a>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-
-                    <a href="/data_salesman">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        data salesman
-                      </ListItem>
-                    </a>
-                    <a href="/data_pengguna">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        data pengguna
-                      </ListItem>
-                    </a>
-                  </List>
-                </AccordionBody>
-              </Accordion>
+                    <ListItem className="p-0 rounded" selected={open === 3}>
+                      <AccordionHeader
+                        onClick={() => handleOpen(3)}
+                        className="border-b-0 px-3 py-2 "
+                      >
+                        <Typography
+                          color="blue-gray"
+                          className="font-poppins uppercase mr-auto text-sm font-normal"
+                        >
+                          data user
+                        </Typography>
+                      </AccordionHeader>
+                    </ListItem>
+                    <AccordionBody className="py-2">
+                      <List className="p-0">
+                        {level === "Superadmin" || level === "Kasir" ? (
+                          <>
+                            <a href="/data_customer">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                data customer
+                              </ListItem>
+                            </a>
+                            <a href="/data_customer_cp">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                data customer cp
+                              </ListItem>
+                            </a>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        {level === "Superadmin" || level === "Gudang" ? (
+                          <>
+                            <a href="/data_suplier">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                data suplier
+                              </ListItem>
+                            </a>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        {roleToko === "Superadmin" ? (
+                          <>
+                            <a href="/data_salesman">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                data salesman
+                              </ListItem>
+                            </a>
+                            <a href="/data_pengguna">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                data pengguna
+                              </ListItem>
+                            </a>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </List>
+                    </AccordionBody>
+                  </Accordion>
+                </>
+              ) : (
+                <></>
+              )}
               {level === "Superadmin" ||
               level === "Kasir" ||
               level === "Gudang" ? (
@@ -419,152 +433,176 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
-              <Accordion
-                open={open === 5}
-                icon={
-                  <ChevronDownIcon
-                    strokeWidth={2.5}
-                    className={`mx-auto h-3 w-3 transition-transform ${
-                      open === 5 ? "rotate-180" : ""
-                    }`}
-                  />
-                }
-              >
-                <ListItem className="p-0 rounded" selected={open === 5}>
-                  <AccordionHeader
-                    onClick={() => handleOpen(5)}
-                    className="border-b-0 px-3 py-2 "
-                  >
-                    <Typography
-                      color="blue-gray"
-                      className="font-poppins uppercase mr-auto text-sm font-normal"
-                    >
-                      return excelcom
-                    </Typography>
-                  </AccordionHeader>
-                </ListItem>
-                <AccordionBody className="py-2">
-                  <List className="p-0">
-                    <a href="/penjualan_return_excelcom">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
+              {level === "Superadmin" || level === "Accounting" ? (
+                <>
+                  {roleToko === "Superadmin" || roleToko === "excelcom" ? (
+                    <>
+                      <Accordion
+                        open={open === 5}
+                        icon={
+                          <ChevronDownIcon
+                            strokeWidth={2.5}
+                            className={`mx-auto h-3 w-3 transition-transform ${
+                              open === 5 ? "rotate-180" : ""
+                            }`}
                           />
-                        </ListItemPrefix>
-                        penjualan return
-                      </ListItem>
-                    </a>
-                    <a href="/penjualan_barang_return_excelcom">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
+                        }
+                      >
+                        <ListItem className="p-0 rounded" selected={open === 5}>
+                          <AccordionHeader
+                            onClick={() => handleOpen(5)}
+                            className="border-b-0 px-3 py-2 "
+                          >
+                            <Typography
+                              color="blue-gray"
+                              className="font-poppins uppercase mr-auto text-sm font-normal"
+                            >
+                              return excelcom
+                            </Typography>
+                          </AccordionHeader>
+                        </ListItem>
+                        <AccordionBody className="py-2">
+                          <List className="p-0">
+                            <a href="/penjualan_return_excelcom">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                penjualan return
+                              </ListItem>
+                            </a>
+                            <a href="/penjualan_barang_return_excelcom">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                penjualan barang return
+                              </ListItem>
+                            </a>
+                            <a href="/pembelian_return_excelcom">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                pembelian return
+                              </ListItem>
+                            </a>
+                            <a href="/pembelian_barang_return_excelcom">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                pembelian barang return
+                              </ListItem>
+                            </a>
+                          </List>
+                        </AccordionBody>
+                      </Accordion>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+              {level === "Superadmin" || level === "Accounting" ? (
+                <>
+                  {roleToko === "Superadmin" || roleToko === "dinarpos" ? (
+                    <>
+                      <Accordion
+                        open={open === 6}
+                        icon={
+                          <ChevronDownIcon
+                            strokeWidth={2.5}
+                            className={`mx-auto h-3 w-3 transition-transform ${
+                              open === 6 ? "rotate-180" : ""
+                            }`}
                           />
-                        </ListItemPrefix>
-                        penjualan barang return
-                      </ListItem>
-                    </a>
-                    <a href="/pembelian_return_excelcom">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        pembelian return
-                      </ListItem>
-                    </a>
-                    <a href="/pembelian_barang_return_excelcom">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        pembelian barang return
-                      </ListItem>
-                    </a>
-                  </List>
-                </AccordionBody>
-              </Accordion>
-              <Accordion
-                open={open === 6}
-                icon={
-                  <ChevronDownIcon
-                    strokeWidth={2.5}
-                    className={`mx-auto h-3 w-3 transition-transform ${
-                      open === 6 ? "rotate-180" : ""
-                    }`}
-                  />
-                }
-              >
-                <ListItem className="p-0 rounded" selected={open === 6}>
-                  <AccordionHeader
-                    onClick={() => handleOpen(6)}
-                    className="border-b-0 px-3 py-2 "
-                  >
-                    <Typography
-                      color="blue-gray"
-                      className="font-poppins uppercase mr-auto text-sm font-normal"
-                    >
-                      return dinarpos
-                    </Typography>
-                  </AccordionHeader>
-                </ListItem>
-                <AccordionBody className="py-2">
-                  <List className="p-0">
-                    <a href="/penjualan_return_dinarpos">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        penjualan return
-                      </ListItem>
-                    </a>
-                    <a href="/penjualan_barang_return_dinarpos">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        penjualan barang return
-                      </ListItem>
-                    </a>
-                    <a href="/pembelian_return_dinarpos">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        pembelian return
-                      </ListItem>
-                    </a>
-                    <a href="/pembelian_barang_return_dinarpos">
-                      <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                        <ListItemPrefix>
-                          <ChevronRightIcon
-                            strokeWidth={3}
-                            className="h-3 w-3"
-                          />
-                        </ListItemPrefix>
-                        pembelian barang return
-                      </ListItem>
-                    </a>
-                  </List>
-                </AccordionBody>
-              </Accordion>
+                        }
+                      >
+                        <ListItem className="p-0 rounded" selected={open === 6}>
+                          <AccordionHeader
+                            onClick={() => handleOpen(6)}
+                            className="border-b-0 px-3 py-2 "
+                          >
+                            <Typography
+                              color="blue-gray"
+                              className="font-poppins uppercase mr-auto text-sm font-normal"
+                            >
+                              return dinarpos
+                            </Typography>
+                          </AccordionHeader>
+                        </ListItem>
+                        <AccordionBody className="py-2">
+                          <List className="p-0">
+                            <a href="/penjualan_return_dinarpos">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                penjualan return
+                              </ListItem>
+                            </a>
+                            <a href="/penjualan_barang_return_dinarpos">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                penjualan barang return
+                              </ListItem>
+                            </a>
+                            <a href="/pembelian_return_dinarpos">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                pembelian return
+                              </ListItem>
+                            </a>
+                            <a href="/pembelian_barang_return_dinarpos">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                pembelian barang return
+                              </ListItem>
+                            </a>
+                          </List>
+                        </AccordionBody>
+                      </Accordion>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
               {level === "Superadmin" || level === "Kasir" ? (
                 <>
                   {roleToko === "excelcom" || roleToko === "Superadmin" ? (
@@ -977,7 +1015,9 @@ function SidebarAdmin() {
                 dashboard
               </ListItem>
             </a>
-            {level === "Superadmin" || level === "Kasir" ? (
+            {level === "Superadmin" ||
+            level === "Kasir" ||
+            level === "Gudang" ? (
               <>
                 {" "}
                 <Accordion
@@ -1048,120 +1088,189 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-            <Accordion
-              open={open === 2}
-              icon={
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-3 w-3 transition-transform ${
-                    open === 2 ? "rotate-180" : ""
-                  }`}
-                />
-              }
-            >
-              <ListItem className="p-0 rounded" selected={open === 2}>
-                <AccordionHeader
-                  onClick={() => handleOpen(2)}
-                  className="border-b-0 px-3 py-2 "
+            {level === "Superadmin" || level === "Gudang" ? (
+              <>
+                <Accordion
+                  open={open === 2}
+                  icon={
+                    <ChevronDownIcon
+                      strokeWidth={2.5}
+                      className={`mx-auto h-3 w-3 transition-transform ${
+                        open === 2 ? "rotate-180" : ""
+                      }`}
+                    />
+                  }
                 >
-                  <Typography
-                    color="blue-gray"
-                    className="font-poppins uppercase mr-auto text-sm font-normal "
-                  >
-                    TRANSAKSI pembelian
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
-              <AccordionBody className="py-2">
-                <List className="p-0">
-                  <a href="/transaksi_pembelian_excelcom">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      EXCELCOM
-                    </ListItem>
-                  </a>
-                  <a href="/transaksi_pembelian_dinarpos">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      DINARPOS
-                    </ListItem>
-                  </a>
-                </List>
-              </AccordionBody>
-            </Accordion>
-            <Accordion
-              open={open === 3}
-              icon={
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-3 w-3 transition-transform ${
-                    open === 3 ? "rotate-180" : ""
-                  }`}
-                />
-              }
-            >
-              <ListItem className="p-0 rounded" selected={open === 3}>
-                <AccordionHeader
-                  onClick={() => handleOpen(3)}
-                  className="border-b-0 px-3 py-2 "
+                  <ListItem className="p-0 rounded" selected={open === 2}>
+                    <AccordionHeader
+                      onClick={() => handleOpen(2)}
+                      className="border-b-0 px-3 py-2 "
+                    >
+                      <Typography
+                        color="blue-gray"
+                        className="font-poppins uppercase mr-auto text-sm font-normal "
+                      >
+                        TRANSAKSI pembelian
+                      </Typography>
+                    </AccordionHeader>
+                  </ListItem>
+                  <AccordionBody className="py-2">
+                    <List className="p-0">
+                      {roleToko === "Superadmin" || roleToko === "excelcom" ? (
+                        <>
+                          <a href="/transaksi_pembelian_excelcom">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              EXCELCOM
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      {roleToko === "Superadmin" || roleToko === "dinarpos" ? (
+                        <>
+                          <a href="/transaksi_pembelian_dinarpos">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              DINARPOS
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </List>
+                  </AccordionBody>
+                </Accordion>
+              </>
+            ) : (
+              <></>
+            )}
+
+            {level === "Superadmin" ||
+            level === "Gudang" ||
+            level === "Kasir" ? (
+              <>
+                {" "}
+                <Accordion
+                  open={open === 3}
+                  icon={
+                    <ChevronDownIcon
+                      strokeWidth={2.5}
+                      className={`mx-auto h-3 w-3 transition-transform ${
+                        open === 3 ? "rotate-180" : ""
+                      }`}
+                    />
+                  }
                 >
-                  <Typography
-                    color="blue-gray"
-                    className="font-poppins uppercase mr-auto text-sm font-normal"
-                  >
-                    data user
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
-              <AccordionBody className="py-2">
-                <List className="p-0">
-                  <a href="/data_customer">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      data customer
-                    </ListItem>
-                  </a>
-                  <a href="/data_customer_cp">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      data customer cp
-                    </ListItem>
-                  </a>
-                  <a href="/data_suplier">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      data suplier
-                    </ListItem>
-                  </a>
-                  <a href="/data_salesman">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      data salesman
-                    </ListItem>
-                  </a>
-                  <a href="/data_pengguna">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      data pengguna
-                    </ListItem>
-                  </a>
-                </List>
-              </AccordionBody>
-            </Accordion>
+                  <ListItem className="p-0 rounded" selected={open === 3}>
+                    <AccordionHeader
+                      onClick={() => handleOpen(3)}
+                      className="border-b-0 px-3 py-2 "
+                    >
+                      <Typography
+                        color="blue-gray"
+                        className="font-poppins uppercase mr-auto text-sm font-normal"
+                      >
+                        data user
+                      </Typography>
+                    </AccordionHeader>
+                  </ListItem>
+                  <AccordionBody className="py-2">
+                    <List className="p-0">
+                      {roleToko === "Superadmin" ||
+                      roleToko === "Gudang" ||
+                      roleToko === "Kasir" ? (
+                        <>
+                          <a href="/data_customer">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              data customer
+                            </ListItem>
+                          </a>
+                          <a href="/data_customer_cp">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              data customer cp
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      {roleToko === "Superadmin" || roleToko === "Gudang" ? (
+                        <>
+                          <a href="/data_suplier">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              data suplier
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      {roleToko === "Superadmin" ? (
+                        <>
+                          <a href="/data_salesman">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              data salesman
+                            </ListItem>
+                          </a>
+                          <a href="/data_pengguna">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              data pengguna
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </List>
+                  </AccordionBody>
+                </Accordion>
+              </>
+            ) : (
+              <></>
+            )}
             {level === "Superadmin" || level === "Kasir" ? (
               <>
                 <Accordion
@@ -1230,129 +1339,181 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-            <Accordion
-              open={open === 5}
-              icon={
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-3 w-3 transition-transform ${
-                    open === 5 ? "rotate-180" : ""
-                  }`}
-                />
-              }
-            >
-              <ListItem className="p-0 rounded" selected={open === 5}>
-                <AccordionHeader
-                  onClick={() => handleOpen(5)}
-                  className="border-b-0 px-3 py-2 "
-                >
-                  <Typography
-                    color="blue-gray"
-                    className="font-poppins uppercase mr-auto text-sm font-normal"
-                  >
-                    return excelcom
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
-              <AccordionBody className="py-2">
-                <List className="p-0">
-                  <a href="/penjualan_return_excelcom">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      penjualan return
-                    </ListItem>
-                  </a>
-                  <a href="/penjualan_barang_return_excelcom">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      penjualan barang return
-                    </ListItem>
-                  </a>
-                  <a href="/pembelian_return_excelcom">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      pembelian return
-                    </ListItem>
-                  </a>
-                  <a href="/pembelian_barang_return_excelcom">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      pembelian barang return
-                    </ListItem>
-                  </a>
-                </List>
-              </AccordionBody>
-            </Accordion>
-            <Accordion
-              open={open === 6}
-              icon={
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-3 w-3 transition-transform ${
-                    open === 6 ? "rotate-180" : ""
-                  }`}
-                />
-              }
-            >
-              <ListItem className="p-0 rounded" selected={open === 6}>
-                <AccordionHeader
-                  onClick={() => handleOpen(6)}
-                  className="border-b-0 px-3 py-2 "
-                >
-                  <Typography
-                    color="blue-gray"
-                    className="font-poppins uppercase mr-auto text-sm font-normal"
-                  >
-                    return dinarpos
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
-              <AccordionBody className="py-2">
-                <List className="p-0">
-                  <a href="/penjualan_return_dinarpos">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      penjualan return
-                    </ListItem>
-                  </a>
-                  <a href="/penjualan_barang_return_dinarpos">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      penjualan barang return
-                    </ListItem>
-                  </a>
-                  <a href="/pembelian_return_dinarpos">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      pembelian return
-                    </ListItem>
-                  </a>
-                  <a href="/pembelian_barang_return_dinarpos">
-                    <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                      <ListItemPrefix>
-                        <ChevronRightIcon strokeWidth={3} className="h-3 w-3" />
-                      </ListItemPrefix>
-                      pembelian barang return
-                    </ListItem>
-                  </a>
-                </List>
-              </AccordionBody>
-            </Accordion>
-            {level === "Superadmin" || level === "Kasir" ? (
+            {level === "Superadmin" || level === "Accounting" ? (
+              <>
+                {roleToko === "Superadmin" || roleToko === "excelcom" ? (
+                  <>
+                    {" "}
+                    <Accordion
+                      open={open === 5}
+                      icon={
+                        <ChevronDownIcon
+                          strokeWidth={2.5}
+                          className={`mx-auto h-3 w-3 transition-transform ${
+                            open === 5 ? "rotate-180" : ""
+                          }`}
+                        />
+                      }
+                    >
+                      <ListItem className="p-0 rounded" selected={open === 5}>
+                        <AccordionHeader
+                          onClick={() => handleOpen(5)}
+                          className="border-b-0 px-3 py-2 "
+                        >
+                          <Typography
+                            color="blue-gray"
+                            className="font-poppins uppercase mr-auto text-sm font-normal"
+                          >
+                            return excelcom
+                          </Typography>
+                        </AccordionHeader>
+                      </ListItem>
+                      <AccordionBody className="py-2">
+                        <List className="p-0">
+                          <a href="/penjualan_return_excelcom">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              penjualan return
+                            </ListItem>
+                          </a>
+                          <a href="/penjualan_barang_return_excelcom">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              penjualan barang return
+                            </ListItem>
+                          </a>
+                          <a href="/pembelian_return_excelcom">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              pembelian return
+                            </ListItem>
+                          </a>
+                          <a href="/pembelian_barang_return_excelcom">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              pembelian barang return
+                            </ListItem>
+                          </a>
+                        </List>
+                      </AccordionBody>
+                    </Accordion>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
+            {level === "Superadmin" || level === "Accounting" ? (
+              <>
+                {roleToko === "Superadmin" || roleToko === "excelcom" ? (
+                  <>
+                    {" "}
+                    <Accordion
+                      open={open === 6}
+                      icon={
+                        <ChevronDownIcon
+                          strokeWidth={2.5}
+                          className={`mx-auto h-3 w-3 transition-transform ${
+                            open === 6 ? "rotate-180" : ""
+                          }`}
+                        />
+                      }
+                    >
+                      <ListItem className="p-0 rounded" selected={open === 6}>
+                        <AccordionHeader
+                          onClick={() => handleOpen(6)}
+                          className="border-b-0 px-3 py-2 "
+                        >
+                          <Typography
+                            color="blue-gray"
+                            className="font-poppins uppercase mr-auto text-sm font-normal"
+                          >
+                            return dinarpos
+                          </Typography>
+                        </AccordionHeader>
+                      </ListItem>
+                      <AccordionBody className="py-2">
+                        <List className="p-0">
+                          <a href="/penjualan_return_dinarpos">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              penjualan return
+                            </ListItem>
+                          </a>
+                          <a href="/penjualan_barang_return_dinarpos">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              penjualan barang return
+                            </ListItem>
+                          </a>
+                          <a href="/pembelian_return_dinarpos">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              pembelian return
+                            </ListItem>
+                          </a>
+                          <a href="/pembelian_barang_return_dinarpos">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              pembelian barang return
+                            </ListItem>
+                          </a>
+                        </List>
+                      </AccordionBody>
+                    </Accordion>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
+            {level === "Superadmin" ||
+            level === "Kasir" ||
+            level === "Accounting" ? (
               <>
                 {roleToko === "excelcom" || roleToko === "Superadmin" ? (
                   <>
@@ -1449,7 +1610,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-            {level === "Superadmin" || level === "Kasir" ? (
+            {level === "Superadmin" ||
+            level === "Kasir" ||
+            level === "Accounting" ? (
               <>
                 {roleToko === "dinarpos" || roleToko === "Superadmin" ? (
                   <>
