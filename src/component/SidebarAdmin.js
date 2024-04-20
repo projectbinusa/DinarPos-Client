@@ -398,19 +398,19 @@ function SidebarAdmin() {
                         ) : (
                           <></>
                         )}
-                        <a href="/stok_masuk_barang">
-                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                            <ListItemPrefix>
-                              <ChevronRightIcon
-                                strokeWidth={3}
-                                className="h-3 w-3"
-                              />
-                            </ListItemPrefix>
-                            stok masuk
-                          </ListItem>
-                        </a>
                         {level === "Superadmin" || level === "Gudang" ? (
                           <>
+                            <a href="/stok_masuk_barang">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                stok masuk
+                              </ListItem>
+                            </a>
                             <a href="/stok_keluar_barang">
                               <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                                 <ListItemPrefix>
@@ -644,50 +644,68 @@ function SidebarAdmin() {
                                 laporan salesman
                               </ListItem>
                             </a>
-                            <a href="/laporan_barang_excelcom">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan barang
-                              </ListItem>
-                            </a>
-                            <a href="/laporan_suplier_excelcom">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan suplier
-                              </ListItem>
-                            </a>
-                            <a href="/laporan_customer_excelcom">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan customer
-                              </ListItem>
-                            </a>
-                            <a href="/laporan_transaksi_beli_excelcom">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan transaksi beli
-                              </ListItem>
-                            </a>
+                            {level === "Gudang" || level === "Superadmin" ? (
+                              <>
+                                <a href="/laporan_barang_excelcom">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan barang
+                                  </ListItem>
+                                </a>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                            {level === "Superadmin" ? (
+                              <>
+                                <a href="/laporan_suplier_excelcom">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan suplier
+                                  </ListItem>
+                                </a>
+                                <a href="/laporan_customer_excelcom">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan customer
+                                  </ListItem>
+                                </a>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                            {level === "Gudang" || level === "Superadmin" ? (
+                              <>
+                                <a href="/laporan_transaksi_beli_excelcom">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan transaksi beli
+                                  </ListItem>
+                                </a>
+                              </>
+                            ) : (
+                              <></>
+                            )}
                           </List>
                         </AccordionBody>
                       </Accordion>
@@ -741,50 +759,68 @@ function SidebarAdmin() {
                                 laporan salesman
                               </ListItem>
                             </a>
-                            <a href="/laporan_barang_dinarpos">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan barang
-                              </ListItem>
-                            </a>
-                            <a href="/laporan_suplier_dinarpos">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan suplier
-                              </ListItem>
-                            </a>
-                            <a href="/laporan_customer_dinarpos">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan customer
-                              </ListItem>
-                            </a>
-                            <a href="/laporan_transaksi_beli_dinarpos">
-                              <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                <ListItemPrefix>
-                                  <ChevronRightIcon
-                                    strokeWidth={3}
-                                    className="h-3 w-3"
-                                  />
-                                </ListItemPrefix>
-                                laporan transaksi beli
-                              </ListItem>
-                            </a>
+                            {level === "Superadmin" || level === "Gudang" ? (
+                              <>
+                                <a href="/laporan_barang_dinarpos">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan barang
+                                  </ListItem>
+                                </a>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                            {level === "Superadmin" ? (
+                              <>
+                                <a href="/laporan_suplier_dinarpos">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan suplier
+                                  </ListItem>
+                                </a>
+                                <a href="/laporan_customer_dinarpos">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan customer
+                                  </ListItem>
+                                </a>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                            {level === "Superadmin" || level === "Gudang" ? (
+                              <>
+                                <a href="/laporan_transaksi_beli_dinarpos">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan transaksi beli
+                                  </ListItem>
+                                </a>
+                              </>
+                            ) : (
+                              <></>
+                            )}
                           </List>
                         </AccordionBody>
                       </Accordion>
@@ -1157,7 +1193,6 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-
             {level === "Superadmin" ||
             level === "Gudang" ||
             level === "Kasir" ? (
@@ -1189,9 +1224,8 @@ function SidebarAdmin() {
                   </ListItem>
                   <AccordionBody className="py-2">
                     <List className="p-0">
-                      {roleToko === "Superadmin" ||
-                      roleToko === "Gudang" ||
-                      roleToko === "Kasir" ? (
+                      {level === "Superadmin" ||
+                      level === "Kasir" ? (
                         <>
                           <a href="/data_customer">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
@@ -1271,7 +1305,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-            {level === "Superadmin" || level === "Kasir" ? (
+            {level === "Superadmin" ||
+            level === "Kasir" ||
+            level === "Gudang" ? (
               <>
                 <Accordion
                   open={open === 4}
@@ -1299,39 +1335,53 @@ function SidebarAdmin() {
                   </ListItem>
                   <AccordionBody className="py-2">
                     <List className="p-0">
-                      <a href="/data_barang">
-                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                          <ListItemPrefix>
-                            <ChevronRightIcon
-                              strokeWidth={3}
-                              className="h-3 w-3"
-                            />
-                          </ListItemPrefix>
-                          data barang
-                        </ListItem>
-                      </a>
-                      <a href="/stok_masuk_barang">
-                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                          <ListItemPrefix>
-                            <ChevronRightIcon
-                              strokeWidth={3}
-                              className="h-3 w-3"
-                            />
-                          </ListItemPrefix>
-                          stok masuk
-                        </ListItem>
-                      </a>
-                      <a href="/stok_keluar_barang">
-                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                          <ListItemPrefix>
-                            <ChevronRightIcon
-                              strokeWidth={3}
-                              className="h-3 w-3"
-                            />
-                          </ListItemPrefix>
-                          stok opname
-                        </ListItem>
-                      </a>
+                      {level === "Superadmin" ||
+                      level === "Gudang" ||
+                      level === "Kasir" ? (
+                        <>
+                          <a href="/data_barang">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              data barang
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      {level === "Superadmin" || level === "Gudang" ? (
+                        <>
+                          <a href="/stok_masuk_barang">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              stok masuk
+                            </ListItem>
+                          </a>
+                          <a href="/stok_keluar_barang">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              stok opname
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </List>
                   </AccordionBody>
                 </Accordion>
@@ -1555,50 +1605,68 @@ function SidebarAdmin() {
                               laporan salesman
                             </ListItem>
                           </a>
-                          <a href="/laporan_barang_excelcom">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan barang
-                            </ListItem>
-                          </a>
-                          <a href="/laporan_suplier_excelcom">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan suplier
-                            </ListItem>
-                          </a>
-                          <a href="/laporan_customer_excelcom">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan customer
-                            </ListItem>
-                          </a>
-                          <a href="/laporan_transaksi_beli_excelcom">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan transaksi beli
-                            </ListItem>
-                          </a>
+                          {level === "Gudang" || level === "Superadmin" ? (
+                            <>
+                              <a href="/laporan_barang_excelcom">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan barang
+                                </ListItem>
+                              </a>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                          {level === "Superadmin" ? (
+                            <>
+                              <a href="/laporan_suplier_excelcom">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan suplier
+                                </ListItem>
+                              </a>
+                              <a href="/laporan_customer_excelcom">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan customer
+                                </ListItem>
+                              </a>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                          {level === "Superadmin" || level === "Gudang" ? (
+                            <>
+                              <a href="/laporan_transaksi_beli_excelcom">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan transaksi beli
+                                </ListItem>
+                              </a>
+                            </>
+                          ) : (
+                            <></>
+                          )}
                         </List>
                       </AccordionBody>
                     </Accordion>
@@ -1654,50 +1722,68 @@ function SidebarAdmin() {
                               laporan salesman
                             </ListItem>
                           </a>
-                          <a href="/laporan_barang_dinarpos">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan barang
-                            </ListItem>
-                          </a>
-                          <a href="/laporan_suplier_dinarpos">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan suplier
-                            </ListItem>
-                          </a>
-                          <a href="/laporan_customer_dinarpos">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan customer
-                            </ListItem>
-                          </a>
-                          <a href="/laporan_transaksi_beli_dinarpos">
-                            <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                              <ListItemPrefix>
-                                <ChevronRightIcon
-                                  strokeWidth={3}
-                                  className="h-3 w-3"
-                                />
-                              </ListItemPrefix>
-                              laporan transaksi beli
-                            </ListItem>
-                          </a>
+                          {level === "Gudang" || level === "Superadmin" ? (
+                            <>
+                              <a href="/laporan_barang_dinarpos">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan barang
+                                </ListItem>
+                              </a>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                          {level === "Superadmin" ? (
+                            <>
+                              <a href="/laporan_suplier_dinarpos">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan suplier
+                                </ListItem>
+                              </a>
+                              <a href="/laporan_customer_dinarpos">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan customer
+                                </ListItem>
+                              </a>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                          {level === "Gudang" || level === "Superadmin" ? (
+                            <>
+                              <a href="/laporan_transaksi_beli_dinarpos">
+                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                  <ListItemPrefix>
+                                    <ChevronRightIcon
+                                      strokeWidth={3}
+                                      className="h-3 w-3"
+                                    />
+                                  </ListItemPrefix>
+                                  laporan transaksi beli
+                                </ListItem>
+                              </a>
+                            </>
+                          ) : (
+                            <></>
+                          )}
                         </List>
                       </AccordionBody>
                     </Accordion>

@@ -178,6 +178,9 @@ function DataBarang() {
       });
   };
 
+  const level = localStorage.getItem("level");
+  const roleToko = localStorage.getItem("roleToko");
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -203,33 +206,40 @@ function DataBarang() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <div className="flex justify-between">
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div>
-                <Button
-                  onClick={handleOpen}
-                  variant="gradient"
-                  color="light-blue"
-                >
-                  Import
-                </Button>
+          {level === "Superadmin" || level === "Gudang"? (
+            <>
+              <div className="flex justify-between">
+                <div className="flex flex-col lg:flex-row gap-4">
+                  <div>
+                    <Button
+                      onClick={handleOpen}
+                      variant="gradient"
+                      color="light-blue"
+                    >
+                      Import
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={handleOpen2}
+                      variant="gradient"
+                      color="light-blue"
+                    >
+                      Export
+                    </Button>
+                  </div>
+                </div>
+                <a href="/add_barang">
+                  <Button variant="gradient" color="blue">
+                    Tambah Barang
+                  </Button>
+                </a>
               </div>
-              <div>
-                <Button
-                  onClick={handleOpen2}
-                  variant="gradient"
-                  color="light-blue"
-                >
-                  Export
-                </Button>
-              </div>
-            </div>
-            <a href="/add_barang">
-              <Button variant="gradient" color="blue">
-                Tambah Barang
-              </Button>
-            </a>
-          </div>
+            </>
+          ) : (
+            <></>
+          )}
+
           <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
               id="example_data"
@@ -239,15 +249,38 @@ function DataBarang() {
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Barcode Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Unit Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Harga Beli (Rp)</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Harga Jual (Rp)</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Barcode Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Nama Barang
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Unit Barang
+                  </th>
+                  {level === "Superadmin" || level === "Gudang"? (
+                    <>
+                      <th className="text-sm py-2 px-3 font-semibold">
+                        Harga Beli (Rp)
+                      </th>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Harga Jual (Rp)
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Jumlah <span className="text-sm block">Stok</span>
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  {level === "Superadmin" || level === "Gudang"? (
+                    <>
+                      {" "}
+                      <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -255,29 +288,47 @@ function DataBarang() {
                   barangs.map((barang, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{barang.barcodeBarang}</td>
+                      <td className="text-sm py-2 px-3">
+                        {barang.barcodeBarang}
+                      </td>
                       <td className="text-sm py-2 px-3">{barang.namaBarang}</td>
                       <td className="text-sm py-2 px-3">{barang.unit}</td>
-                      <td className="text-sm py-2 px-3">{barang.hargaBeli}</td>
-                      <td className="text-sm py-2 px-3">{barang.hargaBarang}</td>
+                      {level === "Superadmin" || level === "Gudang"? (
+                        <>
+                          <td className="text-sm py-2 px-3">
+                            {barang.hargaBeli}
+                          </td>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      <td className="text-sm py-2 px-3">
+                        {barang.hargaBarang}
+                      </td>
                       <td className="text-sm py-2 px-3">{barang.jumlahStok}</td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <a href={"/edit_barang/" + barang.idBarang}>
-                            <IconButton size="md" color="light-blue">
-                              <PencilIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </a>
-                          <IconButton
-                            size="md"
-                            color="red"
-                            type="button"
-                            onClick={() => deleteBarang(barang.idBarang)}
-                          >
-                            <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>{" "}
-                        </div>
-                      </td>{" "}
+                      {level === "Superadmin" || level === "Gudang"? (
+                        <>
+                          <td className="text-sm py-2 px-3 flex items-center justify-center">
+                            <div className="flex flex-row gap-3">
+                              <a href={"/edit_barang/" + barang.idBarang}>
+                                <IconButton size="md" color="light-blue">
+                                  <PencilIcon className="w-6 h-6 white" />
+                                </IconButton>
+                              </a>
+                              <IconButton
+                                size="md"
+                                color="red"
+                                type="button"
+                                onClick={() => deleteBarang(barang.idBarang)}
+                              >
+                                <TrashIcon className="w-6 h-6 white" />
+                              </IconButton>{" "}
+                            </div>
+                          </td>{" "}
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </tr>
                   ))
                 ) : (

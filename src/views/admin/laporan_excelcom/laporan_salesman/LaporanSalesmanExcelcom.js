@@ -201,6 +201,8 @@ function LaporanSalesmanExcelcom() {
     window.open("/tanggalfilter_salesman_excelcom", "_blank");
   };
 
+  const level = localStorage.getItem("level");
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -411,14 +413,20 @@ function LaporanSalesmanExcelcom() {
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="red">
-                            <ArrowPathIcon
-                              className="w-6 h-6 white"
-                              onClick={() =>
-                                returnSalesman(laporan.idTransaksi)
-                              }
-                            />
-                          </IconButton>
+                          {level === "Superadmin" ? (
+                            <>
+                              <IconButton size="md" color="red">
+                                <ArrowPathIcon
+                                  className="w-6 h-6 white"
+                                  onClick={() =>
+                                    returnSalesman(laporan.idTransaksi)
+                                  }
+                                />
+                              </IconButton>
+                            </>
+                          ) : (
+                            <></>
+                          )}
                         </td>
                       </tr>
                     );

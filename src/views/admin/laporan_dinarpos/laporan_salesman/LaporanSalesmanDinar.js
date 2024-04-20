@@ -170,6 +170,8 @@ function LaporanSalesmanDinar() {
     window.open("/tanggalfilter_salesman_dinarpos", "_blank");
   };
 
+  const level = localStorage.getItem("level");
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">
       <SidebarAdmin />
@@ -380,14 +382,20 @@ function LaporanSalesmanDinar() {
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="red">
-                            <ArrowPathIcon
-                              className="w-6 h-6 white"
-                              onClick={() =>
-                                returnSalesman(laporan.idTransaksi)
-                              }
-                            />
-                          </IconButton>
+                          {level === "Superadmin" ? (
+                            <>
+                              <IconButton size="md" color="red">
+                                <ArrowPathIcon
+                                  className="w-6 h-6 white"
+                                  onClick={() =>
+                                    returnSalesman(laporan.idTransaksi)
+                                  }
+                                />
+                              </IconButton>
+                            </>
+                          ) : (
+                            <></>
+                          )}
                         </td>
                       </tr>
                     );
