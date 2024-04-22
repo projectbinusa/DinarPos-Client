@@ -85,6 +85,37 @@ function DataSalesman() {
     });
   };
 
+  // const [pengguna, setPengguna] = useState([]);
+
+  // const penggunaList = async (transactionId) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${GET_BARANG_TRANSAKSI_JUAL_EXCELCOM}?id_transaksi=${transactionId}`,
+  //       {
+  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       }
+  //     );
+  //     return response.data.data;
+  //   } catch (error) {
+  //     console.log("get all", error);
+  //     return [];
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const fetchPengguna = async () => {
+  //     const penggunas = await Promise.all(
+  //       salesmans.map(async (penggunaz) => {
+  //         const penggunad = await penggunaList(penggunaz.idTransaksi);
+  //         return penggunad;
+  //       })
+  //     );
+  //     setPengguna(penggunas);
+  //   };
+
+  //   fetchPengguna();
+  // }, [salesmans]);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -127,8 +158,12 @@ function DataSalesman() {
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Nama </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Username </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Role Toko</th>
                   <th className="text-sm py-2 px-3 font-semibold">Alamat</th>
-                  <th className="text-sm py-2 px-3 font-semibold">No Telepon</th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    No Telepon
+                  </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
@@ -137,9 +172,21 @@ function DataSalesman() {
                   salesmans.map((salesman, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{salesman.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{salesman.alamatSalesman}</td>
-                      <td className="text-sm py-2 px-3">{salesman.noTelpSalesman}</td>
+                      <td className="text-sm py-2 px-3">
+                        {salesman.namaSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {salesman.namaSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {salesman.namaSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {salesman.alamatSalesman}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {salesman.noTelpSalesman}
+                      </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-col lg:flex-row gap-3">
                           <a href={"/edit_salesman/" + salesman.idSalesman}>

@@ -5,6 +5,8 @@ import {
   Button,
   Input,
   Typography,
+  Select,
+  Option,
 } from "@material-tailwind/react";
 import {
   MapPinIcon,
@@ -12,7 +14,7 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import axios from "axios";
-import { API_SALESMAN } from "../../../../utils/BaseUrl";
+import { API_PENGGUNA, API_SALESMAN } from "../../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -20,8 +22,16 @@ function AddSalesman() {
   const [nama, setNama] = useState("");
   const [notelephone, setNotelephone] = useState("");
   const [alamat, setAlamat] = useState("");
+  const [roleToko, setroleToko] = useState("");
 
   const history = useHistory();
+
+  function convertToSnakeCase(input) {
+    const words = input.split(" ");
+    const firstWord = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+    const restOfWords = words.slice(1).join("_").toLowerCase();
+    return `${firstWord}_${restOfWords}`;
+  }
 
   const addSalesman = async (e) => {
     e.preventDefault();
@@ -30,25 +40,56 @@ function AddSalesman() {
       alamatSalesman: alamat,
       noTelpSalesman: notelephone,
     };
+    const pengguna = {
+      levelPengguna: "Kasir",
+      namaPengguna: nama,
+      passwordPengguna: convertToSnakeCase(nama) + "123",
+      roleToko: roleToko,
+      usernamePengguna: convertToSnakeCase(nama),
+    };
     try {
       await axios.post(`${API_SALESMAN}/add`, salesman, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      Swal.fire({
-        icon: "success",
-        title: "Data Berhasil Ditambahkan!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      history.push("/data_salesman");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      try {
+        await axios.post(`${API_PENGGUNA}/add`, pengguna, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+        Swal.fire({
+          icon: "success",
+          title: "Data Berhasil Ditambahkan!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        history.push("/data_salesman");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } catch (error) {
+        if (error.ressponse && error.response.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Tambah Data Gagal!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          console.log(error);
+        }
+      }
     } catch (error) {
       if (error.ressponse && error.response.status === 401) {
         localStorage.clear();
         history.push("/");
       } else {
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Data Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(error);
       }
     }
@@ -91,6 +132,16 @@ function AddSalesman() {
                 onChange={(e) => setNama(e.target.value)}
                 icon={<UserCircleIcon />}
               />
+              <Select
+                variant="static"
+                label="Role Toko"
+                color="blue"
+                size="lg"
+                onChange={(selectedOption) => setroleToko(selectedOption)}
+              >
+                <Option value="excelcom">Excelcom</Option>
+                <Option value="dinarpos">Dinarpos</Option>
+              </Select>
               <Input
                 label="No Telephone"
                 variant="static"
