@@ -10,7 +10,7 @@ import {
 import $ from "jquery";
 import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
-import { API_SALESMAN } from "../../../../utils/BaseUrl";
+import { API_PENGGUNA, API_SALESMAN } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
@@ -85,36 +85,33 @@ function DataSalesman() {
     });
   };
 
-  // const [pengguna, setPengguna] = useState([]);
+  const [pengguna, setPengguna] = useState([]);
 
-  // const penggunaList = async (transactionId) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${GET_BARANG_TRANSAKSI_JUAL_EXCELCOM}?id_transaksi=${transactionId}`,
-  //       {
-  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //       }
-  //     );
-  //     return response.data.data;
-  //   } catch (error) {
-  //     console.log("get all", error);
-  //     return [];
-  //   }
-  // };
+  const penggunaList = async (nama) => {
+    try {
+      const response = await axios.get(`${API_PENGGUNA}/nama?nama=${nama}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
 
-  // useEffect(() => {
-  //   const fetchPengguna = async () => {
-  //     const penggunas = await Promise.all(
-  //       salesmans.map(async (penggunaz) => {
-  //         const penggunad = await penggunaList(penggunaz.idTransaksi);
-  //         return penggunad;
-  //       })
-  //     );
-  //     setPengguna(penggunas);
-  //   };
+  useEffect(() => {
+    const fetchPengguna = async () => {
+      const penggunas = await Promise.all(
+        salesmans.map(async (penggunaz) => {
+          const penggunad = await penggunaList(penggunaz.namaSalesman);
+          return penggunad;
+        })
+      );
+      setPengguna(penggunas);
+    };
 
-  //   fetchPengguna();
-  // }, [salesmans]);
+    fetchPengguna();
+  }, [salesmans]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -169,43 +166,48 @@ function DataSalesman() {
               </thead>
               <tbody>
                 {salesmans.length > 0 ? (
-                  salesmans.map((salesman, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">
-                        {salesman.namaSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {salesman.namaSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {salesman.namaSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {salesman.alamatSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {salesman.noTelpSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-col lg:flex-row gap-3">
-                          <a href={"/edit_salesman/" + salesman.idSalesman}>
-                            <IconButton size="md" color="light-blue">
-                              <PencilIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </a>
-                          <IconButton
-                            size="md"
-                            color="red"
-                            type="button"
-                            onClick={() => deleteSalesman(salesman.idSalesman)}
-                          >
-                            <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>{" "}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                  salesmans.map((salesman, index) => {
+                    const penggunaa = pengguna[index] || [];
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {salesman.namaSalesman}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {penggunaa.usernamePengguna}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                        {penggunaa.roleToko}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {salesman.alamatSalesman}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {salesman.noTelpSalesman}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <div className="flex flex-col lg:flex-row gap-3">
+                            <a href={"/edit_salesman/" + salesman.idSalesman}>
+                              <IconButton size="md" color="light-blue">
+                                <PencilIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </a>
+                            <IconButton
+                              size="md"
+                              color="red"
+                              type="button"
+                              onClick={() =>
+                                deleteSalesman(salesman.idSalesman)
+                              }
+                            >
+                              <TrashIcon className="w-6 h-6 white" />
+                            </IconButton>{" "}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td
