@@ -82,7 +82,7 @@ function SidebarKasir() {
               </Typography>
             </div>
             <List className="mb-5">
-              <a href="/dashboard_admin">
+              <a href="/dashboard">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   dashboard
                 </ListItem>

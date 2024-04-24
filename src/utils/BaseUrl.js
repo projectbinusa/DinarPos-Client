@@ -12,6 +12,7 @@ export const API_CUSTOMER = `${url}/customer`;
 export const API_CUSTOMER_CP = `${url}/customer/cp`;
 export const API_SUPLIER = `${url}/supplier`;
 export const API_PENGGUNA = `${url}/pengguna`;
+export const API_UBAH_PASSWORD = `${url}/ubah_password`;
 
 // DATA BARANG
 export const API_BARANG = `${url}/barang`;

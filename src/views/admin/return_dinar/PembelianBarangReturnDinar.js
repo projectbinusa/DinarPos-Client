@@ -51,7 +51,7 @@ function PembelianBarangReturnDinar() {
             data transaksi pembelian barang return dinarpos
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard_admin" className="opacity-60">
+            <a href="/dashboard" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"

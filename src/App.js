@@ -106,6 +106,7 @@ import TglFilterTransaksiBeliDinarpos from "./views/admin/laporan_dinarpos/lapor
 import TanggalFilterSuplierExcelcom from "./views/admin/laporan_excelcom/laporan_suplier/TanggalFilterSuplierExcelcom.js";
 import TanggalFilterCustomerExcelcom from "./views/admin/laporan_excelcom/laporan_customer/TanggalFilterCustomerExcelcom.js";
 import TglFilterTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/TglFilterTransaksiBeliExcelcom.js";
+import UbahPassword from "./views/admin/UbahPassword.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -125,8 +126,13 @@ function App() {
             <Route path="/r3+91s+t3r" component={Register} exact />
             {/* ROLE ADMIN */}
             <PrivateRoute
-              path="/dashboard_admin"
+              path="/dashboard"
               component={Dashboard}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/ubah_password"
+              component={UbahPassword}
               isAuthenticated={true}
             />
             <PrivateRoute

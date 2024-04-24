@@ -84,6 +84,7 @@ function EditBarang() {
         console.log(error);
       });
   }, []);
+  
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -93,7 +94,7 @@ function EditBarang() {
             edit barang
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard_admin" className="opacity-60">
+            <a href="/dashboard" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"

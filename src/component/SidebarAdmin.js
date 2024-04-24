@@ -85,7 +85,7 @@ function SidebarAdmin() {
               </Typography>
             </div>
             <List className="pb-12">
-              <a href="/dashboard_admin">
+              <a href="/dashboard">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   dashboard
                 </ListItem>
@@ -1028,6 +1028,11 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+              <a href="/ubah_password" className="mb-5">
+                <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                  ubah password
+                </ListItem>
+              </a>
             </List>
             <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
               <button onClick={logout} className="uppercase text-sm">
@@ -1046,7 +1051,7 @@ function SidebarAdmin() {
             </Typography>
           </div>
           <List className="mb-5">
-            <a href="/dashboard_admin">
+            <a href="/dashboard">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 dashboard
               </ListItem>
@@ -1224,8 +1229,7 @@ function SidebarAdmin() {
                   </ListItem>
                   <AccordionBody className="py-2">
                     <List className="p-0">
-                      {level === "Superadmin" ||
-                      level === "Kasir" ? (
+                      {level === "Superadmin" || level === "Kasir" ? (
                         <>
                           <a href="/data_customer">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
@@ -1988,6 +1992,11 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+            <a href="/ubah_password" className="mb-5">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                ubah password
+              </ListItem>
+            </a>
           </List>
           <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
             <button onClick={logout} className="uppercase text-sm">

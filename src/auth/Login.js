@@ -26,7 +26,7 @@ function Login() {
         const response = res.data;
 
         if (response.code === 200) {
-          history.push("/dashboard_admin");
+          history.push("/dashboard");
           setTimeout(() => {
             window.location.reload();
           }, 1000);
