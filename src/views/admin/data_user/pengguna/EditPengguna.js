@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { KeyIcon, UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
-import { API_PENGGUNA } from "../../../../utils/BaseUrl";
+import { API_PENGGUNA, API_UBAH_PASSWORD } from "../../../../utils/BaseUrl";
 import {
   useHistory,
   useParams,
@@ -22,6 +22,9 @@ function EditPengguna() {
   const [namapengguna, setnamapengguna] = useState("");
   const [level, setlevel] = useState("");
   const [password, setpassword] = useState("");
+
+  const [newPass, setnewPass] = useState("");
+  const [konfirmPass, setkonfirmPass] = useState("");
 
   const history = useHistory();
   const param = useParams();
@@ -57,6 +60,46 @@ function EditPengguna() {
           localStorage.clear();
           history.push("/");
         } else {
+          console.log(error);
+        }
+      });
+  };
+
+  const editPassword = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      new_password: newPass,
+      confirm_new_password: konfirmPass,
+    };
+
+    await axios
+      .put(`${API_UBAH_PASSWORD}/admin/` + param.id, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Ubah Password Pengguna Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        history.push("/data_pengguna");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((error) => {
+        if (error.ressponse && error.response.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Ubah Password Gagal!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
           console.log(error);
         }
       });
@@ -140,6 +183,44 @@ function EditPengguna() {
                 <Option value="Warehouse">Warehouse</Option>
                 <Option value="Warehouse">Warehouse</Option>
               </Select>
+            </div>
+            <div className="mt-10 flex gap-4">
+              <Button variant="gradient" color="blue" type="submit">
+                <span>Simpan</span>
+              </Button>
+              <a href="/data_pengguna">
+                <Button variant="text" color="gray" className="mr-1">
+                  <span>Kembali</span>
+                </Button>
+              </a>
+            </div>
+          </form>
+          <br /> <hr /> <br /> <br />
+          <form onSubmit={editPassword}>
+            <Typography variant="lead" className="uppercase font-medium">
+              Ubah Password Pengguna
+            </Typography> <br /> <br />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <Input
+                label="Password Baru"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Masukkan Password Baru"
+                value={newPass}
+                onChange={(e) => setnewPass(e.target.value)}
+                icon={<KeyIcon />}
+              />
+              <Input
+                label="Konfirmasi Password Baru"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Masukkan Konfirmasi Password Baru"
+                value={konfirmPass}
+                onChange={(e) => setkonfirmPass(e.target.value)}
+                icon={<KeyIcon />}
+              />
             </div>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">

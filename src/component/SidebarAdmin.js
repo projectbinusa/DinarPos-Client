@@ -91,6 +91,79 @@ function SidebarAdmin() {
                 </ListItem>
               </a>
               {level === "Superadmin" ||
+              level === "Kasir" ? (
+                <>
+                  {" "}
+                  <Accordion
+                    open={open === 11}
+                    icon={
+                      <ChevronDownIcon
+                        strokeWidth={2.5}
+                        className={`mx-auto h-3 w-3 transition-transform ${
+                          open === 11 ? "rotate-180" : ""
+                        }`}
+                      />
+                    }
+                  >
+                    <ListItem className="p-0 rounded" selected={open === 11}>
+                      <AccordionHeader
+                        onClick={() => handleOpen(11)}
+                        className="border-b-0 px-3 py-2 "
+                      >
+                        <Typography
+                          color="blue-gray"
+                          className="font-poppins uppercase mr-auto text-sm font-normal"
+                        >
+                          TRANSAKSI INDENT
+                        </Typography>
+                      </AccordionHeader>
+                    </ListItem>
+                    <AccordionBody className="py-2">
+                      <List className="p-0">
+                        {roleToko === "Superadmin" ||
+                        roleToko === "excelcom" ? (
+                          <>
+                            <a href="/transaksi_indent_excelcom">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                EXCELCOM
+                              </ListItem>
+                            </a>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        {roleToko === "Superadmin" ||
+                        roleToko === "dinarpos" ? (
+                          <>
+                            <a href="/transaksi_indent_dinarpos">
+                              <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                                <ListItemPrefix>
+                                  <ChevronRightIcon
+                                    strokeWidth={3}
+                                    className="h-3 w-3"
+                                  />
+                                </ListItemPrefix>
+                                DINARPOS
+                              </ListItem>
+                            </a>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </List>
+                    </AccordionBody>
+                  </Accordion>
+                </>
+              ) : (
+                <></>
+              )}
+              {level === "Superadmin" ||
               level === "Gudang" ||
               level === "Kasir" ? (
                 <>
@@ -1056,6 +1129,78 @@ function SidebarAdmin() {
                 dashboard
               </ListItem>
             </a>
+            {level === "Superadmin" ||
+            level === "Kasir" ? (
+              <>
+                {" "}
+                <Accordion
+                  open={open === 11}
+                  icon={
+                    <ChevronDownIcon
+                      strokeWidth={2.5}
+                      className={`mx-auto h-3 w-3 transition-transform ${
+                        open === 11 ? "rotate-180" : ""
+                      }`}
+                    />
+                  }
+                >
+                  <ListItem className="p-0 rounded" selected={open === 11}>
+                    <AccordionHeader
+                      onClick={() => handleOpen(11)}
+                      className="border-b-0 px-3 py-2 "
+                    >
+                      <Typography
+                        color="blue-gray"
+                        className="font-poppins uppercase mr-auto text-sm font-normal"
+                      >
+                        TRANSAKSI INDENT
+                      </Typography>
+                    </AccordionHeader>
+                  </ListItem>
+                  <AccordionBody className="py-2">
+                    <List className="p-0">
+                      {roleToko === "Superadmin" || roleToko === "excelcom" ? (
+                        <>
+                          {" "}
+                          <a href="/transaksi_indent_excelcom">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              EXCELCOM
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      {roleToko === "Superadmin" || roleToko === "dinarpos" ? (
+                        <>
+                          <a href="/transaksi_indent_dinarpos">
+                            <ListItem className="uppercase rounded px-3 py-2 text-sm">
+                              <ListItemPrefix>
+                                <ChevronRightIcon
+                                  strokeWidth={3}
+                                  className="h-3 w-3"
+                                />
+                              </ListItemPrefix>
+                              DINARPOS
+                            </ListItem>
+                          </a>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </List>
+                  </AccordionBody>
+                </Accordion>
+              </>
+            ) : (
+              <></>
+            )}
             {level === "Superadmin" ||
             level === "Kasir" ||
             level === "Gudang" ? (

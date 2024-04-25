@@ -107,6 +107,9 @@ import TanggalFilterSuplierExcelcom from "./views/admin/laporan_excelcom/laporan
 import TanggalFilterCustomerExcelcom from "./views/admin/laporan_excelcom/laporan_customer/TanggalFilterCustomerExcelcom.js";
 import TglFilterTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/TglFilterTransaksiBeliExcelcom.js";
 import UbahPassword from "./views/admin/UbahPassword.js";
+import TransaksiIndentExcelcom from "./views/admin/transaksi_indent/excelcom/TransaksiIndentExcelcom.js";
+import TransaksiIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/TransaksiIndentDinarpos.js";
+import AddIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddIndentExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -670,6 +673,28 @@ function App() {
             />
             {/* END LAPORAN TRANSAKSI BELI */}
             {/* END LAPORAN EXCELCOM */}
+
+            {/* TRANSAKSI INDENT EXCELCOM */}
+            <PrivateRoute
+              path="/transaksi_indent_excelcom"
+              component={TransaksiIndentExcelcom}
+              isAuthenticated={true}
+            />
+
+            <PrivateRoute
+              path="/add_transaksi_indent_excelcom"
+              component={AddIndentExcelcom}
+              isAuthenticated={true}
+            />
+            {/* END TRANSAKSI INDENT EXCELCOM */}
+
+            {/* TRANSAKSI INDENT DINARPOS */}
+            <PrivateRoute
+              path="/transaksi_indent_dinarpos"
+              component={TransaksiIndentDinarpos}
+              isAuthenticated={true}
+            />
+            {/* END TRANSAKSI INDENT DINARPOS */}
           </Switch>
         </main>
       </BrowserRouter>

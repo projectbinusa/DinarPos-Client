@@ -74,9 +74,7 @@ function DataPengguna() {
               showConfirmButton: false,
               timer: 1500,
             });
-
             setTimeout(() => {
-              history.push("/data_barang");
               window.location.reload();
             }, 1500);
           });
@@ -127,6 +125,7 @@ function DataPengguna() {
                   <th className="text-sm py-2 px-3 font-semibold">Nama </th>
                   <th className="text-sm py-2 px-3 font-semibold">Username</th>
                   <th className="text-sm py-2 px-3 font-semibold">Level</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Role Toko</th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
@@ -138,6 +137,7 @@ function DataPengguna() {
                       <td className="text-sm py-2 px-3">{pengguna.namaPengguna}</td>
                       <td className="text-sm py-2 px-3">{pengguna.usernamePengguna}</td>
                       <td className="text-sm py-2 px-3">{pengguna.levelPengguna}</td>
+                      <td className="text-sm py-2 px-3">{pengguna.roleToko}</td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           <a href={"/edit_pengguna/" + pengguna.idPengguna}>
