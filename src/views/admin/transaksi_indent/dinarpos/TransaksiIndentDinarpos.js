@@ -14,6 +14,10 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
+import {
+  API_BARANG_TRANSAKSI_INDENT,
+  API_TRANSAKSI_INDENT_DINARPOS,
+} from "../../../../utils/BaseUrl";
 
 function TransaksiIndentDinarpos() {
   const tableRef = useRef(null);
@@ -29,20 +33,51 @@ function TransaksiIndentDinarpos() {
     $(tableRef.current).DataTable({});
   };
 
-  //   const getAll = async () => {
-  //     try {
-  //       const response = await axios.get(`${API_SALESMAN}`, {
-  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //       });
-  //       setSalesmans(response.data.data);
-  //     } catch (error) {
-  //       console.log("get all", error);
-  //     }
-  //   };
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_TRANSAKSI_INDENT_DINARPOS}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setBarang(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
 
-  //   useEffect(() => {
-  //     getAll();
-  //   }, []);
+  useEffect(() => {
+    getAll();
+  }, []);
+
+  const [barang, setBarang] = useState([]);
+
+  const barangTransaksi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${API_BARANG_TRANSAKSI_INDENT}?id=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        datas.map(async (data) => {
+          const barangData = await barangTransaksi(data.id);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
+  }, [datas]);
 
   useEffect(() => {
     if (datas && datas.length > 0) {
@@ -120,25 +155,59 @@ function TransaksiIndentDinarpos() {
                   <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
                 </tr>
               </thead>
-              {/* <tbody>
+              <tbody>
                 {datas.length > 0 ? (
                   datas.map((data, index) => {
+                    const barangs = barang[index] || [];
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm w-[4%]">{data.created_date}</td>
+                        <td className="text-sm w-[4%]">{data.noFaktur}</td>
+                        <td className="text-sm w-[4%]">
+                          {data.salesman.namaSalesman}
+                        </td>
+                        <td className="text-sm w-[4%]">
+                          {data.customer.nama_customer}
+                        </td>
+                        <td className="text-sm w-[4%]">
+                          {barangs.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.barcodeBarang}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm w-[4%]">
+                          {barangs.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.hargaBrng}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm w-[4%]">
+                          {barangs.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.qty}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm w-[4%]">
+                          {barangs.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.hargaBrng}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm w-[4%]">{data.totalBelanja}</td>
+                        <td className="text-sm w-[4%]">{data.totalBelanja}</td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
                           <div className="flex items-center justify-center">
-                            <a href={"/add_transaksi_from_transaksi_indent/" + salesman.idSalesman}>
+                            <a
+                              href={
+                                "/add_transaksi_from_transaksi_indent/" +
+                                data.id
+                              }
+                            >
                               <IconButton size="md" color="light-blue">
                                 <PencilIcon className="w-6 h-6 white" />
                               </IconButton>
@@ -158,7 +227,7 @@ function TransaksiIndentDinarpos() {
                     </td>
                   </tr>
                 )}
-              </tbody> */}
+              </tbody>
             </table>
           </div>
         </main>

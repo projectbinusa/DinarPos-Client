@@ -17,8 +17,7 @@ import {
   API_BARANG,
   API_CUSTOMER,
   API_SALESMAN,
-  API_TRANSAKSI_INDENT_EXCELCOM,
-  API_TRANSAKSI_JUAL_EXCELCOM,
+  API_TRANSAKSI_INDENT_DINARPOS,
 } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import {
@@ -34,7 +33,7 @@ import ModalTambahCustomerCp from "../../modal/ModalTambahCustomerCp";
 import ModalTambahCustomer from "../../modal/ModalTambahCustomer";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 
-function AddIndentExcelcom() {
+function AddIndentDinarpos() {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
@@ -482,7 +481,7 @@ function AddIndentExcelcom() {
     };
     console.log(request);
     axios
-      .post(`${API_TRANSAKSI_INDENT_EXCELCOM}`, request, {
+      .post(`${API_TRANSAKSI_INDENT_DINARPOS}`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
@@ -498,7 +497,7 @@ function AddIndentExcelcom() {
           }).then((result) => {
             if (result.isConfirmed) {
               window.open(
-                "/cetak_struk_transaksi_penjualan_excelcom/" +
+                "/cetak_struk_transaksi_penjualan_dinarpos/" +
                   res.data.data.idTransaksi
               );
             } else {
@@ -605,7 +604,7 @@ function AddIndentExcelcom() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            TRANSAKSI indent Excelcom
+            TRANSAKSI indent dinarpos
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -618,8 +617,8 @@ function AddIndentExcelcom() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/transaksi_indent_excelcom">
-              <span>Indent Excelcom</span>
+            <a href="/transaksi_indent_dinarpos">
+              <span>Indent Dinarpos</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -1051,4 +1050,4 @@ function AddIndentExcelcom() {
   );
 }
 
-export default AddIndentExcelcom;
+export default AddIndentDinarpos;

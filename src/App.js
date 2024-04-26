@@ -110,6 +110,7 @@ import UbahPassword from "./views/admin/UbahPassword.js";
 import TransaksiIndentExcelcom from "./views/admin/transaksi_indent/excelcom/TransaksiIndentExcelcom.js";
 import TransaksiIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/TransaksiIndentDinarpos.js";
 import AddIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddIndentExcelcom.js";
+import AddIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddIndentDinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -692,6 +693,12 @@ function App() {
             <PrivateRoute
               path="/transaksi_indent_dinarpos"
               component={TransaksiIndentDinarpos}
+              isAuthenticated={true}
+            />
+
+            <PrivateRoute
+              path="/add_transaksi_indent_dinarpos"
+              component={AddIndentDinarpos}
               isAuthenticated={true}
             />
             {/* END TRANSAKSI INDENT DINARPOS */}

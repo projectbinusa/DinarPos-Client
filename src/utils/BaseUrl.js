@@ -76,3 +76,8 @@ export const KONFIRMASI_30 = `${url}/notifikasi/konfirmasi/30_hari`;
 export const KONFIRMASI_90 = `${url}/notifikasi/konfirmasi/90_hari`;
 export const KONFIRMASI_120 = `${url}/notifikasi/konfirmasi/120_hari`;
 export const KONFIRMASI_365 = `${url}/notifikasi/konfirmasi/365_hari`;
+
+// TRANSAKSI INDENT
+export const API_TRANSAKSI_INDENT_EXCELCOM = `${url}/transaksi_indent/excelcom`;
+export const API_TRANSAKSI_INDENT_DINARPOS = `${url}/transaksi_indent/dinarpos`;
+export const API_BARANG_TRANSAKSI_INDENT = `${url}/transaksi_indent/barang`;
