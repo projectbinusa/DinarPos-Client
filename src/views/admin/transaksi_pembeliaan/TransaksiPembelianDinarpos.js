@@ -774,34 +774,36 @@ function TransaksiPembelianDinarpos() {
                           <td className="py-3 px-2 text-center border">
                             {down.totalHarga}
                           </td>
-                          <td className="py-2 px-3 flex flex-col items-center gap-3 border">
-                            <IconButton
-                              id={down.barcode}
-                              size="md"
-                              color="light-blue"
-                              onClick={() =>
-                                edit(
-                                  down.barcode,
-                                  down.nama,
-                                  down.harga,
-                                  down.disc,
-                                  down.hargaDiskon,
-                                  down.jumlah,
-                                  down.totalHarga
-                                )
-                              }
-                            >
-                              <PencilIcon className="w-6 h-6 white" />
-                            </IconButton>
-                            <IconButton
-                              id={down.barcode}
-                              size="md"
-                              color="red"
-                              type="button"
-                              onClick={() => remove(down.barcode)}
-                            >
-                              <TrashIcon className="w-6 h-6 white" />
-                            </IconButton>
+                          <td className="py-2 px-3 text-center border">
+                            <div className="flex justify-center items-center gap-2">
+                              <IconButton
+                                id={down.barcode}
+                                size="md"
+                                color="light-blue"
+                                onClick={() =>
+                                  edit(
+                                    down.barcode,
+                                    down.nama,
+                                    down.harga,
+                                    down.disc,
+                                    down.hargaDiskon,
+                                    down.jumlah,
+                                    down.totalHarga
+                                  )
+                                }
+                              >
+                                <PencilIcon className="w-6 h-6 white" />
+                              </IconButton>
+                              <IconButton
+                                id={down.barcode}
+                                size="md"
+                                color="red"
+                                type="button"
+                                onClick={() => remove(down.barcode)}
+                              >
+                                <TrashIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </div>
                           </td>{" "}
                         </tr>
                       ))

@@ -162,57 +162,54 @@ function TransaksiIndentDinarpos() {
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm w-[4%]">{data.created_date}</td>
-                        <td className="text-sm w-[4%]">{data.noFaktur}</td>
-                        <td className="text-sm w-[4%]">
+                        <td className="text-sm px-2">{data.tanggal}</td>
+                        <td className="text-sm px-2">{data.noFaktur}</td>
+                        <td className="text-sm px-2">
                           {data.salesman.namaSalesman}
                         </td>
-                        <td className="text-sm w-[4%]">
+                        <td className="text-sm px-2">
                           {data.customer.nama_customer}
                         </td>
-                        <td className="text-sm w-[4%]">
+                        <td className="text-sm px-2">
                           {barangs.map((brg, idx) => (
                             <ul key={idx}>
                               <li>{brg.barcodeBarang}</li>
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm w-[4%]">
+                        <td className="text-sm px-2">
                           {barangs.map((brg, idx) => (
                             <ul key={idx}>
                               <li>{brg.hargaBrng}</li>
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm w-[4%]">
+                        <td className="text-sm px-2">
                           {barangs.map((brg, idx) => (
                             <ul key={idx}>
                               <li>{brg.qty}</li>
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm w-[4%]">
+                        <td className="text-sm px-2">
                           {barangs.map((brg, idx) => (
                             <ul key={idx}>
                               <li>{brg.hargaBrng}</li>
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm w-[4%]">{data.totalBelanja}</td>
-                        <td className="text-sm w-[4%]">{data.totalBelanja}</td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
-                          <div className="flex items-center justify-center">
-                            <a
-                              href={
-                                "/add_transaksi_from_transaksi_indent/" +
-                                data.id
-                              }
-                            >
-                              <IconButton size="md" color="light-blue">
-                                <PencilIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </a>
-                          </div>
+                        <td className="text-sm px-2">{data.totalBelanja}</td>
+                        <td className="text-sm px-2">{data.totalBelanja}</td>
+                        <td className="text-sm p-2 text-center">
+                          <a
+                            href={
+                              "/add_transaksi_from_transaksi_indent/" + data.id
+                            }
+                          >
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
                         </td>
                       </tr>
                     );

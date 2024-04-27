@@ -111,6 +111,8 @@ import TransaksiIndentExcelcom from "./views/admin/transaksi_indent/excelcom/Tra
 import TransaksiIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/TransaksiIndentDinarpos.js";
 import AddIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddIndentExcelcom.js";
 import AddIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddIndentDinarpos.js";
+import CetakIndentExcelcom from "./views/admin/transaksi_indent/excelcom/CetakIndentExcelcom.js";
+import CetakIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/CetakIndentDinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -687,6 +689,12 @@ function App() {
               component={AddIndentExcelcom}
               isAuthenticated={true}
             />
+
+            <PrivateRoute
+              path="/cetak_struk_transaksi_indent_excelcom/:id"
+              component={CetakIndentExcelcom}
+              isAuthenticated={true}
+            />
             {/* END TRANSAKSI INDENT EXCELCOM */}
 
             {/* TRANSAKSI INDENT DINARPOS */}
@@ -699,6 +707,12 @@ function App() {
             <PrivateRoute
               path="/add_transaksi_indent_dinarpos"
               component={AddIndentDinarpos}
+              isAuthenticated={true}
+            />
+
+            <PrivateRoute
+              path="/cetak_struk_transaksi_indent_dinarpos/:id"
+              component={CetakIndentDinarpos}
               isAuthenticated={true}
             />
             {/* END TRANSAKSI INDENT DINARPOS */}
