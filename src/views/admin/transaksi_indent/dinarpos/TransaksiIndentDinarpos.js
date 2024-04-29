@@ -10,14 +10,12 @@ import $ from "jquery";
 import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import axios from "axios";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   API_BARANG_TRANSAKSI_INDENT,
   API_TRANSAKSI_INDENT_DINARPOS,
 } from "../../../../utils/BaseUrl";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 function TransaksiIndentDinarpos() {
   const tableRef = useRef(null);
@@ -38,7 +36,7 @@ function TransaksiIndentDinarpos() {
       const response = await axios.get(`${API_TRANSAKSI_INDENT_DINARPOS}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setBarang(response.data.data);
+      setdatas(response.data.data);
     } catch (error) {
       console.log("get all", error);
     }
@@ -207,7 +205,7 @@ function TransaksiIndentDinarpos() {
                             }
                           >
                             <IconButton size="md" color="light-blue">
-                              <PencilIcon className="w-6 h-6 white" />
+                              <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
                         </td>

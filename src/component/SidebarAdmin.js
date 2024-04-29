@@ -90,8 +90,7 @@ function SidebarAdmin() {
                   dashboard
                 </ListItem>
               </a>
-              {level === "Superadmin" ||
-              level === "Kasir" ? (
+              {level === "Superadmin" || level === "Kasir" ? (
                 <>
                   {" "}
                   <Accordion
@@ -499,6 +498,64 @@ function SidebarAdmin() {
                         ) : (
                           <></>
                         )}
+                      </List>
+                    </AccordionBody>
+                  </Accordion>
+                </>
+              ) : (
+                <></>
+              )}
+              {level === "Superadmin" || level === "Accounting" ? (
+                <>
+                  {" "}
+                  <Accordion
+                    open={open === 12}
+                    icon={
+                      <ChevronDownIcon
+                        strokeWidth={2.5}
+                        className={`mx-auto h-3 w-3 transition-transform ${
+                          open === 12 ? "rotate-180" : ""
+                        }`}
+                      />
+                    }
+                  >
+                    <ListItem className="p-0 rounded" selected={open === 12}>
+                      <AccordionHeader
+                        onClick={() => handleOpen(12)}
+                        className="border-b-0 px-3 py-2 "
+                      >
+                        <Typography
+                          color="blue-gray"
+                          className="font-poppins uppercase mr-auto text-sm font-normal"
+                        >
+                          accounting
+                        </Typography>
+                      </AccordionHeader>
+                    </ListItem>
+                    <AccordionBody className="py-2">
+                      <List className="p-0">
+                        <a href="/data_hutang">
+                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                            <ListItemPrefix>
+                              <ChevronRightIcon
+                                strokeWidth={3}
+                                className="h-3 w-3"
+                              />
+                            </ListItemPrefix>
+                            hutang
+                          </ListItem>
+                        </a>
+                        <a href="/data_piutang">
+                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                            <ListItemPrefix>
+                              <ChevronRightIcon
+                                strokeWidth={3}
+                                className="h-3 w-3"
+                              />
+                            </ListItemPrefix>
+                            piutang{" "}
+                          </ListItem>
+                        </a>
                       </List>
                     </AccordionBody>
                   </Accordion>
@@ -1129,8 +1186,7 @@ function SidebarAdmin() {
                 dashboard
               </ListItem>
             </a>
-            {level === "Superadmin" ||
-            level === "Kasir" ? (
+            {level === "Superadmin" || level === "Kasir" ? (
               <>
                 {" "}
                 <Accordion
@@ -1531,6 +1587,63 @@ function SidebarAdmin() {
                       ) : (
                         <></>
                       )}
+                    </List>
+                  </AccordionBody>
+                </Accordion>
+              </>
+            ) : (
+              <></>
+            )}
+            {level === "Superadmin" || level === "Accounting" ? (
+              <>
+                <Accordion
+                  open={open === 12}
+                  icon={
+                    <ChevronDownIcon
+                      strokeWidth={2.5}
+                      className={`mx-auto h-3 w-3 transition-transform ${
+                        open === 12 ? "rotate-180" : ""
+                      }`}
+                    />
+                  }
+                >
+                  <ListItem className="p-0 rounded" selected={open === 12}>
+                    <AccordionHeader
+                      onClick={() => handleOpen(12)}
+                      className="border-b-0 px-3 py-2 "
+                    >
+                      <Typography
+                        color="blue-gray"
+                        className="font-poppins uppercase mr-auto text-sm font-normal"
+                      >
+                        accounting
+                      </Typography>
+                    </AccordionHeader>
+                  </ListItem>
+                  <AccordionBody className="py-2">
+                    <List className="p-0">
+                      <a href="/data_hutang">
+                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                          <ListItemPrefix>
+                            <ChevronRightIcon
+                              strokeWidth={3}
+                              className="h-3 w-3"
+                            />
+                          </ListItemPrefix>
+                          hutang{" "}
+                        </ListItem>
+                      </a>
+                      <a href="/data_piutang">
+                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                          <ListItemPrefix>
+                            <ChevronRightIcon
+                              strokeWidth={3}
+                              className="h-3 w-3"
+                            />
+                          </ListItemPrefix>
+                          piutang{" "}
+                        </ListItem>
+                      </a>
                     </List>
                   </AccordionBody>
                 </Accordion>

@@ -83,3 +83,7 @@ export const API_TRANSAKSI_INDENT_DINARPOS = `${url}/transaksi_indent/dinarpos`;
 export const API_TRANSAKSI_INDENT = `${url}/transaksi_indent`;
 export const API_BARANG_TRANSAKSI_INDENT = `${url}/transaksi_indent/barang`;
 
+// ACCOUNTING
+export const API_HUTANG = `${url}/hutang`;
+export const API_PIUTANG = `${url}/piutang`;
+

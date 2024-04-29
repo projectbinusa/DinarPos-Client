@@ -497,8 +497,8 @@ function AddIndentDinarpos() {
           }).then((result) => {
             if (result.isConfirmed) {
               window.open(
-                "/cetak_struk_transaksi_penjualan_dinarpos/" +
-                  res.data.data.idTransaksi
+                "/cetak_struk_transaksi_indent_dinarpos/" +
+                  res.data.data.id
               );
             } else {
               window.location.reload();
