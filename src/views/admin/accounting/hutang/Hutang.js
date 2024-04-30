@@ -42,6 +42,12 @@ function Hutang() {
 
     $(tableRef.current).DataTable({});
   };
+
+  useEffect(() => {
+    if (hutangs && hutangs.length > 0) {
+      initializeDataTable();
+    }
+  }, [hutangs]);
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -144,7 +150,11 @@ function Hutang() {
                           {hutang.transaksiBeli.kekurangan}
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          <a href="#">
+                          <a
+                            href={
+                              "/pelusanan_hutang/" + hutang.transaksiBeli.id
+                            }
+                          >
                             <IconButton size="md" color="light-blue">
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>

@@ -115,6 +115,8 @@ import CetakIndentExcelcom from "./views/admin/transaksi_indent/excelcom/CetakIn
 import CetakIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/CetakIndentDinarpos.js";
 import Hutang from "./views/admin/accounting/hutang/Hutang.js";
 import Piutang from "./views/admin/accounting/piutang/Piutang.js";
+import PelunasanPiutang from "./views/admin/accounting/piutang/PelunasanPiutang.js";
+import PelunasanHutang from "./views/admin/accounting/hutang/PelunasanHutang.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -734,6 +736,16 @@ function App() {
             <PrivateRoute
               path="/data_piutang"
               component={Piutang}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/pelunasan_piutang/:id"
+              component={PelunasanPiutang}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/pelunasan_hutang/:id"
+              component={PelunasanHutang}
               isAuthenticated={true}
             />
             {/* END ACCOUNTING */}

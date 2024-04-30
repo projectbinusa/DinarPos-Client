@@ -42,6 +42,12 @@ function Piutang() {
 
     $(tableRef.current).DataTable({});
   };
+
+  useEffect(() => {
+    if (piutangs && piutangs.length > 0) {
+      initializeDataTable();
+    }
+  }, [piutangs]);
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -144,7 +150,12 @@ function Piutang() {
                           {piutang.transaksi.kekurangan}
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          <a href="#">
+                          <a
+                            href={
+                              "/pelusanan_piutang/" +
+                              piutang.transaksi.id
+                            }
+                          >
                             <IconButton size="md" color="light-blue">
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
