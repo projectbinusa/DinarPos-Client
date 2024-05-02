@@ -152,8 +152,8 @@ function Piutang() {
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
                           <a
                             href={
-                              "/pelusanan_piutang/" +
-                              piutang.transaksi.id
+                              "/pelunasan_piutang/" +
+                              piutang.id
                             }
                           >
                             <IconButton size="md" color="light-blue">

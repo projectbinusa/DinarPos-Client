@@ -304,10 +304,12 @@ function TransaksiPembelianDinarpos() {
       $("#title").html("Kekurangan");
       var kekurangan = parseInt(total - pembayaran);
       $("#kembalian").html(formatRupiah(kekurangan));
+      $("#bayar").removeAttr("disabled");
     } else {
       var kembalian = parseInt(pembayaran - total);
       $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian));
+      $("#bayar").removeAttr("disabled");
       checkEmptyTransaksi();
     }
   };
@@ -327,9 +329,11 @@ function TransaksiPembelianDinarpos() {
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
       $("#kembalian").html(formatRupiah(kekurangan - potongan));
+      $("#bayar").removeAttr("disabled");
     } else {
       $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian + potongan));
+      $("#bayar").removeAttr("disabled");
     }
 
     // $("#kembalian").html(formatRupiah(kembalian + potongan));

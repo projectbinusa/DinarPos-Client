@@ -117,6 +117,9 @@ import Hutang from "./views/admin/accounting/hutang/Hutang.js";
 import Piutang from "./views/admin/accounting/piutang/Piutang.js";
 import PelunasanPiutang from "./views/admin/accounting/piutang/PelunasanPiutang.js";
 import PelunasanHutang from "./views/admin/accounting/hutang/PelunasanHutang.js";
+import DataTeknisi from "./views/admin/teknisi/DataTeknisi.js";
+import AddTeknisi from "./views/admin/teknisi/AddTeknisi.js";
+import EditTeknisi from "./views/admin/teknisi/EditTeknisi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -749,6 +752,24 @@ function App() {
               isAuthenticated={true}
             />
             {/* END ACCOUNTING */}
+
+            {/* TEKNISI */}
+            <PrivateRoute
+              path="/data_teknisi"
+              component={DataTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_teknisi"
+              component={AddTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_teknisi/:id"
+              component={EditTeknisi}
+              isAuthenticated={true}
+            />
+            {/* END TEKNISI */}
           </Switch>
         </main>
       </BrowserRouter>

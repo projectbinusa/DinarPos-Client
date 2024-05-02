@@ -314,6 +314,7 @@ function TransaksiPenjualanDinarPos() {
     if (cashKredit == "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
+      $("#bayar").removeAttr("disabled");
       $("#title").html("Kekurangan");
       var kekurangan = parseInt(total - pembayaran);
       $("#kembalian").html(formatRupiah(kekurangan));
@@ -321,6 +322,7 @@ function TransaksiPenjualanDinarPos() {
       var kembalian = parseInt(pembayaran - total);
       $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian));
+      $("#bayar").removeAttr("disabled");
       checkEmptyTransaksi();
     }
   };
@@ -340,9 +342,11 @@ function TransaksiPenjualanDinarPos() {
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
       $("#kembalian").html(formatRupiah(kekurangan - potongan));
+      $("#bayar").removeAttr("disabled");
     } else {
       $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian + potongan));
+      $("#bayar").removeAttr("disabled");
     }
 
     // $("#kembalian").html(formatRupiah(kembalian + potongan));

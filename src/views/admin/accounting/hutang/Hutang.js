@@ -152,7 +152,7 @@ function Hutang() {
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
                           <a
                             href={
-                              "/pelusanan_hutang/" + hutang.transaksiBeli.id
+                              "/pelunasan_hutang/" + hutang.id
                             }
                           >
                             <IconButton size="md" color="light-blue">

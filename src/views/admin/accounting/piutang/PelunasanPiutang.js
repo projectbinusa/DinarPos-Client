@@ -1,8 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Input, Option, Select, Typography } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  Input,
+  Option,
+  Select,
+  Typography,
+} from "@material-tailwind/react";
+import { API_PIUTANG } from "../../../../utils/BaseUrl";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
 
 function PelunasanPiutang() {
+  const [noFaktur, setnoFaktur] = useState("");
+  const [kekurangan, setkekurangan] = useState("");
+  const [pelunasan, setpelunasan] = useState("");
+  const [cashKredit, setcashKredit] = useState("");
+  const param = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`${API_PIUTANG}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setnoFaktur(response.transaksi.noFaktur);
+        setkekurangan(response.transaksi.kekurangan);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -30,7 +61,7 @@ function PelunasanPiutang() {
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <Typography variant="lead" className="uppercase">
-            No Faktur
+            No Faktur {noFaktur}
           </Typography>
           <br />
           <form>
@@ -40,12 +71,16 @@ function PelunasanPiutang() {
                 variant="static"
                 color="blue"
                 size="lg"
+                readOnly
+                type="number"
+                value={kekurangan}
               />
               <Input
                 label="Pelunasan"
                 variant="static"
                 color="blue"
                 size="lg"
+                placeholder="Masukkan Pelunasan Piutang"
               />
               <Select
                 variant="static"

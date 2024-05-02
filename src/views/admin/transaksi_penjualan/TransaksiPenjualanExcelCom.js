@@ -297,10 +297,12 @@ function TransaksiPenjualanExcelCom() {
       $("#title").html("Kekurangan");
       var kekurangan = parseInt(total - pembayaran);
       $("#kembalian").html(formatRupiah(kekurangan));
+      $("#bayar").removeAttr("disabled");
     } else {
       var kembalian = parseInt(pembayaran - total);
       $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian));
+      $("#bayar").removeAttr("disabled");
       checkEmptyTransaksi();
     }
   };
@@ -320,9 +322,11 @@ function TransaksiPenjualanExcelCom() {
     if (cashKredit == "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
+      $("#bayar").removeAttr("disabled");
       $("#title").html("Kekurangan");
       $("#kembalian").html(formatRupiah(kekurangan - potongan));
     } else {
+      $("#bayar").removeAttr("disabled");
       $("#title").html("Kembalian");
       $("#kembalian").html(formatRupiah(kembalian + potongan));
     }

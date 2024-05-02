@@ -1,38 +1,14 @@
-import React, { useEffect, useState } from "react";
-import SidebarAdmin from "../../../../component/SidebarAdmin";
-import {
-  Breadcrumbs,
-  Button,
-  Input,
-  Option,
-  Select,
-  Typography,
-} from "@material-tailwind/react";
-import { API_HUTANG } from "../../../../utils/BaseUrl";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import axios from "axios";
+import { KeyIcon, MapPinIcon, PhoneIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { Breadcrumbs, Button, Input, Option, Select, Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
+import SidebarAdmin from "../../../component/SidebarAdmin";
 
-function PelunasanHutang() {
-  const [noFaktur, setnoFaktur] = useState("");
-  const [kekurangan, setkekurangan] = useState("");
-  const [pelunasan, setpelunasan] = useState("");
-  const [cashKredit, setcashKredit] = useState("");
-  const param = useParams();
-
-  useEffect(() => {
-    axios
-      .get(`${API_HUTANG}/` + param.id, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      })
-      .then((res) => {
-        const response = res.data.data;
-        setnoFaktur(response.transaksiBeli.noFaktur);
-        setkekurangan(response.transaksiBeli.kekurangan);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+function EditTeknisi() {
+  const [nama, setnama] = useState("");
+  const [alamat, setalamat] = useState("");
+  const [nohp, setnohp] = useState("");
+  const [bagian, setbagian] = useState("");
+  const [password, setpassword] = useState("");
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -40,7 +16,7 @@ function PelunasanHutang() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full lg:px-7 px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Pelunasan Hutang{" "}
+            edit teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -53,51 +29,68 @@ function PelunasanHutang() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/data_hutang">
-              <span>Hutang</span>
+            <a href="/data_teknisi">
+              <span>Teknisi</span>
             </a>
-            <span className="cursor-default capitalize">Pelunasan</span>
+            <span className="cursor-default capitalize">edit Teknisi</span>
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <Typography variant="lead" className="uppercase">
-            No Faktur {noFaktur}
-          </Typography>
-          <br />
-          <form>
+          <form >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
-                label="Kekurangan"
+                label="Nama Teknisi"
                 variant="static"
                 color="blue"
                 size="lg"
-                type="number"
-                value={kekurangan}
-                readOnly
+                icon={<UserCircleIcon />}
+                onChange={(e) => setnama(e.target.value)}
+                placeholder="Masukkan Nama Teknisi"
               />
               <Input
-                label="Pelunasan"
+                label="Alamat"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Masukkan Alamat"
+                onChange={(e) => setalamat(e.target.value)}
+                icon={<MapPinIcon />}
+              />
+              <Input
+                label="No HP"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Masukkan No HP"
+                onChange={(e) => setnohp(e.target.value)}
+                icon={<PhoneIcon />}
+              />
+              <Input
+                label="Password"
                 variant="static"
                 color="blue"
                 size="lg"
                 type="number"
-                placeholder="Masukkan Pelunasan Hutang"
+                placeholder="Masukkan Password"
+                onChange={(e) => setpassword(e.target.value)}
+                icon={<KeyIcon />}
               />
               <Select
                 variant="static"
-                label="Cash / Kredit"
+                label="Bagian"
                 color="blue"
                 className="w-full"
+                onChange={(selected) => setbagian(selected)}
               >
-                <Option value="Cash">Cash</Option>
-                <Option value="Kredit">Kredit</Option>
+                <Option value="Electro">Electro</Option>
+                <Option value="PC">PC</Option>
               </Select>
             </div>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>
               </Button>
-              <a href="/data_hutang">
+              <a href="/data_teknisi">
                 <Button variant="text" color="gray" className="mr-1">
                   <span>Kembali</span>
                 </Button>
@@ -110,4 +103,4 @@ function PelunasanHutang() {
   );
 }
 
-export default PelunasanHutang;
+export default EditTeknisi;

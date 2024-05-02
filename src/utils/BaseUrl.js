@@ -87,3 +87,5 @@ export const API_BARANG_TRANSAKSI_INDENT = `${url}/transaksi_indent/barang`;
 export const API_HUTANG = `${url}/hutang`;
 export const API_PIUTANG = `${url}/piutang`;
 
+// TEKNISI
+export const API_TEKNISI = `${url}/teknisi`;
