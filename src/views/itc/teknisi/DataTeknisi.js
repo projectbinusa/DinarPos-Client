@@ -111,7 +111,7 @@ function DataTeknisi() {
               Tambah Teknisi
             </Button>
           </a>
-          <div className="rounded my-5 w-full overflow-auto">
+          <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table
               id="example_data"
               ref={tableRef}

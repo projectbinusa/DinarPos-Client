@@ -63,7 +63,6 @@ import LaporanSuplierExcelcom from "./views/admin/laporan_excelcom/laporan_supli
 import LaporanSalesmanExcelcom from "./views/admin/laporan_excelcom/laporan_salesman/LaporanSalesmanExcelcom.js";
 import LaporanCustomerExcelcom from "./views/admin/laporan_excelcom/laporan_customer/LaporanCustomerExcelcom.js";
 import LaporanTransaksiBeliExcelcom from "./views/admin/laporan_excelcom/laporan_transaksi_beli/LaporanTransaksiBeliExcelcom.js";
-import DashboardKasir from "./views/kasir/DashboardKasir.js";
 import CetakStrukExcelcom from "./views/admin/transaksi_pembeliaan/CetakStrukExcelcom.js";
 import CetakStrukDinarpos from "./views/admin/transaksi_pembeliaan/CetakStrukDinarpos.js";
 import CetakStrukPenjualanDinar from "./views/admin/transaksi_penjualan/CetakStrukPenjualanDinar.js";
@@ -117,9 +116,10 @@ import Hutang from "./views/admin/accounting/hutang/Hutang.js";
 import Piutang from "./views/admin/accounting/piutang/Piutang.js";
 import PelunasanPiutang from "./views/admin/accounting/piutang/PelunasanPiutang.js";
 import PelunasanHutang from "./views/admin/accounting/hutang/PelunasanHutang.js";
-import DataTeknisi from "./views/admin/teknisi/DataTeknisi.js";
-import AddTeknisi from "./views/admin/teknisi/AddTeknisi.js";
-import EditTeknisi from "./views/admin/teknisi/EditTeknisi.js";
+import DataTeknisi from "./views/itc/teknisi/DataTeknisi.js";
+import AddTeknisi from "./views/itc/teknisi/AddTeknisi.js";
+import EditTeknisi from "./views/itc/teknisi/EditTeknisi.js";
+import DataService from "./views/itc/service/DataService.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -146,11 +146,6 @@ function App() {
             <PrivateRoute
               path="/ubah_password"
               component={UbahPassword}
-              isAuthenticated={true}
-            />
-            <PrivateRoute
-              path="/dashboard_kasir"
-              component={DashboardKasir}
               isAuthenticated={true}
             />
 
@@ -770,6 +765,14 @@ function App() {
               isAuthenticated={true}
             />
             {/* END TEKNISI */}
+
+            {/* SERVICE */}
+            <PrivateRoute
+              path="/data_service"
+              component={DataService}
+              isAuthenticated={true}
+            />
+            {/* END SERVICE */}
           </Switch>
         </main>
       </BrowserRouter>

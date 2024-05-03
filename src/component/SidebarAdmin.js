@@ -1163,6 +1163,11 @@ function SidebarAdmin() {
                   data teknisi
                 </ListItem>
               </a>
+              <a href="/data_service">
+                <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                  data service
+                </ListItem>
+              </a>
               <a href="/ubah_password" className="mb-5">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   ubah password
@@ -2257,7 +2262,12 @@ function SidebarAdmin() {
             )}
             <a href="/data_teknisi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
-              data teknisi
+                data teknisi
+              </ListItem>
+            </a>
+            <a href="/data_service">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                data service
               </ListItem>
             </a>
             <a href="/ubah_password" className="mb-5">

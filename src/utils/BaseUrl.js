@@ -89,3 +89,6 @@ export const API_PIUTANG = `${url}/piutang`;
 
 // TEKNISI
 export const API_TEKNISI = `${url}/teknisi`;
+
+// SERVICE
+export const API_SERVICE = `${url}/service`;

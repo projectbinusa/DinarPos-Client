@@ -835,8 +835,8 @@ function TransaksiPenjualanDinarPos() {
                           <td className="py-3 px-2 text-center border">
                             {down.totalHarga}
                           </td>
-                          <td className="py-2 px-3 text-center border">
-                            <div className="flex justify-center items-center gap-2">
+                            <td className="py-2 px-3 text-center border">
+                              <div className="flex justify-center items-center gap-2">
                               <IconButton
                                 id={down.barcode}
                                 size="md"
