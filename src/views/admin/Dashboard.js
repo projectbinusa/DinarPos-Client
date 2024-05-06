@@ -877,8 +877,8 @@ function Dashboard() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[20rem] pt-20 lg:pt-5 w-full">
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 lg:mr-8 mx-5 lg:mx-0">
+      <div className="lg:ml-[19rem] pt-20 lg:pt-5 w-full">
+        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 lg:mr-4 mx-5 lg:mx-0">
           <Card className="p-4">
             <ShoppingCartIcon
               className="h-12 w-12 bg-blue-100 p-2 rounded-full mb-3"
@@ -929,7 +929,7 @@ function Dashboard() {
           </Card>
         </div>
         <br />
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 lg:mr-8 mx-5 lg:mx-0">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 lg:mr-4 mx-5 lg:mx-0">
           <Card>
             <CardHeader
               floated={false}
