@@ -103,7 +103,7 @@ function DataService() {
                       <td className="text-sm py-2 px-3">{row.statusEnd}</td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
-                          <a href={"/edit_service/" + row.id}>
+                          <a href={"/detail_service/" + row.idTT}>
                             <IconButton size="md" color="light-blue">
                               <InformationCircleIcon className="w-6 h-6 white" />
                             </IconButton>

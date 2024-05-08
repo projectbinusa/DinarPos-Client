@@ -122,6 +122,7 @@ import EditTeknisi from "./views/itc/teknisi/EditTeknisi.js";
 import DataService from "./views/itc/service/DataService.js";
 import AddService from "./views/itc/service/AddService.js";
 import PrintService from "./views/itc/service/PrintService.js";
+import DetailService from "./views/itc/service/DetailService.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -772,6 +773,11 @@ function App() {
             <PrivateRoute
               path="/data_service"
               component={DataService}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_service/:id"
+              component={DetailService}
               isAuthenticated={true}
             />
             <PrivateRoute
