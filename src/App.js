@@ -123,6 +123,10 @@ import DataService from "./views/itc/service/DataService.js";
 import AddService from "./views/itc/service/AddService.js";
 import PrintService from "./views/itc/service/PrintService.js";
 import DetailService from "./views/itc/service/DetailService.js";
+import DataRetur from "./views/itc/retur/DataRetur.js";
+import EntriRetur from "./views/itc/retur/EntriRetur.js";
+import TakeOver from "./views/itc/take_over/TakeOver.js";
+import DataPoin from "./views/itc/poin/DataPoin.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -791,6 +795,35 @@ function App() {
               isAuthenticated={true}
             />
             {/* END SERVICE */}
+
+            {/* RETUR SERVICE */}
+            <PrivateRoute
+              path="/data_retur"
+              component={DataRetur}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/entri_retur"
+              component={EntriRetur}
+              isAuthenticated={true}
+            />
+            {/* END RETUR SERVICE */}
+
+            {/* TAKE OVER */}
+            <PrivateRoute
+              path="/take_over"
+              component={TakeOver}
+              isAuthenticated={true}
+            />
+            {/* END TAKE OVER */}
+
+            {/* POIN */}
+            <PrivateRoute
+              path="/data_poin_teknisi"
+              component={DataPoin}
+              isAuthenticated={true}
+            />
+            {/* END POIN */}
           </Switch>
         </main>
       </BrowserRouter>

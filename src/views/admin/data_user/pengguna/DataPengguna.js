@@ -109,7 +109,7 @@ function DataPengguna() {
           <div className="block">
             <a href="/add_pengguna">
               <Button variant="gradient" color="blue">
-                Tambah Pengguna
+                Tambah
               </Button>
             </a>
           </div>

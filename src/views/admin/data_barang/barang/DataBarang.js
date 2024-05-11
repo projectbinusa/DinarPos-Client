@@ -231,7 +231,7 @@ function DataBarang() {
                 </div>
                 <a href="/add_barang">
                   <Button variant="gradient" color="blue">
-                    Tambah Barang
+                    Tambah
                   </Button>
                 </a>
               </div>

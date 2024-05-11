@@ -69,7 +69,7 @@ function DataService() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <a href="/add_service" className="float-right mb-5">
             <Button variant="gradient" color="blue">
-              Tambah Service
+              Tambah
             </Button>
           </a>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">

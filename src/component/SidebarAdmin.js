@@ -1158,14 +1158,29 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+              <a href="/data_service">
+                <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                  data service
+                </ListItem>
+              </a>
+              <a href="/data_retur">
+                <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                  data retur
+                </ListItem>
+              </a>
               <a href="/data_teknisi">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   data teknisi
                 </ListItem>
               </a>
-              <a href="/data_service">
+              <a href="/take_over">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                  data service
+                  take over
+                </ListItem>
+              </a>
+              <a href="/data_poin_teknisi">
+                <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                  poin{" "}
                 </ListItem>
               </a>
               <a href="/ubah_password" className="mb-5">
@@ -2260,14 +2275,29 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+            <a href="/data_service">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                data service
+              </ListItem>
+            </a>
+            <a href="/data_retur">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                data retur
+              </ListItem>
+            </a>
             <a href="/data_teknisi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 data teknisi
               </ListItem>
             </a>
-            <a href="/data_service">
+            <a href="/take_over">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                data service
+                take over
+              </ListItem>
+            </a>
+            <a href="/data_poin_teknisi">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                poin
               </ListItem>
             </a>
             <a href="/ubah_password" className="mb-5">

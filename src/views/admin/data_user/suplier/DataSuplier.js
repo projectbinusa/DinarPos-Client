@@ -224,7 +224,7 @@ function DataSuplier() {
             </div>
             <a href="/add_suplier">
               <Button variant="gradient" color="blue">
-                Tambah Suplier
+                Tambah
               </Button>
             </a>
           </div>

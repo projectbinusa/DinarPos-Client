@@ -141,7 +141,7 @@ function DataSalesman() {
           <div className="block">
             <a href="/add_salesman">
               <Button variant="gradient" color="blue">
-                Tambah Salesman
+                Tambah
               </Button>
             </a>
           </div>

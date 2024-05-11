@@ -108,7 +108,7 @@ function DataTeknisi() {
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <a href="/add_teknisi" className="float-right mb-5">
             <Button variant="gradient" color="blue">
-              Tambah Teknisi
+              Tambah
             </Button>
           </a>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
