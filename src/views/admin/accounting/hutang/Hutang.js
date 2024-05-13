@@ -48,6 +48,48 @@ function Hutang() {
       initializeDataTable();
     }
   }, [hutangs]);
+
+  const rekapHutang = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_HUTANG}/export/excel/rekap-hutang`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "RekapHutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+  
+  const bukuHutang = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_HUTANG}/export/excel/hutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "BukuHutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -73,7 +115,7 @@ function Hutang() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <form>
+          <form onSubmit={bukuHutang}>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
                 variant="static"
@@ -98,7 +140,7 @@ function Hutang() {
               Export
             </Button>
           </form>
-          <Button className="mt-5" color="blue" type="button">
+          <Button className="mt-5" color="blue" type="button" onClick={rekapHutang}>
             Export Rekap Hutang
           </Button>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
@@ -135,24 +177,24 @@ function Hutang() {
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
                         <td className="text-sm py-2 px-3">
-                          {hutang.transaksiBeli.created_date}
+                          {hutang.created_date}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {hutang.transaksiBeli.noFaktur}
+                          {hutang.noFaktur}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {hutang.transaksiBeli.suplier.namaSuplier}
+                          {hutang.suplier.namaSuplier}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {hutang.transaksiBeli.totalBelanja}
+                          {hutang.totalBelanja}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {hutang.transaksiBeli.kekurangan}
+                          {hutang.kekurangan}
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
                           <a
                             href={
-                              "/pelunasan_hutang/" + hutang.id
+                              "/pelunasan_hutang/" + hutang.idTransaksiBeli
                             }
                           >
                             <IconButton size="md" color="light-blue">

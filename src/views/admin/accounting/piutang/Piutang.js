@@ -48,6 +48,48 @@ function Piutang() {
       initializeDataTable();
     }
   }, [piutangs]);
+
+  // const rekapPiutang = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.get(`${API_PIUTANG}/export/excel/rekap-piutang`, {
+  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       responseType: "blob",
+  //     });
+
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "RekapPiutang.xlsx");
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.parentNode.removeChild(link);
+  //   } catch (error) {
+  //     console.error("Error saat mengunduh file:", error);
+  //   }
+  // };
+  
+  // const bukuPiutang = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.get(`${API_PIUTANG}/export/excel/piutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
+  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       responseType: "blob",
+  //     });
+
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "BukuPiutang.xlsx");
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.parentNode.removeChild(link);
+  //   } catch (error) {
+  //     console.error("Error saat mengunduh file:", error);
+  //   }
+  // };
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -135,25 +177,25 @@ function Piutang() {
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.transaksi.created_date}
+                          {piutang.created_date}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.transaksi.noFaktur}
+                          {piutang.noFaktur}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.transaksi.suplier.namaSuplier}
+                          {piutang.suplier.namaSuplier}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.transaksi.totalBelanja}
+                          {piutang.totalBelanja}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.transaksi.kekurangan}
+                          {piutang.kekurangan}
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
                           <a
                             href={
                               "/pelunasan_piutang/" +
-                              piutang.id
+                              piutang.idTransaksi
                             }
                           >
                             <IconButton size="md" color="light-blue">

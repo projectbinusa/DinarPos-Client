@@ -9,15 +9,57 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { API_HUTANG } from "../../../../utils/BaseUrl";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useParams,
+} from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function PelunasanHutang() {
   const [noFaktur, setnoFaktur] = useState("");
   const [kekurangan, setkekurangan] = useState("");
   const [pelunasan, setpelunasan] = useState("");
-  const [cashKredit, setcashKredit] = useState("");
   const param = useParams();
+  const history = useHistory();
+
+  // const pelunasanHutang = async (e) => {
+  //   e.preventDefault();
+
+  //   const request = {
+  //     pelunasan: pelunasan,
+  //     idTransaksiBeli: param.id,
+  //   };
+
+  //   try {
+  //     await axios.post(`${API_HUTANG}/add`, request, {
+  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //     });
+  //     Swal.fire({
+  //       icon: "success",
+  //       title: "Pelunasan Hutang Berhasil!",
+  //       showConfirmButton: false,
+  //       timer: 1500,
+  //     });
+  //     history.push("/data_hutang");
+  //     setTimeout(() => {
+  //       window.location.reload();
+  //     }, 1500);
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       localStorage.clear();
+  //       history.push("/");
+  //     } else {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Pelunasan Hutang Gagal!",
+  //         showConfirmButton: false,
+  //         timer: 1500,
+  //       });
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     axios
@@ -82,16 +124,8 @@ function PelunasanHutang() {
                 size="lg"
                 type="number"
                 placeholder="Masukkan Pelunasan Hutang"
+                onChange={(e) => setpelunasan(e.target.value)}
               />
-              <Select
-                variant="static"
-                label="Cash / Kredit"
-                color="blue"
-                className="w-full"
-              >
-                <Option value="Cash">Cash</Option>
-                <Option value="Kredit">Kredit</Option>
-              </Select>
             </div>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">
