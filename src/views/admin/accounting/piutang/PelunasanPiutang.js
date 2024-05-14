@@ -8,9 +8,13 @@ import {
   Select,
   Typography,
 } from "@material-tailwind/react";
-import { API_PIUTANG } from "../../../../utils/BaseUrl";
-import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API_PIUTANG, GET_TRANSAKSI_JUAL } from "../../../../utils/BaseUrl";
+import {
+  useHistory,
+  useParams,
+} from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function PelunasanPiutang() {
   const [noFaktur, setnoFaktur] = useState("");
@@ -19,53 +23,54 @@ function PelunasanPiutang() {
   const param = useParams();
   const history = useHistory();
 
-  // const pelunasanPiutang = async (e) => {
-  //   e.preventDefault();
+  const pelunasanPiutang = async (e) => {
+    e.preventDefault();
 
-  //   const request = {
-  //     pelunasan: pelunasan,
-  //     idTransaksi: param.id,
-  //   };
+    const request = {
+      pelunasan: pelunasan,
+      id_transaksi: param.id,
+    };
 
-  //   try {
-  //     await axios.post(`${API_PIUTANG}/add`, request, {
-  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //     });
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "Pelunasan Piutang Berhasil!",
-  //       showConfirmButton: false,
-  //       timer: 1500,
-  //     });
-  //     history.push("/data_piutang");
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1500);
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 401) {
-  //       localStorage.clear();
-  //       history.push("/");
-  //     } else {
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Pelunasan Piutang Gagal!",
-  //         showConfirmButton: false,
-  //         timer: 1500,
-  //       });
-  //       console.log(error);
-  //     }
-  //   }
-  // };
+    try {
+      await axios.post(`${API_PIUTANG}`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Pelunasan Piutang Berhasil!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      history.push("/data_piutang");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Pelunasan Piutang Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
     axios
-      .get(`${API_PIUTANG}/` + param.id, {
+      .get(`${GET_TRANSAKSI_JUAL}/` + param.id, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
         const response = res.data.data;
-        setnoFaktur(response.transaksi.noFaktur);
-        setkekurangan(response.transaksi.kekurangan);
+        setnoFaktur(response.noFaktur);
+        setkekurangan(response.kekurangan);
+        console.log(res.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -102,7 +107,7 @@ function PelunasanPiutang() {
             No Faktur {noFaktur}
           </Typography>
           <br />
-          <form>
+          <form onSubmit={pelunasanPiutang}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
                 label="Kekurangan"
@@ -119,6 +124,7 @@ function PelunasanPiutang() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Pelunasan Piutang"
+                onChange={(e) => setpelunasan(e.target.value)}
               />
             </div>
             <div className="mt-10 flex gap-4">

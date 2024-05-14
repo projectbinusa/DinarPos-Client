@@ -159,7 +159,7 @@ function Piutang() {
                     No Faktur
                   </th>
                   <th className="text-sm py-2 px-2.5 font-semibold">
-                    Nama Suplier
+                    Nama Customer
                   </th>
                   <th className="text-sm py-2 px-2.5 font-semibold">
                     Nilai Transaksi (Rp)
@@ -183,7 +183,7 @@ function Piutang() {
                           {piutang.noFaktur}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.suplier.namaSuplier}
+                          {piutang.customer.nama_customer}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {piutang.totalBelanja}

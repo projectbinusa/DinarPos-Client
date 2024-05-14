@@ -8,7 +8,7 @@ import {
   Select,
   Typography,
 } from "@material-tailwind/react";
-import { API_HUTANG } from "../../../../utils/BaseUrl";
+import { API_HUTANG, GET_TRANSAKSI_BELI } from "../../../../utils/BaseUrl";
 import {
   useHistory,
   useParams,
@@ -23,53 +23,53 @@ function PelunasanHutang() {
   const param = useParams();
   const history = useHistory();
 
-  // const pelunasanHutang = async (e) => {
-  //   e.preventDefault();
+  const pelunasanHutang = async (e) => {
+    e.preventDefault();
 
-  //   const request = {
-  //     pelunasan: pelunasan,
-  //     idTransaksiBeli: param.id,
-  //   };
+    const request = {
+      pelunasan: pelunasan,
+      id_transaksi: param.id,
+    };
 
-  //   try {
-  //     await axios.post(`${API_HUTANG}/add`, request, {
-  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //     });
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "Pelunasan Hutang Berhasil!",
-  //       showConfirmButton: false,
-  //       timer: 1500,
-  //     });
-  //     history.push("/data_hutang");
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1500);
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 401) {
-  //       localStorage.clear();
-  //       history.push("/");
-  //     } else {
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Pelunasan Hutang Gagal!",
-  //         showConfirmButton: false,
-  //         timer: 1500,
-  //       });
-  //       console.log(error);
-  //     }
-  //   }
-  // };
+    try {
+      await axios.post(`${API_HUTANG}`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Pelunasan Hutang Berhasil!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      history.push("/data_hutang");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Pelunasan Hutang Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
     axios
-      .get(`${API_HUTANG}/` + param.id, {
+      .get(`${GET_TRANSAKSI_BELI}/` + param.id, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
         const response = res.data.data;
-        setnoFaktur(response.transaksiBeli.noFaktur);
-        setkekurangan(response.transaksiBeli.kekurangan);
+        setnoFaktur(response.noFaktur);
+        setkekurangan(response.kekurangan);
       })
       .catch((error) => {
         console.log(error);
@@ -106,7 +106,7 @@ function PelunasanHutang() {
             No Faktur {noFaktur}
           </Typography>
           <br />
-          <form>
+          <form onSubmit={pelunasanHutang}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
                 label="Kekurangan"
