@@ -95,8 +95,8 @@ function DataService() {
                   services.map((row, index) => (
                     <tr key={index}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{row.nama}</td>
-                      <td className="text-sm py-2 px-3">{row.alamat}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.nama_customer}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.alamat}</td>
                       <td className="text-sm py-2 px-3">{row.produk}</td>
                       <td className="text-sm py-2 px-3">{row.tanggalMasuk}</td>
                       <td className="text-sm py-2 px-3">{row.tanggalMasuk}</td>

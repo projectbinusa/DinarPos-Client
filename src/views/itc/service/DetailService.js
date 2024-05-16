@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -9,10 +9,34 @@ import {
 } from "@material-tailwind/react";
 import {
   ChatBubbleBottomCenterIcon,
+  ChevronLeftIcon,
   PrinterIcon,
 } from "@heroicons/react/24/outline";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
+import $ from "jquery";
+import "datatables.net";
+import "./../../../assets/styles/datatables.css";
+import { API_SERVICE } from "../../../utils/BaseUrl";
 
 function DetailService() {
+  const [datas, setdatas] = useState(null);
+  const param = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`${API_SERVICE}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setdatas(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -40,18 +64,31 @@ function DetailService() {
         </div>
         <main className="bg-blue-500 border-4 border-blue-500 shadow-lg my-5 rounded">
           <div className="flex justify-between items-center p-3">
-            <Typography
-              variant="paragraph"
-              className="capitalize font-semibold text-white"
-            >
-              <i className="fas fa-chevron-left"></i> NO. 1
-            </Typography>
+            <a href="/data_service">
+              <Typography
+                variant="paragraph"
+                className="capitalize font-semibold text-white flex"
+              >
+                <ChevronLeftIcon className="w-6 h-6 white" /> NO. {datas?.idTT}
+              </Typography>
+            </a>
             <div>
               <IconButton size="md" color="red">
                 <PrinterIcon className="w-6 h-6 white" />
               </IconButton>{" "}
               <IconButton size="md" color="green">
-                <ChatBubbleBottomCenterIcon className="w-6 h-6 white" />
+                <ChatBubbleBottomCenterIcon
+                  className="w-6 h-6 white"
+                  onClick={() => {
+                    const phone = encodeURIComponent(datas?.customer?.telp);
+                    const message = encodeURIComponent(
+                      `Hallo kak ${datas?.customer?.nama_customer} Terima Kasih Telah Service di Excellent Computer Detail Produk No. TT : ${datas?.idTT} Jenis Produk : ${datas?.produk} Merk : ${datas?.merk} Type : ${datas?.type} SN : ${datas?.sn} Dengan Keluhan : ${datas?.keluhan}`
+                    );
+                    window.open(
+                      `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                    );
+                  }}
+                />
               </IconButton>{" "}
             </div>
           </div>
@@ -73,6 +110,7 @@ function DetailService() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Nama"
                         readOnly
+                        value={datas?.customer?.nama_customer}
                       />
                     </div>
                   </li>
@@ -87,7 +125,7 @@ function DetailService() {
                         cols="30"
                         rows="3"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Alamat"
+                        value={datas?.customer?.alamat}
                         readOnly
                       ></textarea>
                     </div>
@@ -102,6 +140,7 @@ function DetailService() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="CP"
                         readOnly
+                        value={datas?.customer?.telp}
                       />
                     </div>
                   </li>
@@ -111,12 +150,12 @@ function DetailService() {
                         Ket
                       </label>
                       <textarea
-                        name="alamat"
-                        id="alamat"
+                        name="ket"
+                        id="ket"
                         cols="30"
                         rows="3"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Keterangan"
+                        value={datas?.ket}
                         readOnly
                       ></textarea>
                     </div>
@@ -138,6 +177,7 @@ function DetailService() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Tanggal Masuk"
                         readOnly
+                        value={datas?.tgl_masuk}
                       />
                     </div>
                   </li>
@@ -172,7 +212,7 @@ function DetailService() {
                       <label for="" className="w-32 text-center text-sm">
                         Penerima
                       </label>
-                      <p className="text-sm w-full">Dinda</p>
+                      <p className="text-sm w-full">{datas?.penerima}</p>
                     </div>
                   </li>
                   <li className="mb-3">
@@ -180,7 +220,7 @@ function DetailService() {
                       <label for="" className="w-32 text-center text-sm">
                         Checker
                       </label>
-                      <p className="text-sm w-full">Dinda</p>
+                      <p className="text-sm w-full">{datas?.checker}</p>
                     </div>
                   </li>
                 </ol>
@@ -214,6 +254,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
+                          value={datas?.produk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -221,6 +262,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
+                          value={datas?.merk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -228,6 +270,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
+                          value={datas?.type}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -235,6 +278,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
+                          value={datas?.sn}
                         />
                       </td>
                     </tr>
@@ -261,8 +305,8 @@ function DetailService() {
                           cols="30"
                           rows="3"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Keterangan"
                           readOnly
+                          value={datas?.perlengkapan}
                         ></textarea>
                       </td>
                       <td
@@ -273,8 +317,8 @@ function DetailService() {
                           cols="30"
                           rows="3"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Keterangan"
                           readOnly
+                          value={datas?.keluhan}
                         ></textarea>
                       </td>
                     </tr>

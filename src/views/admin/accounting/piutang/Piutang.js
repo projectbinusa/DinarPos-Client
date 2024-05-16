@@ -49,47 +49,47 @@ function Piutang() {
     }
   }, [piutangs]);
 
-  // const rekapPiutang = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.get(`${API_PIUTANG}/export/excel/rekap-piutang`, {
-  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //       responseType: "blob",
-  //     });
+  const rekapPiutang = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_PIUTANG}/export/excel/rekap-piutang`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
 
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+      const url = window.URL.createObjectURL(new Blob([response.data]));
 
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", "RekapPiutang.xlsx");
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.parentNode.removeChild(link);
-  //   } catch (error) {
-  //     console.error("Error saat mengunduh file:", error);
-  //   }
-  // };
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "RekapPiutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
   
-  // const bukuPiutang = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.get(`${API_PIUTANG}/export/excel/piutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
-  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //       responseType: "blob",
-  //     });
+  const bukuPiutang = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(`${API_PIUTANG}/export/excel/piutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
 
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+      const url = window.URL.createObjectURL(new Blob([response.data]));
 
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", "BukuPiutang.xlsx");
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.parentNode.removeChild(link);
-  //   } catch (error) {
-  //     console.error("Error saat mengunduh file:", error);
-  //   }
-  // };
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "BukuPiutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -115,7 +115,7 @@ function Piutang() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <form>
+          <form onSubmit={bukuPiutang}>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
                 variant="static"
@@ -140,7 +140,7 @@ function Piutang() {
               Export
             </Button>
           </form>
-          <Button className="mt-5" color="blue" type="button">
+          <Button className="mt-5" color="blue" type="button" onClick={rekapPiutang}>
             Export Rekap Piutang
           </Button>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
