@@ -127,6 +127,7 @@ import DataRetur from "./views/itc/retur/DataRetur.js";
 import EntriRetur from "./views/itc/retur/EntriRetur.js";
 import TakeOver from "./views/itc/take_over/TakeOver.js";
 import DataPoin from "./views/itc/poin/DataPoin.js";
+import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -777,6 +778,11 @@ function App() {
             <PrivateRoute
               path="/data_service"
               component={DataService}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/data_service_taken"
+              component={DataServiceTaken}
               isAuthenticated={true}
             />
             <PrivateRoute
