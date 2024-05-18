@@ -128,6 +128,8 @@ import EntriRetur from "./views/itc/retur/EntriRetur.js";
 import TakeOver from "./views/itc/take_over/TakeOver.js";
 import DataPoin from "./views/itc/poin/DataPoin.js";
 import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
+import Garansi from "./views/itc/garansi/Garansi.js";
+import AddGaransi from "./views/itc/garansi/AddGaransi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -830,6 +832,19 @@ function App() {
               isAuthenticated={true}
             />
             {/* END POIN */}
+
+            {/* GARANSI */}
+            <PrivateRoute
+              path="/garansi"
+              component={Garansi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_garansi"
+              component={AddGaransi}
+              isAuthenticated={true}
+            />
+            {/* END GARANSI */}
           </Switch>
         </main>
       </BrowserRouter>
