@@ -1193,6 +1193,11 @@ function SidebarAdmin() {
                   ubah password
                 </ListItem>
               </a>
+              <a href="/edit_data">
+                <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                  edit data{" "}
+                </ListItem>
+              </a>
             </List>
             <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
               <button onClick={logout} className="uppercase text-sm">
@@ -2308,6 +2313,11 @@ function SidebarAdmin() {
             <a href="/garansi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 garansi
+              </ListItem>
+            </a>
+            <a href="/edit_data">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                edit data{" "}
               </ListItem>
             </a>
             <a href="/ubah_password" className="mb-5">

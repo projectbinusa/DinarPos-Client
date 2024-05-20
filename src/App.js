@@ -130,6 +130,7 @@ import DataPoin from "./views/itc/poin/DataPoin.js";
 import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
 import Garansi from "./views/itc/garansi/Garansi.js";
 import AddGaransi from "./views/itc/garansi/AddGaransi.js";
+import EditData from "./views/itc/edit_data/EditData.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -845,6 +846,14 @@ function App() {
               isAuthenticated={true}
             />
             {/* END GARANSI */}
+
+            {/* EDIT DATA */}
+            <PrivateRoute
+              path="/edit_data"
+              component={EditData}
+              isAuthenticated={true}
+            />
+            {/* END EDIT DATA */}
           </Switch>
         </main>
       </BrowserRouter>
