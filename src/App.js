@@ -131,6 +131,8 @@ import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
 import Garansi from "./views/itc/garansi/Garansi.js";
 import AddGaransi from "./views/itc/garansi/AddGaransi.js";
 import EditData from "./views/itc/edit_data/EditData.js";
+import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddTransaksiFromIndentDinarpos.js";
+import AddTransaksiFromIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddTransaksiFromIndentExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -731,8 +733,13 @@ function App() {
             {/* END TRANSAKSI INDENT DINARPOS */}
 
             <PrivateRoute
-              path="/add_transaksi_from_transaksi_indent/:id"
-              component={CetakIndentExcelcom}
+              path="/add_transaksi_from_indent_dinarpos/:id"
+              component={AddTransaksiFromIndentDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_transaksi_from_indent_excelcom/:id"
+              component={AddTransaksiFromIndentExcelcom}
               isAuthenticated={true}
             />
 
