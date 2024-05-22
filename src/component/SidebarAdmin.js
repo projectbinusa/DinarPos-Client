@@ -2310,6 +2310,11 @@ function SidebarAdmin() {
                 poin
               </ListItem>
             </a>
+            <a href="/data_bon_barang">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                bon barang
+              </ListItem>
+            </a>
             <a href="/garansi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 garansi

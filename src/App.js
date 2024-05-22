@@ -131,8 +131,10 @@ import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
 import Garansi from "./views/itc/garansi/Garansi.js";
 import AddGaransi from "./views/itc/garansi/AddGaransi.js";
 import EditData from "./views/itc/edit_data/EditData.js";
-import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddTransaksiFromIndentDinarpos.js";
-import AddTransaksiFromIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddTransaksiFromIndentExcelcom.js";
+import DataBon from "./views/itc/bon/DataBon.js";
+import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
+import EditBonBarang from "./views/itc/bon/EditBonBarang.js";
+import EditGaransi from "./views/itc/garansi/EditGaransi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -733,13 +735,8 @@ function App() {
             {/* END TRANSAKSI INDENT DINARPOS */}
 
             <PrivateRoute
-              path="/add_transaksi_from_indent_dinarpos/:id"
-              component={AddTransaksiFromIndentDinarpos}
-              isAuthenticated={true}
-            />
-            <PrivateRoute
-              path="/add_transaksi_from_indent_excelcom/:id"
-              component={AddTransaksiFromIndentExcelcom}
+              path="/add_transaksi_from_transaksi_indent/:id"
+              component={CetakIndentExcelcom}
               isAuthenticated={true}
             />
 
@@ -852,7 +849,30 @@ function App() {
               component={AddGaransi}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/edit_garansi"
+              component={EditGaransi}
+              isAuthenticated={true}
+            />
             {/* END GARANSI */}
+
+            {/* BON BARANG */}
+            <PrivateRoute
+              path="/data_bon_barang"
+              component={DataBon}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_bonbarang"
+              component={AddBonBarang}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_bonbarang"
+              component={EditBonBarang}
+              isAuthenticated={true}
+            />
+            {/* END BON BARANG */}
 
             {/* EDIT DATA */}
             <PrivateRoute
