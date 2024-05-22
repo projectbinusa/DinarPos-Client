@@ -127,6 +127,12 @@ import DataRetur from "./views/itc/retur/DataRetur.js";
 import EntriRetur from "./views/itc/retur/EntriRetur.js";
 import TakeOver from "./views/itc/take_over/TakeOver.js";
 import DataPoin from "./views/itc/poin/DataPoin.js";
+import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
+import Garansi from "./views/itc/garansi/Garansi.js";
+import AddGaransi from "./views/itc/garansi/AddGaransi.js";
+import EditData from "./views/itc/edit_data/EditData.js";
+import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddTransaksiFromIndentDinarpos.js";
+import AddTransaksiFromIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddTransaksiFromIndentExcelcom.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -727,8 +733,13 @@ function App() {
             {/* END TRANSAKSI INDENT DINARPOS */}
 
             <PrivateRoute
-              path="/add_transaksi_from_transaksi_indent/:id"
-              component={CetakIndentExcelcom}
+              path="/add_transaksi_from_indent_dinarpos/:id"
+              component={AddTransaksiFromIndentDinarpos}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_transaksi_from_indent_excelcom/:id"
+              component={AddTransaksiFromIndentExcelcom}
               isAuthenticated={true}
             />
 
@@ -780,6 +791,11 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/data_service_taken"
+              component={DataServiceTaken}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/detail_service/:id"
               component={DetailService}
               isAuthenticated={true}
@@ -824,6 +840,27 @@ function App() {
               isAuthenticated={true}
             />
             {/* END POIN */}
+
+            {/* GARANSI */}
+            <PrivateRoute
+              path="/garansi"
+              component={Garansi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_garansi"
+              component={AddGaransi}
+              isAuthenticated={true}
+            />
+            {/* END GARANSI */}
+
+            {/* EDIT DATA */}
+            <PrivateRoute
+              path="/edit_data"
+              component={EditData}
+              isAuthenticated={true}
+            />
+            {/* END EDIT DATA */}
           </Switch>
         </main>
       </BrowserRouter>

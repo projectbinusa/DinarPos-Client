@@ -199,7 +199,7 @@ function TransaksiIndentExcelcom() {
                         <td className="text-sm p-2 text-center">
                           <a
                             href={
-                              "/add_transaksi_from_transaksi_indent/" + data.id
+                              "/add_transaksi_from_indent_excelcom/" + data.id
                             }
                           >
                             <IconButton size="md" color="light-blue">
