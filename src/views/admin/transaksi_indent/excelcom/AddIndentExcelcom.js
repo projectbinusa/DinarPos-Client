@@ -268,10 +268,7 @@ function AddIndentExcelcom() {
   const checkEmptyTransaksi = () => {
     var pembayaran = $("#pembayaran").val();
     var id_suplier = $("#id_suplier").val();
-    var sisa = $("#kembalian").html();
     if (pembayaran <= 0 || pembayaran === "" || id_suplier === "") {
-      $("#bayar").attr("disabled", "disabled");
-    } else if (sisa < 0) {
       $("#bayar").attr("disabled", "disabled");
     } else if (produk.length < 0) {
       $("#bayar").attr("disabled", "disabled");
@@ -289,13 +286,11 @@ function AddIndentExcelcom() {
   const getDiskon = () => {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
-    var cashKredit = $("#cashKredit").val();
-    if (cashKredit == "Cash" && pembayaran < total) {
-      $("#bayar").attr("disabled", "disabled");
-    } else if (pembayaran < total) {
+    if (pembayaran < total) {
       $("#title").html("Kekurangan");
       var kekurangan = parseInt(total - pembayaran);
       $("#kembalian").html(formatRupiah(kekurangan));
+      checkEmptyTransaksi();
     } else {
       var kembalian = parseInt(pembayaran - total);
       $("#title").html("Kembalian");
@@ -312,13 +307,7 @@ function AddIndentExcelcom() {
     var total2 = convertToAngka($("#total2").html());
     var kembalian = pembayaran - total;
     var kekurangan = total - pembayaran;
-    var cashKredit = $("#cashKredit").val();
-
-    console.log(cashCredit);
-
-    if (cashKredit == "Cash" && pembayaran < total) {
-      $("#bayar").attr("disabled", "disabled");
-    } else if (pembayaran < total) {
+    if (pembayaran < total) {
       $("#title").html("Kekurangan");
       $("#kembalian").html(formatRupiah(kekurangan - potongan));
     } else {
@@ -498,11 +487,10 @@ function AddIndentExcelcom() {
           }).then((result) => {
             if (result.isConfirmed) {
               window.open(
-                "/cetak_struk_transaksi_indent_excelcom/" +
-                  res.data.data.id
+                "/cetak_struk_transaksi_indent_excelcom/" + res.data.data.id
               );
             } else {
-              window.location.reload();
+              window.location.href = "/transaksi_indent_excelcom";
             }
           });
         } else {
@@ -911,6 +899,7 @@ function AddIndentExcelcom() {
                 label="Cash / Kredit"
                 color="blue"
                 className="w-full"
+                id="cashKredit"
                 onChange={(selectedOption) => setcashCredit(selectedOption)}
               >
                 <Option value="Cash">Cash</Option>
@@ -920,7 +909,7 @@ function AddIndentExcelcom() {
                 <Input
                   color="blue"
                   variant="static"
-                  label="Pembayaran"
+                  label="DP"
                   type="number"
                   placeholder="0"
                   id="pembayaran"
