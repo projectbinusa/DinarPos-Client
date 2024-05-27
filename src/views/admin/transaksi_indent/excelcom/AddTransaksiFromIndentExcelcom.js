@@ -73,7 +73,6 @@ function AddTransaksiFromIndentExcelcom() {
   };
 
   const add = () => {
-    const total = parseInt(pembayaran) + parseInt(datas?.pembayaran);
     const request = {
       prembayaran: total,
     };
@@ -94,7 +93,7 @@ function AddTransaksiFromIndentExcelcom() {
           }).then((result) => {
             if (result.isConfirmed) {
               window.open(
-                "/cetak_struk_transaksi_penjualan_excelcom/" + res.data.data.id
+                "/cetak_struk_transaksi_penjualan_excelcom/" + res.data.data.idTransaksi
               );
             } else {
               window.location.href = "/transaksi_indent_excelcom";
