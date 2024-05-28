@@ -803,7 +803,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/print_service"
+              path="/print_service/:id"
               component={PrintService}
               isAuthenticated={true}
             />

@@ -73,7 +73,7 @@ function DetailService() {
               </Typography>
             </a>
             <div>
-              <IconButton size="md" color="red">
+              <IconButton size="md" color="red" onClick={() => window.open('/print_service/' + datas?.idTT) }>
                 <PrinterIcon className="w-6 h-6 white" />
               </IconButton>{" "}
               <IconButton size="md" color="green">

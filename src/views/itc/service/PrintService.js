@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import logo from "../../../assets/logo_black.png";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
+import { API_SERVICE } from "../../../utils/BaseUrl";
 
 function PrintService() {
+  const [datas, setdatas] = useState(null);
+  const param = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`${API_SERVICE}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setdatas(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const formatRupiah = (value) => {
+    const formatter = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    return formatter.format(value);
+  };
+
   return (
     <div>
       <table
@@ -15,7 +44,7 @@ function PrintService() {
         <tbody>
           <tr>
             <td height="50" align="center">
-              <img src="#" style={{ height: "2.5rem" }} />
+              <img src={logo} style={{ height: "2.5rem" }} />
             </td>
             <td
               height="50"
@@ -30,7 +59,10 @@ function PrintService() {
               Jl. ISMOYO NO.27 SIDOMUKTI, SALATIGA TELP.(0298)328707,
               HP.081138010102
               <br />
-              Tracking Page : http://tracking.dinartechshare-e.com
+              Tracking Page :{" "}
+              <a href="http://tracking.dinartechshare-e.com">
+                http://tracking.dinartechshare-e.com
+              </a>
             </td>
           </tr>
 
@@ -64,7 +96,8 @@ function PrintService() {
                         <font size="3px">TANDA TERIMA</font>
                       </div>
                       <br />
-                      Tanggal :<br />
+                      Tanggal : {datas?.created_date}
+                      <br />
                       <br />
                       <br />
                       <br />
@@ -80,11 +113,11 @@ function PrintService() {
                         <tbody>
                           <tr>
                             <td align="center">
-                              (Aisyah)
+                              ({datas?.customer?.nama_customer})
                               <br /> Konsumen
                             </td>
                             <td align="center">
-                              (Dinda)
+                              ({datas?.penerima})
                               <br /> Penerima
                             </td>
                           </tr>
@@ -109,12 +142,13 @@ function PrintService() {
                       :<br />:
                     </td>
                     <td width="48%">
-                      Aisyah
+                      {datas?.customer?.nama_customer}
                       <br />
-                      Semarang
+                      {datas?.customer?.alamat}
                       <br />
-                      098890129012901
-                      <br />-
+                      {datas?.customer?.telp}
+                      <br />
+                      {datas?.ket}
                     </td>
                   </tr>
                   <tr>
@@ -146,13 +180,13 @@ function PrintService() {
                       :<br />:
                     </td>
                     <td>
-                      Laptop
+                      {datas?.produk}
                       <br />
-                      ASUS
+                      {datas?.merk}
                       <br />
-                      Z10
+                      {datas?.type}
                       <br />
-                      Z10A
+                      {datas?.sn}
                     </td>
                   </tr>
                   <tr style={{ fontSize: "15px" }} valign="top">
@@ -171,13 +205,13 @@ function PrintService() {
                       :<br />:<br />:
                     </td>
                     <td colspan="2">
-                      Unit
+                      {datas?.perlengkapan}
                       <br />
-                      mati
+                      {datas?.keluhan}
                       <br />
-                      120000
+                      {formatRupiah(datas?.estimasi)}
                       <br />
-                      500000{" "}
+                      {formatRupiah(datas?.estimasi)}
                     </td>
                   </tr>
                   <tr>
@@ -194,39 +228,25 @@ function PrintService() {
                     </td>
                   </tr>
                   <tr style={{ fontSize: "14px" }}>
-                    <td width={"2%"}>
-                      1.
-                      <br />
-                      2.
-                      <br />
-                      3.
-                      <br />
-                      4.
-                      <br />
-                      5.
-                      <br />
-                      6.
-                      <br />
-                      7.
-                    </td>
+                    <td width={"2%"}></td>
                     <td colSpan="4">
-                      Tanda Terima ini harus dibawa pada saat pengambilan
+                      1. Tanda Terima ini harus dibawa pada saat pengambilan
                       barang.
                       <br />
-                      Pembatalan perbaikan akan dikenakan biaya 50%.
+                      2. Pembatalan perbaikan akan dikenakan biaya 50%.
                       <br />
-                      Garansi service 1 (satu) minggu untuk kerusakan yang sama
-                      (sparepart non garansi).
+                      3. Garansi service 1 (satu) minggu untuk kerusakan yang
+                      sama (sparepart non garansi).
                       <br />
-                      Barang yang tidak diambil dalam waktu 30 (tiga puluh) hari
-                      pemberitahuan tidak menjadi tanggung jawab kami.
+                      4. Barang yang tidak diambil dalam waktu 30 (tiga puluh)
+                      hari pemberitahuan tidak menjadi tanggung jawab kami.
                       <br />
-                      Khusus PC, Notebook dan Data Storage kami tidak
+                      5. Khusus PC, Notebook dan Data Storage kami tidak
                       bertanggung jawab terhadap data didalamnya.
                       <br />
-                      Pengambilan Servis : Senin - Sabtu Jam 09.00 - 16.00.
+                      6. Pengambilan Servis : Senin - Sabtu Jam 09.00 - 16.00.
                       <br />
-                      Biaya Max adalah biaya yang disetujui tanpa konfirmasi
+                      7. Biaya Max adalah biaya yang disetujui tanpa konfirmasi
                       ulang.
                     </td>
                     <td></td>
