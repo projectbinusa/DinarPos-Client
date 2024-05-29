@@ -92,3 +92,7 @@ export const API_TEKNISI = `${url}/teknisi`;
 
 // SERVICE
 export const API_SERVICE = `${url}/service`;
+
+// GARANSI
+export const API_GARANSI = `${url}/garansi`;
+
