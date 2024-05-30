@@ -126,26 +126,25 @@ import DetailService from "./views/itc/service/DetailService.js";
 import DataRetur from "./views/itc/retur/DataRetur.js";
 import EntriRetur from "./views/itc/retur/EntriRetur.js";
 import TakeOver from "./views/itc/take_over/TakeOver.js";
-import DataPoin from "./views/itc/Point/DataPoin.js";
-import PointTeknisi from './views/itc/Point/PointTeknisi.js';
-import AddPoint from "./views/itc/Point/AddPoint.js";
-import Garansi from './views/itc/garansi/Garansi.js';
-import AddGaransi from './views/itc/garansi/AddGaransi.js';
-import HistoryPoint from './views/itc/Point/HistoryPoint.js';
-import DataFinish from "./views/itc/Finish/DataFinish.js";
+import DataPoin from "./views/itc/point/DataPoin.js";
+import PointTeknisi from "./views/itc/point/PointTeknisi.js";
+import AddPoint from "./views/itc/point/AddPoint.js";
+import Garansi from "./views/itc/garansi/Garansi.js";
+import AddGaransi from "./views/itc/garansi/AddGaransi.js";
+import HistoryPoint from "./views/itc/point/HistoryPoint.js";
+import DataFinish from "./views/itc/finish/DataFinish.js";
+import DataBon from "./views/itc/bon/DataBon.js";
+import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-
   return loading ? (
     <Loader />
-
   ) : (
     <>
       <BrowserRouter>
@@ -799,7 +798,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/print_service"
+              path="/print_service/:id"
               component={PrintService}
               isAuthenticated={true}
             />
@@ -832,18 +831,18 @@ function App() {
               component={DataPoin}
               isAuthenticated={true}
             />
-             <PrivateRoute
-              path="/PoinTeknisi"
+            <PrivateRoute
+              path="/poin_teknisi"
               component={PointTeknisi}
               isAuthenticated={true}
             />
-             <PrivateRoute
+            <PrivateRoute
               path="/add_point"
               component={AddPoint}
               isAuthenticated={true}
             />
-             <PrivateRoute
-              path="/History_point"
+            <PrivateRoute
+              path="/history_poin"
               component={HistoryPoint}
               isAuthenticated={true}
             />
@@ -851,14 +850,14 @@ function App() {
 
             {/* FINISH */}
             <PrivateRoute
-              path="/Data_Finish"
+              path="/finish"
               component={DataFinish}
               isAuthenticated={true}
             />
             {/* END FINISH */}
 
-              {/* GARANSI */}
-              <PrivateRoute
+            {/* GARANSI */}
+            <PrivateRoute
               path="/garansi"
               component={Garansi}
               isAuthenticated={true}
@@ -869,6 +868,19 @@ function App() {
               isAuthenticated={true}
             />
             {/* END GARANSI */}
+
+            {/* BON BARANG */}
+            <PrivateRoute
+              path="/bon_barang"
+              component={DataBon}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_bon_barang"
+              component={AddBonBarang}
+              isAuthenticated={true}
+            />
+            {/* END BON BARANG */}
           </Switch>
         </main>
       </BrowserRouter>
