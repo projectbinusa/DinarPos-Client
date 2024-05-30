@@ -126,14 +126,17 @@ import DetailService from "./views/itc/service/DetailService.js";
 import DataRetur from "./views/itc/retur/DataRetur.js";
 import EntriRetur from "./views/itc/retur/EntriRetur.js";
 import TakeOver from "./views/itc/take_over/TakeOver.js";
-import DataPoin from "./views/itc/poin/DataPoin.js";
-import PoinTeknisi from "./views/itc/poin/PoinTeknisi";
-import AddPoint from "./views/itc/poin/AddPoint.js";
-import HistoryPoint from './views/itc/poin/HistoryPoint';
+import DataPoin from "./views/itc/Point/DataPoin.js";
+import PointTeknisi from './views/itc/Point/PointTeknisi.js';
+import AddPoint from "./views/itc/Point/AddPoint.js";
+import Garansi from './views/itc/garansi/Garansi.js';
+import AddGaransi from './views/itc/garansi/AddGaransi.js';
+import HistoryPoint from './views/itc/Point/HistoryPoint.js';
 import DataFinish from "./views/itc/Finish/DataFinish.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
@@ -831,7 +834,7 @@ function App() {
             />
              <PrivateRoute
               path="/PoinTeknisi"
-              component={PoinTeknisi}
+              component={PointTeknisi}
               isAuthenticated={true}
             />
              <PrivateRoute
@@ -848,12 +851,24 @@ function App() {
 
             {/* FINISH */}
             <PrivateRoute
-              path="/DataFinish"
+              path="/Data_Finish"
               component={DataFinish}
               isAuthenticated={true}
             />
             {/* END FINISH */}
 
+              {/* GARANSI */}
+              <PrivateRoute
+              path="/garansi"
+              component={Garansi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_garansi"
+              component={AddGaransi}
+              isAuthenticated={true}
+            />
+            {/* END GARANSI */}
           </Switch>
         </main>
       </BrowserRouter>

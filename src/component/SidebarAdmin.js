@@ -2295,6 +2295,11 @@ function SidebarAdmin() {
                 take over
               </ListItem>
             </a>
+            <a href="/garansi">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                Garansi
+              </ListItem>
+            </a>
             <a href="/data_poin_teknisi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 poin
@@ -2310,7 +2315,7 @@ function SidebarAdmin() {
                 poin teknisi
               </ListItem>
             </a>
-            <a href="/DataFinish">
+            <a href="/Data_Finish">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 finish
               </ListItem>
