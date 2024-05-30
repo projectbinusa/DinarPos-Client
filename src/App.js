@@ -869,7 +869,6 @@ function App() {
               isAuthenticated={true}
             />
             {/* END GARANSI */}
-
           </Switch>
         </main>
       </BrowserRouter>
