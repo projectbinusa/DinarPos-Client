@@ -34,7 +34,6 @@ import {
   API_BARANG,
   API_SALESMAN,
   API_SERVICE,
-  API_TRANSAKSI_JUAL_DINARPOS,
 } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import ReactSelect from "react-select";
@@ -435,7 +434,7 @@ function DetailService() {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
     var cashKredit = $("#cashKredit").val();
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#bayar").removeAttr("disabled");
@@ -461,7 +460,7 @@ function DetailService() {
     var kekurangan = total - pembayaran;
     var cashKredit = $("#cashKredit").val();
 
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
@@ -626,15 +625,15 @@ function DetailService() {
     }
 
     const request = {
-      cashCredit: cashCredit,
+      cashKredit: cashCredit,
       diskon: diskons,
       idCustomer: idCustomer,
       idSalesman: markettingId,
       keterangan: keterangan,
+      kekurangan: kekurangan,
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
-      kekurangan: kekurangan,
       sisa: sisa,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
@@ -711,6 +710,103 @@ function DetailService() {
   // END ALL SALESMAN
   // END TRANSAKSI
 
+  // ADD TGL KONF
+  const [tglKonf, settglKonf] = useState("");
+
+  const addTglKonf = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      date: tglKonf,
+      id_service: param.id,
+    };
+
+    await axios
+      .post(`${API_SERVICE}/konfirm`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Tambah Tgl Konfirmasi Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log("Error : " + err);
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Tgl Konfirmasi Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      });
+  };
+  // END ADD TGL KONF
+
+  // GET ALL TGL KONF
+  const [tglKonfs, settglKonfs] = useState([]);
+
+  // GET ALL BARANG
+  const allTglKonf = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/tgl_konfirm?id=` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      settglKonfs(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  // DELETE BARANG
+  const deleteTglKonf = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_SERVICE}/tgl_konfirm/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
+
+  useEffect(() => {
+    allTglKonf();
+  }, []);
+  // END GET ALL TGL KONF
+
   // GET SERVICE
   useEffect(() => {
     axios
@@ -730,6 +826,7 @@ function DetailService() {
         console.log(error);
       });
   }, []);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -881,7 +978,7 @@ function DetailService() {
                         Tgl Masuk
                       </label>
                       <input
-                        type="text"
+                        type="date"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Tanggal Masuk"
                         readOnly
@@ -895,7 +992,7 @@ function DetailService() {
                         Tgl Jadi
                       </label>
                       <input
-                        type="text"
+                        type="date"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Tgl Jadi"
                         readOnly
@@ -903,12 +1000,55 @@ function DetailService() {
                     </div>
                   </li>
                   <li className="mb-3">
+                    <form onSubmit={addTglKonf} className="flex items-center">
+                      <label htmlFor="" className="w-32 text-center text-sm">
+                        Tgl Konf
+                      </label>
+                      <div className="w-full">
+                        {tglKonfs.length > 0 ? (
+                          <>
+                            <ol>
+                              {tglKonfs.map((row) => (
+                                <li className="mb-2 flex justify-between items-center">
+                                  <span>
+                                    {new Date(row.tglKonf).toLocaleDateString()}
+                                  </span>
+                                  <IconButton
+                                    size="sm"
+                                    color="red"
+                                    type="button"
+                                    onClick={() => deleteTglKonf(row.id)}
+                                  >
+                                    <TrashIcon className="w-6 h-6 white" />
+                                  </IconButton>
+                                </li>
+                              ))}
+                            </ol>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        <div className="flex gap-2 w-full">
+                          <input
+                            type="date"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Tgl Konf"
+                            onChange={(e) => settglKonf(e.target.value)}
+                          />
+                          <IconButton size="lg" color="blue" type="submit">
+                            <PlusIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </div>
+                      </div>
+                    </form>
+                  </li>
+                  <li className="mb-3">
                     <div className="flex items-center">
                       <label htmlFor="" className="w-32 text-center text-sm">
                         Tgl Ambil
                       </label>
                       <input
-                        type="text"
+                        type="date"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Tgl Ambil"
                         readOnly
@@ -1169,6 +1309,7 @@ function DetailService() {
                               </label>
                               <select
                                 id="status"
+                                value={statusEnd}
                                 onChange={(e) => setstatusEnd(e.target.value)}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 darkselect:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required
@@ -1405,7 +1546,6 @@ function DetailService() {
                           </tbody>
                         </table>
                       </Card>
-
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 mb-12">
                         <div className="mt-6">
                           <Input

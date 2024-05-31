@@ -152,12 +152,12 @@ function DataService() {
                           <span className="block">{row.type}</span>{" "}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.tanggalMasuk}
+                          {new Date(row.tanggalMasuk).toLocaleDateString()}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {tglKonfirms.map((down, idx) => (
                             <ul key={idx}>
-                              <li>{down.tglKonf}</li>
+                              <li>{new Date(down.tglKonf).toLocaleDateString()}</li>
                             </ul>
                           ))}{" "}
                         </td>
