@@ -135,6 +135,7 @@ import HistoryPoint from "./views/itc/point/HistoryPoint.js";
 import DataFinish from "./views/itc/finish/DataFinish.js";
 import DataBon from "./views/itc/bon/DataBon.js";
 import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
+import DetailServiceTeknisi from "./views/itc/service/DetailServiceTeknisi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -790,6 +791,11 @@ function App() {
             <PrivateRoute
               path="/detail_service/:id"
               component={DetailService}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_service_teknisi/:id"
+              component={DetailServiceTeknisi}
               isAuthenticated={true}
             />
             <PrivateRoute
