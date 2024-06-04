@@ -47,13 +47,44 @@ function DataService() {
     }
   }, [services]);
 
+  const [tglKonfirm, setTglKonfirm] = useState([]);
+
+  const tglKonfirmasi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/tgl_konfirm?id=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchTglKonfirm = async () => {
+      const tglList = await Promise.all(
+        services.map(async (service) => {
+          const tglData = await tglKonfirmasi(service.idTT);
+          return tglData;
+        })
+      );
+      setTglKonfirm(tglList);
+    };
+
+    fetchTglKonfirm();
+  }, [services]);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Data Service
+            Data Service 1
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -104,33 +135,45 @@ function DataService() {
               </thead>
               <tbody>
                 {services.length > 0 ? (
-                  services.map((row, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">
-                        {row.customer.nama_customer}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.customer.alamat}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.produk} <span className="block">{row.merk}</span>{" "}
-                        <span className="block">{row.type}</span>{" "}
-                      </td>
-                      <td className="text-sm py-2 px-3">{row.tanggalMasuk}</td>
-                      <td className="text-sm py-2 px-3">{row.tanggalMasuk}</td>
-                      <td className="text-sm py-2 px-3">{row.statusEnd}</td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <a href={"/detail_service/" + row.idTT}>
-                            <IconButton size="md" color="light-blue">
-                              <InformationCircleIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                  services.map((row, index) => {
+                    const tglKonfirms = tglKonfirm[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {row.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.customer.alamat}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.produk} <span className="block">{row.merk}</span>{" "}
+                          <span className="block">{row.type}</span>{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {new Date(row.tanggalMasuk).toLocaleDateString()}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {tglKonfirms.map((down, idx) => (
+                            <ul key={idx}>
+                              <li>{new Date(down.tglKonf).toLocaleDateString()}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">{row.statusEnd}</td>
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <div className="flex flex-row gap-3">
+                            <a href={"/detail_service/" + row.idTT}>
+                              <IconButton size="md" color="light-blue">
+                                <InformationCircleIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td

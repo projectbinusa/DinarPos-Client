@@ -29,13 +29,13 @@ function DataBon() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/data_bon-barang">
+            <a href="/bon_barang">
               <span>DataBon</span>
             </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <a href="/add_bonbarang" className="float-right mb-5">
+          <a href="/add_bon_barang" className="float-right mb-5">
             <Button variant="gradient" color="blue">
               Tambah
             </Button>
