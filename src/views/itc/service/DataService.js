@@ -78,13 +78,24 @@ function DataService() {
     fetchTglKonfirm();
   }, [services]);
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Data Service 1
+            Data Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -152,12 +163,14 @@ function DataService() {
                           <span className="block">{row.type}</span>{" "}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {new Date(row.tanggalMasuk).toLocaleDateString()}
+                          {formatDate(row.tanggalMasuk)}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {tglKonfirms.map((down, idx) => (
                             <ul key={idx}>
-                              <li>{new Date(down.tglKonf).toLocaleDateString()}</li>
+                              <li>
+                                {formatDate(down.tglKonf)}
+                              </li>
                             </ul>
                           ))}{" "}
                         </td>
