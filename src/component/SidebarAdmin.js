@@ -1183,19 +1183,9 @@ function SidebarAdmin() {
                   poin{" "}
                 </ListItem>
               </a>
-              <a href="/garansi">
-                <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                  garansi{" "}
-                </ListItem>
-              </a>
               <a href="/ubah_password" className="mb-5">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   ubah password
-                </ListItem>
-              </a>
-              <a href="/edit_data">
-                <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                  edit data{" "}
                 </ListItem>
               </a>
             </List>
@@ -2305,24 +2295,34 @@ function SidebarAdmin() {
                 take over
               </ListItem>
             </a>
+            <a href="/garansi">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                Garansi
+              </ListItem>
+            </a>
+            <a href="/bon_barang">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                Bon Barang
+              </ListItem>
+            </a>
             <a href="/data_poin_teknisi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 poin
               </ListItem>
             </a>
-            <a href="/data_bon_barang">
+            <a href="/history_poin">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                bon barang
+                History Point
               </ListItem>
             </a>
-            <a href="/garansi">
+            <a href="/poin_teknisi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                garansi
+                poin teknisi
               </ListItem>
             </a>
-            <a href="/edit_data">
+            <a href="/finish">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                edit data{" "}
+                finish
               </ListItem>
             </a>
             <a href="/ubah_password" className="mb-5">

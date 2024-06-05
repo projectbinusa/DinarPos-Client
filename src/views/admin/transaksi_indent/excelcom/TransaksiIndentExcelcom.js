@@ -10,16 +10,18 @@ import $ from "jquery";
 import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import axios from "axios";
-import { CheckIcon, PencilIcon } from "@heroicons/react/24/outline";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   API_BARANG_TRANSAKSI_INDENT,
-  API_TRANSAKSI_INDENT_EXCELCOM,
+  API_TRANSAKSI_INDENT_DINARPOS,
 } from "../../../../utils/BaseUrl";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
-function TransaksiIndentExcelcom() {
+function TransaksiIndentDinarpos() {
   const tableRef = useRef(null);
   const [datas, setdatas] = useState([]);
+
+  //   const history = useHistory();
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -31,7 +33,7 @@ function TransaksiIndentExcelcom() {
 
   const getAll = async () => {
     try {
-      const response = await axios.get(`${API_TRANSAKSI_INDENT_EXCELCOM}`, {
+      const response = await axios.get(`${API_TRANSAKSI_INDENT_DINARPOS}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setdatas(response.data.data);
@@ -87,7 +89,7 @@ function TransaksiIndentExcelcom() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Data Transaksi Indent Excelcom
+            Data Transaksi Indent Dinarpos
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -100,14 +102,14 @@ function TransaksiIndentExcelcom() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/transaksi_indent_excelcom">
-              <span>Indent Excelcom</span>
+            <a href="/transaksi_indent_dinarpos">
+              <span>Indent Dinarpos</span>
             </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="block">
-            <a href="/add_transaksi_indent_excelcom">
+            <a href="/add_transaksi_indent_dinarpos">
               <Button variant="gradient" color="blue">
                 Tambah
               </Button>
@@ -199,7 +201,7 @@ function TransaksiIndentExcelcom() {
                         <td className="text-sm p-2 text-center">
                           <a
                             href={
-                              "/add_transaksi_from_indent_excelcom/" + data.id
+                              "/add_transaksi_from_indent_dinarpos/" + data.id
                             }
                           >
                             <IconButton size="md" color="light-blue">
@@ -229,4 +231,4 @@ function TransaksiIndentExcelcom() {
   );
 }
 
-export default TransaksiIndentExcelcom;
+export default TransaksiIndentDinarpos;

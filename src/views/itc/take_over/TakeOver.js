@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -7,23 +7,24 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { API_SERVICE } from "../../../utils/BaseUrl";
+import { API_SERVICE, API_TEKNISI } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function TakeOver() {
-  // Define state variables using useState
   const [idTT, setidTT] = useState(0);
+  const [idTeknisi, setidTeknisi] = useState(0);
   const [data, setdata] = useState(null);
   const [statusEnd, setStatusEnd] = useState("");
   const [taken, setTaken] = useState("");
+  const history = useHistory();
 
-  // Function to search for TT
   const searchTT = async () => {
     try {
       const response = await axios.get(`${API_SERVICE}/` + idTT, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      // Update state variables using setters
+
       setdata(response.data.data);
       setStatusEnd(response.data.data.statusEnd);
       setTaken(response.data.data.taken);
@@ -40,7 +41,70 @@ function TakeOver() {
     }
   };
 
-  console.log(taken);
+  const [teknisi, setteknisi] = useState([]);
+
+  const getAllTeknisi = async (e) => {
+    try {
+      const response = await axios.get(`${API_TEKNISI}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+
+      setteknisi(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getAllTeknisi();
+  }, []);
+
+  const takeOver = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      id_service: idTT,
+      id_teknisi: idTeknisi,
+    };
+
+    try {
+      await axios.post(`${API_SERVICE}/take_over`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Take Over Berhasil",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: error.response.data.data,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Take Over Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -126,17 +190,9 @@ function TakeOver() {
               </div>
             </>
           )}
-
           {data && statusEnd === "PROSES" && (
             <>
-              <form action="" class="border border-gray-400 rounded">
-                <input type="text" hidden id="id_tt2" value={data?.idTT} />
-                <input
-                  type="text"
-                  hidden
-                  id="id_teknisi"
-                  value={data?.teknisi?.id}
-                />
+              <form onSubmit={takeOver} class="border border-gray-400 rounded">
                 <div class="bg-gray-300 p-3">
                   <p>TT {data?.idTT} </p>
                 </div>
@@ -164,15 +220,17 @@ function TakeOver() {
                   <div class="flex items-center gap-2 w-full">
                     <select
                       id="teknisi"
+                      onChange={(e) => setidTeknisi(e.target.value)}
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required
                     >
-                      {/* <?php foreach ($teknisi as $row) : ?>
-                                          <option value="<?php echo $row->id_teknisi ?>"><?php echo $row->nama ?></option>
-                                          <?php endforeach ?> */}
+                      {teknisi.map((row) => (
+                        <option value={row.id}>{row.nama}</option>
+                      ))}
                     </select>
                     <button
                       class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-3 text-center rounded"
+                      type="submit"
                     >
                       TakeOver
                     </button>

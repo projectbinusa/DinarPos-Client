@@ -126,15 +126,16 @@ import DetailService from "./views/itc/service/DetailService.js";
 import DataRetur from "./views/itc/retur/DataRetur.js";
 import EntriRetur from "./views/itc/retur/EntriRetur.js";
 import TakeOver from "./views/itc/take_over/TakeOver.js";
-import DataPoin from "./views/itc/poin/DataPoin.js";
-import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
+import DataPoin from "./views/itc/point/DataPoin.js";
+import PointTeknisi from "./views/itc/point/PointTeknisi.js";
+import AddPoint from "./views/itc/point/AddPoint.js";
 import Garansi from "./views/itc/garansi/Garansi.js";
 import AddGaransi from "./views/itc/garansi/AddGaransi.js";
-import EditData from "./views/itc/edit_data/EditData.js";
+import HistoryPoint from "./views/itc/point/HistoryPoint.js";
+import DataFinish from "./views/itc/finish/DataFinish.js";
 import DataBon from "./views/itc/bon/DataBon.js";
 import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
-import EditBonBarang from "./views/itc/bon/EditBonBarang.js";
-import EditGaransi from "./views/itc/garansi/EditGaransi.js";
+import DetailServiceTeknisi from "./views/itc/service/DetailServiceTeknisi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -788,13 +789,13 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/data_service_taken"
-              component={DataServiceTaken}
+              path="/detail_service/:id"
+              component={DetailService}
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/detail_service/:id"
-              component={DetailService}
+              path="/detail_service_teknisi/:id"
+              component={DetailServiceTeknisi}
               isAuthenticated={true}
             />
             <PrivateRoute
@@ -836,7 +837,30 @@ function App() {
               component={DataPoin}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/poin_teknisi"
+              component={PointTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_point"
+              component={AddPoint}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/history_poin"
+              component={HistoryPoint}
+              isAuthenticated={true}
+            />
             {/* END POIN */}
+
+            {/* FINISH */}
+            <PrivateRoute
+              path="/finish"
+              component={DataFinish}
+              isAuthenticated={true}
+            />
+            {/* END FINISH */}
 
             {/* GARANSI */}
             <PrivateRoute
@@ -849,38 +873,20 @@ function App() {
               component={AddGaransi}
               isAuthenticated={true}
             />
-            <PrivateRoute
-              path="/edit_garansi"
-              component={EditGaransi}
-              isAuthenticated={true}
-            />
             {/* END GARANSI */}
 
             {/* BON BARANG */}
             <PrivateRoute
-              path="/data_bon_barang"
+              path="/bon_barang"
               component={DataBon}
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/add_bonbarang"
+              path="/add_bon_barang"
               component={AddBonBarang}
               isAuthenticated={true}
             />
-            <PrivateRoute
-              path="/edit_bonbarang"
-              component={EditBonBarang}
-              isAuthenticated={true}
-            />
             {/* END BON BARANG */}
-
-            {/* EDIT DATA */}
-            <PrivateRoute
-              path="/edit_data"
-              component={EditData}
-              isAuthenticated={true}
-            />
-            {/* END EDIT DATA */}
           </Switch>
         </main>
       </BrowserRouter>
