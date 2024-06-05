@@ -217,7 +217,7 @@ function AddBonBarang() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/data_bon_barang">
+            <a href="/bon_barang">
               <span>Bon Barang</span>
             </a>
             <span className="cursor-default">Tambah Stok Barang</span>
@@ -387,7 +387,7 @@ function AddBonBarang() {
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>
               </Button>
-              <a href="/stok_masuk_barang">
+              <a href="/bon_barang">
                 <Button variant="text" color="gray" className="mr-1">
                   <span>Kembali</span>
                 </Button>
