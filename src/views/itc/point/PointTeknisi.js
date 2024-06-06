@@ -9,7 +9,7 @@ import 'datatables.net-dt/css/jquery.dataTables.css';
 import 'datatables.net';
 
 const PointTeknisi = () => {
-    const [idTT, setidTT] = useState(0);
+    const [idTT, setIdTT] = useState(0);
     const [month, setMonth] = useState('');
     const [data, setData] = useState([]);
     const [points, setPoints] = useState([]);
@@ -63,7 +63,7 @@ const PointTeknisi = () => {
     };
 
     const filterMonth = () => {
-        axios.post('/admin/finish_filter', { month })
+        axios.post(`${API_SERVICE}/admin/finish_filter`, { month })
             .then((res) => {
                 const responseData = res.data;
                 setPoints(responseData);
@@ -82,7 +82,6 @@ const PointTeknisi = () => {
                         notCpu += item.nots;
                     }
                 });
-
             })
             .catch((err) => {
                 Swal.fire({
@@ -166,7 +165,7 @@ const PointTeknisi = () => {
                                     ) : (
                                         <tr>
                                             <td
-                                                colSpan="6"
+                                                colSpan="5"
                                                 className="text-sm text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
