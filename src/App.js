@@ -856,7 +856,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/history_poin"
+              path="/history_point"
               component={HistoryPoint}
               isAuthenticated={true}
             />
