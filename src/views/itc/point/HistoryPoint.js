@@ -8,96 +8,95 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import $ from 'jquery';
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
-import 'datatables.net';
-import 'datatables.net-bs4';
+// import { Line } from "react-chartjs-2";
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// } from 'chart.js';
+// import 'datatables.net';
+// import 'datatables.net-bs4';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// );
 
 function HistoryPoint() {
-  const [points, setPoints] = useState([]);
-  const [filteredPoints, setFilteredPoints] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const currentYear = new Date().getFullYear();
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [points, setPoints] = useState([]);
+  // const [filteredPoints, setFilteredPoints] = useState([]);
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
+  // const currentYear = new Date().getFullYear();
+  // const [searchTerm, setSearchTerm] = useState("");
 
-  const handleFilter = () => {
-    if (startDate && endDate) {
-      const filtered = points.filter(point => {
-        const pointDate = new Date(point.tanggal);
-        return pointDate >= new Date(startDate) && pointDate <= new Date(endDate);
-      });
-      setFilteredPoints(filtered);
-    } else {
-      setFilteredPoints(points);
-    }
-  };
+  // const handleFilter = () => {
+  //   if (startDate && endDate) {
+  //     const filtered = points.filter(point => {
+  //       const pointDate = new Date(point.tanggal);
+  //       return pointDate >= new Date(startDate) && pointDate <= new Date(endDate);
+  //     });
+  //     setFilteredPoints(filtered);
+  //   } else {
+  //     setFilteredPoints(points);
+  //   }
+  // };
 
-  // Mengelompokkan poin berdasarkan bulan
-  const monthlyPoints = Array(12).fill(0);
-  filteredPoints.forEach((point) => {
-    const month = new Date(point.tanggal).getMonth();
-    monthlyPoints[month] += point.poin;
-  });
+  // // Mengelompokkan poin berdasarkan bulan
+  // const monthlyPoints = Array(12).fill(0);
+  // filteredPoints.forEach((point) => {
+  //   const month = new Date(point.tanggal).getMonth();
+  //   monthlyPoints[month] += point.poin;
+  // });
 
-  // Menghitung total poin
-  const totalPoints = monthlyPoints.reduce((acc, cur) => acc + cur, 0);
+  // // Menghitung total poin
+  // const totalPoints = monthlyPoints.reduce((acc, cur) => acc + cur, 0);
 
-  const chartData = {
-    labels: [
-      "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
-      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ],
-    datasets: [
-      {
-        label: "Poin",
-        data: monthlyPoints,
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-      },
-    ],
-  };
+  // const chartData = {
+  //   labels: [
+  //     "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
+  //     "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  //   ],
+  //   datasets: [
+  //     {
+  //       label: "Poin",
+  //       data: monthlyPoints,
+  //       borderColor: "rgba(75, 192, 192, 1)",
+  //       backgroundColor: "rgba(75, 192, 192, 0.2)",
+  //     },
+  //   ],
+  // };
 
-  const chartOptions = {
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
+  // const chartOptions = {
+  //   scales: {
+  //     y: {
+  //       beginAtZero: true,
+  //     },
+  //   },
+  // };
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
+  // const handleSearch = (event) => {
+  //   setSearchTerm(event.target.value);
+  // };
   
 
-  useEffect(() => {
-    $('#tables').DataTable();
-  }, [filteredPoints]);
+  // useEffect(() => {
+  //   $('#tables').DataTable();
+  // }, [filteredPoints]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[19rem] pt-20 lg:pt-3 w-full">
+      {/* <div className="lg:ml-[19rem] pt-20 lg:pt-3 w-full">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             Riwayat Poin
@@ -227,7 +226,7 @@ function HistoryPoint() {
           </div>
         </div>
         <br />
-      </div>
+      </div> */}
     </section>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SidebarAdmin from "../../../component/SidebarAdmin";
+import SidebarAdmin from "../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Button,
@@ -14,7 +14,7 @@ import {
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
-import { API_SERVICE, API_TEKNISI } from "../../../utils/BaseUrl";
+import { API_SERVICE, API_TEKNISI } from "../../utils/BaseUrl";
 import {
   ArrowUpTrayIcon,
   ChatBubbleBottomCenterIcon,
@@ -88,6 +88,12 @@ function DetailServiceTeknisi() {
   const [ket, setket] = useState("");
   const [idTeknisi, setidTeknisi] = useState(0);
 
+  const [validasiNew, setvalidasiNew] = useState("");
+  const [solusiNew, setsolusiNew] = useState("");
+  const [statusNew, setstatusNew] = useState("");
+  const [ketNew, setketNew] = useState("");
+  const [idTeknisiNew, setidTeknisiNew] = useState(0);
+
   useEffect(() => {
     axios
       .get(
@@ -98,6 +104,7 @@ function DetailServiceTeknisi() {
       )
       .then((res) => {
         setidTeknisi(res.data.data.id);
+        setidTeknisiNew(res.data.data.id);
         console.log(res);
       })
       .catch((err) => {
@@ -117,7 +124,7 @@ function DetailServiceTeknisi() {
     };
 
     await axios
-      .post(`${API_SERVICE}/tambah_status`, request, {
+      .post(`${API_SERVICE}/tambah_status?id=` + param.id, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then(() => {
@@ -133,15 +140,49 @@ function DetailServiceTeknisi() {
       })
       .catch((err) => {
         console.log("Error : " + err);
-        // Swal.fire({
-        //   icon: "error",
-        //   title: "Tambah Status Gagal!",
-        //   showConfirmButton: false,
-        //   timer: 1500,
-        // });
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 1500);
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Status Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
+  };
+
+  const newStatus = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      id_teknisi: idTeknisiNew,
+      ket: ketNew,
+      solusi: solusiNew,
+      status: statusNew,
+      type: validasiNew,
+    };
+
+    await axios
+      .post(`${API_SERVICE}/proses/` + param.id, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Tambah Status Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log("Error : " + err);
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Status Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       });
   };
   // END ADD STATUS
@@ -203,6 +244,17 @@ function DetailServiceTeknisi() {
         console.log(err);
       });
   }, []);
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -649,28 +701,30 @@ function DetailServiceTeknisi() {
                   </thead>
                   <tbody>
                     {statusService.length > 0 ? (
-                      statusService.map((row, index) => (
-                        <tr key={index}>
-                          <td className="text-sm text-center py-2 border-gray-300 border">
-                            {row.tanggal}
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            {row.teknisi.nama}
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            {row.status}
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            {row.solusi}
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            {row.ket}
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
                       <>
-                        {" "}
+                        {statusService.map((row, index) => {
+                          return (
+                            <>
+                              <tr key={index}>
+                                <td className="text-sm text-center py-2 border-gray-300 border">
+                                  {formatDate(row.tanggal)}
+                                </td>
+                                <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                  {row.teknisi.nama}
+                                </td>
+                                <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                  {row.status}
+                                </td>
+                                <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                  {row.solusi}
+                                </td>
+                                <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                  {row.ket}
+                                </td>
+                              </tr>
+                            </>
+                          );
+                        })}
                         <tr>
                           <td className="text-sm text-center py-2 border-gray-300 border">
                             <IconButton
@@ -732,6 +786,77 @@ function DetailServiceTeknisi() {
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
                               required
                               onChange={(e) => setket(e.target.value)}
+                            >
+                              <option value="WT">WT</option>
+                              <option value="WS">WS</option>
+                              <option value="WC">WC</option>
+                            </select>
+                          </td>
+                        </tr>{" "}
+                      </>
+                    ) : (
+                      <>
+                        <tr>
+                          <td className="text-sm text-center py-2 border-gray-300 border">
+                            <IconButton
+                              color="blue"
+                              size="md"
+                              onClick={newStatus}
+                            >
+                              <PlusIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </td>
+                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                            Type <br />
+                            <input
+                              type="radio"
+                              id="validasi_U"
+                              name="validasi"
+                              value="U"
+                              onChange={(e) => setvalidasiNew(e.target.value)}
+                            />
+                            <label htmlFor="validasi_U" className="ml-1">
+                              U
+                            </label>
+                            <br />
+                            <input
+                              type="radio"
+                              id="validasi_I"
+                              name="validasi"
+                              value="I"
+                              onChange={(e) => setvalidasiNew(e.target.value)}
+                            />
+                            <label htmlFor="validasi_I" className="ml-1">
+                              I
+                            </label>
+                            <br />
+                          </td>
+                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                            <textarea
+                              cols="30"
+                              rows="3"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                              placeholder="Status"
+                              id="status"
+                              onChange={(e) => setstatusNew(e.target.value)}
+                            ></textarea>
+                          </td>
+                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                            <textarea
+                              cols="30"
+                              rows="3"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                              placeholder="Solusi"
+                              id="solusi"
+                              onChange={(e) => setsolusiNew(e.target.value)}
+                            ></textarea>
+                          </td>
+                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                            <select
+                              id="ket"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                              required
+                              onChange={(e) => setketNew(e.target.value)}
                             >
                               <option value="WT">WT</option>
                               <option value="WS">WS</option>
@@ -850,8 +975,10 @@ function DetailServiceTeknisi() {
       {/* MODAL PICTURE BEFORE */}
       <Dialog open={open} handler={handleOpen}>
         <DialogBody className="mt-4 ">
-            <h1><b>Picture Before</b></h1>
-            <hr />
+          <h1>
+            <b>Picture Before</b>
+          </h1>
+          <hr />
           <div className="flex justify-center items-center">
             <img src={datas?.fb} alt="" />
           </div>
@@ -872,8 +999,10 @@ function DetailServiceTeknisi() {
       {/* MODAL PICTURE AFTER */}
       <Dialog open={open2} handler={handleOpen2}>
         <DialogBody className="mt-4 ">
-            <h1><b>Picture After</b></h1>
-            <hr />
+          <h1>
+            <b>Picture After</b>
+          </h1>
+          <hr />
           <div className="flex justify-center items-center">
             <img src={datas?.fa} alt="" />
           </div>
