@@ -78,6 +78,17 @@ function DataService() {
     fetchTglKonfirm();
   }, [services]);
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -152,12 +163,14 @@ function DataService() {
                           <span className="block">{row.type}</span>{" "}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.tanggalMasuk}
+                          {formatDate(row.tanggalMasuk)}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {tglKonfirms.map((down, idx) => (
                             <ul key={idx}>
-                              <li>{down.tglKonf}</li>
+                              <li>
+                                {formatDate(down.tglKonf)}
+                              </li>
                             </ul>
                           ))}{" "}
                         </td>

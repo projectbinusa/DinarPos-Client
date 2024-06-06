@@ -10,6 +10,8 @@ import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { API_SERVICE, API_SERVICE_RETUR } from "../../../utils/BaseUrl";
+import axios from "axios";
 
 function DataRetur() {
   const tableRef = useRef(null);
@@ -23,11 +25,68 @@ function DataRetur() {
     $(tableRef.current).DataTable({});
   };
 
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE_RETUR}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setreturs(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
   useEffect(() => {
     if (returs && returs.length > 0) {
       initializeDataTable();
     }
   }, [returs]);
+
+  const [tglKonfirm, setTglKonfirm] = useState([]);
+
+  const tglKonfirmasi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/tgl_konfirm?id=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchTglKonfirm = async () => {
+      const tglList = await Promise.all(
+        returs.map(async (service) => {
+          const tglData = await tglKonfirmasi(service.idTT);
+          return tglData;
+        })
+      );
+      setTglKonfirm(tglList);
+    };
+
+    fetchTglKonfirm();
+  }, [returs]);
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -84,26 +143,45 @@ function DataRetur() {
               </thead>
               <tbody>
                 {returs.length > 0 ? (
-                  returs.map((row, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <a href={"/detail_service/" + index + 1}>
-                            <IconButton size="md" color="light-blue">
-                              <InformationCircleIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                  returs.map((row, index) => {
+                    const tglKonfirms = tglKonfirm[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{row.ttbaru.idTT}</td>
+                        <td className="text-sm py-2 px-3">{row.ttlama.idTT}</td>
+                        <td className="text-sm py-2 px-3">{row.ttbaru.nama}</td>
+                        <td className="text-sm py-2 px-3">
+                          {row.ttbaru.alamat}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.ttbaru.produk}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {formatDate(row.ttbaru.tanggalMasuk)}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {tglKonfirms.map((down, idx) => (
+                            <ul key={idx}>
+                              <li>{formatDate(down.tglKonf)}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>{" "}
+                        <td className="text-sm py-2 px-3">
+                          {row.ttbaru.statusEnd}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <div className="flex flex-row gap-3">
+                            <a href={"/detail_service/" + index + 1}>
+                              <IconButton size="md" color="light-blue">
+                                <InformationCircleIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td

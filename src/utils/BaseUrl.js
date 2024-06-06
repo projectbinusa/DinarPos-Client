@@ -96,3 +96,9 @@ export const API_SERVICE = `${url}/service`;
 // GARANSI
 export const API_GARANSI = `${url}/garansi`;
 
+// BON BARANG
+export const API_BON_BARANG = `${url}/bon_barang`;
+
+// SERVICE RETUR
+export const API_SERVICE_RETUR = `${url}/return/service`;
+

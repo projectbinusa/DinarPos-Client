@@ -2300,22 +2300,27 @@ function SidebarAdmin() {
                 Garansi
               </ListItem>
             </a>
+            <a href="/bon_barang">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                Bon Barang
+              </ListItem>
+            </a>
             <a href="/data_poin_teknisi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 poin
               </ListItem>
             </a>
-            <a href="/History_point">
+            <a href="/history_poin">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 History Point
               </ListItem>
             </a>
-            <a href="/PoinTeknisi">
+            <a href="/poin_teknisi">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 poin teknisi
               </ListItem>
             </a>
-            <a href="/Data_Finish">
+            <a href="/finish">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 finish
               </ListItem>

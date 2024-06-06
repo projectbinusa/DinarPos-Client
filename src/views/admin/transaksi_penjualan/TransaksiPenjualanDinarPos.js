@@ -682,29 +682,6 @@ function TransaksiPenjualanDinarPos() {
                 </button>
               </div>
             </div>
-            {/* <div>
-              <label
-                htmlFor="customer"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Customer
-              </label>
-              <ReactSelect
-                id="customer"
-                options={customer.map((down) => {
-                  return {
-                    value: down.id,
-                    label: down.nama_customer,
-                  };
-                })}
-                placeholder="Pilih Customer"
-                styles={customStyles}
-                onChange={(selectedOption) =>
-                  setcustomerId(selectedOption.value)
-                }
-              />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-            </div> */}
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
               <Button onClick={handleOpen} variant="gradient" color="blue">
