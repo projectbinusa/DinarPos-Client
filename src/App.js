@@ -136,6 +136,7 @@ import DataFinish from "./views/itc/finish/DataFinish.js";
 import DataBon from "./views/itc/bon/DataBon.js";
 import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
 import DetailServiceTeknisi from "./views/itc/service/DetailServiceTeknisi.js";
+import AddRetur from "./views/itc/retur/AddRetur.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -816,9 +817,16 @@ function App() {
               component={DataRetur}
               isAuthenticated={true}
             />
+
             <PrivateRoute
               path="/entri_retur"
               component={EntriRetur}
+              isAuthenticated={true}
+            />
+            
+            <PrivateRoute
+              path="/add_retur/:id"
+              component={AddRetur}
               isAuthenticated={true}
             />
             {/* END RETUR SERVICE */}
