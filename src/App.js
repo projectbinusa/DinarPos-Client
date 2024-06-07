@@ -136,6 +136,7 @@ import DataFinish from "./views/itc/finish/DataFinish.js";
 import DataBon from "./views/itc/bon/DataBon.js";
 import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
 import AddRetur from "./views/itc/retur/AddRetur.js";
+import DashboardTeknisi from "./views/itcteknisi/DashboardTeknisi.js";
 import DetailServiceTeknisi from "./views/itcteknisi/DetailServiceTeknisi.js";
 
 function App() {
@@ -882,6 +883,14 @@ function App() {
               isAuthenticated={true}
             />
             {/* END GARANSI */}
+
+            {/* Teknisi */}
+            <PrivateRoute
+              path="/Dashboard_Teknisi"
+              component={DashboardTeknisi}
+              isAuthenticated={true}
+            />
+            {/* END Teknisi */}
 
             {/* BON BARANG */}
             <PrivateRoute
