@@ -1,84 +1,151 @@
 import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  Input,
+  Typography,
+} from "@material-tailwind/react";
 import axios from "axios";
 import { API_SERVICE } from "../../../utils/BaseUrl";
-import Swal from "sweetalert2";
 
 const DataFinish = () => {
   const [month, setMonth] = useState("");
-  const [data, setData] = useState([]);
+  const today = new Date();
+  const monthss = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const currentDate = (monthss < 10 ? `0${monthss}` : monthss) + "-" + year;
+
+  const months = year + "-" + (monthss < 10 ? `0${monthss}` : monthss);
+
+  const [datas, setdatas] = useState([]);
   const [totalElektro, setTotalElektro] = useState(0);
   const [successElektro, setSuccessElektro] = useState(0);
   const [notElektro, setNotElektro] = useState(0);
+
   const [totalCpu, setTotalCpu] = useState(0);
   const [successCpu, setSuccessCpu] = useState(0);
   const [notCpu, setNotCpu] = useState(0);
 
-  const searchTT = async () => {
-    try {
-      const response = await axios.post(`${API_SERVICE}/admin/finish_filter`, { month }, {
+  let currentMonth = month;
+  if (month === "") {
+    currentMonth = months;
+    setMonth(currentMonth);
+  }
+
+  const dataFinish = async () => {
+    await axios
+      .get(`${API_SERVICE}/data-service?months=` + currentMonth, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setdatas(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      const responseData = response.data;
-      setData(responseData);
-
-      let totalElektro = 0, successElektro = 0, notElektro = 0;
-      let totalCpu = 0, successCpu = 0, notCpu = 0;
-
-      responseData.forEach((item) => {
-        if (item.team === "Elektro") {
-          totalElektro += item.ttl;
-          successElektro += item.success;
-          notElektro += item.nots;
-        } else if (item.team === "CPU") {
-          totalCpu += item.ttl;
-          successCpu += item.success;
-          notCpu += item.nots;
-        }
-      });
-
-      setTotalElektro(totalElektro);
-      setSuccessElektro(successElektro);
-      setNotElektro(notElektro);
-      setTotalCpu(totalCpu);
-      setSuccessCpu(successCpu);
-      setNotCpu(notCpu);
-
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Gagal!",
-        text: "Terjadi kesalahan saat mengambil data!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
   };
 
-  const Month = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agust", "Sep", "Okt", "Nov", "Des"];
+  const totalServiceCpu = async () => {
+    await axios
+      .get(`${API_SERVICE}/total-service-cpu?months=` + currentMonth, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setTotalCpu(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Error total service cpu : " + err);
+      });
+  };
 
-  const indonesianDate = (months) => {
-    const year = months.substring(0, 4);
-    const month = parseInt(months.substring(5, 7), 10);
+  const totalServiceElektro = async () => {
+    await axios
+      .get(`${API_SERVICE}/total-service-elektro?months=` + currentMonth, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setTotalElektro(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Error total service elektro : " + err);
+      });
+  };
 
-    if (month < 1 || month > 12) {
-      return "";
-    }
+  const successServiceCpu = async () => {
+    await axios
+      .get(`${API_SERVICE}/total-service-success-cpu?months=` + currentMonth, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setSuccessCpu(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Error total service success cpu : " + err);
+      });
+  };
 
-    return `${Month[month - 1]} ${year}`;
+  const successServiceElektro = async () => {
+    await axios
+      .get(
+        `${API_SERVICE}/total-service-success-elektro?months=` + currentMonth,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      )
+      .then((res) => {
+        setSuccessElektro(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Error total service success elektro : " + err);
+      });
+  };
+
+  const notServiceCpu = async () => {
+    await axios
+      .get(`${API_SERVICE}/total-service-not-cpu?months=` + currentMonth, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setNotCpu(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Error total service not cpu : " + err);
+      });
+  };
+
+  const notServiceElektro = async () => {
+    await axios
+      .get(`${API_SERVICE}/total-service-not-elektro?months=` + currentMonth, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setNotElektro(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Error total service not elektro : " + err);
+      });
   };
 
   useEffect(() => {
-    if (month) {
-      searchTT();
-    }
-  }, [month]);
+    dataFinish();
+    totalServiceCpu();
+    totalServiceElektro();
+    successServiceCpu();
+    successServiceElektro();
+    notServiceCpu();
+    notServiceElektro();
+  }, []);
 
-  const today = new Date();
-  const monthss = today.getMonth()+1;
-  const year = today.getFullYear();
-  const currentDate = monthss + "-" + year;
+  const handleClick = () => {
+    dataFinish();
+    totalServiceCpu();
+    totalServiceElektro();
+    successServiceCpu();
+    successServiceElektro();
+    notServiceCpu();
+    notServiceElektro();
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -90,7 +157,12 @@ const DataFinish = () => {
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
@@ -108,12 +180,11 @@ const DataFinish = () => {
               <Input
                 type="month"
                 label="Bulan"
-                value={month}
                 variant="outlined"
                 color="blue"
                 onChange={(e) => setMonth(e.target.value)}
               />
-              <Button variant="gradient" color="blue" onClick={searchTT}>
+              <Button variant="gradient" color="blue" onClick={handleClick}>
                 GO!
               </Button>
             </div>
@@ -123,41 +194,79 @@ const DataFinish = () => {
             </h1>
             <br />
             <div className="overflow-x-auto" id="tables_finish">
-              <table className="border border-collapse w-full" id="table_finish">
+              <table
+                className="border border-collapse w-full"
+                id="table_finish"
+              >
                 <thead>
                   <tr>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">No</th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Nama</th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Service Bulan Ini</th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Sukses</th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Tidak Sukses</th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">%</th>
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                      No
+                    </th>
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                      Nama
+                    </th>
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                      Service Bulan Ini
+                    </th>
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                      Sukses
+                    </th>
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                      Tidak Sukses
+                    </th>
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                      %
+                    </th>
                   </tr>
                 </thead>
-                {/* <tbody>
-                  {data.map((row, index) => {
-                    const all = row.ttl;
-                    const scs = row.success;
-                    const percent = scs !== 0 ? (scs / all) * 100 : 0;
+                <tbody>
+                  {datas.length > 0 ? (
+                    datas.map((row, index) => {
+                      const all = row.ttl;
+                      const scs = row.success;
+                      const percent = scs !== 0 ? (scs / all) * 100 : 0;
 
-                    return (
-                      <tr key={index}>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">{index + 1}</td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">{row.nama}</td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">{row.ttl}</td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          <span className="bg-primary py-1 px-2 text-white rounded">{row.success}</span>
-                        </td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          <span className="bg-red-500 py-1 px-2 text-white rounded">{row.nots}</span>
-                        </td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          {percent.toFixed(2)} %
+                      return (
+                        <tr key={index}>
+                          <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                            {index + 1}
+                          </td>
+                          <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                            {row.nama}
+                          </td>
+                          <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                            {row.ttl}
+                          </td>
+                          <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                            <span className="bg-blue-500 py-1 px-2 text-white rounded">
+                              {row.success}
+                            </span>
+                          </td>
+                          <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                            <span className="bg-red-500 py-1 px-2 text-white rounded">
+                              {row.nots}
+                            </span>
+                          </td>
+                          <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                            {percent.toFixed(2)} %
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <>
+                      <tr>
+                        <td
+                          colSpan="6"
+                          className="text-sm text-center capitalize py-3 bg-gray-100"
+                        >
+                          Tidak ada data
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody> */}
+                    </>
+                  )}
+                </tbody>
               </table>
             </div>
           </div>
@@ -167,15 +276,24 @@ const DataFinish = () => {
               <div className="bg-white px-2 rounded">
                 <br />
                 <p className="text-sm text-center">Bulan Ini</p>
-                <h1 className="text-3xl font-semibold text-center">{totalElektro}</h1>
+                <h1 className="text-3xl font-semibold text-center">
+                  {totalElektro}
+                </h1>
                 <br />
                 <hr />
                 <br />
                 <div className="flex items-center justify-center gap-2">
-                  <p className="bg-blue-500 py-1 px-2 text-white rounded">{successElektro}</p>
-                  <p className="bg-red-500 py-1 px-2 text-white rounded">{notElektro}</p>
+                  <p className="bg-blue-500 py-1 px-2 text-white rounded">
+                    {successElektro}
+                  </p>
+                  <p className="bg-red-500 py-1 px-2 text-white rounded">
+                    {notElektro}
+                  </p>
                   <p className="bg-green-500 py-1 px-2 text-white rounded">
-                    {totalElektro !== 0 ? ((successElektro / totalElektro) * 100).toFixed(2) : 0} %
+                    {totalElektro !== 0
+                      ? ((successElektro / totalElektro) * 100).toFixed(2)
+                      : 0}{" "}
+                    %
                   </p>
                 </div>
                 <br />
@@ -202,10 +320,17 @@ const DataFinish = () => {
               <hr />
               <br />
               <div className="flex items-center justify-center gap-2">
-                <p className="bg-blue-500 py-1 px-2 text-white rounded">{successCpu}</p>
-                <p className="bg-red-500 py-1 px-2 text-white rounded">{notCpu}</p>
+                <p className="bg-blue-500 py-1 px-2 text-white rounded">
+                  {successCpu}
+                </p>
+                <p className="bg-red-500 py-1 px-2 text-white rounded">
+                  {notCpu}
+                </p>
                 <p className="bg-green-500 py-1 px-2 text-white rounded">
-                  {totalCpu !== 0 ? ((successCpu / totalCpu) * 100).toFixed(2) : 0} %
+                  {totalCpu !== 0
+                    ? ((successCpu / totalCpu) * 100).toFixed(2)
+                    : 0}{" "}
+                  %
                 </p>
               </div>
               <br />
