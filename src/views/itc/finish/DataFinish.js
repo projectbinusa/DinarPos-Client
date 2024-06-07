@@ -75,6 +75,11 @@ const DataFinish = () => {
     }
   }, [month]);
 
+  const today = new Date();
+  const monthss = today.getMonth()+1;
+  const year = today.getFullYear();
+  const currentDate = monthss + "-" + year;
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -102,8 +107,10 @@ const DataFinish = () => {
             <div className="flex gap-2">
               <Input
                 type="month"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                label="Bulan"
                 value={month}
+                variant="outlined"
+                color="blue"
                 onChange={(e) => setMonth(e.target.value)}
               />
               <Button variant="gradient" color="blue" onClick={searchTT}>
@@ -112,7 +119,7 @@ const DataFinish = () => {
             </div>
             <br />
             <h1 id="mont" className="text-lg font-medium">
-              {indonesianDate(month)}
+              {currentDate}
             </h1>
             <br />
             <div className="overflow-x-auto" id="tables_finish">
@@ -127,7 +134,7 @@ const DataFinish = () => {
                     <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">%</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {data.map((row, index) => {
                     const all = row.ttl;
                     const scs = row.success;
@@ -150,7 +157,7 @@ const DataFinish = () => {
                       </tr>
                     );
                   })}
-                </tbody>
+                </tbody> */}
               </table>
             </div>
           </div>
