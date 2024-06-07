@@ -102,3 +102,5 @@ export const API_BON_BARANG = `${url}/bon_barang`;
 // SERVICE RETUR
 export const API_SERVICE_RETUR = `${url}/return/service`;
 
+// POINT
+export const API_POIN_SALESMAN_TANGGAL_EXCELCOM = `${url}/poin/salesman/tanggal/excelcom`;
