@@ -4,17 +4,20 @@ import {
   Breadcrumbs,
   Button,
   IconButton,
-  Input,
   Typography,
+  Input,
 } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
+import { API_POIN_SALESMAN_TANGGAL_EXCELCOM } from "../../../utils/BaseUrl";
 
 function DataPoin() {
   const tableRef = useRef(null);
   const [points, setpoints] = useState([]);
+
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -78,84 +81,66 @@ function DataPoin() {
                 variant="static"
                 color="blue"
                 size="md"
-                //   onChange={(e) => setidTT(e.target.value)}
                 placeholder="Cari Tanda Terima"
                 required
               />
               <Button variant="gradient" color="blue" size="sm">
                 GO!
               </Button>
-            </div>{" "}
+            </div>
             <br />
-            <div class="overflow-x-auto" id="tables_poin">
-              <table class="border border-collapse w-full" id="table_poin">
+            <div className="overflow-x-auto" id="tables_poin">
+              <table className="border border-collapse w-full" id="table_poin">
                 <thead>
                   <tr>
-                    <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
                       No
                     </th>
-                    <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
                       Teknisi
                     </th>
-                    <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
                       Total Poin
                     </th>
-                    <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
                       Nominal (Rp)
                     </th>
-                    <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
                       %
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      NizarRestu
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1%
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border"></td>
-                    <td class="text-sm text-right py-2 px-2 border-gray-300 border">
-                      <strong>Total</strong>
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1%
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border"></td>
-                    <td class="text-sm text-right py-2 px-2 border-gray-300 border">
-                      <strong>Rata-rata</strong>
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1
-                    </td>
-                    <td class="text-sm text-center py-2 px-2 border-gray-300 border">
-                      1%
-                    </td>
-                  </tr>
+                  {points.length > 0 ? (
+                    points.map((point, index) => (
+                      <tr key={index}>
+                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                          {index + 1}
+                        </td>
+                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                          {point.teknisi}
+                        </td>
+                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                          {point.total_poin}
+                        </td>
+                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                          {point.nominal}
+                        </td>
+                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                          {point.persentase}%
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                      >
+                        Tidak ada data
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -166,7 +151,7 @@ function DataPoin() {
               className="capitalize font-semibold"
             >
               History Poin{" "}
-            </Typography>{" "}
+            </Typography>
             <br />
             <hr /> <br /> <br />
             <div className="flex gap-2 items-center">
@@ -175,7 +160,8 @@ function DataPoin() {
                 variant="static"
                 color="blue"
                 size="md"
-                //   onChange={(e) => setidTT(e.target.value)}
+                value={tanggalAwal}
+                onChange={(e) => setTanggalAwal(e.target.value)}
                 placeholder="Masukkan Tanggal Awal"
                 required
               />
@@ -184,16 +170,17 @@ function DataPoin() {
                 variant="static"
                 color="blue"
                 size="md"
-                //   onChange={(e) => setidTT(e.target.value)}
+                value={tanggalAkhir}
+                onChange={(e) => setTanggalAkhir(e.target.value)}
                 placeholder="Masukkan Tanggal Akhir"
                 required
               />
               <div>
-                <IconButton size="md" color="light-blue">
+                <IconButton size="md" color="light-blue" onClick={handleSearch}>
                   <MagnifyingGlassIcon className="w-6 h-6 white" />
                 </IconButton>
               </div>
-            </div>{" "}
+            </div>
             <br />
             <div className="rounded p-1 w-full overflow-x-auto">
             <table
