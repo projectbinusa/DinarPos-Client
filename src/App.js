@@ -135,8 +135,8 @@ import HistoryPoint from "./views/itc/point/HistoryPoint.js";
 import DataFinish from "./views/itc/finish/DataFinish.js";
 import DataBon from "./views/itc/bon/DataBon.js";
 import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
-import DetailServiceTeknisi from "./views/itc/service/DetailServiceTeknisi.js";
 import AddRetur from "./views/itc/retur/AddRetur.js";
+import DetailServiceTeknisi from "./views/itcteknisi/DetailServiceTeknisi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -856,7 +856,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/history_poin"
+              path="/history_point"
               component={HistoryPoint}
               isAuthenticated={true}
             />

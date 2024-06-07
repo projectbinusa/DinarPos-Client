@@ -8,16 +8,10 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import $ from 'jquery';
-// import 'datatables.net';
-// import 'datatables.net-bs4';
-import { UserCircleIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
-import { API_TEKNISI } from "../../../utils/BaseUrl";
 // import { Line } from "react-chartjs-2";
 // import {
 //   Chart as ChartJS,
 //   CategoryScale,
-//   LinearScale,
 //   PointElement,
 //   LineElement,
 //   Title,
@@ -44,22 +38,6 @@ function HistoryPoint() {
   // const [endDate, setEndDate] = useState("");
   // const currentYear = new Date().getFullYear();
   // const [searchTerm, setSearchTerm] = useState("");
-
-
-  // useEffect(() => {
-  //   const fetchPoints = async () => {
-  //     try {
-  //       const response = await axios.get(`${API_TEKNISI}/history_point`, {
-  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //       });
-  //       setPoints(response.data);
-  //       setFilteredPoints(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching points data:", error);
-  //     }
-  //   };
-  //   fetchPoints();
-  // }, []);
 
   // const handleFilter = () => {
   //   if (startDate && endDate) {
@@ -118,8 +96,8 @@ function HistoryPoint() {
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[19rem] pt-20 lg:pt-3 w-full">
-        {/* <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
+      {/* <div className="lg:ml-[19rem] pt-20 lg:pt-3 w-full">
+        <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
             Riwayat Poin
           </Typography>
@@ -246,9 +224,9 @@ function HistoryPoint() {
               </CardBody>
             </Card>
           </div>
-        </div> */}
+        </div>
         <br />
-      </div>
+      </div> */}
     </section>
   );
 }

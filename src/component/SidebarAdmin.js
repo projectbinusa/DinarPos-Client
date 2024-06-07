@@ -2310,7 +2310,7 @@ function SidebarAdmin() {
                 poin
               </ListItem>
             </a>
-            <a href="/history_poin">
+            <a href="/history_point">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 History Point
               </ListItem>
