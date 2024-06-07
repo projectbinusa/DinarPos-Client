@@ -2325,9 +2325,14 @@ function SidebarAdmin() {
                 finish
               </ListItem>
             </a>
-            <a href="/ubah_password" className="mb-5">
+            <a href="/ubah_password">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 ubah password
+              </ListItem>
+            </a>
+            <a href="/Dashboard_Teknisi" className="mb-5">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                Dashboard Teknisi
               </ListItem>
             </a>
           </List>
