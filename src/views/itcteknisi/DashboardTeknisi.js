@@ -83,7 +83,6 @@ function DashboardTeknisi() {
                   <th className="text-sm py-2 px-3 font-semibold">Total Point</th>
                   <th className="text-sm py-2 px-3 font-semibold">Created Date</th>
                   <th className="text-sm py-2 px-3 font-semibold">Updated Date</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
