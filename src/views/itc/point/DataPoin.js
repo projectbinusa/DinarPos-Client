@@ -16,8 +16,9 @@ import { API_POIN_SALESMAN_TANGGAL_EXCELCOM } from "../../../utils/BaseUrl";
 
 function DataPoin() {
   const tableRef = useRef(null);
-  const [points, setpoints] = useState([]);
-
+  const [points, setPoints] = useState([]);
+  const [tanggalAwal, setTanggalAwal] = useState("");
+  const [tanggalAkhir, setTanggalAkhir] = useState("");
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -27,11 +28,37 @@ function DataPoin() {
     $(tableRef.current).DataTable({});
   };
 
+  // GET ALL
+  const getAll = async () => {
+    try {
+      const response = await axios.get(API_POIN_SALESMAN_TANGGAL_EXCELCOM, {
+        params: {
+          tanggal_awal: tanggalAwal,
+          tanggal_akhir: tanggalAkhir,
+        },
+        headers: {
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
+      });
+      setPoints(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
   useEffect(() => {
     if (points && points.length > 0) {
       initializeDataTable();
     }
   }, [points]);
+
+  const handleSearch = () => {
+    getAll();
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -66,11 +93,10 @@ function DataPoin() {
               >
                 Poin{" "}
               </Typography>
-              <a href="/add_point"> 
-              <Button variant="gradient" color="blue">
-          
-                Input{" "}
-              </Button>
+              <a href="/add_point">
+                <Button variant="gradient" color="blue">
+                  Input{" "}
+                </Button>
               </a>
             </div>
             <br /> <hr /> <br />
@@ -183,46 +209,56 @@ function DataPoin() {
             </div>
             <br />
             <div className="rounded p-1 w-full overflow-x-auto">
-            <table
-              id="example_data"
-              ref={tableRef}
-              className="rounded-sm table-auto w-full"
-            >
-              <thead className="bg-blue-500 text-white">
-                <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Tgl </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Poin </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nominal </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Ket </th>
-                </tr>
-              </thead>
-              <tbody>
-                {points.length > 0 ? (
-                  points.map((row, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                    </tr>
-                  ))
-                ) : (
+              <table
+                id="example_data"
+                ref={tableRef}
+                className="rounded-sm table-auto w-full"
+              >
+                <thead className="bg-blue-500 text-white">
                   <tr>
-                    <td
-                      colSpan="6"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
-                    >
-                      Tidak ada data
-                    </td>
+                    <th className="text-sm py-2 px-3 font-semibold">No</th>
+                    <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
+                    <th className="text-sm py-2 px-3 font-semibold">Tgl</th>
+                    <th className="text-sm py-2 px-3 font-semibold">Poin</th>
+                    <th className="text-sm py-2 px-3 font-semibold">Nominal</th>
+                    <th className="text-sm py-2 px-3 font-semibold">Ket</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {points.length > 0 ? (
+                    points.map((point, index) => (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.teknisi}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.tgl}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.poin}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.nominal}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.keterangan}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                      >
+                        Tidak ada data
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </main>
       </div>
