@@ -104,3 +104,6 @@ export const API_SERVICE_RETUR = `${url}/return/service`;
 
 // POINT
 export const API_POIN_SALESMAN_TANGGAL_EXCELCOM = `${url}/poin/salesman/tanggal/excelcom`;
+
+// EDIT DATA
+export const API_EDIT_DATA = `${url}/edit_data`;

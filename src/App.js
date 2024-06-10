@@ -138,6 +138,7 @@ import AddBonBarang from "./views/itc/bon/AddBonBarang.js";
 import AddRetur from "./views/itc/retur/AddRetur.js";
 import DashboardTeknisi from "./views/itcteknisi/DashboardTeknisi.js";
 import DetailServiceTeknisi from "./views/itcteknisi/DetailServiceTeknisi.js";
+import EditData from "./views/itc/edit_data/EditData.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -824,7 +825,7 @@ function App() {
               component={EntriRetur}
               isAuthenticated={true}
             />
-            
+
             <PrivateRoute
               path="/add_retur/:id"
               component={AddRetur}
@@ -904,6 +905,14 @@ function App() {
               isAuthenticated={true}
             />
             {/* END BON BARANG */}
+
+            {/* EDIT DATA */}
+            <PrivateRoute
+              path="/edit_data"
+              component={EditData}
+              isAuthenticated={true}
+            />
+            {/* END EDIT DATA */}
           </Switch>
         </main>
       </BrowserRouter>
