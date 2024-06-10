@@ -139,6 +139,7 @@ import AddRetur from "./views/itc/retur/AddRetur.js";
 import DashboardTeknisi from "./views/itcteknisi/DashboardTeknisi.js";
 import DetailServiceTeknisi from "./views/itcteknisi/DetailServiceTeknisi.js";
 import EditData from "./views/itc/edit_data/EditData.js";
+import EditGaransi from "./views/itc/garansi/EditGaransi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -881,6 +882,11 @@ function App() {
             <PrivateRoute
               path="/add_garansi"
               component={AddGaransi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_garansi/:id"
+              component={EditGaransi}
               isAuthenticated={true}
             />
             {/* END GARANSI */}
