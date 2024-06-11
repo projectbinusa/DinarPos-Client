@@ -197,7 +197,7 @@ function EditData() {
     };
 
     try {
-      await axios.put(`${API_EDIT_DATA}/update_tt_service/` + idTT, request, {
+      await axios.put(`${API_EDIT_DATA}/update_tt_service/` + idTT3, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       Swal.fire({
