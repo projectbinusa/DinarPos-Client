@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -7,8 +7,83 @@ import {
   Textarea,
   Typography,
 } from "@material-tailwind/react";
+import {
+  useHistory,
+  useParams,
+} from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
+import { API_GARANSI } from "../../../utils/BaseUrl";
+import Swal from "sweetalert2";
 
 function EditGaransi() {
+  const [namaBrg, setnamaBrg] = useState("");
+  const [merek, setmerek] = useState("");
+  const [masukKe, setmasukKe] = useState("");
+  const [kerusakan, setkerusakan] = useState("");
+  const [idTT, setidTT] = useState(0);
+  const [tglMasuk, settglMasuk] = useState("");
+
+  const param = useParams();
+  const history = useHistory();
+
+  useEffect(() => {
+    axios
+      .get(`${API_GARANSI}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setnamaBrg(response.namaBrg);
+        setmerek(response.merek);
+        setmasukKe(response.masukKe);
+        setkerusakan(response.kerusakan);
+        setidTT(response.serviceBarang.idTT);
+        settglMasuk(response.tanggalMasuk);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  // UPDATE GARANSI
+  const editGaransi = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      id_tt: idTT,
+      kerusakan: kerusakan,
+      masukKe: masukKe,
+      merek: merek,
+      namaBrg: namaBrg,
+      tanggalMasuk: tglMasuk,
+    };
+
+    await axios
+      .put(`${API_GARANSI}/update/` + param.id, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Data Berhasil Diubah!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        history.push("/garansi");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((error) => {
+        if (error.ressponse && error.response.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        } else {
+          console.log(error);
+        }
+      });
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -35,7 +110,7 @@ function EditGaransi() {
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form>
+          <form onSubmit={editGaransi}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
                 label="Nama Barang"
@@ -43,6 +118,8 @@ function EditGaransi() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Nama Barang"
+                defaultValue={namaBrg}
+                onChange={(e) => setnamaBrg(e.target.value)}
               />
               <Input
                 label="Merek"
@@ -50,6 +127,8 @@ function EditGaransi() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Merek"
+                defaultValue={merek}
+                onChange={(e) => setmerek(e.target.value)}
               />
               <Input
                 label="TGL Masuk"
@@ -58,6 +137,8 @@ function EditGaransi() {
                 size="lg"
                 placeholder="Masukkan TGL Masuk"
                 type="date"
+                defaultValue={tglMasuk}
+                onChange={(e) => settglMasuk(e.target.value)}
               />
               <Input
                 label="Masuk ke"
@@ -65,6 +146,8 @@ function EditGaransi() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Masuk ke"
+                defaultValue={masukKe}
+                onChange={(e) => setmasukKe(e.target.value)}
               />
               <Input
                 label="ID TT"
@@ -73,6 +156,8 @@ function EditGaransi() {
                 size="lg"
                 type="number"
                 placeholder="Masukkan ID TT"
+                defaultValue={idTT}
+                onChange={(e) => setidTT(e.target.value)}
               />
               <div>
                 <Textarea
@@ -81,6 +166,8 @@ function EditGaransi() {
                   placeholder="Masukkan Kerusakan"
                   variant="static"
                   color="blue"
+                  defaultValue={kerusakan}
+                  onChange={(e) => setkerusakan(e.target.value)}
                 />
               </div>
             </div>

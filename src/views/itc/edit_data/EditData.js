@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import {
+  BookmarkIcon,
   MagnifyingGlassIcon,
   PencilIcon,
   TrashIcon,
@@ -127,7 +128,65 @@ function EditData() {
     }
   };
 
+  // UPDATE POIN
+  const [idTT2, setidTT2] = useState(0);
+  const [poins, setpoins] = useState([]);
+
+  const searchPoinsService = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE}/status/` + idTT2, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+
+      setpoins(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      if (error.response.data.code === 404) {
+        Swal.fire({
+          icon: "info",
+          title: "Data Tidak Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      console.log("get all", error.response.data.code);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
+  };
+
+  useEffect(() => {
+    searchPoinsService();
+  }, []);
+
   // UPDATE ID TT
+  const [idTT3, setidTT3] = useState(0);
+  const [data3, setdata3] = useState(null);
+
+  const searchTT3 = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE}/` + idTT3, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+
+      setdata3(response.data.data);
+    } catch (error) {
+      if (error.response.data.code === 404) {
+        Swal.fire({
+          icon: "info",
+          title: "Data Tidak Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      console.log("get all", error.response.data.code);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
+  };
+
   const [idTandaTerima, setidTandaTerima] = useState(0);
 
   const updateTandaTerima = async (e) => {
@@ -166,7 +225,33 @@ function EditData() {
     }
   };
 
-  // UPDATE STATUS SERVICE
+  // UPDATE STATUS TANDA TERIMA SERVICE
+  const [idTT4, setidTT4] = useState(0);
+  const [data4, setdata4] = useState(null);
+
+  const searchTT4 = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE}/` + idTT4, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+
+      setdata4(response.data.data);
+    } catch (error) {
+      if (error.response.data.code === 404) {
+        Swal.fire({
+          icon: "info",
+          title: "Data Tidak Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      console.log("get all", error.response.data.code);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
+  };
+
   const [status, setstatus] = useState("");
 
   const updateStatus = async (e) => {
@@ -210,11 +295,12 @@ function EditData() {
   };
 
   // HAPUS STATUS
+  const [idTT5, setidTT5] = useState(0);
   const [dataStatus, setdataStatus] = useState([]);
 
   const searchStatusService = async () => {
     try {
-      const response = await axios.get(`${API_SERVICE}/status/` + idTT, {
+      const response = await axios.get(`${API_SERVICE}/status/` + idTT5, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
 
@@ -489,15 +575,15 @@ function EditData() {
                   color="blue"
                   size="lg"
                   placeholder="Cari Tanda Terima"
-                  onChange={(e) => setidTT(e.target.value)}
+                  onChange={(e) => setidTT2(e.target.value)}
                 />
-                <IconButton onClick={searchTT} color="blue">
+                <IconButton onClick={searchPoinsService} color="blue">
                   <MagnifyingGlassIcon className="w-6 h-6" />
                 </IconButton>
               </div>
               <br />
               <div id="resultPoin">
-                {data ? (
+                {poins.length > 0 ? (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
                       <table className="border border-collapse w-full">
@@ -510,14 +596,41 @@ function EditData() {
                               Poin
                             </th>
                             <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
-                              Keterangan
+                              Ket
                             </th>
                             <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
                               Aksi
                             </th>
                           </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                          {poins.map((row, index) => (
+                            <tr key={index}>
+                              <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                                {row.service.teknisi.nama}
+                              </td>
+                              <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                                <Input
+                                  variant="outlined"
+                                  size="md"
+                                  color="blue"
+                                  value={row.service.teknisi.nama}
+                                />
+                              </td>
+                              <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                                {row.service.teknisi.nama}
+                              </td>
+                              <td className="text-sm text-center py-2 px-2 border-gray-300 border">
+                                <IconButton
+                                  color="blue"
+                                  onClick={() => hapusStatus(row.id)}
+                                >
+                                  <BookmarkIcon className="w-6 h-6" />
+                                </IconButton>{" "}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
                       </table>
                     </div>
                   </>
@@ -542,15 +655,15 @@ function EditData() {
                   color="blue"
                   size="lg"
                   placeholder="Cari Tanda Terima"
-                  onChange={(e) => setidTT(e.target.value)}
+                  onChange={(e) => setidTT3(e.target.value)}
                 />
-                <IconButton onClick={searchTT} color="blue">
+                <IconButton onClick={searchTT3} color="blue">
                   <MagnifyingGlassIcon className="w-6 h-6" />
                 </IconButton>
               </div>
               <br />
               <div id="resultTandaTerima">
-                {data ? (
+                {data3 ? (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
                       <ol>
@@ -562,7 +675,7 @@ function EditData() {
                             >
                               TT Lama
                             </label>
-                            <p className="w-full">{data?.idTT}</p>
+                            <p className="w-full">{data3?.idTT}</p>
                           </div>
                         </li>
                         <li className="mb-2">
@@ -573,7 +686,7 @@ function EditData() {
                             >
                               Nama
                             </label>
-                            <p className="w-full">{data?.nama}</p>
+                            <p className="w-full">{data3?.nama}</p>
                           </div>
                         </li>
                         <li className="mb-2">
@@ -627,15 +740,15 @@ function EditData() {
                   color="blue"
                   size="lg"
                   placeholder="Cari Tanda Terima"
-                  onChange={(e) => setidTT(e.target.value)}
+                  onChange={(e) => setidTT4(e.target.value)}
                 />
-                <IconButton onClick={searchTT} color="blue">
+                <IconButton onClick={searchTT4} color="blue">
                   <MagnifyingGlassIcon className="w-6 h-6" />
                 </IconButton>
               </div>
               <br />
               <div id="resultStatusTandaTerima">
-                {data ? (
+                {data4 ? (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
                       <ol>
@@ -647,7 +760,7 @@ function EditData() {
                             >
                               TT Lama
                             </label>
-                            <p className="w-full"> {data?.idTT}</p>
+                            <p className="w-full"> {data4?.idTT}</p>
                           </div>
                         </li>
                         <li className="mb-2">
@@ -658,7 +771,7 @@ function EditData() {
                             >
                               Status
                             </label>
-                            <p className="w-full">{data?.statusEnd}</p>
+                            <p className="w-full">{data4?.statusEnd}</p>
                           </div>
                         </li>
                         <li className="mb-2">
@@ -718,7 +831,7 @@ function EditData() {
                   color="blue"
                   size="lg"
                   placeholder="Cari Tanda Terima"
-                  onChange={(e) => setidTT(e.target.value)}
+                  onChange={(e) => setidTT5(e.target.value)}
                 />
                 <IconButton onClick={searchStatusService} color="blue">
                   <MagnifyingGlassIcon className="w-6 h-6" />

@@ -1,13 +1,14 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs,
-   Button,
-    Input,
-    Textarea,
-   Typography,
-  } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  Input,
+  Textarea,
+  Typography,
+} from "@material-tailwind/react";
 import { useHistory } from "react-router-dom";
-import { API_GARANSI } from "../../../utils/BaseUrl";
+import { API_GARANSI, API_SERVICE } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { API_CUSTOMER } from "../../../utils/BaseUrl";
@@ -18,48 +19,20 @@ function AddGaransi() {
   const [merek, setMerek] = useState("");
   const [tanggalMasuk, setTanggalMasuk] = useState("");
   const [masukKe, setMasukKe] = useState("");
-  const [id_tt, setIdTt] = useState("");
+  const [idTT, setIdTt] = useState(0);
   const [kerusakan, setKerusakan] = useState("");
-
-  const [values, setvalues] = useState("");
-  const [options, setoptions] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const validateInputs = () => {
-    if (!namaBrg || !merek || !tanggalMasuk || !masukKe || !id_tt || !kerusakan) {
-      Swal.fire({
-        icon: "warning",
-        title: "Semua field harus diisi",
-        showConfirmButton: true,
-      });
-      return false;
-    }
-    if (isNaN(id_tt)) {
-      Swal.fire({
-        icon: "warning",
-        title: "ID TT harus berupa angka",
-        showConfirmButton: true,
-      });
-      return false;
-    }
-    return true;
-  };
 
   const addGaransi = async (e) => {
     e.preventDefault();
-
-    if (!validateInputs()) return;
 
     const request = {
       namaBrg: namaBrg,
       merek: merek,
       tanggalMasuk: tanggalMasuk,
       masukKe: masukKe,
-      id_tt: parseInt(id_tt),
+      id_tt: idTT,
       kerusakan: kerusakan,
     };
-
-    console.log("Mengirim data ke server:", request);
 
     try {
       await axios.post(`${API_GARANSI}/add`, request, {
@@ -99,14 +72,14 @@ function AddGaransi() {
     }
   };
 
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+
   const handle = async () => {
     if (values.trim() !== "") {
-      const response = await fetch(
-        `${API_CUSTOMER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
+      const response = await fetch(`${API_SERVICE}/taken/N`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
       const data = await response.json();
       setoptions(data.data);
       console.log(data);
@@ -117,14 +90,12 @@ function AddGaransi() {
 
   useEffect(() => {
     handle();
-  }, [currentPage, values]);
+  }, [values]);
 
   const handleChange = (event) => {
     setvalues(event.target.value);
-    setCurrentPage(1);
   };
 
-  
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -160,7 +131,6 @@ function AddGaransi() {
                 size="lg"
                 placeholder="Masukkan Nama Barang"
                 name="namaBrg"
-                // value={namaBrg}
                 onChange={(e) => setNamaBrg(e.target.value)}
               />
               <Input
@@ -170,7 +140,6 @@ function AddGaransi() {
                 size="lg"
                 placeholder="Masukkan Merek"
                 name="merek"
-                // value={merek}
                 onChange={(e) => setMerek(e.target.value)}
               />
               <Input
@@ -181,7 +150,6 @@ function AddGaransi() {
                 placeholder="Masukkan TGL Masuk"
                 type="date"
                 name="tanggalMasuk"
-                // value={tanggalMasuk}
                 onChange={(e) => setTanggalMasuk(e.target.value)}
               />
               <Input
@@ -191,7 +159,6 @@ function AddGaransi() {
                 size="lg"
                 placeholder="Masukkan Masuk ke"
                 name="masukKe"
-                // value={masukKe}
                 onChange={(e) => setMasukKe(e.target.value)}
               />
               <Input
@@ -201,9 +168,11 @@ function AddGaransi() {
                 size="lg"
                 type="number"
                 placeholder="Masukkan ID TT"
-                name="id_tt"
-                // value={id_tt}
-                onChange={(e) => setIdTt(e.target.value)}
+                name="idTT"
+                onChange={(event) => {
+                  handleChange(event);
+                  setIdTt(event.target.value);
+                }}
               />
               <div>
                 <Textarea
@@ -213,7 +182,6 @@ function AddGaransi() {
                   variant="static"
                   color="blue"
                   name="kerusakan"
-                  // value={kerusakan}
                   onChange={(e) => setKerusakan(e.target.value)}
                 />
               </div>

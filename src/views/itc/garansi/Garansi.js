@@ -1,9 +1,18 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  IconButton,
+  Typography,
+} from "@material-tailwind/react";
+import { API_GARANSI } from "../../../utils/BaseUrl";
+import axios from "axios";
+import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
 
 function Garansi() {
   const tableRef = useRef(null);
@@ -15,6 +24,105 @@ function Garansi() {
     }
 
     $(tableRef.current).DataTable({});
+  };
+
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_GARANSI}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setgaransi(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
+  useEffect(() => {
+    if (garansi && garansi.length > 0) {
+      initializeDataTable();
+    }
+  }, [garansi]);
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
+  // HAPUS GARANSI
+  const hapusGaransi = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_GARANSI}/delete/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
+
+  // UPDATE TGL JADI GARANSI
+  const updateTglJadiGaransi = async (id) => {
+    const request = {
+      tgl_jadi: new Date(),
+    };
+
+    await axios
+      .put(`${API_GARANSI}/update/tgl_jadi/` + id, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Update Tanggal Jadi Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Update Tanggal Jadi Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        console.log(err);
+      });
   };
 
   return (
@@ -71,14 +179,70 @@ function Garansi() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td
-                    colSpan="9"
-                    className="text-sm text-center capitalize py-3 bg-gray-100"
-                  >
-                    Tidak ada data
-                  </td>
-                </tr>
+                {garansi.length > 0 ? (
+                  garansi.map((row, index) => (
+                    <tr key={index}>
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">
+                        {row.serviceBarang.idTT}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {formatDate(row.tanggalMasuk)}
+                      </td>
+                      <td className="text-sm py-2 px-3">{row.namaBrg}</td>
+                      <td className="text-sm py-2 px-3">{row.merek}</td>
+                      <td className="text-sm py-2 px-3">{row.masukKe}</td>
+                      <td className="text-sm py-2 px-3">{row.kerusakan}</td>
+                      <td className="text-sm py-2 px-3">
+                        {row.tanggalJadi === null ? (
+                          <></>
+                        ) : (
+                          <>{formatDate(row.tanggalJadi)}</>
+                        )}
+                      </td>
+                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                        <div className="flex flex-row gap-3">
+                          {row.tanggalJadi != null ? (
+                            <></>
+                          ) : (
+                            <>
+                              <IconButton
+                                size="md"
+                                color="green"
+                                onClick={() => updateTglJadiGaransi(row.id)}
+                              >
+                                <CheckIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </>
+                          )}
+                          <a href={"/edit_garansi/" + row.id}>
+                            <IconButton size="md" color="light-blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                          <IconButton
+                            size="md"
+                            color="red"
+                            onClick={() => hapusGaransi(row.id)}
+                          >
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <>
+                    <tr>
+                      <td
+                        colSpan="9"
+                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                      >
+                        Tidak ada data
+                      </td>
+                    </tr>
+                  </>
+                )}
               </tbody>
             </table>
           </div>
