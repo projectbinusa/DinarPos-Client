@@ -14,7 +14,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import $ from "jquery";
-import { API_EDIT_DATA, API_SERVICE } from "../../../utils/BaseUrl";
+import { API_EDIT_DATA, API_POIN, API_SERVICE } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -129,30 +129,30 @@ function EditData() {
   };
 
   // UPDATE POIN
-  const [idTT2, setidTT2] = useState(0);
+  const [idTT2, setidTT2] = useState("");
   const [poins, setpoins] = useState([]);
 
   const searchPoinsService = async () => {
     try {
-      const response = await axios.get(`${API_SERVICE}/status/` + idTT2, {
+      const response = await axios.get(`${API_POIN}/ket/` + idTT2, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
 
-      setpoins(response.data.data);
-      console.log(response.data.data);
+      // setpoins(response.data.data);
+      console.log(response);
     } catch (error) {
-      if (error.response.data.code === 404) {
-        Swal.fire({
-          icon: "info",
-          title: "Data Tidak Ada!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-      console.log("get all", error.response.data.code);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      // if (error.response.code === 404) {
+      //   Swal.fire({
+      //     icon: "info",
+      //     title: "Data Tidak Ada!",
+      //     showConfirmButton: false,
+      //     timer: 1500,
+      //   });
+      // }
+      console.log("get all", error);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1500);
     }
   };
 
@@ -582,7 +582,7 @@ function EditData() {
                 </IconButton>
               </div>
               <br />
-              <div id="resultPoin">
+              {/* <div id="resultPoin">
                 {poins.length > 0 ? (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
@@ -641,7 +641,7 @@ function EditData() {
                     </div>
                   </>
                 )}
-              </div>
+              </div> */}
             </div>
             <div id="tanda_terima" hidden>
               <Typography variant="lead" className="capitalize font-medium">

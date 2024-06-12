@@ -6,9 +6,17 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useParams,
+} from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
-import { API_BARANG, API_BON_BARANG, API_TEKNISI } from "../../../utils/BaseUrl";
+import {
+  API_BARANG,
+  API_BON_BARANG,
+  API_SERVICE,
+  API_TEKNISI,
+} from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 
 function EditBonBarang() {
@@ -27,10 +35,10 @@ function EditBonBarang() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       const data = response.data.data;
-      settglAmbil(data.tglAmbil);
-      setteknisiId(data.id_teknisi);
-      setserviceId(data.id_service);
-      setbarangId(data.id_barang);
+      settglAmbil(data.tgl_ambil);
+      setteknisiId(data.teknisi.id);
+      setserviceId(data.serviceBarang.idTT);
+      setbarangId(data.barang.barcodeBarang);
     } catch (error) {
       console.log(error);
     }
@@ -44,11 +52,10 @@ function EditBonBarang() {
   const editBonBarang = async (e) => {
     e.preventDefault();
     const request = {
-      id_service: serviceId,
-      id_barang: barangId,
+      id_tt: serviceId,
+      barcode_brg: barangId,
       id_teknisi: teknisiId,
-      // barcode: barcode,
-      tglAmbil: tglAmbil,
+      tgl_ambil: tglAmbil,
     };
 
     try {
@@ -143,6 +150,37 @@ function EditBonBarang() {
   };
   // END GET ALL TEKNISI
 
+  // GET ALL SERVICE
+  const [values3, setvalues3] = useState("");
+  const [options3, setoptions3] = useState([]);
+  const [currentPage3, setCurrentPage3] = useState(1);
+
+  const handleService = async () => {
+    if (values3.trim() !== "") {
+      const response = await fetch(
+        `${API_SERVICE}/pagination/takenN?limit=10&page=${currentPage3}&search=${values3}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions3(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleService();
+  }, [currentPage3, values3]);
+
+  const handleChangeService = (event) => {
+    setvalues3(event.target.value);
+    setCurrentPage3(1);
+  };
+  // END GET ALL SERVICE
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -171,7 +209,7 @@ function EditBonBarang() {
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={editBonBarang}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* <div className="flex gap-2 items-end">
+              <div className="flex gap-2 items-end">
                 <Input
                   label="ID Service"
                   variant="static"
@@ -181,18 +219,18 @@ function EditBonBarang() {
                   name="service"
                   value={serviceId}
                   onChange={(event) => {
-                    handleChangeTeknisi(event);
+                    handleChangeService(event);
                     setserviceId(event.target.value);
                   }}
                   placeholder="Pilih Service"
                   required
                 />
                 <datalist id="service-list">
-                  {options2.length > 0 && (
+                  {options3.length > 0 && (
                     <>
-                      {options2.map((option) => (
-                        <option key={option.idService} value={option.idService}>
-                          {option.barcodeService} - {option.namaService}
+                      {options3.map((option) => (
+                        <option key={option.idTT} value={option.idTT}>
+                          {option.idTT} - {option.nama}
                         </option>
                       ))}
                     </>
@@ -202,21 +240,21 @@ function EditBonBarang() {
                   <button
                     type="button"
                     className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage2(currentPage2 - 1)}
-                    disabled={currentPage2 === 1}
+                    onClick={() => setCurrentPage3(currentPage3 - 1)}
+                    disabled={currentPage3 === 1}
                   >
                     Prev
                   </button>
                   <button
                     type="button"
                     className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage2(currentPage2 + 1)}
-                    disabled={!options2.length}
+                    onClick={() => setCurrentPage3(currentPage3 + 1)}
+                    disabled={!options3.length}
                   >
                     Next
                   </button>
                 </div>
-              </div> */}
+              </div>
               <div className="flex gap-2 items-end">
                 <Input
                   label="Teknisi"
@@ -314,6 +352,7 @@ function EditBonBarang() {
                 variant="static"
                 color="blue"
                 size="lg"
+                type="date"
                 value={tglAmbil}
                 placeholder="Masukkan Tanggal Ambil"
                 onChange={(e) => settglAmbil(e.target.value)}

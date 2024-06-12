@@ -46,7 +46,7 @@ function AddBonBarang() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/data_bon-barang");
+      history.push("/bon_barang");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
@@ -105,7 +105,7 @@ function AddBonBarang() {
   const handleTeknisi = async () => {
     if (values2.trim() !== "") {
       const response = await fetch(
-        `${API_TEKNISI}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=1`,
+        `${API_TEKNISI}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=id`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -127,37 +127,6 @@ function AddBonBarang() {
     setCurrentPage2(1);
   };
   // END GET ALL TEKNISI
-
-  // GET ALL SERVICE
-  const [values3, setvalues3] = useState("");
-  const [options3, setoptions3] = useState([]);
-  const [currentPage3, setCurrentPage3] = useState(1);
-
-  const handleService = async () => {
-    if (values3.trim() !== "") {
-      const response = await fetch(
-        `${API_SERVICE}/pagination/takenN?limit=10&page=${currentPage3}&search=${values3}&sort=1`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      const data = await response.json();
-      setoptions3(data.data);
-      console.log(data);
-    } else {
-      return;
-    }
-  };
-
-  useEffect(() => {
-    handleService();
-  }, [currentPage3, values3]);
-
-  const handleChangeService = (event) => {
-    setvalues3(event.target.value);
-    setCurrentPage3(1);
-  };
-  // END GET ALL SERVICE
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -187,51 +156,17 @@ function AddBonBarang() {
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addBonBarang}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="flex gap-2 items-end">
-                <Input
-                  label="ID Service"
-                  variant="static"
-                  color="blue"
-                  list="service-list"
-                  id="service"
-                  name="service"
-                  onChange={(event) => {
-                    handleChangeService(event);
-                    setserviceId(event.target.value);
-                  }}
-                  placeholder="Pilih Service"
-                  required
-                />
-                <datalist id="service-list">
-                  {options3.length > 0 && (
-                    <>
-                      {options3.map((option) => (
-                        <option key={option.idTT} value={option.idTT}>
-                          {option.idTT} - {option.nama}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </datalist>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage3(currentPage3 - 1)}
-                    disabled={currentPage3 === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    type="button"
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage3(currentPage3 + 1)}
-                    disabled={!options3.length}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
+              <Input
+                label="ID Service"
+                variant="static"
+                color="blue"
+                list="service-list"
+                id="service"
+                name="service"
+                onChange={(e) => setserviceId(e.target.value)}
+                placeholder="Pilih Service"
+                required
+              />
               <div className="flex gap-2 items-end">
                 <Input
                   label="Teknisi"
@@ -296,7 +231,10 @@ function AddBonBarang() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option key={option.barcodeBarang} value={option.barcodeBarang}>
+                        <option
+                          key={option.barcodeBarang}
+                          value={option.barcodeBarang}
+                        >
                           {option.barcodeBarang} - {option.namaBarang}
                         </option>
                       ))}

@@ -107,3 +107,7 @@ export const API_POIN_SALESMAN_TANGGAL_EXCELCOM = `${url}/poin/salesman/tanggal/
 
 // EDIT DATA
 export const API_EDIT_DATA = `${url}/edit_data`;
+
+// POIN
+export const API_POIN = `${url}/poin`;
+

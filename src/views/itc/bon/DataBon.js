@@ -86,39 +86,39 @@ function DataBon() {
     });
   };
 
-  // UPDATE TGL JADI GARANSI
-  // const updateTglJadiGaransi = async (id) => {
-  //   const request = {
-  //     tgl_jadi: new Date(),
-  //   };
+  // UPDATE TGL KEMBALIKAN BON BARANG
+  const updateTglKembaliBonBarang = async (id) => {
+    const request = {
+      tgl_kembali: new Date(),
+    };
 
-  //   await axios
-  //     .put(`${API_GARANSI}/update/tgl_jadi/` + id, request, {
-  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //     })
-  //     .then(() => {
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "Update Tanggal Jadi Berhasil!",
-  //         showConfirmButton: false,
-  //         timer: 1500,
-  //       });
+    await axios
+      .put(`${API_BON_BARANG}/` + id, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Update Tanggal Kembali Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
 
-  //       setTimeout(() => {
-  //         window.location.reload();
-  //       }, 1500);
-  //     })
-  //     .catch((err) => {
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Update Tanggal Jadi Gagal!",
-  //         showConfirmButton: false,
-  //         timer: 1500,
-  //       });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Update Tanggal Jadi Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
 
-  //       console.log(err);
-  //     });
-  // };
+        console.log(err);
+      });
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -166,7 +166,7 @@ function DataBon() {
                     Nama Teknisi
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    Nama Barang
+                    Barcode Barang
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Ambil
@@ -208,7 +208,7 @@ function DataBon() {
                               <IconButton
                                 size="md"
                                 color="green"
-                                // onClick={() => updateTglJadiGaransi(bon.id)}
+                                onClick={() => updateTglKembaliBonBarang(bon.id)}
                               >
                                 <CheckIcon className="w-6 h-6 white" />
                               </IconButton>
