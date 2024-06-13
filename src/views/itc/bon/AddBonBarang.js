@@ -58,6 +58,7 @@ function AddBonBarang() {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",
+          text: error.response.data.data,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -206,7 +207,7 @@ function AddBonBarang() {
                     type="button"
                     className="text-sm bg-gray-400 px-1"
                     onClick={() => setCurrentPage2(currentPage2 + 1)}
-                    disabled={!options.length}
+                    disabled={!options2.length}
                   >
                     Next
                   </button>

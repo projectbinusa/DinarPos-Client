@@ -131,34 +131,61 @@ function EditData() {
   // UPDATE POIN
   const [idTT2, setidTT2] = useState("");
   const [poins, setpoins] = useState([]);
+  const [poin, setpoin] = useState(0);
 
   const searchPoinsService = async () => {
     try {
-      const response = await axios.get(`${API_POIN}/ket/` + idTT2, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `${API_POIN}/keterangan?keterangan=` + idTT2,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
 
-      // setpoins(response.data.data);
+      setpoins(response.data.data);
       console.log(response);
     } catch (error) {
-      // if (error.response.code === 404) {
-      //   Swal.fire({
-      //     icon: "info",
-      //     title: "Data Tidak Ada!",
-      //     showConfirmButton: false,
-      //     timer: 1500,
-      //   });
-      // }
+      if (error.response.code === 404) {
+        Swal.fire({
+          icon: "info",
+          title: "Data Tidak Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
       console.log("get all", error);
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1500);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     }
   };
 
   useEffect(() => {
     searchPoinsService();
   }, []);
+
+  const updatePoin = async (id) => {
+    const data = {
+      poin: poin,
+    };
+
+    await axios
+      .put(`${API_EDIT_DATA}/update_poin_history/` + id, data, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Poin Berhasil Diubah!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      });
+  };
 
   // UPDATE ID TT
   const [idTT3, setidTT3] = useState(0);
@@ -359,6 +386,9 @@ function EditData() {
     });
   };
 
+  const handleInputChange = (e) => {
+    setpoin(e.target.value); // Update state when input value changes
+  };
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -582,23 +612,23 @@ function EditData() {
                 </IconButton>
               </div>
               <br />
-              {/* <div id="resultPoin">
+              <div id="resultPoin">
                 {poins.length > 0 ? (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
                       <table className="border border-collapse w-full">
                         <thead>
                           <tr>
-                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-2">
                               Nama
                             </th>
-                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-2">
                               Poin
                             </th>
-                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-2">
                               Ket
                             </th>
-                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-2">
                               Aksi
                             </th>
                           </tr>
@@ -607,23 +637,24 @@ function EditData() {
                           {poins.map((row, index) => (
                             <tr key={index}>
                               <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                                {row.service.teknisi.nama}
+                                {row.teknisi.nama}
                               </td>
                               <td className="text-sm text-center py-2 px-2 border-gray-300 border">
                                 <Input
                                   variant="outlined"
                                   size="md"
                                   color="blue"
-                                  value={row.service.teknisi.nama}
+                                  defaultValue={row.poin}
+                                  onChange={(e) => setpoin(e.target.value)}
                                 />
                               </td>
                               <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                                {row.service.teknisi.nama}
+                                {row.keterangan}
                               </td>
                               <td className="text-sm text-center py-2 px-2 border-gray-300 border">
                                 <IconButton
                                   color="blue"
-                                  onClick={() => hapusStatus(row.id)}
+                                  onClick={() => updatePoin(row.id)}
                                 >
                                   <BookmarkIcon className="w-6 h-6" />
                                 </IconButton>{" "}
@@ -641,7 +672,7 @@ function EditData() {
                     </div>
                   </>
                 )}
-              </div> */}
+              </div>
             </div>
             <div id="tanda_terima" hidden>
               <Typography variant="lead" className="capitalize font-medium">

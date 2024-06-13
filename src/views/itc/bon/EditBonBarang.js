@@ -28,26 +28,6 @@ function EditBonBarang() {
 
   const history = useHistory();
 
-  // GET BON BARANG BY ID
-  const getBonBarangById = async () => {
-    try {
-      const response = await axios.get(`${API_BON_BARANG}/` + param.id, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      const data = response.data.data;
-      settglAmbil(data.tgl_ambil);
-      setteknisiId(data.teknisi.id);
-      setserviceId(data.serviceBarang.idTT);
-      setbarangId(data.barang.barcodeBarang);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getBonBarangById();
-  }, []);
-
   // EDIT BON BARANG
   const editBonBarang = async (e) => {
     e.preventDefault();
@@ -68,7 +48,7 @@ function EditBonBarang() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/data_bon_barang");
+      history.push("/bon_barang");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
@@ -80,6 +60,7 @@ function EditBonBarang() {
         Swal.fire({
           icon: "error",
           title: "Ubah Data Gagal!",
+          // text: ,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -150,36 +131,25 @@ function EditBonBarang() {
   };
   // END GET ALL TEKNISI
 
-  // GET ALL SERVICE
-  const [values3, setvalues3] = useState("");
-  const [options3, setoptions3] = useState([]);
-  const [currentPage3, setCurrentPage3] = useState(1);
-
-  const handleService = async () => {
-    if (values3.trim() !== "") {
-      const response = await fetch(
-        `${API_SERVICE}/pagination/takenN?limit=10&page=${currentPage3}&search=${values3}&sort=1`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      const data = await response.json();
-      setoptions3(data.data);
-      console.log(data);
-    } else {
-      return;
+  // GET BON BARANG BY ID
+  const getBonBarangById = async () => {
+    try {
+      const response = await axios.get(`${API_BON_BARANG}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      const data = response.data.data;
+      settglAmbil(data.tgl_ambil);
+      setteknisiId(data.teknisi.id);
+      setserviceId(data.serviceBarang.idTT);
+      setbarangId(data.barang.barcodeBarang);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    handleService();
-  }, [currentPage3, values3]);
-
-  const handleChangeService = (event) => {
-    setvalues3(event.target.value);
-    setCurrentPage3(1);
-  };
-  // END GET ALL SERVICE
+    getBonBarangById();
+  }, []);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -209,52 +179,18 @@ function EditBonBarang() {
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={editBonBarang}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="flex gap-2 items-end">
-                <Input
-                  label="ID Service"
-                  variant="static"
-                  color="blue"
-                  list="service-list"
-                  id="service"
-                  name="service"
-                  value={serviceId}
-                  onChange={(event) => {
-                    handleChangeService(event);
-                    setserviceId(event.target.value);
-                  }}
-                  placeholder="Pilih Service"
-                  required
-                />
-                <datalist id="service-list">
-                  {options3.length > 0 && (
-                    <>
-                      {options3.map((option) => (
-                        <option key={option.idTT} value={option.idTT}>
-                          {option.idTT} - {option.nama}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </datalist>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage3(currentPage3 - 1)}
-                    disabled={currentPage3 === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    type="button"
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage3(currentPage3 + 1)}
-                    disabled={!options3.length}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
+              <Input
+                label="ID Service"
+                variant="static"
+                color="blue"
+                list="service-list"
+                id="service"
+                name="service"
+                defaultValue={serviceId}
+                onChange={(e) => setserviceId(e.target.value)}
+                placeholder="Pilih Service"
+                required
+              />
               <div className="flex gap-2 items-end">
                 <Input
                   label="Teknisi"
@@ -263,7 +199,7 @@ function EditBonBarang() {
                   list="teknisi-list"
                   id="teknisi"
                   name="teknisi"
-                  value={teknisiId}
+                  // value={teknisiId}
                   onChange={(event) => {
                     handleChangeTeknisi(event);
                     setteknisiId(event.target.value);

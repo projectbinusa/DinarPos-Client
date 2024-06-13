@@ -115,7 +115,7 @@ function DataPoin() {
               </Button>
             </div>
             <br />
-            <div className="overflow-x-auto" id="tables_poin">
+            {/* <div className="overflow-x-auto" id="tables_poin">
               <table className="border border-collapse w-full" id="table_poin">
                 <thead>
                   <tr>
@@ -169,7 +169,7 @@ function DataPoin() {
                   )}
                 </tbody>
               </table>
-            </div>
+            </div> */}
           </div>
           <div className="bg-white shadow-lg p-5 my-5 rounded lg:col-span-2">
             <Typography
@@ -224,7 +224,7 @@ function DataPoin() {
                     <th className="text-sm py-2 px-3 font-semibold">Ket</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {points.length > 0 ? (
                     points.map((point, index) => (
                       <tr key={index}>
@@ -256,7 +256,7 @@ function DataPoin() {
                       </td>
                     </tr>
                   )}
-                </tbody>
+                </tbody> */}
               </table>
             </div>
           </div>

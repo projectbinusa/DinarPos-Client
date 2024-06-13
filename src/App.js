@@ -894,7 +894,7 @@ function App() {
 
             {/* Teknisi */}
             <PrivateRoute
-              path="/Dashboard_Teknisi"
+              path="/dashboard_teknisi"
               component={DashboardTeknisi}
               isAuthenticated={true}
             />
