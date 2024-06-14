@@ -85,11 +85,21 @@ function SidebarAdmin() {
               </Typography>
             </div>
             <List className="pb-12">
-              <a href="/dashboard">
-                <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                  dashboard
-                </ListItem>
-              </a>
+              {level === "Superadmin" ||
+              level === "Admin" ||
+              level === "Kasir" ||
+              level === "Gudang" ||
+              level === "Accounting" ? (
+                <>
+                  <a href="/dashboard">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      dashboard
+                    </ListItem>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
               {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ? (
@@ -1226,7 +1236,7 @@ function SidebarAdmin() {
                   </a>
                   <a href="/data_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      data teknisi
+                      teknisi
                     </ListItem>
                   </a>
                   <a href="/take_over">
@@ -1268,6 +1278,16 @@ function SidebarAdmin() {
                   <a href="/poin_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       poin teknisi{" "}
+                    </ListItem>
+                  </a>
+                  <a href="/finish">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      finish{" "}
+                    </ListItem>
+                  </a>
+                  <a href="/data_teknisi">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      teknisi
                     </ListItem>
                   </a>
                 </>
@@ -1313,11 +1333,22 @@ function SidebarAdmin() {
             </Typography>
           </div>
           <List className="mb-5">
-            <a href="/dashboard">
-              <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                dashboard
-              </ListItem>
-            </a>
+            {level === "Superadmin" ||
+            level === "Admin" ||
+            level === "Kasir" ||
+            level === "Gudang" ||
+            level === "Accounting" ? (
+              <>
+                <a href="/dashboard">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    dashboard
+                  </ListItem>
+                </a>
+              </>
+            ) : (
+              <></>
+            )}
+
             {level === "Superadmin" ||
             level === "Admin" ||
             level === "Kasir" ? (
@@ -2454,7 +2485,7 @@ function SidebarAdmin() {
                 </a>
                 <a href="/data_teknisi">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    data teknisi
+                    teknisi
                   </ListItem>
                 </a>
                 <a href="/take_over">
@@ -2498,13 +2529,23 @@ function SidebarAdmin() {
                     poin teknisi
                   </ListItem>
                 </a>
+                <a href="/finish">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    finish
+                  </ListItem>
+                </a>
+                <a href="/data_teknisi">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    teknisi
+                  </ListItem>
+                </a>
               </>
             ) : (
               <></>
             )}
             {level === "Teknisi" ? (
               <>
-                <a href="/dashboard_teknisi" className="mb-5">
+                <a href="/dashboard_teknisi">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Dashboard Teknisi
                   </ListItem>

@@ -12,13 +12,15 @@ import axios from "axios";
 import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
-import { API_POIN_SALESMAN_TANGGAL_EXCELCOM } from "../../../utils/BaseUrl";
+import { API_POIN } from "../../../utils/BaseUrl";
 
 function DataPoin() {
   const tableRef = useRef(null);
   const [points, setPoints] = useState([]);
+  const [pointsDate, setPointsDate] = useState([]);
   const [tanggalAwal, setTanggalAwal] = useState("");
   const [tanggalAkhir, setTanggalAkhir] = useState("");
+  const [validasi, setValidasi] = useState(false);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -31,16 +33,30 @@ function DataPoin() {
   // GET ALL
   const getAll = async () => {
     try {
-      const response = await axios.get(API_POIN_SALESMAN_TANGGAL_EXCELCOM, {
-        params: {
-          tanggal_awal: tanggalAwal,
-          tanggal_akhir: tanggalAkhir,
-        },
+      const response = await axios.get(`${API_POIN}`, {
         headers: {
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
         },
       });
-      setPoints(response.data.data);
+      setPoints(response.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  // GET ALL HISTORY POINT BY DATE
+  const getAllByDate = async () => {
+    try {
+      const response = await axios.get(
+        `${API_POIN}/tanggal/?tanggal_akhir=${tanggalAkhir}&tanggal_awal=${tanggalAwal}`,
+        {
+          headers: {
+            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setPointsDate(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -48,6 +64,7 @@ function DataPoin() {
 
   useEffect(() => {
     getAll();
+    getAllByDate();
   }, []);
 
   useEffect(() => {
@@ -56,8 +73,20 @@ function DataPoin() {
     }
   }, [points]);
 
-  const handleSearch = () => {
-    getAll();
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
+  const searchHistoryPoin = () => {
+    getAllByDate();
+    setValidasi(true);
   };
 
   return (
@@ -85,7 +114,7 @@ function DataPoin() {
           </Breadcrumbs>
         </div>
         <main className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-          <div className="bg-white shadow-lg p-5 my-5 rounded">
+          <div className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
             <div className="flex justify-between items-center">
               <Typography
                 variant="paragraph"
@@ -99,18 +128,18 @@ function DataPoin() {
                 </Button>
               </a>
             </div>
-            <br /> <hr /> <br />
+            <br /> <hr />
             <br />
             <div className="flex gap-2 items-center">
               <Input
-                label="Tanda Terima"
-                variant="static"
+                label="Bulan"
+                variant="outlined"
                 color="blue"
                 size="md"
-                placeholder="Cari Tanda Terima"
+                type="month"
                 required
               />
-              <Button variant="gradient" color="blue" size="sm">
+              <Button variant="gradient" color="blue" size="md">
                 GO!
               </Button>
             </div>
@@ -171,7 +200,7 @@ function DataPoin() {
               </table>
             </div> */}
           </div>
-          <div className="bg-white shadow-lg p-5 my-5 rounded lg:col-span-2">
+          <div className="bg-white shadow-lg p-5 my-5 rounded lg:col-span-2 overflow-auto">
             <Typography
               variant="paragraph"
               className="capitalize font-semibold"
@@ -186,9 +215,9 @@ function DataPoin() {
                 variant="static"
                 color="blue"
                 size="md"
-                value={tanggalAwal}
                 onChange={(e) => setTanggalAwal(e.target.value)}
-                placeholder="Masukkan Tanggal Awal"
+                placeholder="Tanggal Awal"
+                type="date"
                 required
               />
               <Input
@@ -196,13 +225,17 @@ function DataPoin() {
                 variant="static"
                 color="blue"
                 size="md"
-                value={tanggalAkhir}
                 onChange={(e) => setTanggalAkhir(e.target.value)}
-                placeholder="Masukkan Tanggal Akhir"
+                placeholder="Tanggal Akhir"
+                type="date"
                 required
               />
               <div>
-                <IconButton size="md" color="light-blue" onClick={handleSearch}>
+                <IconButton
+                  size="md"
+                  color="light-blue"
+                  onClick={searchHistoryPoin}
+                >
                   <MagnifyingGlassIcon className="w-6 h-6 white" />
                 </IconButton>
               </div>
@@ -224,39 +257,77 @@ function DataPoin() {
                     <th className="text-sm py-2 px-3 font-semibold">Ket</th>
                   </tr>
                 </thead>
-                {/* <tbody>
-                  {points.length > 0 ? (
-                    points.map((point, index) => (
-                      <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.teknisi}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.tgl}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.poin}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.nominal}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.keterangan}
-                        </td>
-                      </tr>
-                    ))
+                <tbody>
+                  {validasi === true ? (
+                    <>
+                      {pointsDate.length > 0 ? (
+                        pointsDate.map((poin, index) => (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.teknisi.nama}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {formatDate(poin.tanggal)}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.poin}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.nominal}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.keterangan}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="text-sm text-center capitalize py-3 bg-gray-100"
+                          >
+                            Tidak ada data
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   ) : (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-sm text-center capitalize py-3 bg-gray-100"
-                      >
-                        Tidak ada data
-                      </td>
-                    </tr>
+                    <>
+                      {points.length > 0 ? (
+                        points.map((point, index) => (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.teknisi.nama}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {formatDate(point.tanggal)}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.poin}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.nominal}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.keterangan}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="text-sm text-center capitalize py-3 bg-gray-100"
+                          >
+                            Tidak ada data
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   )}
-                </tbody> */}
+                </tbody>
               </table>
             </div>
           </div>

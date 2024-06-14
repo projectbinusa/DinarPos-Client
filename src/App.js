@@ -141,6 +141,7 @@ import DetailServiceTeknisi from "./views/itcteknisi/DetailServiceTeknisi.js";
 import EditData from "./views/itc/edit_data/EditData.js";
 import EditGaransi from "./views/itc/garansi/EditGaransi.js";
 import EditBonBarang from "./views/itc/bon/EditBonBarang.js";
+import GrafikPoin from "./views/itc/point/GrafikPoin.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -925,6 +926,12 @@ function App() {
               isAuthenticated={true}
             />
             {/* END EDIT DATA */}
+
+            <PrivateRoute
+              path="/grafik_poin/:id"
+              component={GrafikPoin}
+              isAuthenticated={true}
+            />
           </Switch>
         </main>
       </BrowserRouter>
