@@ -140,6 +140,7 @@ import DashboardTeknisi from "./views/itcteknisi/DashboardTeknisi.js";
 import DetailServiceTeknisi from "./views/itcteknisi/DetailServiceTeknisi.js";
 import EditData from "./views/itc/edit_data/EditData.js";
 import EditGaransi from "./views/itc/garansi/EditGaransi.js";
+import EditBonBarang from "./views/itc/bon/EditBonBarang.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -893,7 +894,7 @@ function App() {
 
             {/* Teknisi */}
             <PrivateRoute
-              path="/Dashboard_Teknisi"
+              path="/dashboard_teknisi"
               component={DashboardTeknisi}
               isAuthenticated={true}
             />
@@ -908,6 +909,11 @@ function App() {
             <PrivateRoute
               path="/add_bon_barang"
               component={AddBonBarang}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_bon_barang/:id"
+              component={EditBonBarang}
               isAuthenticated={true}
             />
             {/* END BON BARANG */}
