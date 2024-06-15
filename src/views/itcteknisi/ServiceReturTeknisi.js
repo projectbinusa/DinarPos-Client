@@ -1,15 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
-import SidebarAdmin from "../../component/SidebarAdmin";
-import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { API_SERVICE } from "../../utils/BaseUrl";
+import React, { useEffect, useRef, useState } from "react";
+import { API_SERVICE, API_TEKNISI } from "../../utils/BaseUrl";
 import $ from "jquery";
 import "../../assets/styles/datatables.css";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import {
+  Breadcrumbs,
+  Button,
+  IconButton,
+  Typography,
+} from "@material-tailwind/react";
+import SidebarAdmin from "../../component/SidebarAdmin";
 
-function ServiceTakenTeknisi() {
+function ServiceReturTeknisi() {
   const tableRef = useRef(null);
   const [services, setservices] = useState([]);
+  const [idTeknisi, setidTeknisi] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${API_TEKNISI}/username?username=` + localStorage.getItem("username"),
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      )
+      .then((res) => {
+        setidTeknisi(res.data.data.id);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -22,9 +45,12 @@ function ServiceTakenTeknisi() {
   // GET ALL
   const getAll = async () => {
     try {
-      const response = await axios.get(`${API_SERVICE}/taken`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `${API_SERVICE}/my-service-retur?teknisiId=${idTeknisi}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
       setservices(response.data.data);
     } catch (error) {
       console.log("get all", error);
@@ -89,7 +115,7 @@ function ServiceTakenTeknisi() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Service Taken
+            Service Retur
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard_teknisi" className="opacity-60">
@@ -102,12 +128,16 @@ function ServiceTakenTeknisi() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/service_taken_teknisi">
-              <span>Taken</span>
+            <a href="/service_teknisi">
+              <span>My Service</span>
             </a>
+            <span className="cursor-default capitalize">retur</span>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <Typography variant="lead" className="uppercase">
+            Data Service retur
+          </Typography>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table
               id="example_data"
@@ -186,4 +216,4 @@ function ServiceTakenTeknisi() {
   );
 }
 
-export default ServiceTakenTeknisi;
+export default ServiceReturTeknisi;

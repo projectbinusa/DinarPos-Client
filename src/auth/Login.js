@@ -26,10 +26,35 @@ function Login() {
         const response = res.data;
 
         if (response.code === 200) {
-          history.push("/dashboard");
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          const level = response.data.data.levelPengguna;
+
+          if (
+            level === "Superadmin" ||
+            level === "Admin" ||
+            level === "Kasir" ||
+            level === "Gudang" ||
+            level === "Accounting"
+          ) {
+            history.push("/dashboard");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else if (level === "Pimpinan") {
+            history.push("/dashboard_pimpinan");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else if (level === "Teknisi") {
+            history.push("/dashboard_teknisi");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else if (level === "AdminService") {
+            history.push("/dashboard_service");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }
 
           // SET LOCAL STORAGE
           localStorage.setItem("id", response.data.data.idPengguna);
