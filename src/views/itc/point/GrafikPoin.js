@@ -14,7 +14,16 @@ import axios from "axios";
 import { API_POIN } from "../../../utils/BaseUrl";
 
 function GrafikPoin() {
-  const currentYear = new Date().getFullYear();
+  const [validasi, setvalidasi] = useState(false);
+  const [year, setyear] = useState(new Date().getFullYear());
+
+  useEffect(() => {
+    if (validasi) {
+      getAllPoin(year);
+      setvalidasi(false);
+    }
+  }, [validasi, year]);
+
   const param = useParams();
 
   const [poinJan, setpoinJan] = useState(0);
@@ -30,12 +39,19 @@ function GrafikPoin() {
   const [poinNov, setpoinNov] = useState(0);
   const [poinDes, setpoinDes] = useState(0);
 
+  const searchHistoryPoin = () => {
+    setvalidasi(true);
+  };
+
   const getAllPoin = async () => {
+    const currentYear = new Date().getFullYear();
+    const years = validasi ? year : currentYear;
+
     try {
       // JANUARI
       const jan = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=01&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -45,7 +61,7 @@ function GrafikPoin() {
       // FEBRUARI
       const feb = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=02&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -55,7 +71,7 @@ function GrafikPoin() {
       // MARET
       const mar = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=03&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -65,7 +81,7 @@ function GrafikPoin() {
       // APRIL
       const apr = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=04&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -75,7 +91,7 @@ function GrafikPoin() {
       // MEI
       const may = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=05&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -85,7 +101,7 @@ function GrafikPoin() {
       // JUNI
       const jun = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=06&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -95,7 +111,7 @@ function GrafikPoin() {
       // JULI
       const jul = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=07&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -105,7 +121,7 @@ function GrafikPoin() {
       // AGUSTUS
       const agus = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=08&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -115,7 +131,7 @@ function GrafikPoin() {
       // SEPTEMBER
       const sep = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=09&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -125,7 +141,7 @@ function GrafikPoin() {
       // OKTOBER
       const okto = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=10&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -135,7 +151,7 @@ function GrafikPoin() {
       // NOVEMBER
       const nov = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=11&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -145,7 +161,7 @@ function GrafikPoin() {
       // DESEMBER
       const des = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=12&year=` +
-          currentYear,
+          years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -301,11 +317,16 @@ function GrafikPoin() {
               color="blue"
               size="md"
               placeholder="Masukkan Tahun"
-              //   onChange={(e) => settanggalAwal(e.target.value)}
+              onChange={(e) => setyear(e.target.value)}
               required
             />
             <div>
-              <Button variant="gradient" color="blue" size="md">
+              <Button
+                variant="gradient"
+                color="blue"
+                size="md"
+                onClick={searchHistoryPoin}
+              >
                 GO!
               </Button>
             </div>
@@ -314,7 +335,7 @@ function GrafikPoin() {
           <div className="w-full my-5 rounded">
             <Card className="shadow-none">
               <Typography variant="h5" color="black" className="font-medium">
-                Grafik Poin {currentYear}
+                Grafik Poin {year}
               </Typography>
               <hr /> <br />
               <CardBody className="px-2 pb-0">

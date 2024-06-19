@@ -243,7 +243,7 @@ function AddPoint() {
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>
               </Button>
-              <a href="/point">
+              <a href="/data_poin_teknisi">
                 <Button variant="text" color="gray" className="mr-1">
                   <span>Kembali</span>
                 </Button>
