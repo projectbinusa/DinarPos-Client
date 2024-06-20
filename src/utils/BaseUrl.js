@@ -111,3 +111,5 @@ export const API_EDIT_DATA = `${url}/edit_data`;
 // POIN
 export const API_POIN = `${url}/poin`;
 
+export const API_SERVICE_TAKEN = `${url}/service/taken`;
+

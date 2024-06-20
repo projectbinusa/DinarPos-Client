@@ -1275,6 +1275,16 @@ function SidebarAdmin() {
               )}
               {level === "Pimpinan" ? (
                 <>
+                  <a href="/dashboard_pimpinan">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      dashboard pimpinan{" "}
+                    </ListItem>
+                  </a>
+                  <a href="/data_service_taken">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      TAKEN{" "}
+                    </ListItem>
+                  </a>
                   <a href="/poin_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       poin teknisi{" "}
@@ -2524,6 +2534,16 @@ function SidebarAdmin() {
             )}
             {level === "Pimpinan" ? (
               <>
+                <a href="/dashboard_pimpinan">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    dashboard pimpinan{" "}
+                  </ListItem>
+                </a>
+                <a href="/data_service_taken">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    taken{" "}
+                  </ListItem>
+                </a>
                 <a href="/poin_teknisi">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     poin teknisi
