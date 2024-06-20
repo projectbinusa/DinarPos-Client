@@ -4,20 +4,20 @@ import {
   Breadcrumbs,
   Button,
   Input,
-  Textarea,
   Typography,
 } from "@material-tailwind/react";
 import { useHistory } from "react-router-dom";
-import { API_POINT } from "../../../utils/BaseUrl"; // Assume you have an API endpoint for points
+import { API_POIN, API_TEKNISI } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 function AddPoint() {
   const history = useHistory();
-  const [tanggal, setTanggal] = useState("");
-  const [point, setPoint] = useState("");
-  const [teknisi, setTeknisi] = useState("");
-  const [keterangan, setKeterangan] = useState("");
+  const [tanggal, settanggal] = useState("");
+  const [point, setpoint] = useState("");
+  const [teknisi, setteknisiId] = useState(0);
+  const [keterangan, setketerangan] = useState("");
+  const [nominal, setnominal] = useState("");
 
   const validateInputs = () => {
     if (!tanggal || !point || !teknisi || !keterangan) {
@@ -45,25 +45,24 @@ function AddPoint() {
     if (!validateInputs()) return;
 
     const request = {
-      tanggal: tanggal,
-      point: parseInt(point),
-      teknisi: teknisi,
+      id_teknisi: teknisi,
       keterangan: keterangan,
+      nominal: nominal,
+      poin: point,
+      tanggal: tanggal,
     };
 
-    console.log("Mengirim data ke server:", request);
-
     try {
-    //   await axios.post(`${API_POINT}/add`, request, {
-    //     headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    //   });
+      await axios.post(`${API_POIN}/add`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
       Swal.fire({
         icon: "success",
         title: "Data Berhasil DiTambahkan",
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/point");
+      history.push("/data_poin_teknisi");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
@@ -88,8 +87,40 @@ function AddPoint() {
         });
         console.log(error);
       }
+      console.log(error);
     }
   };
+
+  // GET ALL TEKNISI
+  const [values2, setvalues2] = useState("");
+  const [options2, setoptions2] = useState([]);
+  const [currentPage2, setCurrentPage2] = useState(1);
+
+  const handleTeknisi = async () => {
+    if (values2.trim() !== "") {
+      const response = await fetch(
+        `${API_TEKNISI}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=id`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptions2(data.data);
+      console.log(data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleTeknisi();
+  }, [currentPage2, values2]);
+
+  const handleChangeTeknisi = (event) => {
+    setvalues2(event.target.value);
+    setCurrentPage2(1);
+  };
+  // END GET ALL TEKNISI
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -110,10 +141,10 @@ function AddPoint() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/point">
-              <span>Point</span>
+            <a href="/data_poin_teknisi">
+              <span>Poin</span>
             </a>
-            <span className="cursor-default capitalize">tambah Point</span>
+            <span className="cursor-default capitalize">tambah Poin</span>
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
@@ -127,44 +158,92 @@ function AddPoint() {
                 placeholder="Masukkan Tanggal"
                 type="date"
                 name="tanggal"
-                onChange={(e) => setTanggal(e.target.value)}
+                required
+                onChange={(e) => settanggal(e.target.value)}
               />
+              <div className="flex gap-2 items-end">
+                <Input
+                  label="Teknisi"
+                  variant="static"
+                  color="blue"
+                  list="teknisi-list"
+                  id="teknisi"
+                  name="teknisi"
+                  onChange={(event) => {
+                    handleChangeTeknisi(event);
+                    setteknisiId(event.target.value);
+                  }}
+                  placeholder="Pilih Teknisi"
+                  required
+                />
+                <datalist id="teknisi-list">
+                  {options2.length > 0 && (
+                    <>
+                      {options2.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.nama}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </datalist>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage2(currentPage2 - 1)}
+                    disabled={currentPage2 === 1}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    type="button"
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPage2(currentPage2 + 1)}
+                    disabled={!options2.length}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
               <Input
-                label="Point"
+                label="Poin"
                 variant="static"
                 color="blue"
                 size="lg"
                 type="number"
-                placeholder="Masukkan Point"
+                placeholder="Masukkan Poin"
                 name="point"
-                onChange={(e) => setPoint(e.target.value)}
+                required
+                onChange={(e) => setpoint(e.target.value)}
               />
               <Input
-                label="Teknisi"
+                label="Nominal"
                 variant="static"
                 color="blue"
                 size="lg"
-                placeholder="Masukkan Nama Teknisi"
-                name="teknisi"
-                onChange={(e) => setTeknisi(e.target.value)}
+                type="number"
+                placeholder="Masukkan Nominal"
+                name="nominal"
+                required
+                onChange={(e) => setnominal(e.target.value)}
               />
-              <div>
-                <Textarea
-                  label="Keterangan"
-                  size="lg"
-                  placeholder="Masukkan Keterangan"
-                  variant="static"
-                  color="blue"
-                  name="keterangan"
-                  onChange={(e) => setKeterangan(e.target.value)}
-                />
-              </div>
+              <Input
+                label="Keterangan"
+                size="lg"
+                placeholder="Masukkan Keterangan"
+                variant="static"
+                color="blue"
+                name="keterangan"
+                required
+                onChange={(e) => setketerangan(e.target.value)}
+              />
             </div>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>
               </Button>
-              <a href="/point">
+              <a href="/data_poin_teknisi">
                 <Button variant="text" color="gray" className="mr-1">
                   <span>Kembali</span>
                 </Button>

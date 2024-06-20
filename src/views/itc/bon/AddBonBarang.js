@@ -6,13 +6,6 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import {
-  ClipboardDocumentListIcon,
-  CurrencyDollarIcon,
-  InformationCircleIcon,
-  PlusIcon,
-  UserCircleIcon,
-} from "@heroicons/react/24/outline";
 import $ from "jquery";
 import "datatables.net";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -26,68 +19,21 @@ import {
 import Swal from "sweetalert2";
 
 function AddBonBarang() {
-  const [barcode_brg, setbarcode_brg] = useState("");
-  const [tanggal_kembali, settanggal_kembali] = useState("");
+  const [tglAmbil, settglAmbil] = useState("");
   const [teknisiId, setteknisiId] = useState(0);
   const [serviceId, setserviceId] = useState(0);
   const [barangId, setbarangId] = useState(0);
-
-  const [teknisi, setteknisi] = useState([]);
-  const [service, setservice] = useState([]);
-  const [barang, setbarang] = useState([]);
   const history = useHistory();
-
-  // GET ALL TEKNISI
-  const allTeknisi = async () => {
-    try {
-      const response = await axios.get(API_TEKNISI, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setteknisi(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // GET ALL SERVICE
-  const allService = async () => {
-    try {
-      const response = await axios.get(API_SERVICE, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setservice(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const allBarang = async () => {
-    try {
-      const response = await axios.get(API_BARANG, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setbarang(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    allTeknisi();
-    allService();
-    allBarang();
-  }, []);
 
   // ADD BON BARANG
   const addBonBarang = async (e) => {
     e.preventDefault();
 
     const request = {
-      id_service: serviceId,
-      id_barang: barangId,
+      id_tt: serviceId,
+      barcode_brg: barangId,
       id_teknisi: teknisiId,
-      barcode_brg: barcode_brg,
-      tanggal_kembali: tanggal_kembali,
+      tgl_ambil: tglAmbil,
     };
 
     try {
@@ -100,7 +46,7 @@ function AddBonBarang() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/data_bon-barang");
+      history.push("/bon_barang");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
@@ -112,6 +58,7 @@ function AddBonBarang() {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",
+          text: error.response.data.data,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -120,23 +67,22 @@ function AddBonBarang() {
     }
   };
 
+  // GET ALL BARANG
   const [values, setvalues] = useState("");
   const [options, setoptions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [values2, setvalues2] = useState("");
-  const [options2, setoptions2] = useState([]);
-  const [currentPage2, setCurrentPage2] = useState(1);
 
   const handle = async () => {
     if (values.trim() !== "") {
       const response = await fetch(
-        `${API_SERVICE}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        `${API_BARANG}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
       const data = await response.json();
       setoptions(data.data);
+      console.log(data);
     } else {
       return;
     }
@@ -146,21 +92,28 @@ function AddBonBarang() {
     handle();
   }, [currentPage, values]);
 
-  const handleChange = (event) => {
+  const handleChangeBarang = (event) => {
     setvalues(event.target.value);
     setCurrentPage(1);
   };
+  // END GET ALL BARANG
+
+  // GET ALL TEKNISI
+  const [values2, setvalues2] = useState("");
+  const [options2, setoptions2] = useState([]);
+  const [currentPage2, setCurrentPage2] = useState(1);
 
   const handleTeknisi = async () => {
     if (values2.trim() !== "") {
       const response = await fetch(
-        `${API_TEKNISI}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=1`,
+        `${API_TEKNISI}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=id`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
       const data = await response.json();
       setoptions2(data.data);
+      console.log(data);
     } else {
       return;
     }
@@ -174,30 +127,8 @@ function AddBonBarang() {
     setvalues2(event.target.value);
     setCurrentPage2(1);
   };
+  // END GET ALL TEKNISI
 
-  const handleBarang = async () => {
-    if (values2.trim() !== "") {
-      const response = await fetch(
-        `${API_BARANG}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=1`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      const data = await response.json();
-      setoptions2(data.data);
-    } else {
-      return;
-    }
-  };
-
-  useEffect(() => {
-    handleBarang();
-  }, [currentPage2, values2]);
-
-  const handleChangeBarang = (event) => {
-    setvalues2(event.target.value);
-    setCurrentPage2(1);
-  };
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -220,12 +151,23 @@ function AddBonBarang() {
             <a href="/bon_barang">
               <span>Bon Barang</span>
             </a>
-            <span className="cursor-default">Tambah Stok Barang</span>
+            <span className="cursor-default">Tambah Bon Barang</span>
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addBonBarang}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <Input
+                label="ID Service"
+                variant="static"
+                color="blue"
+                list="service-list"
+                id="service"
+                name="service"
+                onChange={(e) => setserviceId(e.target.value)}
+                placeholder="Pilih Service"
+                required
+              />
               <div className="flex gap-2 items-end">
                 <Input
                   label="Teknisi"
@@ -235,63 +177,18 @@ function AddBonBarang() {
                   id="teknisi"
                   name="teknisi"
                   onChange={(event) => {
-                    handleChange(event);
+                    handleChangeTeknisi(event);
                     setteknisiId(event.target.value);
                   }}
                   placeholder="Pilih Teknisi"
                   required
                 />
                 <datalist id="teknisi-list">
-                  {options.length > 0 && (
-                    <>
-                      {options.map((option) => (
-                        <option key={option.idTeknisi} value={option.idTeknisi}>
-                          {option.kodeTeknisi} - {option.namaTeknisi}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </datalist>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    type="button"
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={!options.length}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-              <div className="flex gap-2 items-end">
-                <Input
-                  label="Service"
-                  variant="static"
-                  color="blue"
-                  list="service-list"
-                  id="service"
-                  name="service"
-                  onChange={(event) => {
-                    handleChangeTeknisi(event);
-                    setserviceId(event.target.value);
-                  }}
-                  placeholder="Pilih Service"
-                  required
-                />
-                <datalist id="service-list">
                   {options2.length > 0 && (
                     <>
                       {options2.map((option) => (
-                        <option key={option.idService} value={option.idService}>
-                          {option.barcodeService} - {option.namaService}
+                        <option key={option.id} value={option.id}>
+                          {option.nama}
                         </option>
                       ))}
                     </>
@@ -332,10 +229,13 @@ function AddBonBarang() {
                   required
                 />
                 <datalist id="barang-list">
-                  {options2.length > 0 && (
+                  {options.length > 0 && (
                     <>
-                      {options2.map((option) => (
-                        <option key={option.idBarang} value={option.idBarang}>
+                      {options.map((option) => (
+                        <option
+                          key={option.barcodeBarang}
+                          value={option.barcodeBarang}
+                        >
                           {option.barcodeBarang} - {option.namaBarang}
                         </option>
                       ))}
@@ -346,40 +246,29 @@ function AddBonBarang() {
                   <button
                     type="button"
                     className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage2(currentPage2 - 1)}
-                    disabled={currentPage2 === 1}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
                   >
                     Prev
                   </button>
                   <button
                     type="button"
                     className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPage2(currentPage2 + 1)}
-                    disabled={!options2.length}
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={!options.length}
                   >
                     Next
                   </button>
                 </div>
               </div>
               <Input
-                label="barcode brg"
-                variant="static"
-                color="blue"
-                type="number"
-                size="lg"
-                placeholder="Masukkan barcode brg"
-                icon={<PlusIcon />}
-                onChange={(e) => setbarcode_brg(e.target.value)}
-                required
-              />
-              <Input
-                label="tanggal kembali"
+                label="Tanggal Ambil"
                 variant="static"
                 color="blue"
                 size="lg"
-                placeholder="Masukkan tanggal kembali"
-                icon={<InformationCircleIcon />}
-                onChange={(e) => settanggal_kembali(e.target.value)}
+                type="date"
+                placeholder="Masukkan Tanggal Ambil"
+                onChange={(e) => settglAmbil(e.target.value)}
                 required
               />
             </div>

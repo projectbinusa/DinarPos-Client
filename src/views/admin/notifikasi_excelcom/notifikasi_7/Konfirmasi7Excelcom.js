@@ -152,7 +152,7 @@ function Konfirmasi7Excelcom() {
                     setsalesmanId(event.target.value);
                   }}
                   placeholder="Pilih Salesman"
-required
+                  required
                 />
                 <datalist id="salesman-list">
                   {optionsSalesman.length > 0 && (
@@ -194,7 +194,7 @@ required
                 label="Keterangan"
                 placeholder="Masukkan Keterangan"
                 onChange={(e) => setket(e.target.value)}
-required
+                required
               />
             </div>
             <div className="mt-10 flex gap-4">

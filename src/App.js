@@ -140,6 +140,12 @@ import DashboardTeknisi from "./views/itcteknisi/DashboardTeknisi.js";
 import DetailServiceTeknisi from "./views/itcteknisi/DetailServiceTeknisi.js";
 import EditData from "./views/itc/edit_data/EditData.js";
 import EditGaransi from "./views/itc/garansi/EditGaransi.js";
+import EditBonBarang from "./views/itc/bon/EditBonBarang.js";
+import GrafikPoin from "./views/itc/point/GrafikPoin.js";
+import ServiceTakenTeknisi from "./views/itcteknisi/ServiceTakenTeknisi.js";
+import ServiceCancelTeknisi from "./views/itcteknisi/ServiceCancelTeknisi.js";
+import ServiceTeknisi from "./views/itcteknisi/ServiceTeknisi.js";
+import ServiceReturTeknisi from "./views/itcteknisi/ServiceReturTeknisi.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -858,11 +864,6 @@ function App() {
               component={AddPoint}
               isAuthenticated={true}
             />
-            <PrivateRoute
-              path="/history_point"
-              component={HistoryPoint}
-              isAuthenticated={true}
-            />
             {/* END POIN */}
 
             {/* FINISH */}
@@ -891,14 +892,6 @@ function App() {
             />
             {/* END GARANSI */}
 
-            {/* Teknisi */}
-            <PrivateRoute
-              path="/Dashboard_Teknisi"
-              component={DashboardTeknisi}
-              isAuthenticated={true}
-            />
-            {/* END Teknisi */}
-
             {/* BON BARANG */}
             <PrivateRoute
               path="/bon_barang"
@@ -910,6 +903,11 @@ function App() {
               component={AddBonBarang}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/edit_bon_barang/:id"
+              component={EditBonBarang}
+              isAuthenticated={true}
+            />
             {/* END BON BARANG */}
 
             {/* EDIT DATA */}
@@ -919,6 +917,44 @@ function App() {
               isAuthenticated={true}
             />
             {/* END EDIT DATA */}
+
+            {/* ROLE TEKNISI */}
+            <PrivateRoute
+              path="/dashboard_teknisi"
+              component={DashboardTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/service_taken_teknisi"
+              component={ServiceTakenTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/service_cancel_teknisi"
+              component={ServiceCancelTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/service_teknisi"
+              component={ServiceTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/service_retur_teknisi"
+              component={ServiceReturTeknisi}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/history_point"
+              component={HistoryPoint}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/grafik_poin/:id"
+              component={GrafikPoin}
+              isAuthenticated={true}
+            />
+            {/* ROLE TEKNISI */}
           </Switch>
         </main>
       </BrowserRouter>
