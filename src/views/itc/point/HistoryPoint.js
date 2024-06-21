@@ -1,105 +1,372 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Card,
   CardBody,
   CardHeader,
+  IconButton,
+  Input,
   Typography,
 } from "@material-tailwind/react";
-import $ from 'jquery';
-// import { Line } from "react-chartjs-2";
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   PointElement,
-//   LineElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// } from 'chart.js';
-// import 'datatables.net';
-// import 'datatables.net-bs4';
-
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-//   LineElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
+import $ from "jquery";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { API_POIN, API_TEKNISI } from "../../../utils/BaseUrl";
+import axios from "axios";
+import Chart from "react-apexcharts";
 
 function HistoryPoint() {
-  // const [points, setPoints] = useState([]);
-  // const [filteredPoints, setFilteredPoints] = useState([]);
-  // const [startDate, setStartDate] = useState("");
-  // const [endDate, setEndDate] = useState("");
-  // const currentYear = new Date().getFullYear();
-  // const [searchTerm, setSearchTerm] = useState("");
+  const [tanggalAwal, settanggalAwal] = useState("");
+  const [tanggalAkhir, settanggalAkhir] = useState("");
+  const [idTeknisi, setidTeknisi] = useState(0);
 
-  // const handleFilter = () => {
-  //   if (startDate && endDate) {
-  //     const filtered = points.filter(point => {
-  //       const pointDate = new Date(point.tanggal);
-  //       return pointDate >= new Date(startDate) && pointDate <= new Date(endDate);
-  //     });
-  //     setFilteredPoints(filtered);
-  //   } else {
-  //     setFilteredPoints(points);
-  //   }
-  // };
+  const [validasi, setValidasi] = useState(false);
 
-  // // Mengelompokkan poin berdasarkan bulan
-  // const monthlyPoints = Array(12).fill(0);
-  // filteredPoints.forEach((point) => {
-  //   const month = new Date(point.tanggal).getMonth();
-  //   monthlyPoints[month] += point.poin;
-  // });
+  const [points, setPoints] = useState([]);
+  const [pointsDate, setPointsDate] = useState([]);
 
-  // // Menghitung total poin
-  // const totalPoints = monthlyPoints.reduce((acc, cur) => acc + cur, 0);
+  const currentYear = new Date().getFullYear();
 
-  // const chartData = {
-  //   labels: [
-  //     "Januari", "Februari", "Maret", "April", "Mei", "Juni", 
-  //     "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-  //   ],
-  //   datasets: [
-  //     {
-  //       label: "Poin",
-  //       data: monthlyPoints,
-  //       borderColor: "rgba(75, 192, 192, 1)",
-  //       backgroundColor: "rgba(75, 192, 192, 0.2)",
-  //     },
-  //   ],
-  // };
+  const tableRef = useRef(null);
 
-  // const chartOptions = {
-  //   scales: {
-  //     y: {
-  //       beginAtZero: true,
-  //     },
-  //   },
-  // };
+  useEffect(() => {
+    axios
+      .get(
+        `${API_TEKNISI}/username?username=` + localStorage.getItem("username"),
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      )
+      .then((res) => {
+        setidTeknisi(res.data.data.id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [API_TEKNISI]);
 
-  // const handleSearch = (event) => {
-  //   setSearchTerm(event.target.value);
-  // };
-  
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
 
-  // useEffect(() => {
-  //   $('#tables').DataTable();
-  // }, [filteredPoints]);
+    $(tableRef.current).DataTable({});
+  };
+
+  // GET ALL
+  const getAll = async () => {
+    try {
+      const response = await axios.get(
+        `${API_POIN}/teknisi?id_teknisi=${idTeknisi}`,
+        {
+          headers: {
+            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setPoints(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  // GET ALL BY DATE
+  const getAllByDate = async () => {
+    try {
+      const response = await axios.get(
+        `${API_POIN}/filter?akhir=${tanggalAkhir}&awal=${tanggalAwal}&idTeknisi=${idTeknisi}`,
+        {
+          headers: {
+            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setPointsDate(response.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, [idTeknisi, API_POIN]);
+
+  useEffect(() => {
+    if (points && points.length > 0) {
+      initializeDataTable();
+    }
+  }, [points]);
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
+  const searchHistoryPoin = () => {
+    getAllByDate();
+    setValidasi(true);
+  };
+
+  const [poinJan, setpoinJan] = useState(0);
+  const [poinFeb, setpoinFeb] = useState(0);
+  const [poinMar, setpoinMar] = useState(0);
+  const [poinApr, setpoinApr] = useState(0);
+  const [poinMei, setpoinMei] = useState(0);
+  const [poinJun, setpoinJun] = useState(0);
+  const [poinJul, setpoinJul] = useState(0);
+  const [poinAgs, setpoinAgs] = useState(0);
+  const [poinSep, setpoinSep] = useState(0);
+  const [poinOkto, setpoinOkto] = useState(0);
+  const [poinNov, setpoinNov] = useState(0);
+  const [poinDes, setpoinDes] = useState(0);
+
+  const getAllPoin = async () => {
+    try {
+      // JANUARI
+      const jan = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=01&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinJan(jan.data);
+
+      // FEBRUARI
+      const feb = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=02&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinFeb(feb.data);
+
+      // MARET
+      const mar = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=03&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinMar(mar.data);
+
+      // APRIL
+      const apr = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=04&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinApr(apr.data);
+
+      // MEI
+      const may = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=05&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinMei(may.data);
+
+      // JUNI
+      const jun = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=06&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinJun(jun.data);
+
+      // JULI
+      const jul = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=07&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinJul(jul.data);
+
+      // AGUSTUS
+      const agus = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=08&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinAgs(agus.data);
+
+      // SEPTEMBER
+      const sep = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=09&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinSep(sep.data);
+
+      // OKTOBER
+      const okto = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=10&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinOkto(okto.data);
+
+      // NOVEMBER
+      const nov = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=11&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinNov(nov.data);
+
+      // DESEMBER
+      const des = await axios.get(
+        `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=12&year=` +
+          currentYear,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setpoinDes(des.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllPoin();
+  }, [idTeknisi, API_POIN]);
+
+  const chartConfigPoin = {
+    type: "area",
+    height: 260,
+    series: [
+      {
+        name: "Jumlah Poin",
+        data: [
+          poinJan,
+          poinFeb,
+          poinMar,
+          poinApr,
+          poinMei,
+          poinJun,
+          poinJul,
+          poinAgs,
+          poinSep,
+          poinOkto,
+          poinNov,
+          poinDes,
+        ],
+      },
+    ],
+    options: {
+      chart: {
+        toolbar: {
+          show: false,
+        },
+      },
+      title: {
+        show: "",
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      colors: ["#2196f3", "#4caf50"],
+      plotOptions: {
+        bar: {
+          columnWidth: "40%",
+          borderRadius: 2,
+        },
+      },
+      xaxis: {
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+      },
+      grid: {
+        show: true,
+        borderColor: "#dddddd",
+        strokeDashArray: 5,
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        padding: {
+          top: 5,
+          right: 20,
+        },
+      },
+      fill: {
+        opacity: 0.8,
+      },
+      tooltip: {
+        theme: "dark",
+      },
+    },
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      {/* <div className="lg:ml-[19rem] pt-20 lg:pt-3 w-full">
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Riwayat Poin
+            Poin Teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -112,124 +379,147 @@ function HistoryPoint() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/history_point">
-              <span>Riwayat Poin</span>
+            <a href="/take_over">
+              <span>Poin</span>
             </a>
-            <span className="cursor-default capitalize">Ikhtisar</span>
-            </Breadcrumbs>
+          </Breadcrumbs>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 items-center">
-          <div className="bg-white p-5 mt-5 shadow-lg rounded lg:col-span-2 w-full md:w-auto">
-            <Typography variant="h6" color="blue-gray">
+        <main className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+          <div className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
+            <Typography
+              variant="paragraph"
+              className="capitalize font-semibold"
+            >
               History Poin
             </Typography>
-            <hr />
             <br />
-            <div className="flex flex-col md:flex-row gap-3 items-end">
-              <div className="w-full">
-                <label className="text-sm font-medium">Tanggal Awal</label>
-                <input
-                  type="date"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-              </div>
-              <div className="w-full">
-                <label className="text-sm font-medium">Tanggal Akhir</label>
-                <input
-                  type="date"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </div>
+            <hr /> <br />
+            <div className="flex gap-2 items-center">
+              <Input
+                label="Tanggal Awal"
+                variant="static"
+                color="blue"
+                size="md"
+                onChange={(e) => settanggalAwal(e.target.value)}
+                placeholder="Tanggal Awal"
+                type="date"
+                required
+              />
+              <Input
+                label="Tanggal Akhir"
+                variant="static"
+                color="blue"
+                size="md"
+                onChange={(e) => settanggalAkhir(e.target.value)}
+                placeholder="Tanggal Akhir"
+                type="date"
+                required
+              />
               <div>
-                <button
-                  className="block text-white bg-primary hover:bg-sky-600 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium text-sm px-5 py-2.5 text-center rounded-lg"
-                  type="button"
-                  onClick={handleFilter}
+                <IconButton
+                  size="md"
+                  color="light-blue"
+                  onClick={searchHistoryPoin}
                 >
-                  <i className="fas fa-search"></i>
-                </button>
+                  <MagnifyingGlassIcon className="w-6 h-6 white" />
+                </IconButton>
               </div>
-            </div>
+            </div>{" "}
             <br />
-            <input
-                    type="text"
-                    placeholder="Cari Data..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="px-3 py-2 border rounded-md"
-                    />
-                    <br />
             <div className="rounded p-1 w-full overflow-x-auto mt-5">
-                <table id="example_data" className="rounded-sm w-full">
-                    <thead className="bg-blue-500 text-white">
-                    <tr>
-                        <th className="py-2 px-3 font-semibold">No</th>
-                        <th className="py-2 px-3 font-semibold">Tanggal</th>
-                        <th className="py-2 px-3 font-semibold">Poin</th>
-                        <th className="py-2 px-3 font-semibold">Keterangan </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {points.length > 0 ? (
-                            points
-                                .filter((row) => {
-                                // Filter berdasarkan pencarian
-                                return (
-                                    row.tanggal.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    row.poin.toString().includes(searchTerm.toLowerCase()) ||
-                                    row.keterangan.toLowerCase().includes(searchTerm.toLowerCase())
-                                );
-                                })
-                                .map((row, index) => (
-                                <tr key={index}>
-                                    <td className="py-2 px-3">{index + 1}</td>
-                                    <td className="py-2 px-3">{row.tanggal}</td>
-                                    <td className="py-2 px-3">{row.poin}</td>
-                                    <td className="py-2 px-3">{row.keterangan}</td>
-                                </tr>
-                                ))
-                            ) : (
+              <table
+                ref={tableRef}
+                id="example_data"
+                className="rounded-sm w-full"
+              >
+                <thead className="bg-blue-500 text-white">
+                  <tr>
+                    <th className="py-2 px-3 font-semibold">No</th>
+                    <th className="py-2 px-3 font-semibold">Tanggal</th>
+                    <th className="py-2 px-3 font-semibold">Poin</th>
+                    <th className="py-2 px-3 font-semibold">Keterangan </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {validasi === true ? (
+                    <>
+                      {pointsDate.length > 0 ? (
+                        pointsDate.map((poin, index) => (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {formatDate(poin.tanggal)}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.poin}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.keterangan}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
                         <tr>
-                        <td colSpan="5" className="text-center py-3 bg-gray-100">
+                          <td
+                            colSpan="4"
+                            className="text-sm text-center capitalize py-3 bg-gray-100"
+                          >
                             Tidak ada data
-                        </td>
+                          </td>
                         </tr>
-                    )}
-                    </tbody>
-                </table>
-                </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {points.length > 0 ? (
+                        points.map((point, index) => (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {formatDate(point.tanggal)}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.poin}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.keterangan}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="4"
+                            className="text-sm text-center capitalize py-3 bg-gray-100"
+                          >
+                            Tidak ada data
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div className="w-full md:w-[calc(100%-330px)]">
-            <Card>
-              <CardHeader
-                floated={false}
-                shadow={false}
-                color="transparent"
-                className="flex flex-col gap-4 rounded-none lg:flex-row lg:items-center"
-              >
-                <div>
-                  <Typography variant="h6" color="blue-gray">
-                    Grafik Poin {currentYear}
-                  </Typography>
-                </div>
-              </CardHeader>
+          <div className="w-full my-5 rounded">
+            <Card className="rounded p-5">
+              <Typography variant="h6" color="black">
+                Grafik Poin {currentYear}
+              </Typography>
+              <br />
+              <hr /> <br />
               <CardBody className="px-2 pb-0">
-                <Line data={chartData} options={chartOptions} />
+                <Chart {...chartConfigPoin} />
               </CardBody>
             </Card>
           </div>
-        </div>
-        <br />
-      </div> */}
+        </main>
+      </div>
     </section>
   );
 }
 
 export default HistoryPoint;
-

@@ -85,11 +85,21 @@ function SidebarAdmin() {
               </Typography>
             </div>
             <List className="pb-12">
-              <a href="/dashboard">
-                <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                  dashboard
-                </ListItem>
-              </a>
+              {level === "Superadmin" ||
+              level === "Admin" ||
+              level === "Kasir" ||
+              level === "Gudang" ||
+              level === "Accounting" ? (
+                <>
+                  <a href="/dashboard">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      dashboard
+                    </ListItem>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
               {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ? (
@@ -1226,7 +1236,7 @@ function SidebarAdmin() {
                   </a>
                   <a href="/data_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      data teknisi
+                      teknisi
                     </ListItem>
                   </a>
                   <a href="/take_over">
@@ -1265,9 +1275,29 @@ function SidebarAdmin() {
               )}
               {level === "Pimpinan" ? (
                 <>
+                  <a href="/dashboard_pimpinan">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      dashboard pimpinan{" "}
+                    </ListItem>
+                  </a>
+                  <a href="/data_service_taken">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      TAKEN{" "}
+                    </ListItem>
+                  </a>
                   <a href="/poin_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       poin teknisi{" "}
+                    </ListItem>
+                  </a>
+                  <a href="/finish">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      finish{" "}
+                    </ListItem>
+                  </a>
+                  <a href="/data_teknisi">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      teknisi
                     </ListItem>
                   </a>
                 </>
@@ -1278,12 +1308,12 @@ function SidebarAdmin() {
                 <>
                   <a href="/dashboard_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      dashboard teknisi{" "}
+                      dashboard{" "}
                     </ListItem>
                   </a>
                   <a href="/history_point">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      history point
+                      Poin
                     </ListItem>
                   </a>
                 </>
@@ -1313,11 +1343,22 @@ function SidebarAdmin() {
             </Typography>
           </div>
           <List className="mb-5">
-            <a href="/dashboard">
-              <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                dashboard
-              </ListItem>
-            </a>
+            {level === "Superadmin" ||
+            level === "Admin" ||
+            level === "Kasir" ||
+            level === "Gudang" ||
+            level === "Accounting" ? (
+              <>
+                <a href="/dashboard">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    dashboard
+                  </ListItem>
+                </a>
+              </>
+            ) : (
+              <></>
+            )}
+
             {level === "Superadmin" ||
             level === "Admin" ||
             level === "Kasir" ? (
@@ -2454,7 +2495,7 @@ function SidebarAdmin() {
                 </a>
                 <a href="/data_teknisi">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    data teknisi
+                    teknisi
                   </ListItem>
                 </a>
                 <a href="/take_over">
@@ -2493,9 +2534,29 @@ function SidebarAdmin() {
             )}
             {level === "Pimpinan" ? (
               <>
+                <a href="/dashboard_pimpinan">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    dashboard pimpinan{" "}
+                  </ListItem>
+                </a>
+                <a href="/data_service_taken">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    taken{" "}
+                  </ListItem>
+                </a>
                 <a href="/poin_teknisi">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     poin teknisi
+                  </ListItem>
+                </a>
+                <a href="/finish">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    finish
+                  </ListItem>
+                </a>
+                <a href="/data_teknisi">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    teknisi
                   </ListItem>
                 </a>
               </>
@@ -2504,14 +2565,29 @@ function SidebarAdmin() {
             )}
             {level === "Teknisi" ? (
               <>
-                <a href="/dashboard_teknisi" className="mb-5">
+                <a href="/dashboard_teknisi">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    Dashboard Teknisi
+                    Dashboard
+                  </ListItem>
+                </a>
+                <a href="/service_taken_teknisi">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Taken
+                  </ListItem>
+                </a>
+                <a href="/service_cancel_teknisi">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Cancel
+                  </ListItem>
+                </a>
+                <a href="/service_teknisi">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    My Service
                   </ListItem>
                 </a>
                 <a href="/history_point">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    History Point
+                    Poin
                   </ListItem>
                 </a>
               </>

@@ -7,18 +7,63 @@ import {
   Typography,
   Input,
 } from "@material-tailwind/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ChartBarIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-import $ from "jquery";
+import $, { error } from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
-import { API_POIN_SALESMAN_TANGGAL_EXCELCOM } from "../../../utils/BaseUrl";
+import { API_POIN } from "../../../utils/BaseUrl";
 
 function DataPoin() {
   const tableRef = useRef(null);
+  const tableRef2 = useRef(null);
   const [points, setPoints] = useState([]);
+  const [pointsDate, setPointsDate] = useState([]);
   const [tanggalAwal, setTanggalAwal] = useState("");
   const [tanggalAkhir, setTanggalAkhir] = useState("");
+  const [validasi, setValidasi] = useState(false);
+
+  // TOTAL POIN PER BULAN
+  const [poins, setpoins] = useState([]);
+  const [month, setmonth] = useState("");
+  const [validasi2, setvalidasi2] = useState(false);
+
+  const searchPoinByMonth = async () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const months = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${months}-${day}`;
+
+    const bulan = validasi2 ? `${month}-01` : formattedDate;
+
+    try {
+      const response = await axios.get(`${API_POIN}/month?month=${bulan}`, {
+        headers: {
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
+      });
+      setpoins(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  useEffect(() => {
+    if (validasi2) {
+      searchPoinByMonth();
+      setvalidasi2(false);
+    }
+  }, [validasi2, month]);
+
+  useEffect(() => {
+    searchPoinByMonth();
+  }, []);
+
+  const handleSearchPoinByMonth = () => {
+    setvalidasi2(true);
+  };
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -28,27 +73,45 @@ function DataPoin() {
     $(tableRef.current).DataTable({});
   };
 
+  const initializeDataTable2 = () => {
+    if ($.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable().destroy();
+    }
+
+    $(tableRef2.current).DataTable({});
+  };
+
   // GET ALL
   const getAll = async () => {
     try {
-      const response = await axios.get(API_POIN_SALESMAN_TANGGAL_EXCELCOM, {
-        params: {
-          tanggal_awal: tanggalAwal,
-          tanggal_akhir: tanggalAkhir,
-        },
+      const response = await axios.get(`${API_POIN}`, {
         headers: {
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
         },
       });
-      setPoints(response.data.data);
+      setPoints(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
     }
   };
 
-  useEffect(() => {
-    getAll();
-  }, []);
+  // GET ALL HISTORY POINT BY DATE
+  const getAllByDate = async () => {
+    try {
+      const response = await axios.get(
+        `${API_POIN}/tanggal/?tanggal_akhir=${tanggalAkhir}&tanggal_awal=${tanggalAwal}`,
+        {
+          headers: {
+            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setPointsDate(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
 
   useEffect(() => {
     if (points && points.length > 0) {
@@ -56,8 +119,35 @@ function DataPoin() {
     }
   }, [points]);
 
-  const handleSearch = () => {
+  useEffect(() => {
+    if (poins && poins.length > 0) {
+      initializeDataTable2();
+    }
+  }, [poins]);
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
+  useEffect(() => {
     getAll();
+  }, []);
+
+  useEffect(() => {
+    if (validasi) {
+      getAllByDate();
+    }
+  }, [validasi]);
+
+  const searchHistoryPoin = () => {
+    setValidasi((prevValidasi) => !prevValidasi);
   };
 
   return (
@@ -84,8 +174,8 @@ function DataPoin() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-          <div className="bg-white shadow-lg p-5 my-5 rounded">
+        <main className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+          <div className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
             <div className="flex justify-between items-center">
               <Typography
                 variant="paragraph"
@@ -99,68 +189,87 @@ function DataPoin() {
                 </Button>
               </a>
             </div>
-            <br /> <hr /> <br />
+            <br /> <hr />
             <br />
             <div className="flex gap-2 items-center">
               <Input
-                label="Tanda Terima"
-                variant="static"
+                label="Bulan"
+                variant="outlined"
                 color="blue"
                 size="md"
-                placeholder="Cari Tanda Terima"
+                type="month"
+                onChange={(e) => setmonth(e.target.value)}
                 required
               />
-              <Button variant="gradient" color="blue" size="sm">
+              <Button
+                variant="gradient"
+                color="blue"
+                size="md"
+                onClick={handleSearchPoinByMonth}
+              >
                 GO!
               </Button>
             </div>
             <br />
-            {/* <div className="overflow-x-auto" id="tables_poin">
-              <table className="border border-collapse w-full" id="table_poin">
-                <thead>
+            <div className="overflow-x-auto">
+              <table
+                className="rounded-sm table-auto w-full"
+                id="example_data1"
+                ref={tableRef2}
+              >
+                <thead className="bg-blue-500 text-white">
                   <tr>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
-                      No
-                    </th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
-                      Teknisi
-                    </th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                    <th className="text-sm py-2 px-3 font-semibold">No</th>
+                    <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
+                    <th className="text-sm py-2 px-3 font-semibold">
                       Total Poin
                     </th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                    <th className="text-sm py-2 px-3 font-semibold">
                       Nominal (Rp)
                     </th>
-                    <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
-                      %
+                    <th className="text-sm py-2 px-3 font-semibold">%</th>
+                    <th className="text-sm py-2 px-3 font-semibold">
+                      <ChartBarIcon className="w-5 h-6 white" />
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {points.length > 0 ? (
-                    points.map((point, index) => (
-                      <tr key={index}>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          {index + 1}
-                        </td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          {point.teknisi}
-                        </td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          {point.total_poin}
-                        </td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          {point.nominal}
-                        </td>
-                        <td className="text-sm text-center py-2 px-2 border-gray-300 border">
-                          {point.persentase}%
-                        </td>
-                      </tr>
-                    ))
+                  {poins.length > 0 ? (
+                    poins.map((poin, index) => {
+                      const percent = Number(
+                        (poin.totalPoin / 250) * 100
+                      ).toFixed(2);
+                      return (
+                        <tr key={index}>
+                          <td className="text-sm py-2 px-3 text-center">
+                            {index + 1}
+                          </td>
+                          <td className="text-sm py-2 px-3 text-center">
+                            {poin.teknisiNama}
+                          </td>
+                          <td className="text-sm py-2 px-3 text-center">
+                            {poin.totalPoin}
+                          </td>
+                          <td className="text-sm py-2 px-3 text-center">
+                            {poin.totalNominal}
+                          </td>
+                          <td className="text-sm py-2 px-3 text-center">
+                            {percent}%
+                          </td>
+                          <td className="text-sm py-2 px-3 text-center">
+                            <a href={`/grafik_poin/${poin.teknisiId}`}>
+                              <IconButton color="blue" size="md">
+                                <ChartBarIcon className="w-5 h-6 white" />
+                              </IconButton>
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td
-                        colSpan="5"
+                        colSpan="6"
                         className="text-sm text-center capitalize py-3 bg-gray-100"
                       >
                         Tidak ada data
@@ -169,9 +278,9 @@ function DataPoin() {
                   )}
                 </tbody>
               </table>
-            </div> */}
+            </div>
           </div>
-          <div className="bg-white shadow-lg p-5 my-5 rounded lg:col-span-2">
+          <div className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
             <Typography
               variant="paragraph"
               className="capitalize font-semibold"
@@ -186,9 +295,9 @@ function DataPoin() {
                 variant="static"
                 color="blue"
                 size="md"
-                value={tanggalAwal}
                 onChange={(e) => setTanggalAwal(e.target.value)}
-                placeholder="Masukkan Tanggal Awal"
+                placeholder="Tanggal Awal"
+                type="date"
                 required
               />
               <Input
@@ -196,13 +305,17 @@ function DataPoin() {
                 variant="static"
                 color="blue"
                 size="md"
-                value={tanggalAkhir}
                 onChange={(e) => setTanggalAkhir(e.target.value)}
-                placeholder="Masukkan Tanggal Akhir"
+                placeholder="Tanggal Akhir"
+                type="date"
                 required
               />
               <div>
-                <IconButton size="md" color="light-blue" onClick={handleSearch}>
+                <IconButton
+                  size="md"
+                  color="light-blue"
+                  onClick={searchHistoryPoin}
+                >
                   <MagnifyingGlassIcon className="w-6 h-6 white" />
                 </IconButton>
               </div>
@@ -224,39 +337,77 @@ function DataPoin() {
                     <th className="text-sm py-2 px-3 font-semibold">Ket</th>
                   </tr>
                 </thead>
-                {/* <tbody>
-                  {points.length > 0 ? (
-                    points.map((point, index) => (
-                      <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.teknisi}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.tgl}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.poin}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.nominal}
-                        </td>
-                        <td className="text-sm py-2 px-3 text-center">
-                          {point.keterangan}
-                        </td>
-                      </tr>
-                    ))
+                <tbody>
+                  {validasi === true ? (
+                    <>
+                      {pointsDate.length > 0 ? (
+                        pointsDate.map((poin, index) => (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.teknisi.nama}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {formatDate(poin.tanggal)}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.poin}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.nominal}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {poin.keterangan}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="text-sm text-center capitalize py-3 bg-gray-100"
+                          >
+                            Tidak ada data
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   ) : (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-sm text-center capitalize py-3 bg-gray-100"
-                      >
-                        Tidak ada data
-                      </td>
-                    </tr>
+                    <>
+                      {points.length > 0 ? (
+                        points.map((point, index) => (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.teknisi.nama}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {formatDate(point.tanggal)}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.poin}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.nominal}
+                            </td>
+                            <td className="text-sm py-2 px-3 text-center">
+                              {point.keterangan}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="text-sm text-center capitalize py-3 bg-gray-100"
+                          >
+                            Tidak ada data
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   )}
-                </tbody> */}
+                </tbody>
               </table>
             </div>
           </div>

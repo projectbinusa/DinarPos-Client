@@ -1,9 +1,22 @@
-import { Breadcrumbs, Button, Input, Textarea, Typography } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  Input,
+  Textarea,
+  Typography,
+} from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { API_SALESMAN, GET_TRANSAKSI_JUAL, KONFIRMASI_120 } from "../../../../utils/BaseUrl";
+import {
+  API_SALESMAN,
+  GET_TRANSAKSI_JUAL,
+  KONFIRMASI_120,
+} from "../../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useParams,
+} from "react-router-dom/cjs/react-router-dom.min";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 
 function Konfirmasi120Excelcom() {
@@ -139,7 +152,7 @@ function Konfirmasi120Excelcom() {
                     setsalesmanId(event.target.value);
                   }}
                   placeholder="Pilih Salesman"
-required
+                  required
                 />
                 <datalist id="salesman-list">
                   {optionsSalesman.length > 0 && (
@@ -181,7 +194,7 @@ required
                 label="Keterangan"
                 placeholder="Masukkan Keterangan"
                 onChange={(e) => setket(e.target.value)}
-required
+                required
               />
             </div>
             <div className="mt-10 flex gap-4">

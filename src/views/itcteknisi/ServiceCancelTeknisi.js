@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../component/SidebarAdmin";
 import {
   Breadcrumbs,
-  Button,
   IconButton,
   Typography,
 } from "@material-tailwind/react";
@@ -23,6 +22,22 @@ function ServiceCancelTeknisi() {
 
     $(tableRef.current).DataTable({});
   };
+
+  // GET ALL
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE}/cancel`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setservices(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
 
   useEffect(() => {
     if (services && services.length > 0) {
@@ -72,7 +87,6 @@ function ServiceCancelTeknisi() {
     return formattedDate;
   };
 
-
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -82,7 +96,7 @@ function ServiceCancelTeknisi() {
             Service Cancel
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href="/dashboard_teknisi" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -92,7 +106,7 @@ function ServiceCancelTeknisi() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/ServiceCancelTeknisi">
+            <a href="/service_cancel_teknisi">
               <span>Cancel</span>
             </a>
           </Breadcrumbs>
@@ -146,7 +160,7 @@ function ServiceCancelTeknisi() {
                         <td className="text-sm py-2 px-3">{row.statusEnd}</td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-row gap-3">
-                            <a href={"/detail_service/" + row.idTT}>
+                            <a href={"/detail_service_teknisi/" + row.idTT}>
                               <IconButton size="md" color="light-blue">
                                 <InformationCircleIcon className="w-6 h-6 white" />
                               </IconButton>
