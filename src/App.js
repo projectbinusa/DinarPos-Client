@@ -146,6 +146,8 @@ import ServiceTakenTeknisi from "./views/itcteknisi/ServiceTakenTeknisi.js";
 import ServiceCancelTeknisi from "./views/itcteknisi/ServiceCancelTeknisi.js";
 import ServiceTeknisi from "./views/itcteknisi/ServiceTeknisi.js";
 import ServiceReturTeknisi from "./views/itcteknisi/ServiceReturTeknisi.js";
+import DashboardPimpinan from "./views/itcpimpinan/DashboardPimpinan.js";
+import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -799,6 +801,11 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/data_service_taken"
+              component={DataServiceTaken}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/detail_service/:id"
               component={DetailService}
               isAuthenticated={true}
@@ -955,6 +962,14 @@ function App() {
               isAuthenticated={true}
             />
             {/* ROLE TEKNISI */}
+
+            {/* ROLE PIMPINAN */}
+            <PrivateRoute
+              path="/dashboard_pimpinan"
+              component={DashboardPimpinan}
+              isAuthenticated={true}
+            />
+            {/* END ROLE PIMPINAN */}
           </Switch>
         </main>
       </BrowserRouter>
