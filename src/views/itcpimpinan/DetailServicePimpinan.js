@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../component/SidebarAdmin";
-import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  Button,
+  IconButton,
+  Typography,
+} from "@material-tailwind/react";
 import {
   ChatBubbleBottomCenterIcon,
   ChevronLeftIcon,
@@ -8,11 +13,13 @@ import {
 } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { API_SERVICE } from "../../utils/BaseUrl";
+import { API_SERVICE, API_TRANSAKSI } from "../../utils/BaseUrl";
 
 function DetailServicePimpinan() {
   const [datas, setdatas] = useState(null);
+  const [dataTransaksi, setdataTransaksi] = useState(null);
   const param = useParams();
+
   useEffect(() => {
     axios
       .get(`${API_SERVICE}/` + param.id, {
@@ -27,6 +34,20 @@ function DetailServicePimpinan() {
       });
   }, []);
 
+    useEffect(() => {
+      axios
+        .get(`${API_TRANSAKSI}/get-transaksi-by-id-tt/` + param.id, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        })
+        .then((res) => {
+          setdataTransaksi(res.data);
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, []);
+
   const formatDate = (value) => {
     const date = new Date(value);
 
@@ -36,6 +57,14 @@ function DetailServicePimpinan() {
     const formattedDate = `${year}-${month}-${day}`;
 
     return formattedDate;
+  };
+
+  const formatRupiah = (value) => {
+    const formatter = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    return formatter.format(value);
   };
 
   // GET ALL TGL KONF
@@ -59,6 +88,7 @@ function DetailServicePimpinan() {
   useEffect(() => {
     allTglKonf();
   }, []);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -389,6 +419,184 @@ function DetailServicePimpinan() {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
+              <h1 className="font-semibold mt-1">Perincian Biaya</h1>
+              <hr /> <br />
+              <ol className="">
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Estimasi</p>
+                    <p className="w-full">{formatRupiah(datas?.estimasi)}</p>
+                  </div>
+                </li>
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Sparepart</p>
+                    <p className="w-full">
+                      {formatRupiah(datas?.biayaSparepart)}
+                    </p>
+                  </div>
+                </li>
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Service</p>
+                    <p className="w-full">
+                      {formatRupiah(datas?.biayaService)}
+                    </p>
+                  </div>
+                </li>
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Total</p>
+                    <p className="w-full">{formatRupiah(datas?.total)}</p>
+                  </div>
+                </li>
+              </ol>
+              <br />
+              <br />
+              {dataTransaksi && dataTransaksi.length > 0 ? (
+                <>
+                  <h1 class="text-xl font-medium">
+                    No Faktur : {dataTransaksi?.noFaktur}
+                  </h1>
+                  <hr /> <br />
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                    <ol>
+                      <li class="mb-3">
+                        <div class="flex items-center">
+                          <p class="font-medium w-28">Tanggal</p> :
+                          <p class="ml-2">{dataTransaksi?.tanggal}</p>
+                        </div>
+                      </li>
+                      <li class="mb-3">
+                        <div class="flex items-center">
+                          <p class="font-medium w-28">Customer</p>:
+                          <p class="ml-2">
+                            {dataTransaksi?.customer?.nama_customer}
+                          </p>
+                        </div>
+                      </li>
+                      <li class="mb-3">
+                        <div class="flex items-center">
+                          <p class="font-medium w-28">Salesman</p>:
+                          <p class="ml-2">
+                            {dataTransaksi?.salesman?.namaSalesman}
+                          </p>
+                        </div>
+                      </li>
+                    </ol>
+                    <ol>
+                      <li class="mb-3">
+                        <div class="flex items-center">
+                          <p class="font-medium w-28">Total Belanja</p>:
+                          <p class="ml-2">
+                            {formatRupiah(dataTransaksi?.totalBelanja)}
+                          </p>
+                        </div>
+                      </li>
+                      <li class="mb-3">
+                        <div class="flex items-center">
+                          <p class="font-medium w-28">Potongan</p>:
+                          <p class="ml-2">
+                            {formatRupiah(dataTransaksi?.potongan)}
+                          </p>
+                        </div>
+                      </li>
+                      <li class="mb-3">
+                        <div class="flex items-center">
+                          <p class="font-medium w-28">Pembayaran</p>:
+                          <p class="ml-2">
+                            {formatRupiah(dataTransaksi?.pembayaran)}
+                          </p>
+                        </div>
+                      </li>
+                      <li class="mb-3">
+                        <div class="flex items-center">
+                          <p class="font-medium w-28">Kembalian</p>:
+                          <p class="ml-2">
+                            {formatRupiah(dataTransaksi?.sisa)}
+                          </p>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                  <br />
+                  <div class="overflow-x-auto">
+                    <table class="w-full border-collapse my-3">
+                      <thead>
+                        <tr>
+                          <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            Barcode
+                          </th>
+                          <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            Nama Barang
+                          </th>
+                          <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            Harga Barang (Rp)
+                          </th>
+                          <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            QTY
+                          </th>
+                          <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            Total Harga Barang (Rp)
+                          </th>
+                          <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            Diskon
+                          </th>
+                          <th class="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                            Total Harga (Rp)
+                          </th>
+                        </tr>
+                      </thead>
+                      {/* <tbody>
+                                        <?php if ($barangs) : ?>
+                                            <?php foreach ($barangs as $brg) : ?>
+                                                <tr>
+                                                    <td class="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->barcode_barang ?></td>
+                                                    <td class="text-sm text-center py-2 border-gray-300 border"><?php echo tampil_nama_barang_byid($brg->barcode_barang) ?></td>
+                                                    <td class="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->harga_brng ?></td>
+                                                    <td class="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->qty ?></td>
+                                                    <td class="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->total_harga_barang ?></td>
+                                                    <td class="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->diskon ?></td>
+                                                    <td class="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->total_harga ?></td>
+                                                </tr>
+                                            <?php endforeach ?>
+                                        <?php else : ?>
+                                            <tr>
+                                                <td colspan="7" class="text-center text-xs border-gray-300 border bg-white p-2">Tidak Ada Barang !</td>
+                                            </tr>
+                                        <?php endif ?>
+                                    </tbody> */}
+                    </table>
+                  </div>
+                  <div class="mt-3 flex justify-end">
+                    <a
+                      href={`/print_histori_dinarpos/${dataTransaksi?.idTransaksi}`}
+                    >
+                      <Button variant="gradient" size="md" color="blue">
+                        Print
+                      </Button>
+                    </a>
+                  </div>
+                  <br />
+                  <br />
+                </>
+              ) : (
+                <></>
+              )}
+              <p class="font-semibold text-sm ">
+                Aturan Pengisian Form Service:
+              </p>
+              <ol class="list-inside list-decimal">
+                <li class="font-semibold text-sm">
+                  Harap isi semua kolom dengan tepat dan jelas.
+                </li>
+                <li class="font-semibold text-sm">
+                  Ketika barang sudah diambil / diantar ke customer / pelanggan,
+                  kolom tanggal ambil HARUS DIISI.
+                </li>
+              </ol>
             </div>
           </div>
         </main>
