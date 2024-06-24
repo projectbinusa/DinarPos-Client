@@ -880,7 +880,7 @@ function DetailServiceTaken() {
                       id="bayar"
                       // onClick={() => add()}
                     >
-                      {/* <span>Lanjut</span> */}
+                      <span>Lanjut</span>
                     </Button>
                   </div>
                 </div>
