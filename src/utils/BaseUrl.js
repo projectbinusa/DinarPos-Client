@@ -24,6 +24,7 @@ export const API_RETURN_DINARPOS = `${url}/return/dinarpos`;
 export const API_RETURN_EXCELCOM = `${url}/return/excelcom`;
 
 // TRANSAKSI
+export const API_TRANSAKSI = `${url}/transaksi`;
 export const API_TRANSAKSI_BELI_EXCELCOM = `${url}/transaksi/pembelian/excelcom`;
 export const API_TRANSAKSI_BELI_DINARPOS = `${url}/transaksi/pembelian/dinarpos`;
 export const API_TRANSAKSI_JUAL_EXCELCOM = `${url}/transaksi/penjualan/excelcom`;

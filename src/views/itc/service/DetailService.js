@@ -30,11 +30,7 @@ import {
 import axios from "axios";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
-import {
-  API_BARANG,
-  API_SALESMAN,
-  API_SERVICE,
-} from "../../../utils/BaseUrl";
+import { API_BARANG, API_SALESMAN, API_SERVICE } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import ReactSelect from "react-select";
 import $ from "jquery";
@@ -827,6 +823,17 @@ function DetailService() {
       });
   }, []);
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -1011,7 +1018,7 @@ function DetailService() {
                               {tglKonfs.map((row) => (
                                 <li className="mb-2 flex justify-between items-center">
                                   <span>
-                                    {new Date(row.tglKonf).toLocaleDateString()}
+                                    {formatDate(row.tglKonf)}
                                   </span>
                                   <IconButton
                                     size="sm"

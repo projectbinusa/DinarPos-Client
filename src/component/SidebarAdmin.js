@@ -1277,7 +1277,7 @@ function SidebarAdmin() {
                 <>
                   <a href="/dashboard_pimpinan">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      dashboard pimpinan{" "}
+                      dashboard{" "}
                     </ListItem>
                   </a>
                   <a href="/data_service_taken">
@@ -2536,7 +2536,7 @@ function SidebarAdmin() {
               <>
                 <a href="/dashboard_pimpinan">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    dashboard pimpinan{" "}
+                    dashboard{" "}
                   </ListItem>
                 </a>
                 <a href="/data_service_taken">
