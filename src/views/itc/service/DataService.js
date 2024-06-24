@@ -28,7 +28,7 @@ function DataService() {
   // GET ALL
   const getAll = async () => {
     try {
-      const response = await axios.get(`${API_SERVICE}`, {
+      const response = await axios.get(`${API_SERVICE}/taken/N`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setservices(response.data.data);
