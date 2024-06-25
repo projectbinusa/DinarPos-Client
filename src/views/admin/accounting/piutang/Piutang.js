@@ -52,10 +52,13 @@ function Piutang() {
   const rekapPiutang = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${API_PIUTANG}/export/excel/rekap-piutang`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        responseType: "blob",
-      });
+      const response = await axios.get(
+        `${API_PIUTANG}/export/excel/rekap-piutang`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -69,14 +72,17 @@ function Piutang() {
       console.error("Error saat mengunduh file:", error);
     }
   };
-  
+
   const bukuPiutang = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${API_PIUTANG}/export/excel/piutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        responseType: "blob",
-      });
+      const response = await axios.get(
+        `${API_PIUTANG}/export/excel/piutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -140,9 +146,23 @@ function Piutang() {
               Export
             </Button>
           </form>
-          <Button className="mt-5" color="blue" type="button" onClick={rekapPiutang}>
-            Export Rekap Piutang
-          </Button>
+          <div className="block lg:flex lg:gap-4">
+            <Button
+              className="mt-5"
+              color="blue"
+              type="button"
+              onClick={rekapPiutang}
+            >
+              Export Rekap Piutang
+            </Button>
+            <Button
+              className="mt-5"
+              color="blue"
+              type="button"
+            >
+              Export History Piutang
+            </Button>
+          </div>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table
               id="example_data"
@@ -192,12 +212,7 @@ function Piutang() {
                           {piutang.kekurangan}
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          <a
-                            href={
-                              "/pelunasan_piutang/" +
-                              piutang.idTransaksi
-                            }
-                          >
+                          <a href={"/pelunasan_piutang/" + piutang.idTransaksi}>
                             <IconButton size="md" color="light-blue">
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>

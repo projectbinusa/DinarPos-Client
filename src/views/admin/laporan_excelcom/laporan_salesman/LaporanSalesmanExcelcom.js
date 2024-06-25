@@ -249,7 +249,7 @@ function LaporanSalesmanExcelcom() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option value={option.idSalesman}>
+                        <option value={option.id}>
                           {option.namaSalesman}
                         </option>
                       ))}

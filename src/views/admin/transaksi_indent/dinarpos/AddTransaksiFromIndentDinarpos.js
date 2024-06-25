@@ -96,6 +96,7 @@ function AddTransaksiFromIndentDinarpos() {
                 "/cetak_struk_transaksi_penjualan_dinarpos/" +
                   res.data.data.idTransaksi
               );
+              window.location.href = "/transaksi_indent_dinarpos";
             } else {
               window.location.href = "/transaksi_indent_dinarpos";
             }
@@ -157,7 +158,6 @@ function AddTransaksiFromIndentDinarpos() {
                   <thead className="border-b-2 ">
                     <tr>
                       <th className="py-3 px-2">Barcode</th>
-                      <th className="py-3 px-2">Nama</th>
                       <th className="py-3 px-2">Harga (Rp)</th>
                       <th className="py-3 px-2">Disc</th>
                       <th className="py-3 px-2">Harga Diskon (Rp)</th>
@@ -174,9 +174,6 @@ function AddTransaksiFromIndentDinarpos() {
                           <tr key={index}>
                             <td className="py-3 px-2 text-center border">
                               {down.barcodeBarang}
-                            </td>
-                            <td className="py-3 px-2 text-center border">
-                              {down.nama}
                             </td>
                             <td className="py-3 px-2 text-center border">
                               {down.hargaBrng}
@@ -199,7 +196,7 @@ function AddTransaksiFromIndentDinarpos() {
                     ) : (
                       <>
                         <tr>
-                          <td colSpan={7} className="text-center py-3">
+                          <td colSpan={6} className="text-center py-3">
                             Tidak ada data
                           </td>
                         </tr>
@@ -215,7 +212,7 @@ function AddTransaksiFromIndentDinarpos() {
                     variant="static"
                     label="Keterangan"
                     placeholder="Masukkan Keterangan"
-                    value={datas?.ket}
+                    value={datas?.keterangan}
                   />
                 </div>
                 <div className="mt-6">
@@ -224,7 +221,7 @@ function AddTransaksiFromIndentDinarpos() {
                     variant="static"
                     label="Salesman"
                     placeholder="Masukkan Salesman"
-                    value={datas?.salesman?.idSalesman}
+                    value={datas?.salesman?.id}
                   />
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
