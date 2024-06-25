@@ -43,6 +43,7 @@ const PointTeknisi = () => {
         },
       });
       setPoints(response.data);
+      console.log();
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -170,7 +171,7 @@ const PointTeknisi = () => {
                     <th className="text-sm py-2 px-3 font-semibold">Graph</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {points.length > 0 ? (
                     points.map((row, index) => (
                       <tr key={index}>
@@ -272,7 +273,7 @@ const PointTeknisi = () => {
                   ) : (
                     <></>
                   )}
-                </tfoot>
+                </tfoot> */}
               </table>
             </div>
           </div>

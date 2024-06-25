@@ -74,7 +74,7 @@ function AddTransaksiFromIndentDinarpos() {
 
   const add = () => {
     const request = {
-      prembayaran: total,
+      prembayaran: pembayaran,
     };
     axios
       .post(`${API_TRANSAKSI_INDENT}/checklist/` + param.id, request, {
@@ -93,7 +93,8 @@ function AddTransaksiFromIndentDinarpos() {
           }).then((result) => {
             if (result.isConfirmed) {
               window.open(
-                "/cetak_struk_transaksi_penjualan_dinarpos/" + res.data.data.idTransaksi
+                "/cetak_struk_transaksi_penjualan_dinarpos/" +
+                  res.data.data.idTransaksi
               );
             } else {
               window.location.href = "/transaksi_indent_dinarpos";

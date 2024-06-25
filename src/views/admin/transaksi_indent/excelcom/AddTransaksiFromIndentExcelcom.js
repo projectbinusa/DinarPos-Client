@@ -1,14 +1,37 @@
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Card, Input, Typography } from "@material-tailwind/react";
-import { API_TRANSAKSI_INDENT } from "../../../../utils/BaseUrl";
+import {
+  Breadcrumbs,
+  Button,
+  Card,
+  Input,
+  Typography,
+} from "@material-tailwind/react";
+import {
+  API_BARANG_TRANSAKSI_INDENT,
+  API_TRANSAKSI_INDENT,
+} from "../../../../utils/BaseUrl";
 import axios from "axios";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
 
-function AddTransaksiFromIndentDinarpos() {
+function AddTransaksiFromIndentExcelcom() {
   const [datas, setdatas] = useState(null);
   const [produk, setproduk] = useState([]);
   const param = useParams();
+
+  const getBarangIndent = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BARANG_TRANSAKSI_INDENT}?id=` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setproduk(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -22,7 +45,10 @@ function AddTransaksiFromIndentDinarpos() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+    getBarangIndent();
+  }, [param.id]);
+
+  
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
@@ -30,7 +56,7 @@ function AddTransaksiFromIndentDinarpos() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            TRANSAKSI Penjualan dinarpos
+            TRANSAKSI Penjualan Excelcom
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -43,8 +69,8 @@ function AddTransaksiFromIndentDinarpos() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/transaksi_indent_dinarpos">
-              <span>Indent Dinarpos</span>
+            <a href="/transaksi_indent_excelcom">
+              <span>Indent Excelcom</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -58,6 +84,7 @@ function AddTransaksiFromIndentDinarpos() {
                 color="blue"
                 id="customer"
                 name="customer"
+                readOnly
                 value={datas?.customer?.id}
               />
             </div>
@@ -75,77 +102,45 @@ function AddTransaksiFromIndentDinarpos() {
                       <th className="py-3 px-2">Harga Diskon (Rp)</th>
                       <th className="py-3 px-2">Jumlah</th>
                       <th className="py-3 px-2">Total Harga (Rp)</th>
-                      <th className="py-3 px-2">Aksi</th>
                     </tr>
                   </thead>
-                  {/* <tbody>
+                  <tbody>
                     {produk.length > 0 ? (
                       produk.map((down, index) => (
                         <tr key={index}>
                           <td className="py-3 px-2 text-center border">
-                            {down.barcode}
+                            {down.barcodeBarang}
                           </td>
                           <td className="py-3 px-2 text-center border">
                             {down.nama}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {down.harga}
+                            {down.hargaBrng}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {down.disc}
+                            {down.diskon}
                           </td>
                           <td className="py-3 px-2 text-center border">
                             {down.hargaDiskon}
                           </td>
                           <td className="py-3 px-2 text-center border">
-                            {down.jumlah}
+                            {down.qty}
                           </td>
                           <td className="py-3 px-2 text-center border">
                             {down.totalHarga}
                           </td>
-                          <td className="py-2 px-3 text-center border">
-                            <div className="flex justify-center items-center gap-2">
-                              <IconButton
-                                id={down.barcode}
-                                size="md"
-                                color="light-blue"
-                                onClick={() =>
-                                  edit(
-                                    down.barcode,
-                                    down.nama,
-                                    down.harga,
-                                    down.disc,
-                                    down.hargaDiskon,
-                                    down.jumlah,
-                                    down.totalHarga
-                                  )
-                                }
-                              >
-                                <PencilIcon className="w-6 h-6 white" />
-                              </IconButton>
-                              <IconButton
-                                id={down.barcode}
-                                size="md"
-                                color="red"
-                                type="button"
-                                onClick={() => remove(down.barcode)}
-                              >
-                                <TrashIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </div>
-                          </td>{" "}
                         </tr>
                       ))
                     ) : (
                       <>
                         <tr>
-                          <td colSpan={8} className="text-center py-3">
+                          <td colSpan={7} className="text-center py-3">
                             Tidak ada data
                           </td>
                         </tr>
                       </>
                     )}
-                  </tbody> */}
+                  </tbody>
                 </table>
               </Card>
 
@@ -157,6 +152,7 @@ function AddTransaksiFromIndentDinarpos() {
                     label="Keterangan"
                     placeholder="Masukkan Keterangan"
                     value={datas?.ket}
+                    readOnly
                   />
                 </div>
                 <div className="mt-6">
@@ -166,6 +162,7 @@ function AddTransaksiFromIndentDinarpos() {
                     label="Salesman"
                     placeholder="Masukkan Salesman"
                     value={datas?.salesman?.idSalesman}
+                    readOnly
                   />
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
@@ -191,6 +188,7 @@ function AddTransaksiFromIndentDinarpos() {
                 label="Cash / Kredit"
                 placeholder="Masukkan Cash / Kredit"
                 value={datas?.cashKredit}
+                readOnly
               />
               <div className="flex flex-col gap-y-6 my-6">
                 <Input
@@ -201,6 +199,7 @@ function AddTransaksiFromIndentDinarpos() {
                   placeholder="Pembayaran"
                   id="pembayaran"
                   value={datas?.pembayaran}
+                  readOnly
                 />
                 <Input
                   color="blue"
@@ -210,6 +209,7 @@ function AddTransaksiFromIndentDinarpos() {
                   placeholder="Potongan"
                   id="potongan"
                   value={datas?.potongan}
+                  readOnly
                 />
               </div>
               <div className="flex flex-col gap-y-4">
@@ -255,4 +255,4 @@ function AddTransaksiFromIndentDinarpos() {
   );
 }
 
-export default AddTransaksiFromIndentDinarpos;
+export default AddTransaksiFromIndentExcelcom;

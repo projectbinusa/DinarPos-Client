@@ -148,6 +148,12 @@ import ServiceTeknisi from "./views/itcteknisi/ServiceTeknisi.js";
 import ServiceReturTeknisi from "./views/itcteknisi/ServiceReturTeknisi.js";
 import DashboardPimpinan from "./views/itcpimpinan/DashboardPimpinan.js";
 import DataServiceTaken from "./views/itc/service/DataServiceTaken.js";
+import DetailServicePimpinan from "./views/itcpimpinan/DetailServicePimpinan.js";
+import KasHarian from "./views/admin/accounting/kasharian/KasHarian.js";
+import AddSaldo from "./views/admin/accounting/kasharian/AddSaldo.js";
+import EditSaldo from "./views/admin/accounting/kasharian/EditSaldo.js";
+import AddTransaksiFromIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddTransaksiFromIndentExcelcom.js";
+import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddTransaksiFromIndentDinarpos.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -725,6 +731,12 @@ function App() {
               component={CetakIndentExcelcom}
               isAuthenticated={true}
             />
+
+            <PrivateRoute
+              path="/add_transaksi_from_indent_excelcom/:id"
+              component={AddTransaksiFromIndentExcelcom}
+              isAuthenticated={true}
+            />
             {/* END TRANSAKSI INDENT EXCELCOM */}
 
             {/* TRANSAKSI INDENT DINARPOS */}
@@ -745,15 +757,30 @@ function App() {
               component={CetakIndentDinarpos}
               isAuthenticated={true}
             />
-            {/* END TRANSAKSI INDENT DINARPOS */}
 
             <PrivateRoute
-              path="/add_transaksi_from_transaksi_indent/:id"
-              component={CetakIndentExcelcom}
+              path="/add_transaksi_from_indent_dinarpos/:id"
+              component={AddTransaksiFromIndentDinarpos}
               isAuthenticated={true}
             />
+            {/* END TRANSAKSI INDENT DINARPOS */}
 
             {/* ACCOUNTING */}
+            <PrivateRoute
+              path="/kas_harian"
+              component={KasHarian}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_saldo"
+              component={AddSaldo}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_saldo/:id"
+              component={EditSaldo}
+              isAuthenticated={true}
+            />
             <PrivateRoute
               path="/data_hutang"
               component={Hutang}
@@ -967,6 +994,11 @@ function App() {
             <PrivateRoute
               path="/dashboard_pimpinan"
               component={DashboardPimpinan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_service_pimpinan/:id"
+              component={DetailServicePimpinan}
               isAuthenticated={true}
             />
             {/* END ROLE PIMPINAN */}

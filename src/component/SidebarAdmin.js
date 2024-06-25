@@ -566,6 +566,17 @@ function SidebarAdmin() {
                     </ListItem>
                     <AccordionBody className="py-2">
                       <List className="p-0">
+                        <a href="/kas_harian">
+                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                            <ListItemPrefix>
+                              <ChevronRightIcon
+                                strokeWidth={3}
+                                className="h-3 w-3"
+                              />
+                            </ListItemPrefix>
+                            kas harian
+                          </ListItem>
+                        </a>
                         <a href="/data_hutang">
                           <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                             <ListItemPrefix>
@@ -1277,7 +1288,7 @@ function SidebarAdmin() {
                 <>
                   <a href="/dashboard_pimpinan">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      dashboard pimpinan{" "}
+                      dashboard{" "}
                     </ListItem>
                   </a>
                   <a href="/data_service_taken">
@@ -1823,6 +1834,17 @@ function SidebarAdmin() {
                   </ListItem>
                   <AccordionBody className="py-2">
                     <List className="p-0">
+                      <a href="/kas_harian">
+                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                          <ListItemPrefix>
+                            <ChevronRightIcon
+                              strokeWidth={3}
+                              className="h-3 w-3"
+                            />
+                          </ListItemPrefix>
+                          kas harian
+                        </ListItem>
+                      </a>
                       <a href="/data_hutang">
                         <ListItem className="uppercase rounded px-3 py-2 text-sm ">
                           <ListItemPrefix>
@@ -2536,7 +2558,7 @@ function SidebarAdmin() {
               <>
                 <a href="/dashboard_pimpinan">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    dashboard pimpinan{" "}
+                    dashboard{" "}
                   </ListItem>
                 </a>
                 <a href="/data_service_taken">

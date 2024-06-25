@@ -490,6 +490,7 @@ function AddIndentDinarpos() {
               window.open(
                 "/cetak_struk_transaksi_indent_dinarpos/" + res.data.data.id
               );
+              window.location.href = "/transaksi_indent_dinarpos";
             } else {
               window.location.href = "/transaksi_indent_dinarpos";
             }
@@ -902,7 +903,8 @@ function AddIndentDinarpos() {
                 className="w-full"
                 onChange={(selectedOption) => setcashCredit(selectedOption)}
               >
-                <Option value="Cash">Cash</Option>
+                <Option value="Cash Uang">Cash Uang</Option>
+                <Option value="Cash Bank">Cash Bank</Option>
                 <Option value="Kredit">Kredit</Option>
               </Select>
               <div className="flex flex-col gap-y-6 my-6">
