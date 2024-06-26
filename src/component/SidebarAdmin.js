@@ -132,7 +132,7 @@ function SidebarAdmin() {
                     <AccordionBody className="py-2">
                       <List className="p-0">
                         {roleToko === "Superadmin" ||
-                        roleToko === "admin" ||
+                        roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                           <>
                             <a href="/transaksi_indent_excelcom">
@@ -151,7 +151,7 @@ function SidebarAdmin() {
                           <></>
                         )}
                         {roleToko === "Superadmin" ||
-                        roleToko === "admin" ||
+                        roleToko === "Admin" ||
                         roleToko === "dinarpos" ? (
                           <>
                             <a href="/transaksi_indent_dinarpos">
@@ -209,7 +209,7 @@ function SidebarAdmin() {
                     <AccordionBody className="py-2">
                       <List className="p-0">
                         {roleToko === "Superadmin" ||
-                        roleToko === "admin" ||
+                        roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                           <>
                             <a href="/transaksi_penjualan_excelcom">
@@ -228,7 +228,7 @@ function SidebarAdmin() {
                           <></>
                         )}
                         {roleToko === "Superadmin" ||
-                        roleToko === "admin" ||
+                        roleToko === "Admin" ||
                         roleToko === "dinarpos" ? (
                           <>
                             <a href="/transaksi_penjualan_dinarpos">
@@ -285,7 +285,7 @@ function SidebarAdmin() {
                     <AccordionBody className="py-2">
                       <List className="p-0">
                         {roleToko === "Superadmin" ||
-                        roleToko === "admin" ||
+                        roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                           <>
                             {" "}
@@ -305,7 +305,7 @@ function SidebarAdmin() {
                           <></>
                         )}
                         {roleToko === "Superadmin" ||
-                        roleToko === "admin" ||
+                        roleToko === "Admin" ||
                         roleToko === "dinarpos" ? (
                           <>
                             <a href="/transaksi_pembelian_dinarpos">
@@ -411,7 +411,7 @@ function SidebarAdmin() {
                         ) : (
                           <></>
                         )}
-                        {roleToko === "Superadmin" || roleToko === "admin" ? (
+                        {roleToko === "Superadmin" || roleToko === "Admin" ? (
                           <>
                             <a href="/data_salesman">
                               <ListItem className="uppercase rounded px-3 py-2 text-sm">
@@ -611,7 +611,7 @@ function SidebarAdmin() {
               level === "Accounting" ? (
                 <>
                   {roleToko === "Superadmin" ||
-                  roleToko === "admin" ||
+                  roleToko === "Admin" ||
                   roleToko === "excelcom" ? (
                     <>
                       <Accordion
@@ -700,7 +700,7 @@ function SidebarAdmin() {
               level === "Accounting" ? (
                 <>
                   {roleToko === "Superadmin" ||
-                  roleToko === "admin" ||
+                  roleToko === "Admin" ||
                   roleToko === "dinarpos" ? (
                     <>
                       <Accordion
@@ -790,7 +790,7 @@ function SidebarAdmin() {
                 <>
                   {roleToko === "excelcom" ||
                   roleToko === "Superadmin" ||
-                  roleToko === "admin" ? (
+                  roleToko === "Admin" ? (
                     <>
                       <Accordion
                         open={open === 7}
@@ -912,7 +912,7 @@ function SidebarAdmin() {
                 <>
                   {roleToko === "dinarpos" ||
                   roleToko === "Superadmin" ||
-                  roleToko === "admin" ? (
+                  roleToko === "Admin" ? (
                     <>
                       {" "}
                       <Accordion
@@ -1035,7 +1035,7 @@ function SidebarAdmin() {
                 <>
                   {roleToko === "excelcom" ||
                   roleToko === "Superadmin" ||
-                  roleToko === "admin" ? (
+                  roleToko === "Admin" ? (
                     <>
                       {" "}
                       <Accordion
@@ -1136,7 +1136,7 @@ function SidebarAdmin() {
                 <>
                   {roleToko === "dinarpos" ||
                   roleToko === "Superadmin" ||
-                  roleToko === "admin" ? (
+                  roleToko === "Admin" ? (
                     <>
                       <Accordion
                         open={open === 10}
@@ -1402,7 +1402,7 @@ function SidebarAdmin() {
                   <AccordionBody className="py-2">
                     <List className="p-0">
                       {roleToko === "Superadmin" ||
-                      roleToko === "admin" ||
+                      roleToko === "Admin" ||
                       roleToko === "excelcom" ? (
                         <>
                           {" "}
@@ -1422,7 +1422,7 @@ function SidebarAdmin() {
                         <></>
                       )}
                       {roleToko === "Superadmin" ||
-                      roleToko === "admin" ||
+                      roleToko === "Admin" ||
                       roleToko === "dinarpos" ? (
                         <>
                           <a href="/transaksi_indent_dinarpos">
@@ -1480,7 +1480,7 @@ function SidebarAdmin() {
                   <AccordionBody className="py-2">
                     <List className="p-0">
                       {roleToko === "Superadmin" ||
-                      roleToko === "admin" ||
+                      roleToko === "Admin" ||
                       roleToko === "excelcom" ? (
                         <>
                           {" "}
@@ -1500,7 +1500,7 @@ function SidebarAdmin() {
                         <></>
                       )}
                       {roleToko === "Superadmin" ||
-                      roleToko === "admin" ||
+                      roleToko === "Admin" ||
                       roleToko === "dinarpos" ? (
                         <>
                           <a href="/transaksi_penjualan_dinarpos">
@@ -1556,7 +1556,7 @@ function SidebarAdmin() {
                   <AccordionBody className="py-2">
                     <List className="p-0">
                       {roleToko === "Superadmin" ||
-                      roleToko === "admin" ||
+                      roleToko === "Admin" ||
                       roleToko === "excelcom" ? (
                         <>
                           <a href="/transaksi_pembelian_excelcom">
@@ -1575,7 +1575,7 @@ function SidebarAdmin() {
                         <></>
                       )}
                       {roleToko === "Superadmin" ||
-                      roleToko === "admin" ||
+                      roleToko === "Admin" ||
                       roleToko === "dinarpos" ? (
                         <>
                           <a href="/transaksi_pembelian_dinarpos">
@@ -1663,7 +1663,7 @@ function SidebarAdmin() {
                         <></>
                       )}
                       {roleToko === "Superadmin" ||
-                      roleToko === "admin" ||
+                      roleToko === "Admin" ||
                       roleToko === "Gudang" ? (
                         <>
                           <a href="/data_suplier">
@@ -1681,7 +1681,7 @@ function SidebarAdmin() {
                       ) : (
                         <></>
                       )}
-                      {roleToko === "Superadmin" || roleToko === "admin" ? (
+                      {roleToko === "Superadmin" || roleToko === "Admin" ? (
                         <>
                           <a href="/data_salesman">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
@@ -1879,7 +1879,7 @@ function SidebarAdmin() {
             level === "Accounting" ? (
               <>
                 {roleToko === "Superadmin" ||
-                roleToko === "admin" ||
+                roleToko === "Admin" ||
                 roleToko === "excelcom" ? (
                   <>
                     {" "}
@@ -1969,7 +1969,7 @@ function SidebarAdmin() {
             level === "Accounting" ? (
               <>
                 {roleToko === "Superadmin" ||
-                roleToko === "admin" ||
+                roleToko === "Admin" ||
                 roleToko === "excelcom" ? (
                   <>
                     {" "}
@@ -2061,7 +2061,7 @@ function SidebarAdmin() {
               <>
                 {roleToko === "excelcom" ||
                 roleToko === "Superadmin" ||
-                roleToko === "admin" ? (
+                roleToko === "Admin" ? (
                   <>
                     {" "}
                     <Accordion
@@ -2185,7 +2185,7 @@ function SidebarAdmin() {
               <>
                 {roleToko === "dinarpos" ||
                 roleToko === "Superadmin" ||
-                roleToko === "admin" ? (
+                roleToko === "Admin" ? (
                   <>
                     {" "}
                     <Accordion
@@ -2308,7 +2308,7 @@ function SidebarAdmin() {
               <>
                 {roleToko === "excelcom" ||
                 roleToko === "Superadmin" ||
-                roleToko === "admin" ? (
+                roleToko === "Admin" ? (
                   <>
                     <Accordion
                       open={open === 9}
@@ -2408,7 +2408,7 @@ function SidebarAdmin() {
               <>
                 {roleToko === "dinarpos" ||
                 roleToko === "Superadmin" ||
-                roleToko === "admin" ? (
+                roleToko === "Admin" ? (
                   <>
                     {" "}
                     <Accordion

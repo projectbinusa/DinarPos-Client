@@ -146,22 +146,26 @@ function Piutang() {
               Export
             </Button>
           </form>
-          <div className="block lg:flex lg:gap-4">
-            <Button
-              className="mt-5"
-              color="blue"
-              type="button"
-              onClick={rekapPiutang}
-            >
-              Export Rekap Piutang
-            </Button>
-            <Button
-              className="mt-5"
-              color="blue"
-              type="button"
-            >
-              Export History Piutang
-            </Button>
+          <div className="flex flex-col lg:flex-row lg:gap-4">
+            <div>
+              <Button
+                className="mt-5"
+                color="blue"
+                type="button"
+                onClick={rekapPiutang}
+              >
+                Export Rekap Piutang
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="mt-5"
+                color="blue"
+                type="button"
+              >
+                Export History Piutang
+              </Button>
+            </div>
           </div>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table

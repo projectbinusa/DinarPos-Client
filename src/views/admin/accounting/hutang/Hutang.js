@@ -146,18 +146,22 @@ function Hutang() {
               Export
             </Button>
           </form>
-          <div className="block lg:flex lg:gap-4">
-            <Button
-              className="mt-5"
-              color="blue"
-              type="button"
-              onClick={rekapHutang}
-            >
-              Export Rekap Hutang
-            </Button>
-            <Button className="mt-5" color="blue" type="button">
-              Export History Hutang
-            </Button>
+          <div className="flex flex-col lg:flex-row lg:gap-4">
+            <div>
+              <Button
+                className="mt-5"
+                color="blue"
+                type="button"
+                onClick={rekapHutang}
+              >
+                Export Rekap Hutang
+              </Button>
+            </div>
+            <div>
+              <Button className="mt-5" color="blue" type="button">
+                Export History Hutang
+              </Button>
+            </div>
           </div>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table

@@ -79,6 +79,7 @@ function DataService() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setAllService(response.data.data);
+        
     } catch (error) {
       console.log("get all", error);
     }
