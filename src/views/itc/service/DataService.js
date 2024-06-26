@@ -2,20 +2,33 @@ import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
+  Typography,
   Button,
   IconButton,
-  Typography,
+  Input,
+  Select,
+  Option,
 } from "@material-tailwind/react";
+import {
+  InformationCircleIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import axios from "axios";
 import { API_SERVICE } from "../../../utils/BaseUrl";
 import $ from "jquery";
 import "datatables.net";
-import "./../../../assets/styles/datatables.css";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import "../../../assets/styles/datatables.css";
 
 function DataService() {
   const tableRef = useRef(null);
-  const [services, setservices] = useState([]);
+  const [services, setServices] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [pilih, setPilih] = useState("");
+  const [tglKonfirm, setTglKonfirm] = useState([]);
+  const [validasi, setValidasi] = useState(false);
+
+  const [allService, setAllService] = useState([]);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -25,29 +38,11 @@ function DataService() {
     $(tableRef.current).DataTable({});
   };
 
-  // GET ALL
-  const getAll = async () => {
-    try {
-      const response = await axios.get(`${API_SERVICE}/taken/N`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setservices(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
   useEffect(() => {
-    getAll();
-  }, []);
-
-  useEffect(() => {
-    if (services && services.length > 0) {
+    if (allService && allService.length > 0) {
       initializeDataTable();
     }
-  }, [services]);
-
-  const [tglKonfirm, setTglKonfirm] = useState([]);
+  }, [allService]);
 
   const tglKonfirmasi = async (transactionId) => {
     try {
@@ -59,7 +54,7 @@ function DataService() {
       );
       return response.data.data;
     } catch (error) {
-      console.log("get all", error);
+      console.log("tglKonfirmasi", error);
       return [];
     }
   };
@@ -67,7 +62,7 @@ function DataService() {
   useEffect(() => {
     const fetchTglKonfirm = async () => {
       const tglList = await Promise.all(
-        services.map(async (service) => {
+        allService.map(async (service) => {
           const tglData = await tglKonfirmasi(service.idTT);
           return tglData;
         })
@@ -76,18 +71,87 @@ function DataService() {
     };
 
     fetchTglKonfirm();
-  }, [services]);
+  }, [allService]);
+
+  const getAllService = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE}/taken/N`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setAllService(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllService();
+  }, []);
+
+  const getAllServiceFilter = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/tanggal?status=${pilih}&tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+
+      if (response.data.data.length === 0) {
+        console.log("Tidak ada data yang sesuai dengan kriteria pencarian.");
+        setServices([]);
+        setTglKonfirm([]);
+        return;
+      }
+
+      setServices(response.data.data);
+
+      const tglList = await Promise.all(
+        response.data.data.map(async (service) => {
+          const tglData = await tglKonfirmasi(service.idTT);
+          return tglData;
+        })
+      );
+      setTglKonfirm(tglList);
+
+      initializeDataTable();
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    if (validasi) {
+      getAllServiceFilter();
+    }
+  }, [validasi]);
+
+  const filterTangggal = async () => {
+    if (startDate === endDate && pilih === "") {
+      console.log(
+        "Tanggal awal dan akhir tidak boleh sama dan pilihan harus dipilih."
+      );
+      setServices([]);
+      setTglKonfirm([]);
+      return;
+    }
+
+    setValidasi((prevValidasi) => !prevValidasi);
+  };
 
   const formatDate = (value) => {
     const date = new Date(value);
-
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-
-    return formattedDate;
+    return `${year}-${month}-${day}`;
   };
+
+  useEffect(() => {
+    $("#example_table").DataTable({
+      order: [[6, "desc"]],
+    });
+  }, []);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -105,15 +169,69 @@ function DataService() {
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/data_service">
-              <span>Service</span>
+            <a href="/dashboard_teknisi">
+              <span>Data Service</span>
             </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
+            <div className="w-full">
+              <Input
+                type="date"
+                id="startDate"
+                label="Tanggal Awal"
+                color="blue"
+                variant="outlined"
+                required
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                type="date"
+                id="endDate"
+                label="Tanggal Akhir"
+                color="blue"
+                variant="outlined"
+                required
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="w-full">
+              <Select
+                id="pilih"
+                label="Status"
+                color="blue"
+                variant="outlined"
+                required
+                onChange={(value) => setPilih(value)}
+                className="w-full"
+              >
+                <Option value="">Pilih</Option>
+                <Option value="New Arrival">New Arrival</Option>
+                <Option value="Proses">Proses</Option>
+                <Option value="Ready">Ready</Option>
+              </Select>
+            </div>
+            <div className="w-full lg:w-auto flex justify-start items-center">
+              <Button
+                variant="gradient"
+                color="blue"
+                onClick={filterTangggal}
+                size="md"
+              >
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </Button>
+            </div>
+          </div>
           <div className="flex justify-between items-center">
             <a href="/data_service_taken" className="mb-5">
               <Button variant="gradient" color="light-blue">
@@ -126,7 +244,7 @@ function DataService() {
               </Button>
             </a>
           </div>
-          <div className="rounded my-5 p-2 w-full overflow-x-auto">
+          <div className="rounded mt-10 p-2 w-full overflow-x-auto">
             <table
               id="example_data"
               ref={tableRef}
@@ -145,57 +263,122 @@ function DataService() {
                 </tr>
               </thead>
               <tbody>
-                {services.length > 0 ? (
-                  services.map((row, index) => {
-                    const tglKonfirms = tglKonfirm[index] || [];
+                {validasi === true ? (
+                  <>
+                    {services.length > 0 ? (
+                      services.map((row, index) => {
+                        const tglKonfirms = tglKonfirm[index] || [];
+                        console.log("Rendering Service: ", row); // Debugging line
+                        console.log("Confirmation Dates: ", tglKonfirms); // Debugging line
 
-                    return (
-                      <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">
-                          {row.customer.nama_customer}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.customer.alamat}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.produk} <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {formatDate(row.tanggalMasuk)}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {tglKonfirms.map((down, idx) => (
-                            <ul key={idx}>
-                              <li>
-                                {formatDate(down.tglKonf)}
-                              </li>
-                            </ul>
-                          ))}{" "}
-                        </td>
-                        <td className="text-sm py-2 px-3">{row.statusEnd}</td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
-                          <div className="flex flex-row gap-3">
-                            <a href={"/detail_service/" + row.idTT}>
-                              <IconButton size="md" color="light-blue">
-                                <InformationCircleIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </a>
-                          </div>
+                        return (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3">
+                              {row.customer.nama_customer}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {row.customer.alamat}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {row.produk}{" "}
+                              <span className="block">{row.merk}</span>{" "}
+                              <span className="block">{row.type}</span>{" "}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {formatDate(row.tanggalMasuk)}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {tglKonfirms.map((down, idx) => (
+                                <ul key={idx}>
+                                  <li>{formatDate(down.tglKonf)}</li>
+                                </ul>
+                              ))}{" "}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {row.statusEnd}
+                            </td>
+                            <td className="text-sm py-2 px-3 flex items-center justify-center">
+                              <div className="flex flex-row gap-3">
+                                <a href={"/detail_service_teknisi/" + row.idTT}>
+                                  <IconButton size="md" color="light-blue">
+                                    <InformationCircleIcon className="w-6 h-6 white" />
+                                  </IconButton>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="8"
+                          className="text-sm text-center capitalize py-3 bg-gray-100"
+                        >
+                          Tidak ada data
                         </td>
                       </tr>
-                    );
-                  })
+                    )}
+                  </>
                 ) : (
-                  <tr>
-                    <td
-                      colSpan="8"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
-                    >
-                      Tidak ada data
-                    </td>
-                  </tr>
+                  <>
+                    {allService.length > 0 ? (
+                      allService.map((row, index) => {
+                        const tglKonfirms = tglKonfirm[index] || [];
+                        console.log("Rendering All Service: ", row); // Debugging line
+                        console.log("All Confirmation Dates: ", tglKonfirms); // Debugging line
+
+                        return (
+                          <tr key={index}>
+                            <td className="text-sm w-[4%]">{index + 1}</td>
+                            <td className="text-sm py-2 px-3">
+                              {row.customer.nama_customer}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {row.customer.alamat}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {row.produk}{" "}
+                              <span className="block">{row.merk}</span>{" "}
+                              <span className="block">{row.type}</span>{" "}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {formatDate(row.tanggalMasuk)}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {tglKonfirms.map((down, idx) => (
+                                <ul key={idx}>
+                                  <li>{formatDate(down.tglKonf)}</li>
+                                </ul>
+                              ))}{" "}
+                            </td>
+                            <td className="text-sm py-2 px-3">
+                              {row.statusEnd}
+                            </td>
+                            <td className="text-sm py-2 px-3 flex items-center justify-center">
+                              <div className="flex flex-row gap-3">
+                                <a href={"/detail_service_teknisi/" + row.idTT}>
+                                  <IconButton size="md" color="light-blue">
+                                    <InformationCircleIcon className="w-6 h-6 white" />
+                                  </IconButton>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="8"
+                          className="text-sm text-center capitalize py-3 bg-gray-100"
+                        >
+                          Tidak ada data
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 )}
               </tbody>
             </table>
