@@ -624,7 +624,7 @@ function DetailService() {
       cashKredit: cashCredit,
       diskon: diskons,
       idCustomer: idCustomer,
-      idSalesman: markettingId,
+      id: markettingId,
       keterangan: keterangan,
       kekurangan: kekurangan,
       pembayaran: pembayaran,
@@ -1581,7 +1581,7 @@ function DetailService() {
                             {optionsSalesman.length > 0 && (
                               <>
                                 {optionsSalesman.map((option) => (
-                                  <option value={option.idSalesman}>
+                                  <option value={option.id}>
                                     {option.namaSalesman}
                                   </option>
                                 ))}

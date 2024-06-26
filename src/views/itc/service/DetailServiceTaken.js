@@ -762,7 +762,7 @@ function DetailServiceTaken() {
                           {/* {optionsSalesman.length > 0 && (
                               <>
                                 {optionsSalesman.map((option) => (
-                                  <option value={option.idSalesman}>
+                                  <option value={option.id}>
                                     {option.namaSalesman}
                                   </option>
                                 ))}
