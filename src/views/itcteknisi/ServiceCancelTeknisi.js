@@ -3,17 +3,23 @@ import SidebarAdmin from "../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   IconButton,
+  Input,
   Typography,
 } from "@material-tailwind/react";
 import axios from "axios";
 import { API_SERVICE } from "../../utils/BaseUrl";
 import $ from "jquery";
 import "../../assets/styles/datatables.css";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
 
 function ServiceCancelTeknisi() {
   const tableRef = useRef(null);
   const [services, setservices] = useState([]);
+  // const [servicesTgl, setservicesTgl] = useState([]);
+  const [startDate, setstartDate] = useState("");
+  const [endDate, setendDate] = useState("");
+  const [validasi, setvalidasi] = useState(false);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -24,20 +30,47 @@ function ServiceCancelTeknisi() {
   };
 
   // GET ALL
-  const getAll = async () => {
-    try {
-      const response = await axios.get(`${API_SERVICE}/cancel`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  const getAllService = async () => {
+    if (startDate === "" && endDate === "" && validasi === true) {
+      Swal.fire({
+        icon: "warning",
+        title: "Masukkan Tanggal Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
       });
-      setservices(response.data.data);
+    }
+    let response;
+    try {
+      if (validasi === true && endDate != "" && startDate != "") {
+        let response = await axios.get(`${API_SERVICE}/cancel/filter?akhir=${endDate}&awal=${startDate}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+        setservices(response.data.data)
+      } else {
+        let response = await axios.get(`${API_SERVICE}/cancel`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+        setservices(response.data.data)
+      }
     } catch (error) {
       console.log("get all", error);
     }
-  };
+  }
 
   useEffect(() => {
-    getAll();
+    if (validasi == true) {
+      getAllService();
+      setvalidasi(false);
+    }
+  }, [validasi, endDate, startDate]);
+
+  useEffect(() => {
+    getAllService();
   }, []);
+
+  const handleSearchByMonth = () => {
+    setvalidasi(true);
+  };
 
   useEffect(() => {
     if (services && services.length > 0) {
@@ -112,6 +145,44 @@ function ServiceCancelTeknisi() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
+            <div className="w-full">
+              <Input
+                type="date"
+                id="startDate"
+                label="Tanggal Awal"
+                color="blue"
+                variant="outlined"
+                required
+                value={startDate}
+                onChange={(e) => setstartDate(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                type="date"
+                id="endDate"
+                label="Tanggal Akhir"
+                color="blue"
+                variant="outlined"
+                required
+                value={endDate}
+                onChange={(e) => setendDate(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div className="w-full lg:w-auto flex justify-start items-center">
+              <IconButton
+                variant="gradient"
+                color="blue"
+                onClick={handleSearchByMonth}
+                size="md"
+              >
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </IconButton>
+            </div>
+          </div>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table
               id="example_data"

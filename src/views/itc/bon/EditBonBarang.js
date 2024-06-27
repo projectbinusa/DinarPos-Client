@@ -138,10 +138,11 @@ function EditBonBarang() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       const data = response.data.data;
+      // console.log(data);
       settglAmbil(data.tgl_ambil);
       setteknisiId(data.teknisi.id);
       setserviceId(data.serviceBarang.idTT);
-      setbarangId(data.barang.barcodeBarang);
+      setbarangId(data.barang.id);
     } catch (error) {
       console.log(error);
     }
@@ -149,7 +150,7 @@ function EditBonBarang() {
 
   useEffect(() => {
     getBonBarangById();
-  }, []);
+  }, [param.id]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -186,8 +187,9 @@ function EditBonBarang() {
                 list="service-list"
                 id="service"
                 name="service"
-                defaultValue={serviceId}
+                type="number"
                 onChange={(e) => setserviceId(e.target.value)}
+                defaultValue={serviceId}
                 placeholder="Pilih Service"
                 required
               />
@@ -199,7 +201,7 @@ function EditBonBarang() {
                   list="teknisi-list"
                   id="teknisi"
                   name="teknisi"
-                  // value={teknisiId}
+                  value={teknisiId}
                   onChange={(event) => {
                     handleChangeTeknisi(event);
                     setteknisiId(event.target.value);
@@ -257,7 +259,7 @@ function EditBonBarang() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option key={option.idBarang} value={option.idBarang}>
+                        <option key={option.id} value={option.id}>
                           {option.barcodeBarang} - {option.namaBarang}
                         </option>
                       ))}

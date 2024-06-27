@@ -3,7 +3,6 @@ import SidebarAdmin from "../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Typography,
-  Button,
   IconButton,
   Input,
   Select,
@@ -18,6 +17,7 @@ import { API_SERVICE, API_SERVICE_TAKEN } from "../../utils/BaseUrl";
 import $ from "jquery";
 import "datatables.net";
 import "../../assets/styles/datatables.css";
+import Swal from "sweetalert2";
 
 function DashboardPimpinan() {
   const tableRef = useRef(null);
@@ -26,6 +26,7 @@ function DashboardPimpinan() {
   const [endDate, setEndDate] = useState("");
   const [pilih, setPilih] = useState("");
   const [tglKonfirm, setTglKonfirm] = useState([]);
+  const [tglKonfirm2, setTglKonfirm2] = useState([]);
 
   const [allService, setAllService] = useState([]);
   const [validasi, setvalidasi] = useState(false);
@@ -49,12 +50,6 @@ function DashboardPimpinan() {
 
     $(tableRef.current).DataTable({});
   };
-
-  useEffect(() => {
-    if (allService && allService.length > 0) {
-      initializeDataTable();
-    }
-  }, [allService]);
 
   const tglKonfirmasi = async (transactionId) => {
     try {
@@ -100,12 +95,6 @@ function DashboardPimpinan() {
     }
   };
 
-  useEffect(() => {
-    if (services && services.length > 0) {
-      initializeDataTable();
-    }
-  }, [services]);
-
   const tglKonfirmasi2 = async (transactionId) => {
     try {
       const response = await axios.get(
@@ -129,23 +118,33 @@ function DashboardPimpinan() {
           return tglData;
         })
       );
-      setTglKonfirm(tglList);
+      setTglKonfirm2(tglList);
     };
 
     fetchTglKonfirm();
   }, [services]);
 
   useEffect(() => {
-    getAllService();
-  }, []);
-
-  useEffect(() => {
     if (validasi) {
       getAllServiceFilter();
+    } else {
+      getAllService();
     }
   }, [validasi]);
 
   const filterTangggal = () => {
+    if (startDate === endDate && pilih === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setservices([]);
+      setTglKonfirm2([]);
+      return;
+    }
+
     setvalidasi((prevValidasi) => !prevValidasi);
   };
 
@@ -184,9 +183,6 @@ function DashboardPimpinan() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/dashboard_pimpinan">
-              <span>Dashboard</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -229,20 +225,20 @@ function DashboardPimpinan() {
                 className="w-full"
               >
                 <Option value="">Pilih</Option>
-                <Option value="New Arrival">New Arrival</Option>
+                <Option value="N_A">New Arrival</Option>
                 <Option value="Proses">Proses</Option>
                 <Option value="Ready">Ready</Option>
               </Select>
             </div>
             <div className="w-full lg:w-auto flex justify-start items-center">
-              <Button
+              <IconButton
                 variant="gradient"
                 color="blue"
                 onClick={filterTangggal}
                 size="md"
               >
                 <MagnifyingGlassIcon className="w-5 h-5" />
-              </Button>
+              </IconButton>
             </div>
           </div>
           <div className="rounded mt-10 p-2 w-full overflow-x-auto">
@@ -268,7 +264,7 @@ function DashboardPimpinan() {
                   <>
                     {services.length > 0 ? (
                       services.map((row, index) => {
-                        const tglKonfirms = tglKonfirm[index] || [];
+                        const tglKonfirms = tglKonfirm2[index] || [];
 
                         return (
                           <tr key={index}>

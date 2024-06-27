@@ -1,5 +1,5 @@
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, IconButton, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, Dialog, DialogBody, DialogFooter, IconButton, Input, Option, Select, Typography } from "@material-tailwind/react";
 import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
@@ -7,11 +7,15 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { API_BON_BARANG } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
-import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon, CheckIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 function DataBon() {
   const tableRef = useRef(null);
   const [bonBarang, setBonBarang] = useState([]);
+
+  // MODAL
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(!open);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -172,6 +176,10 @@ function DataBon() {
                     Tanggal Ambil
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
+                    Status Barang                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Status Service                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Kembalikan
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi </th>
@@ -193,6 +201,12 @@ function DataBon() {
                         {formatDate(bon.tgl_ambil)}
                       </td>
                       <td className="text-sm py-2 px-3">
+                        {bon.status_barang}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {bon.status_service}
+                      </td>
+                      <td className="text-sm py-2 px-3">
                         {bon.tgl_kembalikan === null ? (
                           <></>
                         ) : (
@@ -207,8 +221,21 @@ function DataBon() {
                             <>
                               <IconButton
                                 size="md"
-                                color="green"
+                                color="orange"
                                 onClick={() => updateTglKembaliBonBarang(bon.id)}
+                              >
+                                <CalendarIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </>
+                          )}
+                          {bon.status_barang === "Barang belum ready" ? (
+                            <></>
+                          ) : (
+                            <>
+                              <IconButton
+                                size="md"
+                                color="green"
+                              // onClick={() => updateTglKembaliBonBarang(bon.id)}
                               >
                                 <CheckIcon className="w-6 h-6 white" />
                               </IconButton>
@@ -233,7 +260,7 @@ function DataBon() {
                 ) : (
                   <tr>
                     <td
-                      colSpan="7"
+                      colSpan="9"
                       className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
@@ -245,6 +272,46 @@ function DataBon() {
           </div>
         </main>
       </div>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogBody className="mt-4 ">
+          <h1>
+            <b>Konfirmasi Status Service</b>
+          </h1>
+          <hr />
+          <div className="grid grid-cols-1 gap-8">
+            <Input
+              label="Tanggal Kembalikan"
+              variant="static"
+              color="blue"
+              size="lg"
+              type="date"
+              required
+            />
+            <Select label="Status" variant="static" color="blue" size="lg">
+              <Option value="Barang masuk gudang">Barang masuk gudang</Option>
+              <Option value="Barang masuk konsumen">Barang masuk konsumen</Option>
+            </Select>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="gray"
+            onClick={handleOpen}
+            className="mr-1"
+          >
+            <span>Batal</span>
+          </Button>
+          <Button
+            variant="gradient"
+            color="blue"
+            className="mr-1"
+          >
+            <span>Konfirmasi</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
     </section>
   );
 }

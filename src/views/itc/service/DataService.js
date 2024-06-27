@@ -217,7 +217,7 @@ function DataService() {
                 className="w-full"
               >
                 <Option value="">Pilih</Option>
-                <Option value="New Arrival">New Arrival</Option>
+                <Option value="N_A">New Arrival</Option>
                 <Option value="Proses">Proses</Option>
                 <Option value="Ready">Ready</Option>
               </Select>

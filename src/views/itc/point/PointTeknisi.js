@@ -17,7 +17,7 @@ import { ChartBarIcon } from "@heroicons/react/24/outline";
 
 const PointTeknisi = () => {
   const [month, setMonth] = useState("");
-  const [points, setPoints] = useState([]);
+  const [poins, setpoins] = useState([]);
   const [teknisi, setTeknisi] = useState([]);
   const tableRef = useRef(null);
 
@@ -29,25 +29,10 @@ const PointTeknisi = () => {
   };
 
   useEffect(() => {
-    if (points && points.length > 0) {
+    if (poins && poins.length > 0) {
       initializeDataTable();
     }
-  }, [points]);
-
-  // GET ALL
-  const getAll = async () => {
-    try {
-      const response = await axios.get(`${API_POIN}/pimpinan`, {
-        headers: {
-          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-        },
-      });
-      setPoints(response.data);
-      console.log();
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-  };
+  }, [poins]);
 
   const getAllTeknisi = async () => {
     try {
@@ -63,7 +48,6 @@ const PointTeknisi = () => {
   };
 
   useEffect(() => {
-    getAll();
     getAllTeknisi();
   }, []);
 
@@ -74,42 +58,55 @@ const PointTeknisi = () => {
     }).format(num);
   };
 
-  //   const filterMonth = () => {
-  //     axios
-  //       .post(`${API_SERVICE}/admin/finish_filter`, { month })
-  //       .then((res) => {
-  //         const responseData = res.data;
-  //         setPoints(responseData);
+  // TOTAL POIN PER BULAN
+  const [validasi, setvalidasi] = useState(false);
 
-  //         let totalElektro = 0,
-  //           successElektro = 0,
-  //           notElektro = 0;
-  //         let totalCpu = 0,
-  //           successCpu = 0,
-  //           notCpu = 0;
+  const searchPoinByMonth = async () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const months = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${months}-${day}`;
+    const month2 = `${month}-01`;
 
-  //         responseData.forEach((item) => {
-  //           if (item.team === "Elektro") {
-  //             totalElektro += item.ttl;
-  //             successElektro += item.success;
-  //             notElektro += item.nots;
-  //           } else if (item.team === "CPU") {
-  //             totalCpu += item.ttl;
-  //             successCpu += item.success;
-  //             notCpu += item.nots;
-  //           }
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         Swal.fire({
-  //           icon: "error",
-  //           title: "Gagal!",
-  //           text: "Terjadi kesalahan saat mengambil data!",
-  //           showConfirmButton: false,
-  //           timer: 1500,
-  //         });
-  //       });
-  //   };
+    const bulan = validasi ? month2 : formattedDate;
+
+    if (month === "" && validasi === true) {
+      Swal.fire({
+        icon: "warning",
+        title: "Masukkan Bulan Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+
+    try {
+      const response = await axios.get(`${API_POIN}/month?month=${bulan}`, {
+        headers: {
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
+      });
+      setpoins(response.data.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  useEffect(() => {
+    if (validasi) {
+      searchPoinByMonth();
+      setvalidasi(false);
+    }
+  }, [validasi, month]);
+
+  useEffect(() => {
+    searchPoinByMonth();
+  }, []);
+
+  const handleSearchPoinByMonth = () => {
+    setvalidasi(true);
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -148,7 +145,7 @@ const PointTeknisi = () => {
                 color="blue"
                 onChange={(e) => setMonth(e.target.value)}
               />
-              <Button variant="gradient" color="blue">
+              <Button variant="gradient" color="blue" onClick={handleSearchPoinByMonth}>
                 GO!
               </Button>
             </div>
@@ -171,20 +168,20 @@ const PointTeknisi = () => {
                     <th className="text-sm py-2 px-3 font-semibold">Graph</th>
                   </tr>
                 </thead>
-                {/* <tbody>
-                  {points.length > 0 ? (
-                    points.map((row, index) => (
+                <tbody>
+                  {poins.length > 0 ? (
+                    poins.map((row, index) => (
                       <tr key={index}>
                         <td className="text-sm py-2 px-3">{index + 1}</td>
                         <td className="text-sm py-2 px-3">
-                          {row.teknisi.nama}
+                          {row.teknisiNama}
                         </td>
-                        <td className="text-sm py-2 px-3">{row.poin}</td>
+                        <td className="text-sm py-2 px-3">{row.totalPoin}</td>
                         <td className="text-sm py-2 px-3 text-right">
-                          {formatCurrency(row.poin * 90000)}
+                          {formatCurrency(row.totalPoin * 90000)}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          <a href={"/grafik_poin/" + row.teknisi.id}>
+                          <a href={"/grafik_poin/" + row.teknisiId}>
                             <IconButton
                               variant="gradient"
                               color="blue"
@@ -208,7 +205,7 @@ const PointTeknisi = () => {
                   )}
                 </tbody>
                 <tfoot>
-                  {points.length > 0 ? (
+                  {poins.length > 0 ? (
                     <>
                       <tr>
                         <td
@@ -223,7 +220,7 @@ const PointTeknisi = () => {
                           style={{ textAlign: "center" }}
                           colSpan="1"
                         >
-                          {points.reduce((total, row) => total + row.poin, 0)}
+                          {poins.reduce((total, row) => total + row.totalPoin, 0)}
                         </td>
                         <td
                           className="text-sm py-2 px-3"
@@ -231,8 +228,8 @@ const PointTeknisi = () => {
                           colSpan="1"
                         >
                           {formatCurrency(
-                            points.reduce(
-                              (total, row) => total + row.poin * 90000,
+                            poins.reduce(
+                              (total, row) => total + row.totalPoin * 90000,
                               0
                             )
                           )}
@@ -252,7 +249,7 @@ const PointTeknisi = () => {
                           style={{ textAlign: "center" }}
                           colSpan="1"
                         >
-                          {points.reduce((total, row) => total + row.poin, 0) /
+                          {poins.reduce((total, row) => total + row.totalPoin, 0) /
                             teknisi.length}
                         </td>
                         <td
@@ -261,8 +258,8 @@ const PointTeknisi = () => {
                           colSpan="1"
                         >
                           {formatCurrency(
-                            points.reduce(
-                              (total, row) => total + row.poin * 90000,
+                            poins.reduce(
+                              (total, row) => total + row.totalPoin * 90000,
                               0
                             ) / teknisi.length
                           )}
@@ -273,7 +270,7 @@ const PointTeknisi = () => {
                   ) : (
                     <></>
                   )}
-                </tfoot> */}
+                </tfoot>
               </table>
             </div>
           </div>
