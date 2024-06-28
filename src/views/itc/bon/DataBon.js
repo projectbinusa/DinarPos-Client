@@ -1,5 +1,5 @@
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Dialog, DialogBody, DialogFooter, IconButton, Input, Option, Select, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Option, Select, Typography } from "@material-tailwind/react";
 import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
@@ -91,16 +91,22 @@ function DataBon() {
   };
 
   // UPDATE TGL KEMBALIKAN BON BARANG
-  const updateTglKembaliBonBarang = async (id) => {
+  const [tglKembali, setTglKembali] = useState("");
+  const [statusService, setStatusService] = useState("");
+  const [selectId, setSelectId] = useState(0);
+
+  const updateTglKembaliBonBarang = async () => {
     const request = {
-      tgl_kembali: new Date(),
+      tgl_kembali: tglKembali,
+      status_service: statusService
     };
 
     await axios
-      .put(`${API_BON_BARANG}/` + id, request, {
+      .put(`${API_BON_BARANG}/` + selectId, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then(() => {
+        handleOpen();
         Swal.fire({
           icon: "success",
           title: "Update Tanggal Kembali Berhasil!",
@@ -115,7 +121,45 @@ function DataBon() {
       .catch((err) => {
         Swal.fire({
           icon: "error",
-          title: "Update Tanggal Jadi Gagal!",
+          title: "Update Tanggal Kembali Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        console.log(err);
+      });
+  };
+
+  const handleSelectId = async (id) => {
+    setSelectId(id)
+  }
+
+  // UPDATE TGL STATUS BARANG
+  const updateStatusBarang = async (id) => {
+    const request = {
+      status_barang: "Barang ready"
+    };
+
+    await axios
+      .put(`${API_BON_BARANG}/update_status_barang/` + id, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Update Status Barang Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Update Status Barang Gagal!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -214,31 +258,36 @@ function DataBon() {
                         )}
                       </td>
                       <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
+                        <div className="flex flex-wrap gap-3">
                           {bon.tgl_kembalikan != null ? (
                             <></>
                           ) : (
                             <>
-                              <IconButton
-                                size="md"
-                                color="orange"
-                                onClick={() => updateTglKembaliBonBarang(bon.id)}
-                              >
-                                <CalendarIcon className="w-6 h-6 white" />
-                              </IconButton>
+                              <div>
+                                <IconButton
+                                  size="md"
+                                  color="orange"
+                                  onClick={() => { handleOpen(); handleSelectId(bon.id); }}
+                                >
+                                  <CalendarIcon className="w-6 h-6 white" />
+                                </IconButton>
+                              </div>
                             </>
                           )}
                           {bon.status_barang === "Barang belum ready" ? (
-                            <></>
+                            <>
+                              <div>
+                                <IconButton
+                                  size="md"
+                                  color="green"
+                                onClick={() => updateStatusBarang(bon.id)}
+                                >
+                                  <CheckIcon className="w-6 h-6 white" />
+                                </IconButton>
+                              </div>
+                            </>
                           ) : (
                             <>
-                              <IconButton
-                                size="md"
-                                color="green"
-                              // onClick={() => updateTglKembaliBonBarang(bon.id)}
-                              >
-                                <CheckIcon className="w-6 h-6 white" />
-                              </IconButton>
                             </>
                           )}
                           <a href={"/edit_bon_barang/" + bon.id}>
@@ -246,13 +295,15 @@ function DataBon() {
                               <PencilIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton
-                            size="md"
-                            color="red"
-                            onClick={() => hapusBonBarang(bon.id)}
-                          >
-                            <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>
+                          <div>
+                            <IconButton
+                              size="md"
+                              color="red"
+                              onClick={() => hapusBonBarang(bon.id)}
+                            >
+                              <TrashIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </div>
                         </div>
                       </td>
                     </tr>
@@ -273,11 +324,9 @@ function DataBon() {
         </main>
       </div>
       <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>Konfirmasi Status Service</DialogHeader>
+        <hr />
         <DialogBody className="mt-4 ">
-          <h1>
-            <b>Konfirmasi Status Service</b>
-          </h1>
-          <hr />
           <div className="grid grid-cols-1 gap-8">
             <Input
               label="Tanggal Kembalikan"
@@ -285,9 +334,10 @@ function DataBon() {
               color="blue"
               size="lg"
               type="date"
+              onChange={(e) => setTglKembali(e.target.value)}
               required
             />
-            <Select label="Status" variant="static" color="blue" size="lg">
+            <Select label="Status" variant="static" color="blue" size="lg" onChange={(event) => setStatusService(event)} required>
               <Option value="Barang masuk gudang">Barang masuk gudang</Option>
               <Option value="Barang masuk konsumen">Barang masuk konsumen</Option>
             </Select>
@@ -306,6 +356,7 @@ function DataBon() {
             variant="gradient"
             color="blue"
             className="mr-1"
+            onClick={updateTglKembaliBonBarang}
           >
             <span>Konfirmasi</span>
           </Button>

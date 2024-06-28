@@ -51,7 +51,8 @@ function AddBonBarang() {
         window.location.reload();
       }, 1500);
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      console.log(error);
+      if (error.response && error.response.code === 401) {
         localStorage.clear();
         history.push("/");
       } else {
@@ -161,9 +162,9 @@ function AddBonBarang() {
                 label="ID Service"
                 variant="static"
                 color="blue"
-                list="service-list"
                 id="service"
                 name="service"
+                type="number"
                 onChange={(e) => setserviceId(e.target.value)}
                 placeholder="Pilih Service"
                 required

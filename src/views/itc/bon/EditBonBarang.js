@@ -14,7 +14,6 @@ import axios from "axios";
 import {
   API_BARANG,
   API_BON_BARANG,
-  API_SERVICE,
   API_TEKNISI,
 } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
@@ -53,14 +52,14 @@ function EditBonBarang() {
         window.location.reload();
       }, 1500);
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.data.code === 401) {
         localStorage.clear();
         history.push("/");
       } else {
         Swal.fire({
           icon: "error",
           title: "Ubah Data Gagal!",
-          // text: ,
+          text: error.response.data.data,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -150,7 +149,7 @@ function EditBonBarang() {
 
   useEffect(() => {
     getBonBarangById();
-  }, [param.id]);
+  }, []);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -184,12 +183,11 @@ function EditBonBarang() {
                 label="ID Service"
                 variant="static"
                 color="blue"
-                list="service-list"
                 id="service"
                 name="service"
                 type="number"
+                value={serviceId}
                 onChange={(e) => setserviceId(e.target.value)}
-                defaultValue={serviceId}
                 placeholder="Pilih Service"
                 required
               />
