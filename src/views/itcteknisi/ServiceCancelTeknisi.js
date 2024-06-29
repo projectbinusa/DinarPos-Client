@@ -55,6 +55,7 @@ function ServiceCancelTeknisi() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setservicesTgl(response.data.data)
+      console.log(response.data.data)
     } catch (error) {
       console.log("get all", error);
     }
@@ -143,7 +144,7 @@ function ServiceCancelTeknisi() {
   };
 
   useEffect(() => {
-    const fetchTglKonfirm = async () => {
+    const fetchTglKonfirm2 = async () => {
       const tglList = await Promise.all(
         servicesTgl.map(async (service) => {
           const tglData = await tglKonfirmasi2(service.idTT);
@@ -153,7 +154,7 @@ function ServiceCancelTeknisi() {
       setTglKonfirm2(tglList);
     };
 
-    fetchTglKonfirm();
+    fetchTglKonfirm2();
   }, [servicesTgl]);
 
   const formatDate = (value) => {
@@ -201,7 +202,6 @@ function ServiceCancelTeknisi() {
                 color="blue"
                 variant="outlined"
                 required
-                value={startDate}
                 onChange={(e) => setstartDate(e.target.value)}
                 className="w-full"
               />
@@ -214,7 +214,6 @@ function ServiceCancelTeknisi() {
                 color="blue"
                 variant="outlined"
                 required
-                value={endDate}
                 onChange={(e) => setendDate(e.target.value)}
                 className="w-full"
               />
@@ -322,7 +321,7 @@ function ServiceCancelTeknisi() {
               <tbody>
                 {servicesTgl.length > 0 ? (
                   servicesTgl.map((row, index) => {
-                    const tglKonfirms = tglKonfirm2[index] || [];
+                    const tglKonfirms2 = tglKonfirm2[index] || [];
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
@@ -340,7 +339,7 @@ function ServiceCancelTeknisi() {
                           {formatDate(row.tanggalMasuk)}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {tglKonfirms.map((down, idx) => (
+                          {tglKonfirms2.map((down, idx) => (
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>

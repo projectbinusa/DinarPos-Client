@@ -96,6 +96,30 @@ function Hutang() {
       console.error("Error saat mengunduh file:", error);
     }
   };
+
+  const historyHutang = async () => {
+    try {
+      const response = await axios.get(
+        `${API_HUTANG}/export/excel/history-hutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "HistoryHutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -158,7 +182,7 @@ function Hutang() {
               </Button>
             </div>
             <div>
-              <Button className="mt-5" color="blue" type="button">
+              <Button className="mt-5" color="blue" type="button" onClick={historyHutang}>
                 Export History Hutang
               </Button>
             </div>

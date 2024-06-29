@@ -96,6 +96,30 @@ function Piutang() {
       console.error("Error saat mengunduh file:", error);
     }
   };
+
+  const historyPiutang = async () => {
+    try {
+      const response = await axios.get(
+        `${API_PIUTANG}/export/excel/history-piutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "HistoryPIutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -162,6 +186,7 @@ function Piutang() {
                 className="mt-5"
                 color="blue"
                 type="button"
+                onClick={historyPiutang}
               >
                 Export History Piutang
               </Button>

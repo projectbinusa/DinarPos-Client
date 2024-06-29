@@ -13,7 +13,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import axios from "axios";
-import { API_SERVICE, API_SERVICE_TAKEN } from "../../utils/BaseUrl";
+import { API_SERVICE } from "../../utils/BaseUrl";
 import $ from "jquery";
 import "datatables.net";
 import "../../assets/styles/datatables.css";
