@@ -42,9 +42,6 @@ function TransaksiPembelianDinarpos() {
   const handleOpen2 = () => setOpen2(!open2);
   const handleOpen3 = () => setOpen3(!open3);
 
-  const history = useHistory();
-
-  const [suplier, setsuplier] = useState([]);
   const [barang, setbarang] = useState([]);
 
   // TRANSAKSI BELI
@@ -104,17 +101,6 @@ function TransaksiPembelianDinarpos() {
     }),
   };
 
-  // GET ALL SUPLIER
-  const allSuplier = async () => {
-    try {
-      const response = await axios.get(`${API_SUPLIER}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsuplier(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
 
   // GET ALL BARANG
   const allBarang = async () => {
@@ -129,7 +115,6 @@ function TransaksiPembelianDinarpos() {
   };
 
   useEffect(() => {
-    allSuplier();
     allBarang();
   }, []);
 
@@ -298,7 +283,7 @@ function TransaksiPembelianDinarpos() {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
     var cashKredit = $("#cashKredit").val();
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
@@ -324,7 +309,7 @@ function TransaksiPembelianDinarpos() {
     var kekurangan = total - pembayaran;
     var cashKredit = $("#cashKredit").val();
 
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
@@ -343,6 +328,7 @@ function TransaksiPembelianDinarpos() {
     $("#ttl_bayar_hemat").html(formatRupiah(ttl_bayar_hemat));
     // checkEmptyTransaksi();
   };
+
   // BUTTON EDIT
   const edit = (
     barcode,
@@ -403,8 +389,6 @@ function TransaksiPembelianDinarpos() {
     const harga_diskon = parseInt(editHargaBarang - potongan);
     const total_harga = parseInt(harga_diskon * editJumlah);
     const total_harga_barang = parseInt(editHargaBarang * editJumlah);
-
-    // removeItemsById(editBarcode);
 
     setproduk((prevState) => {
       const indexToUpdate = prevState.findIndex((item) => {
@@ -574,6 +558,16 @@ function TransaksiPembelianDinarpos() {
     setCurrentPage(1);
   };
   // END ALL SUPLIER
+
+  function setPembayaranCash(values) {
+    if (values === "Cash Uang" || values === "Cash Bank") {
+      var total = convertToAngka($("#total").html());
+      console.log(total);
+      $("#pembayaran").val(total);
+    } else {
+      $("#pembayaran").val(0);
+    }
+  }
 
   return (
     <section className="lg:flex font-popins bg-gray-50 ">
@@ -848,9 +842,13 @@ function TransaksiPembelianDinarpos() {
                 color="blue"
                 className="w-full"
                 id="cashKredit"
-                onChange={(selectedOption) => setcashCredit(selectedOption)}
+                onChange={(selectedOption) => {
+                  setcashCredit(selectedOption);
+                  setPembayaranCash(selectedOption);
+                }}
               >
-                <Option value="Cash">Cash</Option>
+                <Option value="Cash Uang">Cash Uang</Option>
+                <Option value="Cash Bank">Cash Bank</Option>
                 <Option value="Kredit">Kredit</Option>
               </Select>
               <div className="flex flex-col gap-y-6 my-6">

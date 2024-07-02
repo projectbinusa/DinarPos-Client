@@ -27,6 +27,9 @@ function DataServiceTaken() {
   const [endDate, setEndDate] = useState("");
   const [tglKonfirm, setTglKonfirm] = useState([]);
 
+  // FILTER
+  const [tglKonfirm2, setTglKonfirm2] = useState([]);
+
   const formatDate = (value) => {
     const date = new Date(value);
 
@@ -137,7 +140,7 @@ function DataServiceTaken() {
           return tglData;
         })
       );
-      setTglKonfirm(tglList);
+      setTglKonfirm2(tglList);
     };
 
     fetchTglKonfirm();

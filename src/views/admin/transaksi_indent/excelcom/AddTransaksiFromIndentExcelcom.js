@@ -8,21 +8,36 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import {
-  API_BARANG_TRANSAKSI_INDENT,
   API_TRANSAKSI_INDENT,
 } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
+import $ from "jquery";
+import Swal from "sweetalert2";
 
 function AddTransaksiFromIndentExcelcom() {
   const [datas, setdatas] = useState(null);
   const [produk, setproduk] = useState([]);
+  const [pembayaran, setpembayaran] = useState("");
   const param = useParams();
 
-  const getBarangIndent = async () => {
+  useEffect(() => {
+    axios
+      .get(`${API_TRANSAKSI_INDENT}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setdatas(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const getAllProduk = async () => {
     try {
       const response = await axios.get(
-        `${API_BARANG_TRANSAKSI_INDENT}?id=` + param.id,
+        `${API_TRANSAKSI_INDENT}/barang?id=` + param.id,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -34,21 +49,71 @@ function AddTransaksiFromIndentExcelcom() {
   };
 
   useEffect(() => {
+    getAllProduk();
+  }, []);
+
+  const formatRupiah = (value) => {
+    const formatter = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    return formatter.format(value);
+  };
+
+  const totalBayar = () => {
+    var dp = $("#dp").val();
+    var pembayaran = $("#pembayaran").val();
+    var ttl_pembayaran = parseInt(dp) + parseInt(pembayaran);
+
+    $("#ttl_pembayaran").html(formatRupiah(ttl_pembayaran));
+
+    if (ttl_pembayaran < datas?.totalBelanja) {
+      $("#bayar").attr("disabled", "disabled");
+    } else {
+      $("#bayar").removeAttr("disabled");
+    }
+  };
+
+  const add = () => {
+    const request = {
+      prembayaran: pembayaran,
+    };
     axios
-      .get(`${API_TRANSAKSI_INDENT}/` + param.id, {
+      .post(`${API_TRANSAKSI_INDENT}/checklist/` + param.id, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
-        console.log(res.data.data);
-        setdatas(res.data.data);
+        if (res.data.code === 200) {
+          Swal.fire({
+            title: "Transaksi Penjualan Berhasil. Cetak Struk?",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.open(
+                "/cetak_struk_transaksi_penjualan_excelcom/" +
+                  res.data.data.idTransaksi
+              );
+              window.location.href = "/transaksi_indent_excelcom";
+            } else {
+              window.location.href = "/transaksi_indent_excelcom";
+            }
+          });
+        } else {
+          alert("gagal");
+        }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
-    getBarangIndent();
-  }, [param.id]);
+  };
 
-  
+  const dp = $("#dp").val();
+  const ttl_pembayaran = parseInt(dp) + parseInt(pembayaran);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
@@ -84,7 +149,6 @@ function AddTransaksiFromIndentExcelcom() {
                 color="blue"
                 id="customer"
                 name="customer"
-                readOnly
                 value={datas?.customer?.id}
               />
             </div>
@@ -96,7 +160,6 @@ function AddTransaksiFromIndentExcelcom() {
                   <thead className="border-b-2 ">
                     <tr>
                       <th className="py-3 px-2">Barcode</th>
-                      <th className="py-3 px-2">Nama</th>
                       <th className="py-3 px-2">Harga (Rp)</th>
                       <th className="py-3 px-2">Disc</th>
                       <th className="py-3 px-2">Harga Diskon (Rp)</th>
@@ -106,35 +169,36 @@ function AddTransaksiFromIndentExcelcom() {
                   </thead>
                   <tbody>
                     {produk.length > 0 ? (
-                      produk.map((down, index) => (
-                        <tr key={index}>
-                          <td className="py-3 px-2 text-center border">
-                            {down.barcodeBarang}
-                          </td>
-                          <td className="py-3 px-2 text-center border">
-                            {down.nama}
-                          </td>
-                          <td className="py-3 px-2 text-center border">
-                            {down.hargaBrng}
-                          </td>
-                          <td className="py-3 px-2 text-center border">
-                            {down.diskon}
-                          </td>
-                          <td className="py-3 px-2 text-center border">
-                            {down.hargaDiskon}
-                          </td>
-                          <td className="py-3 px-2 text-center border">
-                            {down.qty}
-                          </td>
-                          <td className="py-3 px-2 text-center border">
-                            {down.totalHarga}
-                          </td>
-                        </tr>
-                      ))
+                      produk.map((down, index) => {
+                        const jmlDiskon = down.hargaBrng * (down.diskon / 100);
+
+                        return (
+                          <tr key={index}>
+                            <td className="py-3 px-2 text-center border">
+                              {down.barcodeBarang}
+                            </td>
+                            <td className="py-3 px-2 text-center border">
+                              {down.hargaBrng}
+                            </td>
+                            <td className="py-3 px-2 text-center border">
+                              {down.diskon}
+                            </td>
+                            <td className="py-3 px-2 text-center border">
+                              {jmlDiskon}
+                            </td>
+                            <td className="py-3 px-2 text-center border">
+                              {down.qty}
+                            </td>
+                            <td className="py-3 px-2 text-center border">
+                              {down.totalHarga}
+                            </td>
+                          </tr>
+                        );
+                      })
                     ) : (
                       <>
                         <tr>
-                          <td colSpan={7} className="text-center py-3">
+                          <td colSpan={6} className="text-center py-3">
                             Tidak ada data
                           </td>
                         </tr>
@@ -143,7 +207,6 @@ function AddTransaksiFromIndentExcelcom() {
                   </tbody>
                 </table>
               </Card>
-
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 mb-12">
                 <div className="mt-6">
                   <Input
@@ -151,8 +214,7 @@ function AddTransaksiFromIndentExcelcom() {
                     variant="static"
                     label="Keterangan"
                     placeholder="Masukkan Keterangan"
-                    value={datas?.ket}
-                    readOnly
+                    value={datas?.keterangan}
                   />
                 </div>
                 <div className="mt-6">
@@ -161,8 +223,7 @@ function AddTransaksiFromIndentExcelcom() {
                     variant="static"
                     label="Salesman"
                     placeholder="Masukkan Salesman"
-                    value={datas?.salesman?.idSalesman}
-                    readOnly
+                    value={datas?.salesman?.id}
                   />
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
@@ -188,9 +249,17 @@ function AddTransaksiFromIndentExcelcom() {
                 label="Cash / Kredit"
                 placeholder="Masukkan Cash / Kredit"
                 value={datas?.cashKredit}
-                readOnly
               />
               <div className="flex flex-col gap-y-6 my-6">
+                <Input
+                  color="blue"
+                  variant="static"
+                  label="DP"
+                  type="number"
+                  placeholder="DP"
+                  id="dp"
+                  value={datas?.pembayaran}
+                />
                 <Input
                   color="blue"
                   variant="static"
@@ -198,8 +267,8 @@ function AddTransaksiFromIndentExcelcom() {
                   type="number"
                   placeholder="Pembayaran"
                   id="pembayaran"
-                  value={datas?.pembayaran}
-                  readOnly
+                  onChange={(e) => setpembayaran(e.target.value)}
+                  onInput={() => totalBayar()}
                 />
                 <Input
                   color="blue"
@@ -209,7 +278,6 @@ function AddTransaksiFromIndentExcelcom() {
                   placeholder="Potongan"
                   id="potongan"
                   value={datas?.potongan}
-                  readOnly
                 />
               </div>
               <div className="flex flex-col gap-y-4">
@@ -220,13 +288,32 @@ function AddTransaksiFromIndentExcelcom() {
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" id="title">
-                    Kembalian / Kekurangan{" "}
-                  </Typography>
-                  <Typography variant="h6" id="kembalian">
-                    Rp {datas?.sisa}
-                  </Typography>
+                  {datas?.sisa === "null" && datas?.kekurangan !== "0" ? (
+                    <>
+                      <Typography variant="paragraph" id="title">
+                        Kekurangan
+                      </Typography>
+                      <Typography variant="h6" id="kembalian">
+                        {formatRupiah(datas?.kekurangan)}
+                      </Typography>
+                    </>
+                  ) : (
+                    <>
+                      <Typography variant="paragraph" id="title">
+                        Kembalian
+                      </Typography>
+                      <Typography variant="h6" id="kembalian">
+                        {formatRupiah(datas?.sisa)}
+                      </Typography>
+                    </>
+                  )}
                 </div>
+              </div>
+              <div className="bg-white shadow rounded px-3 py-2 mt-5">
+                <Typography variant="paragraph">Total Pembayaran</Typography>
+                <Typography variant="h6" id="ttl_pembayaran">
+                  Rp 0,00{" "}
+                </Typography>
               </div>
               <div className="bg-white shadow rounded px-3 py-2 mt-5">
                 <p className="text-base my-2">
@@ -237,16 +324,33 @@ function AddTransaksiFromIndentExcelcom() {
                   Rp {datas?.totalBelanja}
                 </h1>
               </div>
-              <Button
-                variant="gradient"
-                color="blue"
-                className="mt-5"
-                type="submit"
-                id="bayar"
-                // onClick={() => add()}
-              >
-                <span>Lanjut</span>
-              </Button>
+              {ttl_pembayaran < datas?.totalBelanja ? (
+                <>
+                  <Button
+                    variant="gradient"
+                    color="blue"
+                    className="mt-5"
+                    type="submit"
+                    id="bayar"
+                    disabled
+                  >
+                    <span>Lanjut</span>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="gradient"
+                    color="blue"
+                    className="mt-5"
+                    type="submit"
+                    id="bayar"
+                    onClick={() => add()}
+                  >
+                    <span>Lanjut</span>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -14,7 +14,6 @@ import axios from "axios";
 import {
   API_BARANG,
   API_BON_BARANG,
-  API_SERVICE,
   API_TEKNISI,
 } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
@@ -53,14 +52,14 @@ function EditBonBarang() {
         window.location.reload();
       }, 1500);
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.data.code === 401) {
         localStorage.clear();
         history.push("/");
       } else {
         Swal.fire({
           icon: "error",
           title: "Ubah Data Gagal!",
-          // text: ,
+          text: error.response.data.data,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -138,10 +137,11 @@ function EditBonBarang() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       const data = response.data.data;
+      // console.log(data);
       settglAmbil(data.tgl_ambil);
       setteknisiId(data.teknisi.id);
       setserviceId(data.serviceBarang.idTT);
-      setbarangId(data.barang.barcodeBarang);
+      setbarangId(data.barang.id);
     } catch (error) {
       console.log(error);
     }
@@ -183,10 +183,10 @@ function EditBonBarang() {
                 label="ID Service"
                 variant="static"
                 color="blue"
-                list="service-list"
                 id="service"
                 name="service"
-                defaultValue={serviceId}
+                type="number"
+                value={serviceId}
                 onChange={(e) => setserviceId(e.target.value)}
                 placeholder="Pilih Service"
                 required
@@ -199,7 +199,7 @@ function EditBonBarang() {
                   list="teknisi-list"
                   id="teknisi"
                   name="teknisi"
-                  // value={teknisiId}
+                  value={teknisiId}
                   onChange={(event) => {
                     handleChangeTeknisi(event);
                     setteknisiId(event.target.value);
@@ -257,7 +257,7 @@ function EditBonBarang() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option key={option.idBarang} value={option.idBarang}>
+                        <option key={option.id} value={option.id}>
                           {option.barcodeBarang} - {option.namaBarang}
                         </option>
                       ))}

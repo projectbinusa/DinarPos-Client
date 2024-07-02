@@ -154,6 +154,7 @@ import AddSaldo from "./views/admin/accounting/kasharian/AddSaldo.js";
 import EditSaldo from "./views/admin/accounting/kasharian/EditSaldo.js";
 import AddTransaksiFromIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddTransaksiFromIndentExcelcom.js";
 import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddTransaksiFromIndentDinarpos.js";
+import DashboardAdminService from "./views/itc/DashboardAdminService.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1002,6 +1003,12 @@ function App() {
               isAuthenticated={true}
             />
             {/* END ROLE PIMPINAN */}
+
+            <PrivateRoute
+              path="/dashboard_service"
+              component={DashboardAdminService}
+              isAuthenticated={true}
+            />
           </Switch>
         </main>
       </BrowserRouter>

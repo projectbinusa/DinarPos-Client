@@ -28,6 +28,7 @@ function TakeOver() {
       setdata(response.data.data);
       setStatusEnd(response.data.data.statusEnd);
       setTaken(response.data.data.taken);
+      console.log(response.data.data.statusEnd);
     } catch (error) {
       if (error.response.data.code === 404) {
         Swal.fire({
@@ -57,6 +58,24 @@ function TakeOver() {
 
   useEffect(() => {
     getAllTeknisi();
+  }, []);
+
+  const [dataTake, setdataTake] = useState([]);
+
+  const getAllTakeByIdTT = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE}/take/` + idTT, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+
+      setdataTake(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getAllTakeByIdTT();
   }, []);
 
   const takeOver = async (e) => {
@@ -156,7 +175,7 @@ function TakeOver() {
               </div>
             </div>
           )}
-          {data && taken === "Y" && (
+          {data && (taken === "Y" || statusEnd.includes("CANCEL") || statusEnd.includes("READY")) && (
             <>
               <div class="border border-gray-400 rounded">
                 <div class="bg-gray-300 p-3">
@@ -184,7 +203,15 @@ function TakeOver() {
                     <i class="text-4xl fas fa-sync"></i>
                   </div>
                   <div class="text-center bg-blue-700 text-white py-2 rounded">
-                    {data?.teknisi?.nama}
+                    {dataTake.length > 0 ? (<>
+                      {dataTake.map((row) => (
+                        <ol>
+                          <li>{row.id_take.nama}</li>
+                        </ol>
+                      ))}
+                    </>) : (<>
+                      {data?.teknisi?.nama}
+                    </>)}
                   </div>
                 </div>
               </div>

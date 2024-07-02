@@ -42,9 +42,6 @@ function TransaksiPembelianExcelcom() {
   const handleOpen2 = () => setOpen2(!open2);
   const handleOpen3 = () => setOpen3(!open3);
 
-  const history = useHistory();
-
-  const [suplier, setsuplier] = useState([]);
   const [barang, setbarang] = useState([]);
 
   // TRANSAKSI BELI
@@ -104,18 +101,6 @@ function TransaksiPembelianExcelcom() {
     }),
   };
 
-  // GET ALL SUPLIER
-  const allSuplier = async () => {
-    try {
-      const response = await axios.get(`${API_SUPLIER}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsuplier(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
   // GET ALL BARANG
   const allBarang = async () => {
     try {
@@ -129,7 +114,6 @@ function TransaksiPembelianExcelcom() {
   };
 
   useEffect(() => {
-    allSuplier();
     allBarang();
   }, []);
 
@@ -298,7 +282,7 @@ function TransaksiPembelianExcelcom() {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
     var cashKredit = $("#cashKredit").val();
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
@@ -324,7 +308,7 @@ function TransaksiPembelianExcelcom() {
     var kekurangan = total - pembayaran;
     var cashKredit = $("#cashKredit").val();
 
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#bayar").removeAttr("disabled");
@@ -569,6 +553,16 @@ function TransaksiPembelianExcelcom() {
     setCurrentPage(1);
   };
   // END ALL SUPLIER
+
+  function setPembayaranCash(values) {
+    if (values === "Cash Uang" || values === "Cash Bank") {
+      var total = convertToAngka($("#total").html());
+      console.log(total);
+      $("#pembayaran").val(total);
+    } else {
+      $("#pembayaran").val(0);
+    }
+  }
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
@@ -843,9 +837,13 @@ function TransaksiPembelianExcelcom() {
                 color="blue"
                 className="w-full"
                 id="cashKredit"
-                onChange={(selectedOption) => setcashCredit(selectedOption)}
+                onChange={(selectedOption) => {
+                  setcashCredit(selectedOption);
+                  setPembayaranCash(selectedOption);
+                }}
               >
-                <Option value="Cash">Cash</Option>
+                <Option value="Cash Uang">Cash Uang</Option>
+                <Option value="Cash Bank">Cash Bank</Option>
                 <Option value="Kredit">Kredit</Option>
               </Select>
               <div className="flex flex-col gap-y-6 my-6">

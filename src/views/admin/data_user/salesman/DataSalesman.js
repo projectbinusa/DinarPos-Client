@@ -188,7 +188,7 @@ function DataSalesman() {
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-col lg:flex-row gap-3">
-                            <a href={"/edit_salesman/" + salesman.idSalesman}>
+                            <a href={"/edit_salesman/" + salesman.id}>
                               <IconButton size="md" color="light-blue">
                                 <PencilIcon className="w-6 h-6 white" />
                               </IconButton>
@@ -198,7 +198,7 @@ function DataSalesman() {
                               color="red"
                               type="button"
                               onClick={() =>
-                                deleteSalesman(salesman.idSalesman)
+                                deleteSalesman(salesman.id)
                               }
                             >
                               <TrashIcon className="w-6 h-6 white" />

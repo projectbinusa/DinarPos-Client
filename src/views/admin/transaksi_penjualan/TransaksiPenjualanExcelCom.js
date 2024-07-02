@@ -42,9 +42,7 @@ function TransaksiPenjualanExcelCom() {
   const handleOpen2 = () => setOpen2(!open2);
   const handleOpen3 = () => setOpen3(!open3);
 
-  const [salesman, setsalesman] = useState([]);
   const [barang, setbarang] = useState([]);
-  const [customer, setcustomer] = useState([]);
 
   // TRANSAKSI JUAL EXCEL
   const [markettingId, setmarkettingId] = useState(0);
@@ -106,30 +104,6 @@ function TransaksiPenjualanExcelCom() {
     }),
   };
 
-  // GET ALL SALESMAN
-  const allSalesman = async () => {
-    try {
-      const response = await axios.get(`${API_SALESMAN}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsalesman(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
-  // GET ALL CUSTOMER
-  const allCustomer = async () => {
-    try {
-      const response = await axios.get(`${API_CUSTOMER}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setcustomer(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
   // GET ALL BARANG
   const allBarang = async () => {
     try {
@@ -143,9 +117,7 @@ function TransaksiPenjualanExcelCom() {
   };
 
   useEffect(() => {
-    allCustomer();
     allBarang();
-    allSalesman();
   }, []);
 
   // FORMAT RUPIAH
@@ -291,7 +263,7 @@ function TransaksiPenjualanExcelCom() {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
     var cashKredit = $("#cashKredit").val();
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
@@ -319,7 +291,7 @@ function TransaksiPenjualanExcelCom() {
 
     console.log(cashCredit);
 
-    if (cashKredit == "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#bayar").removeAttr("disabled");
@@ -472,15 +444,15 @@ function TransaksiPenjualanExcelCom() {
     }
 
     const request = {
-      cashCredit: cashCredit,
+      cashKredit: cashCredit,
       diskon: diskons,
       idCustomer: customerId,
       idSalesman: markettingId,
+      kekurangan: kekurangan,
       keterangan: keterangan,
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
-      kekurangan: kekurangan,
       sisa: sisa,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
@@ -507,6 +479,9 @@ function TransaksiPenjualanExcelCom() {
                 "/cetak_struk_transaksi_penjualan_excelcom/" +
                   res.data.data.idTransaksi
               );
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
             } else {
               window.location.reload();
             }
@@ -605,6 +580,16 @@ function TransaksiPenjualanExcelCom() {
         });
     }
   };
+
+  function setPembayaranCash(values) {
+    if (values === "Cash Uang" || values === "Cash Bank") {
+      var total = convertToAngka($("#total").html());
+      console.log(total);
+      $("#pembayaran").val(total);
+    } else {
+      $("#pembayaran").val(0);
+    }
+  }
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 ">
@@ -877,7 +862,7 @@ function TransaksiPenjualanExcelCom() {
                     {optionsSalesman.length > 0 && (
                       <>
                         {optionsSalesman.map((option) => (
-                          <option value={option.idSalesman}>
+                          <option value={option.id}>
                             {option.namaSalesman}
                           </option>
                         ))}
@@ -928,9 +913,15 @@ function TransaksiPenjualanExcelCom() {
                 label="Cash / Kredit"
                 color="blue"
                 className="w-full"
-                onChange={(selectedOption) => setcashCredit(selectedOption)}
+                id="cash_kredit"
+                onChange={(selectedOption) => {
+                  setcashCredit(selectedOption);
+                  setPembayaranCash(selectedOption);
+                }}
               >
-                <Option value="Cash">Cash</Option>
+                <Option value="">Pilih</Option>
+                <Option value="Cash Uang">Cash Uang</Option>
+                <Option value="Cash Bank">Cash Bank</Option>
                 <Option value="Kredit">Kredit</Option>
               </Select>
               <div className="flex flex-col gap-y-6 my-6">

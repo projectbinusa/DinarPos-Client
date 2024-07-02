@@ -234,7 +234,7 @@ function ModalTambahCustomerCp({ handleOpen }) {
               {optionsSalesmanModalCP.length > 0 && (
                 <>
                   {optionsSalesmanModalCP.map((option2) => (
-                    <option value={option2.idSalesman}>
+                    <option value={option2.id}>
                       {option2.namaSalesman}
                     </option>
                   ))}

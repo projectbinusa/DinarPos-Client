@@ -20,56 +20,7 @@ function AddStokOpname() {
   const [stok, setstok] = useState("");
   const [keterangan, setketerangan] = useState("");
 
-  const [barang, setbarang] = useState([]);
   const history = useHistory();
-
-  // GET ALL BARANG
-  const allBarang = async () => {
-    try {
-      const response = await axios.get(`${API_BARANG}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setbarang(response.data.data);
-      console.log(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    allBarang();
-  }, []);
-
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-  };
 
   // ALL BARANG
   const [values2, setvalues2] = useState("");
@@ -166,7 +117,7 @@ function AddStokOpname() {
             <span className="cursor-default">Tambah Barang Opname</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addStokOpname}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="flex gap-2 items-end">
@@ -188,7 +139,7 @@ function AddStokOpname() {
                   {options2.length > 0 && (
                     <>
                       {options2.map((option) => (
-                        <option value={option.idBarang}>
+                        <option value={option.id}>
                           {option.barcodeBarang} - {option.namaBarang}
                         </option>
                       ))}

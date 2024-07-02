@@ -13,7 +13,6 @@ import axios from "axios";
 import {
   API_BARANG,
   API_BON_BARANG,
-  API_SERVICE,
   API_TEKNISI,
 } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
@@ -33,7 +32,8 @@ function AddBonBarang() {
       id_tt: serviceId,
       barcode_brg: barangId,
       id_teknisi: teknisiId,
-      tgl_ambil: tglAmbil,
+      tanggal_ambil: tglAmbil,
+      status_barang: "Barang belum ready"
     };
 
     try {
@@ -51,7 +51,8 @@ function AddBonBarang() {
         window.location.reload();
       }, 1500);
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      console.log(error);
+      if (error.response && error.response.code === 401) {
         localStorage.clear();
         history.push("/");
       } else {
@@ -106,14 +107,14 @@ function AddBonBarang() {
   const handleTeknisi = async () => {
     if (values2.trim() !== "") {
       const response = await fetch(
-        `${API_TEKNISI}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=id`,
+        `${API_TEKNISI}/pagination?limit=10&page=${currentPage2}&search=${values2}&sort=1`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
       const data = await response.json();
       setoptions2(data.data);
-      console.log(data);
+      console.log(data.data);
     } else {
       return;
     }
@@ -161,9 +162,9 @@ function AddBonBarang() {
                 label="ID Service"
                 variant="static"
                 color="blue"
-                list="service-list"
                 id="service"
                 name="service"
+                type="number"
                 onChange={(e) => setserviceId(e.target.value)}
                 placeholder="Pilih Service"
                 required

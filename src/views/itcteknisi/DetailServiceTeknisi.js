@@ -7,6 +7,7 @@ import {
   DialogBody,
   DialogFooter,
   IconButton,
+  Input,
   Typography,
 } from "@material-tailwind/react";
 import {
@@ -106,6 +107,27 @@ function DetailServiceTeknisi() {
         setidTeknisi(res.data.data.id);
         setidTeknisiNew(res.data.data.id);
         console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // CEK ID TAKE
+  const [idTake, setidTake] = useState(0);
+  const [idTeknisiTake, setidTeknisiTake] = useState(0);
+  const [namaTeknisiTake, setnamaTeknisiTake] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`${API_SERVICE}/take/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const data = res.data.data;
+        setidTake(data.id_take?.id);
+        setidTeknisiTake(data.id_tekinisi?.id);
+        setnamaTeknisiTake(data.id_take?.nama);
       })
       .catch((err) => {
         console.log(err);
@@ -255,6 +277,39 @@ function DetailServiceTeknisi() {
 
     return formattedDate;
   };
+
+  // ALL TEKNISI
+  const [valuesTeknisi, setvaluesTeknisi] = useState("");
+  const [optionsTeknisi, setoptionsTeknisi] = useState([]);
+  const [currentPageTeknisi, setCurrentPageTeknisi] = useState(1);
+
+  const handleTeknisi = async () => {
+    if (valuesTeknisi.trim() !== "") {
+      const response = await fetch(
+        `${API_TEKNISI}/pagination?limit=10&page=${currentPageTeknisi}&search=${valuesTeknisi}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsTeknisi(data.data);
+      console.log(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleTeknisi();
+  }, [currentPageTeknisi, valuesTeknisi]);
+
+  const handleChangeTeknisi = (event) => {
+    setvaluesTeknisi(event.target.value);
+    setCurrentPageTeknisi(1);
+  };
+  // END ALL TEKNISI
+
+  console.log(datas);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -472,6 +527,90 @@ function DetailServiceTeknisi() {
                     </div>
                   </li>
                 </ol>
+                {idTake === idTeknisi ||
+                  datas?.statusEnd === "READY_T" ||
+                  datas?.statusEnd === "READY_S" ? (
+                  <></>
+                ) : (
+                  <>
+                    {idTeknisiTake === idTeknisi ? (
+                      <>
+                        <br /> <br />
+                        <h1 className="text-lg">
+                          <b>Take Over to</b>
+                        </h1>
+                        <hr /> <br />{" "}
+                        <p className="text-sm">{namaTeknisiTake}</p>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    {datas?.teknisi?.id === idTeknisi ? (
+                      <>
+                        <br /> <br />
+                        <h1 className="text-lg">
+                          <b>Take Over to</b>
+                        </h1>
+                        <hr /> <br />
+                        <div className="flex gap-2 items-end">
+                          <Input
+                            label="Teknisi"
+                            variant="static"
+                            color="blue"
+                            list="teknisi-list"
+                            id="teknisi"
+                            name="teknisi"
+                            onChange={(event) => {
+                              handleChangeTeknisi(event);
+                            }}
+                            placeholder="Pilih Teknisi"
+                          />
+                          <datalist id="teknisi-list">
+                            {optionsTeknisi.length > 0 && (
+                              <>
+                                {optionsTeknisi.map((option) => (
+                                  <option value={option.id}>
+                                    {option.nama}
+                                  </option>
+                                ))}
+                              </>
+                            )}
+                          </datalist>
+
+                          <div className="flex gap-2">
+                            <button
+                              className="text-sm bg-gray-400 px-1"
+                              onClick={() =>
+                                setCurrentPageTeknisi(currentPageTeknisi - 1)
+                              }
+                              disabled={currentPageTeknisi === 1}
+                            >
+                              Prev
+                            </button>
+                            <button
+                              className="text-sm bg-gray-400 px-1"
+                              onClick={() =>
+                                setCurrentPageTeknisi(currentPageTeknisi + 1)
+                              }
+                              disabled={!optionsTeknisi.length}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                        <br />
+                        <div className="flex justify-end">
+                          <Button variant="gradient" color="blue">
+                            TakeOver
+                          </Button>
+                        </div>
+                        <br />
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                )}
               </div>
               <div className="border border-gray-400 rounded shadow lg:col-span-2 p-2">
                 <h1 className="text-lg">
@@ -574,110 +713,162 @@ function DetailServiceTeknisi() {
                 </table>
                 <br />
                 <h1 className="font-semibold mt-3 text-lg">
-                  Status dan Laporan ({datas?.statusEnd})
+                  Status dan Laporan ({datas?.statusEnd})       
+                  
                 </h1>
                 <hr /> <br />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="flex items-center justify-between">
-                    {datas?.fa != null ? (
-                      <>
-                        <div class="flex gap-2 items-end">
-                          <Button
-                            type="gradient"
-                            className="flex items-center"
-                            color="blue"
-                            onClick={handleOpen}
-                          >
-                            <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
-                            Picture Before
-                          </Button>
-                          <IconButton size="md" color="red">
-                            <XMarkIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <form
-                          className="flex gap-2 items-end"
-                          onSubmit={updatePictureBefore}
-                        >
-                          <div>
-                            <label
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                              htmlFor="small_size"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {datas?.teknisi?.id === idTeknisi ? (
+                    <>
+                      <div className="flex items-center justify-between">
+                        {datas?.fa != null ? (
+                          <>
+                            <div class="flex gap-2 items-end">
+                              <Button
+                                type="gradient"
+                                className="flex items-center"
+                                color="blue"
+                                onClick={handleOpen}
+                              >
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                Picture Before
+                              </Button>
+                              <IconButton size="md" color="red">
+                                <XMarkIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <form
+                              className="flex gap-2 items-end"
+                              onSubmit={updatePictureBefore}
                             >
-                              Picture Before
-                            </label>
-                            <input
-                              className="block w-full text-sm text-gray-900 border border-gray-300 rounded cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                              onChange={(e) =>
-                                setPictureBefore(e.target.files[0])
-                              }
-                              id="small_size"
-                              name="imageb"
-                              type="file"
-                              accept="image/*"
-                            />
-                          </div>
-                          <IconButton size="md" color="blue" type="submit">
-                            <ArrowUpTrayIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </form>
-                        <br />
-                      </>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    {datas?.fa != null ? (
-                      <>
-                        <div class="flex gap-2 items-end">
-                          <Button
-                            type="gradient"
-                            className="flex items-center"
-                            color="blue"
-                            onClick={handleOpen2}
-                          >
-                            <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
-                            Picture After
-                          </Button>
-                          <IconButton size="md" color="red">
-                            <XMarkIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <form
-                          className="flex gap-2 items-end"
-                          onSubmit={updatePictureAfter}
-                        >
-                          <div>
-                            <label
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                              htmlFor="small_size"
+                              <div>
+                                <label
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                  htmlFor="small_size"
+                                >
+                                  Picture Before
+                                </label>
+                                <input
+                                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                  onChange={(e) =>
+                                    setPictureBefore(e.target.files[0])
+                                  }
+                                  id="small_size"
+                                  name="imageb"
+                                  type="file"
+                                  accept="image/*"
+                                />
+                              </div>
+                              <IconButton size="md" color="blue" type="submit">
+                                <ArrowUpTrayIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </form>
+                            <br />
+                          </>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        {datas?.fa != null ? (
+                          <>
+                            <div class="flex gap-2 items-end">
+                              <Button
+                                type="gradient"
+                                className="flex items-center"
+                                color="blue"
+                                onClick={handleOpen2}
+                              >
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                Picture After
+                              </Button>
+                              <IconButton size="md" color="red">
+                                <XMarkIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <form
+                              className="flex gap-2 items-end"
+                              onSubmit={updatePictureAfter}
                             >
-                              Picture After
-                            </label>
-                            <input
-                              className="block w-full text-sm text-gray-900 border border-gray-300 rounded cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                              id="small_size"
-                              onChange={(e) =>
-                                setPictureAfter(e.target.files[0])
-                              }
-                              name="imagea"
-                              type="file"
-                              accept="image/*"
-                            />
-                          </div>
-                          <IconButton size="md" color="blue" type="submit">
-                            <ArrowUpTrayIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </form>
-                        <br />
-                      </>
-                    )}
-                  </div>
+                              <div>
+                                <label
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                  htmlFor="small_size"
+                                >
+                                  Picture After
+                                </label>
+                                <input
+                                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                  id="small_size"
+                                  onChange={(e) =>
+                                    setPictureAfter(e.target.files[0])
+                                  }
+                                  name="imagea"
+                                  type="file"
+                                  accept="image/*"
+                                />
+                              </div>
+                              <IconButton size="md" color="blue" type="submit">
+                                <ArrowUpTrayIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </form>
+                            <br />
+                          </>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between">
+                        {datas?.fa != null ? (
+                          <>
+                            <div class="flex gap-2 items-end">
+                              <Button
+                                type="gradient"
+                                className="flex items-center"
+                                color="blue"
+                                onClick={handleOpen}
+                              >
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                Picture Before
+                              </Button>
+                              <IconButton size="md" color="red">
+                                <XMarkIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </div>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        {datas?.fa != null ? (
+                          <>
+                            <div class="flex gap-2 items-end">
+                              <Button
+                                type="gradient"
+                                className="flex items-center"
+                                color="blue"
+                                onClick={handleOpen2}
+                              >
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                Picture After
+                              </Button>
+                              <IconButton size="md" color="red">
+                                <XMarkIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </div>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <table className="w-full border-collapse my-3">
                   <thead>
@@ -725,77 +916,85 @@ function DetailServiceTeknisi() {
                             </>
                           );
                         })}
-                        <tr>
-                          <td className="text-sm text-center py-2 border-gray-300 border">
-                            <IconButton
-                              color="blue"
-                              size="md"
-                              onClick={addStatus}
-                            >
-                              <PlusIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            Type <br />
-                            <input
-                              type="radio"
-                              id="validasi_U"
-                              name="validasi"
-                              value="U"
-                              onChange={(e) => setvalidasi(e.target.value)}
-                            />
-                            <label htmlFor="validasi_U" className="ml-1">
-                              U
-                            </label>
-                            <br />
-                            <input
-                              type="radio"
-                              id="validasi_I"
-                              name="validasi"
-                              value="I"
-                              onChange={(e) => setvalidasi(e.target.value)}
-                            />
-                            <label htmlFor="validasi_I" className="ml-1">
-                              I
-                            </label>
-                            <br />
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            <textarea
-                              cols="30"
-                              rows="3"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
-                              placeholder="Status"
-                              id="status"
-                              onChange={(e) => setstatus(e.target.value)}
-                            ></textarea>
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            <textarea
-                              cols="30"
-                              rows="3"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
-                              placeholder="Solusi"
-                              id="solusi"
-                              onChange={(e) => setsolusi(e.target.value)}
-                            ></textarea>
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            <select
-                              id="ket"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
-                              required
-                              onChange={(e) => setket(e.target.value)}
-                            >
-                              <option value="WT">WT</option>
-                              <option value="WS">WS</option>
-                              <option value="WC">WC</option>
-                            </select>
-                          </td>
-                        </tr>{" "}
+                        {datas?.teknisi?.id === idTeknisi ? (
+                          <>
+                            {" "}
+                            <tr>
+                              <td className="text-sm text-center py-2 border-gray-300 border">
+                                <IconButton
+                                  color="blue"
+                                  size="md"
+                                  onClick={addStatus}
+                                >
+                                  <PlusIcon className="w-6 h-6 white" />
+                                </IconButton>
+                              </td>
+                              <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                Type <br />
+                                <input
+                                  type="radio"
+                                  id="validasi_U"
+                                  name="validasi"
+                                  value="U"
+                                  onChange={(e) => setvalidasi(e.target.value)}
+                                />
+                                <label htmlFor="validasi_U" className="ml-1">
+                                  U
+                                </label>
+                                <br />
+                                <input
+                                  type="radio"
+                                  id="validasi_I"
+                                  name="validasi"
+                                  value="I"
+                                  onChange={(e) => setvalidasi(e.target.value)}
+                                />
+                                <label htmlFor="validasi_I" className="ml-1">
+                                  I
+                                </label>
+                                <br />
+                              </td>
+                              <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                <textarea
+                                  cols="30"
+                                  rows="3"
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                                  placeholder="Status"
+                                  id="status"
+                                  onChange={(e) => setstatus(e.target.value)}
+                                ></textarea>
+                              </td>
+                              <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                <textarea
+                                  cols="30"
+                                  rows="3"
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                                  placeholder="Solusi"
+                                  id="solusi"
+                                  onChange={(e) => setsolusi(e.target.value)}
+                                ></textarea>
+                              </td>
+                              <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                                <select
+                                  id="ket"
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                                  required
+                                  onChange={(e) => setket(e.target.value)}
+                                >
+                                  <option value="WT">WT</option>
+                                  <option value="WS">WS</option>
+                                  <option value="WC">WC</option>
+                                </select>
+                              </td>
+                            </tr>{" "}
+                          </>
+                        ) : (
+                          <></>
+                        )}
                       </>
                     ) : (
                       <>
+                        {" "}
                         <tr>
                           <td className="text-sm text-center py-2 border-gray-300 border">
                             <IconButton
@@ -813,7 +1012,9 @@ function DetailServiceTeknisi() {
                               id="validasi_U"
                               name="validasi"
                               value="U"
-                              onChange={(e) => setvalidasiNew(e.target.value)}
+                              onChange={(e) =>
+                                setvalidasiNew(e.target.value)
+                              }
                             />
                             <label htmlFor="validasi_U" className="ml-1">
                               U
@@ -824,7 +1025,9 @@ function DetailServiceTeknisi() {
                               id="validasi_I"
                               name="validasi"
                               value="I"
-                              onChange={(e) => setvalidasiNew(e.target.value)}
+                              onChange={(e) =>
+                                setvalidasiNew(e.target.value)
+                              }
                             />
                             <label htmlFor="validasi_I" className="ml-1">
                               I
@@ -900,7 +1103,7 @@ function DetailServiceTeknisi() {
                 </div>
               </div>
               {datas?.statusEnd === "READY_T" ||
-              datas?.statusEnd === "READY_S" ? (
+                datas?.statusEnd === "READY_S" ? (
                 <>
                   <div className="border-gray-500 bg-white border rounded p-3 mt-5">
                     <h1 className="font-semibold text-lg mt-1">

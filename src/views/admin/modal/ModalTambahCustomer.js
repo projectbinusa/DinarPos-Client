@@ -181,7 +181,7 @@ function ModalTambahCustomer({ handleOpen }) {
               {optionsSalesmanModal.length > 0 && (
                 <>
                   {optionsSalesmanModal.map((option2) => (
-                    <option value={option2.idSalesman}>
+                    <option value={option2.id}>
                       {option2.namaSalesman}
                     </option>
                   ))}

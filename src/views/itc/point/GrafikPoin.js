@@ -56,7 +56,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinJan(jan.data);
+      setpoinJan(jan.data.data.total_poin || 0);
 
       // FEBRUARI
       const feb = await axios.get(
@@ -66,7 +66,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinFeb(feb.data);
+      setpoinFeb(feb.data.data.total_poin || 0);
 
       // MARET
       const mar = await axios.get(
@@ -76,7 +76,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinMar(mar.data);
+      setpoinMar(mar.data.data.total_poin || 0);
 
       // APRIL
       const apr = await axios.get(
@@ -86,7 +86,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinApr(apr.data);
+      setpoinApr(apr.data.data.total_poin || 0);
 
       // MEI
       const may = await axios.get(
@@ -96,7 +96,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinMei(may.data);
+      setpoinMei(may.data.data.total_poin || 0);
 
       // JUNI
       const jun = await axios.get(
@@ -106,7 +106,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinJun(jun.data);
+      setpoinJun(jun.data.data.total_poin || 0);
 
       // JULI
       const jul = await axios.get(
@@ -116,7 +116,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinJul(jul.data);
+      setpoinJul(jul.data.data.total_poin || 0);
 
       // AGUSTUS
       const agus = await axios.get(
@@ -126,7 +126,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinAgs(agus.data);
+      setpoinAgs(agus.data.data.total_poin || 0);
 
       // SEPTEMBER
       const sep = await axios.get(
@@ -136,7 +136,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinSep(sep.data);
+      setpoinSep(sep.data.data.total_poin || 0);
 
       // OKTOBER
       const okto = await axios.get(
@@ -146,7 +146,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinOkto(okto.data);
+      setpoinOkto(okto.data.data.total_poin || 0);
 
       // NOVEMBER
       const nov = await axios.get(
@@ -156,7 +156,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinNov(nov.data);
+      setpoinNov(nov.data.data.total_poin || 0);
 
       // DESEMBER
       const des = await axios.get(
@@ -166,7 +166,7 @@ function GrafikPoin() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setpoinDes(des.data);
+      setpoinDes(des.data.data.total_poin || 0);
     } catch (error) {
       console.log("get all", error);
     }

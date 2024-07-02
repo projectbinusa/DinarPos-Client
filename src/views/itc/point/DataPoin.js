@@ -13,6 +13,7 @@ import $, { error } from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import { API_POIN } from "../../../utils/BaseUrl";
+import Swal from "sweetalert2";
 
 function DataPoin() {
   const tableRef = useRef(null);
@@ -34,8 +35,18 @@ function DataPoin() {
     const months = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${months}-${day}`;
+    const month2 = `${month}-01`;
 
-    const bulan = validasi2 ? `${month}-01` : formattedDate;
+    const bulan = validasi2 ? month2 : formattedDate;
+
+    if(month === "" && validasi === true) {
+      Swal.fire({
+        icon: "warning",
+        title: "Masukkan Bulan Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
 
     try {
       const response = await axios.get(`${API_POIN}/month?month=${bulan}`, {
@@ -43,7 +54,7 @@ function DataPoin() {
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
         },
       });
-      setpoins(response.data);
+      setpoins(response.data.data);
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
