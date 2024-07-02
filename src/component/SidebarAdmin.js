@@ -1224,7 +1224,7 @@ function SidebarAdmin() {
               {level === "AdminService" ? (<>
                 <a href="/dashboard_service">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    Dasboard
+                    Dashboard
                   </ListItem>
                 </a></>) : (<></>)}
               {level === "Superadmin" || level === "AdminService" ? (
@@ -2488,7 +2488,7 @@ function SidebarAdmin() {
             {level === "AdminService" ? (<>
               <a href="/dashboard_service">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                  Dasboard
+                  Dashboard
                 </ListItem>
               </a></>) : (<></>)}
 
