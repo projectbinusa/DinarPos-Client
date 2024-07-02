@@ -96,6 +96,30 @@ function Hutang() {
       console.error("Error saat mengunduh file:", error);
     }
   };
+
+  const historyHutang = async () => {
+    try {
+      const response = await axios.get(
+        `${API_HUTANG}/export/excel/history-hutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "HistoryHutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -146,18 +170,22 @@ function Hutang() {
               Export
             </Button>
           </form>
-          <div className="block lg:flex lg:gap-4">
-            <Button
-              className="mt-5"
-              color="blue"
-              type="button"
-              onClick={rekapHutang}
-            >
-              Export Rekap Hutang
-            </Button>
-            <Button className="mt-5" color="blue" type="button">
-              Export History Hutang
-            </Button>
+          <div className="flex flex-col lg:flex-row lg:gap-4">
+            <div>
+              <Button
+                className="mt-5"
+                color="blue"
+                type="button"
+                onClick={rekapHutang}
+              >
+                Export Rekap Hutang
+              </Button>
+            </div>
+            <div>
+              <Button className="mt-5" color="blue" type="button" onClick={historyHutang}>
+                Export History Hutang
+              </Button>
+            </div>
           </div>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table

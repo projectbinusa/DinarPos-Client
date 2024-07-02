@@ -79,6 +79,7 @@ function DataService() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setAllService(response.data.data);
+        
     } catch (error) {
       console.log("get all", error);
     }
@@ -216,7 +217,7 @@ function DataService() {
                 className="w-full"
               >
                 <Option value="">Pilih</Option>
-                <Option value="New Arrival">New Arrival</Option>
+                <Option value="N_A">New Arrival</Option>
                 <Option value="Proses">Proses</Option>
                 <Option value="Ready">Ready</Option>
               </Select>
@@ -358,7 +359,7 @@ function DataService() {
                             </td>
                             <td className="text-sm py-2 px-3 flex items-center justify-center">
                               <div className="flex flex-row gap-3">
-                                <a href={"/detail_service_teknisi/" + row.idTT}>
+                                <a href={"/detail_service/" + row.idTT}>
                                   <IconButton size="md" color="light-blue">
                                     <InformationCircleIcon className="w-6 h-6 white" />
                                   </IconButton>

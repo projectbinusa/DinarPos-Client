@@ -415,14 +415,16 @@ function LaporanSalesmanExcelcom() {
                           </a>
                           {level === "Superadmin" ? (
                             <>
-                              <IconButton size="md" color="red">
-                                <ArrowPathIcon
-                                  className="w-6 h-6 white"
-                                  onClick={() =>
-                                    returnSalesman(laporan.idTransaksi)
-                                  }
-                                />
-                              </IconButton>
+                              <div>
+                                <IconButton size="md" color="red">
+                                  <ArrowPathIcon
+                                    className="w-6 h-6 white"
+                                    onClick={() =>
+                                      returnSalesman(laporan.idTransaksi)
+                                    }
+                                  />
+                                </IconButton>
+                              </div>
                             </>
                           ) : (
                             <></>

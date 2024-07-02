@@ -96,6 +96,30 @@ function Piutang() {
       console.error("Error saat mengunduh file:", error);
     }
   };
+
+  const historyPiutang = async () => {
+    try {
+      const response = await axios.get(
+        `${API_PIUTANG}/export/excel/history-piutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "HistoryPIutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -146,22 +170,27 @@ function Piutang() {
               Export
             </Button>
           </form>
-          <div className="block lg:flex lg:gap-4">
-            <Button
-              className="mt-5"
-              color="blue"
-              type="button"
-              onClick={rekapPiutang}
-            >
-              Export Rekap Piutang
-            </Button>
-            <Button
-              className="mt-5"
-              color="blue"
-              type="button"
-            >
-              Export History Piutang
-            </Button>
+          <div className="flex flex-col lg:flex-row lg:gap-4">
+            <div>
+              <Button
+                className="mt-5"
+                color="blue"
+                type="button"
+                onClick={rekapPiutang}
+              >
+                Export Rekap Piutang
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="mt-5"
+                color="blue"
+                type="button"
+                onClick={historyPiutang}
+              >
+                Export History Piutang
+              </Button>
+            </div>
           </div>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table
