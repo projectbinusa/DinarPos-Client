@@ -32,7 +32,7 @@ function AddSaldo() {
     };
 
     try {
-      await axios.post(`${API_KAS_HARIAN}/add`, request, {
+      await axios.post(`${API_KAS_HARIAN}/saldo_shift_awal/add`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       Swal.fire({
