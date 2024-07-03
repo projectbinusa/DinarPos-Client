@@ -1,9 +1,147 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Input, Option, Select, Typography } from "@material-tailwind/react";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import {
+  Breadcrumbs,
+  Button,
+  Option,
+  Input,
+  Select,
+  Typography,
+} from "@material-tailwind/react";
+import {
+  ClipboardDocumentListIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
+import axios from "axios";
+import { API_KAS_HARIAN } from "../../../../utils/BaseUrl";
 
 function EditSaldo() {
+  // const [shift, setShift] = useState("");
+  // const [saldoAwal, setSaldoAwal] = useState("");
+  // const [setorKasBesar, setSetorKasBesar] = useState("");
+
+  // const history = useHistory();
+  // const param = useParams();
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       const response = await axios.get(`${API_KAS_HARIAN}/${param.id}`, {
+  //         headers: { Authorization: `jwt ${token}` },
+  //       });
+  //       const { shift, saldoAwal, setorKasBesar } = response.data;
+  //       setShift(shift);
+  //       setSaldoAwal(saldoAwal);
+  //       setSetorKasBesar(setorKasBesar);
+  //     } catch (error) {
+  //       console.error("Error fetching data", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [param.id]);
+
+  // const editSaldo = async (e) => {
+  //   e.preventDefault();
+
+  //   const token = localStorage.getItem("token");
+  //   const request = {
+  //     shift: shift,
+  //     saldoAwal: parseFloat(saldoAwal),
+  //     setorKasBesar: parseFloat(setorKasBesar),
+  //   };
+
+  //   try {
+  //     await axios.put(`${API_KAS_HARIAN}/${param.id}`, request, {
+  //       headers: { Authorization: `jwt ${token}` },
+  //     });
+  //     Swal.fire({
+  //       icon: "success",
+  //       title: "Data Berhasil Diubah!",
+  //       showConfirmButton: false,
+  //       timer: 1500,
+  //     });
+  //     history.push("/kas_harian");
+  //     setTimeout(() => {
+  //       window.location.reload();
+  //     }, 1500);
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       localStorage.clear();
+  //       history.push("/");
+  //     } else {
+  //       console.log(error);
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Error",
+  //         text: "Error data gagal di ubah.",
+  //       });
+  //     }
+  //   }
+  // };
+
+  const [shift, setShift] = useState("");
+  const [saldoAwal, setSaldoAwal] = useState("");
+  const [setorKasBesar, setSetorKasBesar] = useState("");
+
+  const history = useHistory();
+  const param = useParams();
+
+  // EDIT SALDO
+  const editSaldo = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      shift: shift,
+      saldoAwal: saldoAwal,
+      setorKasBesar: setorKasBesar,
+    };
+
+    axios
+      .get(`${API_KAS_HARIAN}/` + param.id, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Data Berhasil Diubah!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        history.push("/kas_harian");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((error) => {
+        if (error.ressponse && error.response.status === 401) {
+          localStorage.clear();
+          history.push("/");
+        } else {
+          console.log(error);
+        }
+      });
+  };
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_KAS_HARIAN}/` + param.id, {
+  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //     })
+  //     .then((res) => {
+  //       const response = res.data.data;
+  //       setShift(response.shift);
+  //       setSaldoAwal(response.saldoAwal);
+  //       setSetorKasBesar(response.setorKasBesar);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -30,10 +168,19 @@ function EditSaldo() {
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form>
+          <form onSubmit={editSaldo}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <Select label="Shift" variant="static" color="blue" size="lg">
-                <Option>Pilih</Option>
+              <Select
+                label="Shift"
+                variant="static"
+                color="blue"
+                size="lg"
+                onChange={(e) => setShift(e)}
+                value={shift}
+              >
+                <Option value="" disabled>
+                  Pilih
+                </Option>
                 <Option value="Pagi">Pagi</Option>
                 <Option value="Siang">Siang</Option>
               </Select>
@@ -44,8 +191,9 @@ function EditSaldo() {
                 type="number"
                 size="lg"
                 placeholder="Masukkan Saldo Awal"
-                icon={<PlusIcon />}
-                // onChange={(e) => setstok(e.target.value)}
+                icon={<ClipboardDocumentListIcon />}
+                onChange={(e) => setSaldoAwal(e.target.value)}
+                value={saldoAwal}
                 required
               />
               <Input
@@ -56,7 +204,8 @@ function EditSaldo() {
                 size="lg"
                 placeholder="Masukkan Setor Kas Besar"
                 icon={<PlusIcon />}
-                // onChange={(e) => setstok(e.target.value)}
+                onChange={(e) => setSetorKasBesar(e.target.value)}
+                value={setorKasBesar}
                 required
               />
             </div>

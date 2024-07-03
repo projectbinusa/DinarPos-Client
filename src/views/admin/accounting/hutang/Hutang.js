@@ -52,10 +52,13 @@ function Hutang() {
   const rekapHutang = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${API_HUTANG}/export/excel/rekap-hutang`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        responseType: "blob",
-      });
+      const response = await axios.get(
+        `${API_HUTANG}/export/excel/rekap-hutang`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -69,14 +72,17 @@ function Hutang() {
       console.error("Error saat mengunduh file:", error);
     }
   };
-  
+
   const bukuHutang = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${API_HUTANG}/export/excel/hutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        responseType: "blob",
-      });
+      const response = await axios.get(
+        `${API_HUTANG}/export/excel/hutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -90,6 +96,30 @@ function Hutang() {
       console.error("Error saat mengunduh file:", error);
     }
   };
+
+  const historyHutang = async () => {
+    try {
+      const response = await axios.get(
+        `${API_HUTANG}/export/excel/history-hutang?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "HistoryHutang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -140,9 +170,23 @@ function Hutang() {
               Export
             </Button>
           </form>
-          <Button className="mt-5" color="blue" type="button" onClick={rekapHutang}>
-            Export Rekap Hutang
-          </Button>
+          <div className="flex flex-col lg:flex-row lg:gap-4">
+            <div>
+              <Button
+                className="mt-5"
+                color="blue"
+                type="button"
+                onClick={rekapHutang}
+              >
+                Export Rekap Hutang
+              </Button>
+            </div>
+            <div>
+              <Button className="mt-5" color="blue" type="button" onClick={historyHutang}>
+                Export History Hutang
+              </Button>
+            </div>
+          </div>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table
               id="example_data"
@@ -179,9 +223,7 @@ function Hutang() {
                         <td className="text-sm py-2 px-3">
                           {hutang.created_date}
                         </td>
-                        <td className="text-sm py-2 px-3">
-                          {hutang.noFaktur}
-                        </td>
+                        <td className="text-sm py-2 px-3">{hutang.noFaktur}</td>
                         <td className="text-sm py-2 px-3">
                           {hutang.suplier.namaSuplier}
                         </td>
@@ -193,9 +235,7 @@ function Hutang() {
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
                           <a
-                            href={
-                              "/pelunasan_hutang/" + hutang.idTransaksiBeli
-                            }
+                            href={"/pelunasan_hutang/" + hutang.idTransaksiBeli}
                           >
                             <IconButton size="md" color="light-blue">
                               <CheckIcon className="w-6 h-6 white" />

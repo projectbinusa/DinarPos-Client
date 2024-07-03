@@ -114,3 +114,5 @@ export const API_POIN = `${url}/poin`;
 
 export const API_SERVICE_TAKEN = `${url}/service/taken`;
 
+// KAS HARIAN
+export const API_KAS_HARIAN = `${url}/kas_harian`;

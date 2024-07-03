@@ -100,6 +100,8 @@ function AddStokMasuk() {
       keterangan: keterangan,
     };
 
+    console.log(request);
+
     try {
       await axios.post(`${API_STOK_MASUK}/add`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
@@ -279,7 +281,7 @@ function AddStokMasuk() {
                   {options2.length > 0 && (
                     <>
                       {options2.map((option) => (
-                        <option value={option.idBarang}>
+                        <option value={option.id}>
                           {option.barcodeBarang} - {option.namaBarang}
                         </option>
                       ))}

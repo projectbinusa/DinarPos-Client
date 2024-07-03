@@ -342,7 +342,7 @@ function EditData() {
           timer: 1500,
         });
       }
-      console.log("get all", error.response.data.code);
+      console.log("get all", error.response.data);
       setTimeout(() => {
         window.location.reload();
       }, 1500);
