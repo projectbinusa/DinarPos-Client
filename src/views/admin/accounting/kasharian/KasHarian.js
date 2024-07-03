@@ -8,11 +8,23 @@ import {
 } from "@material-tailwind/react";
 import $ from "jquery";
 import "datatables.net";
+import axios from "axios";
 import "./../../../../assets/styles/datatables.css";
+import { API_KAS_HARIAN } from "../../../../utils/BaseUrl";
+
+function getCurrentDate() {
+  const currentDate = new Date();
+
+  const day = currentDate.getDate().toString().padStart(2, "0"); // Format 2 digit
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
+  const year = currentDate.getFullYear();
+
+  return `${day}-${month}-${year}`;
+}
 
 function KasHarian() {
   const tableRef = useRef(null);
-  const [datas, setdatas] = useState();
+  const [datas, setDatas] = useState([]);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -22,11 +34,27 @@ function KasHarian() {
     $(tableRef.current).DataTable({});
   };
 
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_KAS_HARIAN}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setDatas(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
   useEffect(() => {
     if (datas && datas.length > 0) {
       initializeDataTable();
     }
   }, [datas]);
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -60,7 +88,6 @@ function KasHarian() {
                 type="date"
                 label="Tanggal Awal"
                 required
-                // onChange={(e) => settglAwal(e.target.value)}
               />
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
@@ -70,7 +97,6 @@ function KasHarian() {
                 type="date"
                 label="Tanggal Akhir"
                 required
-                // onChange={(e) => settglAkhir(e.target.value)}
               />
             </div>
             <Button className="mt-5" color="blue" type="submit">
@@ -110,38 +136,26 @@ function KasHarian() {
                   <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {piutangs.length > 0 ? (
-                  piutangs.map((piutang, index) => {
+              <tbody>
+                {datas.length > 0 ? (
+                  datas.map((data, index) => {
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">{data.shif}</td>
+                        <td className="text-sm py-2 px-3">{data.saldoAwal}</td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.created_date}
+                          {data.created_date
+                            ? new Date(data.created_date).toLocaleDateString()
+                            : "-"}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {piutang.noFaktur}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {piutang.customer.nama_customer}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {piutang.totalBelanja}
+                          {data.setorKasBesar}
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          <a
-                            href={
-                              "/pelunasan_piutang/" +
-                              piutang.idTransaksi
-                            }
-                          >
-                            <IconButton size="md" color="light-blue">
-                              <PenIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </a>
-                          <IconButton size="md" color="red">
-                              <TrashIcon className="w-6 h-6 white" />
-                            </IconButton>
+                          {/* <IconButton size="md" color="red">
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton> */}
                         </td>
                       </tr>
                     );
@@ -156,7 +170,7 @@ function KasHarian() {
                     </td>
                   </tr>
                 )}
-              </tbody> */}
+              </tbody>
             </table>
           </div>
         </main>
