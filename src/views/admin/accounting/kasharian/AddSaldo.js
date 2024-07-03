@@ -1,16 +1,74 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import Swal from "sweetalert2";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Button,
-  Input,
   Option,
+  Input,
   Select,
   Typography,
 } from "@material-tailwind/react";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import {
+  ClipboardDocumentListIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
+import axios from "axios";
+import { API_KAS_HARIAN } from "../../../../utils/BaseUrl";
 
 function AddSaldo() {
+  const [shift, setShift] = useState("");
+  const [saldoAwal, setSaldoAwal] = useState("");
+
+  const history = useHistory();
+
+  const AddSaldo = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      shift: shift,
+      saldoAwal: saldoAwal,
+    };
+
+    try {
+      await axios.post(`${API_KAS_HARIAN}/add`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Data Berhasil DiTambahkan",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      history.push("/kas_harian");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Data Sudah Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Data Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -37,22 +95,32 @@ function AddSaldo() {
           </Breadcrumbs>
         </div>
         <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form>
+          <form onSubmit={AddSaldo}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <Select label="Shift" variant="static" color="blue" size="lg">
-                <Option>Pilih</Option>
+              <Select
+                label="Shift"
+                variant="outlined"
+                color="blue"
+                size="lg"
+                icon={<ClipboardDocumentListIcon />}
+                value={shift}
+                onChange={(selectedOption) => setShift(selectedOption)}
+                required
+              >
+                <Option value="">Pilih</Option>
                 <Option value="Pagi">Pagi</Option>
                 <Option value="Siang">Siang</Option>
               </Select>
               <Input
                 label="Saldo Awal"
-                variant="static"
+                variant="outlined"
                 color="blue"
                 type="number"
                 size="lg"
                 placeholder="Masukkan Saldo Awal"
                 icon={<PlusIcon />}
-                // onChange={(e) => setstok(e.target.value)}
+                value={saldoAwal}
+                onChange={(e) => setSaldoAwal(e.target.value)}
                 required
               />
             </div>
