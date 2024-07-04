@@ -132,6 +132,18 @@ function DashboardPimpinan() {
     }
   }, [validasi]);
 
+  useEffect(() => {
+    if (validasi) {
+      if (services && services.length > 0) {
+        initializeDataTable();
+      }
+    } else {
+      if (allService && allService.length > 0) {
+        initializeDataTable();
+      }
+    }
+  }, [validasi, services, allService])
+
   const filterTangggal = () => {
     if (startDate === endDate && pilih === "") {
       Swal.fire({

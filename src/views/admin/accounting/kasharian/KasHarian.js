@@ -3,6 +3,7 @@ import SidebarAdmin from "../../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
   Button,
+  IconButton,
   Input,
   Typography,
 } from "@material-tailwind/react";
@@ -11,16 +12,8 @@ import "datatables.net";
 import axios from "axios";
 import "./../../../../assets/styles/datatables.css";
 import { API_KAS_HARIAN } from "../../../../utils/BaseUrl";
-
-function getCurrentDate() {
-  const currentDate = new Date();
-
-  const day = currentDate.getDate().toString().padStart(2, "0"); // Format 2 digit
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Bulan dimulai dari 0
-  const year = currentDate.getFullYear();
-
-  return `${day}-${month}-${year}`;
-}
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
 
 function KasHarian() {
   const tableRef = useRef(null);
@@ -32,6 +25,17 @@ function KasHarian() {
     }
 
     $(tableRef.current).DataTable({});
+  };
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
   };
 
   const getAll = async () => {
@@ -55,6 +59,38 @@ function KasHarian() {
     }
   }, [datas]);
 
+  // DELETE SALDO
+  const deleteSaldo = async (id) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_KAS_HARIAN}/delete/` + id, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Dihapus!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          });
+      }
+    });
+  };
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -142,20 +178,22 @@ function KasHarian() {
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">{data.shif}</td>
+                        <td className="text-sm py-2 px-3">{data.shift}</td>
                         <td className="text-sm py-2 px-3">{data.saldoAwal}</td>
                         <td className="text-sm py-2 px-3">
-                          {data.created_date
-                            ? new Date(data.created_date).toLocaleDateString()
-                            : "-"}
+                          {formatDate(data.date)}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {data.setorKasBesar}
+                          {data.setorKas}
                         </td>
-                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          {/* <IconButton size="md" color="red">
+                        <td className="text-sm py-2 px-3 flex gap-2">
+                          <a href={"/edit_saldo/" + data.id}>
+                            <IconButton size="md" color="blue">
+                              <PencilIcon className="w-6 h-6 white" />
+                            </IconButton></a>
+                          <IconButton size="md" color="red" onClick={() => deleteSaldo(data.id)}>
                             <TrashIcon className="w-6 h-6 white" />
-                          </IconButton> */}
+                          </IconButton>
                         </td>
                       </tr>
                     );

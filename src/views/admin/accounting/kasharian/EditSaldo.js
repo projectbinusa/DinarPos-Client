@@ -18,71 +18,6 @@ import axios from "axios";
 import { API_KAS_HARIAN } from "../../../../utils/BaseUrl";
 
 function EditSaldo() {
-  // const [shift, setShift] = useState("");
-  // const [saldoAwal, setSaldoAwal] = useState("");
-  // const [setorKasBesar, setSetorKasBesar] = useState("");
-
-  // const history = useHistory();
-  // const param = useParams();
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const token = localStorage.getItem("token");
-  //       const response = await axios.get(`${API_KAS_HARIAN}/${param.id}`, {
-  //         headers: { Authorization: `jwt ${token}` },
-  //       });
-  //       const { shift, saldoAwal, setorKasBesar } = response.data;
-  //       setShift(shift);
-  //       setSaldoAwal(saldoAwal);
-  //       setSetorKasBesar(setorKasBesar);
-  //     } catch (error) {
-  //       console.error("Error fetching data", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [param.id]);
-
-  // const editSaldo = async (e) => {
-  //   e.preventDefault();
-
-  //   const token = localStorage.getItem("token");
-  //   const request = {
-  //     shift: shift,
-  //     saldoAwal: parseFloat(saldoAwal),
-  //     setorKasBesar: parseFloat(setorKasBesar),
-  //   };
-
-  //   try {
-  //     await axios.put(`${API_KAS_HARIAN}/${param.id}`, request, {
-  //       headers: { Authorization: `jwt ${token}` },
-  //     });
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "Data Berhasil Diubah!",
-  //       showConfirmButton: false,
-  //       timer: 1500,
-  //     });
-  //     history.push("/kas_harian");
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1500);
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 401) {
-  //       localStorage.clear();
-  //       history.push("/");
-  //     } else {
-  //       console.log(error);
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Error",
-  //         text: "Error data gagal di ubah.",
-  //       });
-  //     }
-  //   }
-  // };
-
   const [shift, setShift] = useState("");
   const [saldoAwal, setSaldoAwal] = useState("");
   const [setorKasBesar, setSetorKasBesar] = useState("");
@@ -101,7 +36,7 @@ function EditSaldo() {
     };
 
     axios
-      .get(`${API_KAS_HARIAN}/` + param.id, request, {
+      .get(`${API_KAS_HARIAN}/update/` + param.id, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then(() => {
@@ -126,21 +61,21 @@ function EditSaldo() {
       });
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${API_KAS_HARIAN}/` + param.id, {
-  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-  //     })
-  //     .then((res) => {
-  //       const response = res.data.data;
-  //       setShift(response.shift);
-  //       setSaldoAwal(response.saldoAwal);
-  //       setSetorKasBesar(response.setorKasBesar);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(`${API_KAS_HARIAN}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setShift(response.shift);
+        setSaldoAwal(response.saldoAwal);
+        setSetorKasBesar(response.setorKas);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
