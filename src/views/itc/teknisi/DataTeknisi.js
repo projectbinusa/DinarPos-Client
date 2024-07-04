@@ -61,22 +61,26 @@ function DataTeknisi() {
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete(`${API_TEKNISI}/` + id, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-          })
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Dihapus!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
+        try {
+          axios
+            .delete(`${API_TEKNISI}/` + id, {
+              headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            })
+            .then(() => {
+              Swal.fire({
+                icon: "success",
+                title: "Dihapus!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
 
-            setTimeout(() => {
-              window.location.reload();
-            }, 1500);
-          });
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 1500);
+            });
+        } catch (error) { 
+          console.log(error);
+        }
       }
     });
   };

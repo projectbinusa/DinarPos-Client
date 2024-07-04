@@ -150,7 +150,7 @@ function DataSuplier() {
     await axios
       .post(`${API_SUPLIER}/import`, formData, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        // responseType: "blob",
+        responseType: "blob",
       })
       .then(() => {
         Swal.fire({
@@ -168,7 +168,7 @@ function DataSuplier() {
         Swal.fire({
           icon: "error",
           title: "Error!",
-          text: "Import Barang Gagal!",
+          text: "Import Suplier Gagal!",
           showConfirmButton: false,
           timer: 1500,
         });

@@ -59,7 +59,7 @@ function ServiceReturTeknisi() {
 
   useEffect(() => {
     getAll();
-  }, []);
+  }, [idTeknisi]);
 
   useEffect(() => {
     if (services && services.length > 0) {
