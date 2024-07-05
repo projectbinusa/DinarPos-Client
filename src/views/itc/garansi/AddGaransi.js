@@ -64,6 +64,7 @@ function AddGaransi() {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",
+          text: error.response.data.data,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -121,7 +122,7 @@ function AddGaransi() {
             <span className="cursor-default capitalize">tambah Garansi</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addGaransi}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input

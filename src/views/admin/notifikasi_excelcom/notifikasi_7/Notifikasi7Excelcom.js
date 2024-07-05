@@ -220,7 +220,7 @@ function Notifikasi7Excelcom() {
                                   penjualan.customer.telp
                                 ); // Mengkodekan nomor telepon
                                 const message = encodeURIComponent(
-                                  `Selamat pagi kak ${penjualan.customer.nama_customer}%0APerkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  `Selamat pagi kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );
                                 window.open(
                                   `https://api.whatsapp.com/send?phone=${phone}&text=${message}`

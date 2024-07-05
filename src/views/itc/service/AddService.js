@@ -58,6 +58,7 @@ function AddService() {
       tanggal_masuk: tglMasuk,
       type: type,
     };
+    console.log(request);
 
     try {
       await axios.post(`${API_SERVICE}/add`, request, {

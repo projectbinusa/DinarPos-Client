@@ -109,7 +109,7 @@ function EditGaransi() {
             <span className="cursor-default capitalize">edit Garansi</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={editGaransi}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
