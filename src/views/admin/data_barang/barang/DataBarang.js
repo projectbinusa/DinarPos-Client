@@ -206,7 +206,7 @@ function DataBarang() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          {level === "Superadmin" || level === "Gudang"? (
+          {level === "Superadmin" || level === "Gudang" || level === "Admin"? (
             <>
               <div className="flex justify-between">
                 <div className="flex flex-col lg:flex-row gap-4">

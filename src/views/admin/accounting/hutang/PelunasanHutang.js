@@ -32,7 +32,7 @@ function PelunasanHutang() {
     };
 
     try {
-      await axios.post(`${API_HUTANG}`, request, {
+      await axios.post(`${API_HUTANG}/pelunasan`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       Swal.fire({

@@ -624,7 +624,7 @@ function DetailService() {
       cashKredit: cashCredit,
       diskon: diskons,
       idCustomer: idCustomer,
-      id: markettingId,
+      idSalesman: markettingId,
       keterangan: keterangan,
       kekurangan: kekurangan,
       pembayaran: pembayaran,
