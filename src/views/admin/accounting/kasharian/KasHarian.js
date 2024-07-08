@@ -18,6 +18,8 @@ import Swal from "sweetalert2";
 function KasHarian() {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
+  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState("");
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -91,6 +93,30 @@ function KasHarian() {
       }
     });
   };
+
+  const kasHarian = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        `${API_KAS_HARIAN}/export/excel?tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "KasHarian.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -116,7 +142,7 @@ function KasHarian() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <form>
+          <form onSubmit={kasHarian}>
             <div className="mt-8 w-72 lg:w-[50%]">
               <Input
                 variant="static"
@@ -124,6 +150,7 @@ function KasHarian() {
                 type="date"
                 label="Tanggal Awal"
                 required
+                onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
@@ -132,6 +159,7 @@ function KasHarian() {
                 color="blue"
                 type="date"
                 label="Tanggal Akhir"
+                onChange={(e) => setEndDate(e.target.value)}
                 required
               />
             </div>

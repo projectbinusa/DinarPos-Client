@@ -28,7 +28,7 @@ function ServiceTeknisi() {
       )
       .then((res) => {
         setidTeknisi(res.data.data.id);
-        console.log(res);
+        console.log(res.data.data.id);
       })
       .catch((err) => {
         console.log(err);
@@ -53,6 +53,7 @@ function ServiceTeknisi() {
         }
       );
       setservices(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log("get all", error);
     }
@@ -60,7 +61,7 @@ function ServiceTeknisi() {
 
   useEffect(() => {
     getAll();
-  }, []);
+  }, [idTeknisi]);
 
   useEffect(() => {
     if (services && services.length > 0) {
@@ -109,6 +110,7 @@ function ServiceTeknisi() {
 
     return formattedDate;
   };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />

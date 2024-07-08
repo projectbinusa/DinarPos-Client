@@ -102,7 +102,7 @@ function PelunasanPiutang() {
             <span className="cursor-default capitalize">Pelunasan</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <Typography variant="lead" className="uppercase">
             No Faktur {noFaktur}
           </Typography>

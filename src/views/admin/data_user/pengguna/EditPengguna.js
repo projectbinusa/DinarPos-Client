@@ -178,10 +178,11 @@ function EditPengguna() {
                 onChange={(e) => setlevel(e.target.value)}
                 value={level}
               >
-                <Option value="Level">Kasir</Option>
+                <Option value="Kasir">Kasir</Option>
+                <Option value="Gudang">Gudang</Option>
+                <Option value="Accounting">Accounting</Option>
                 <Option value="Admin">Admin</Option>
-                <Option value="Warehouse">Warehouse</Option>
-                <Option value="Warehouse">Warehouse</Option>
+                <Option value="AdminService">AdminService</Option>
               </Select>
             </div>
             <div className="mt-10 flex gap-4">

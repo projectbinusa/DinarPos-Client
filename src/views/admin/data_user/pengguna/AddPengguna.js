@@ -119,9 +119,11 @@ function AddPengguna() {
                 size="lg"
                 onChange={(selectedOption) => setlevel(selectedOption)}
               >
-                <Option value="kasir">Kasir</Option>
-                <Option value="warehouse">Warehouse</Option>
-                <Option value="accounting">Accounting</Option>
+                <Option value="Kasir">Kasir</Option>
+                <Option value="Gudang">Gudang</Option>
+                <Option value="Accounting">Accounting</Option>
+                <Option value="Admin">Admin</Option>
+                <Option value="AdminService">AdminService</Option>
               </Select>
               <Select
                 variant="static"
@@ -132,6 +134,8 @@ function AddPengguna() {
               >
                 <Option value="excelcom">Excelcom</Option>
                 <Option value="dinarpos">Dinarpos</Option>
+                <Option value="Admin">Admin</Option>
+                <Option value="AdminService">AdminService</Option>
               </Select>
             </div>
             <div className="mt-10 flex gap-4">

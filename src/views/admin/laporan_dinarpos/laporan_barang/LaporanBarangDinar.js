@@ -183,6 +183,8 @@ function LaporanBarangDinar() {
     window.open("/tanggalfilter_barang_dinarpos", "_blank");
   };
 
+  const level = localStorage.getItem('level');
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">
       <SidebarAdmin />
@@ -302,7 +304,9 @@ function LaporanBarangDinar() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Total Harga
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  {level === "Superadmin" || level === "Admin" || level === "Accounting"? (<>
+                    <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  </>) : (<></>)}
                 </tr>
               </thead>
               <tbody>
@@ -324,24 +328,35 @@ function LaporanBarangDinar() {
                       <td className="text-sm py-2 px-3">
                         {row.totalHargaBarang}
                       </td>
-                      <td className="text-sm py-2 px-3 text-center">
-                        <IconButton size="md" color="red">
-                          <ArrowPathIcon
-                            className="w-6 h-6 white"
-                            onClick={() => returnBarang(row.idBrgTransaksi)}
-                          />
-                        </IconButton>
-                      </td>{" "}
+                      {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (<>
+                        <td className="text-sm py-2 px-3 text-center">
+                          <IconButton size="md" color="red">
+                            <ArrowPathIcon
+                              className="w-6 h-6 white"
+                              onClick={() => returnBarang(row.idBrgTransaksi)}
+                            />
+                          </IconButton>
+                        </td>{" "}
+                      </>) : (<></>)}
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td
-                      colSpan="10"
-                      className="text-center capitalize py-3 bg-gray-100"
-                    >
-                      Tidak ada data
-                    </td>
+                    {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (<>
+                      <td
+                        colSpan="10"
+                        className="text-center capitalize py-3 bg-gray-100"
+                      >
+                        Tidak ada data
+                      </td>
+                    </>) : (<>
+                      <td
+                        colSpan="9"
+                        className="text-center capitalize py-3 bg-gray-100"
+                      >
+                        Tidak ada data
+                      </td>
+                    </>)}
                   </tr>
                 )}
               </tbody>

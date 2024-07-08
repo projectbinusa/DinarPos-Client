@@ -222,7 +222,15 @@ function DetailServiceTeknisi() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
-        console.log(res);
+        Swal.fire({
+          icon: "success",
+          title: "Update Foto Before Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
       .catch((err) => {
         console.log(err);
@@ -239,11 +247,19 @@ function DetailServiceTeknisi() {
     const formData = new FormData();
     formData.append("file", pictureAfter);
     await axios
-      .put(`${API_SERVICE}/foto_after/{id}?id=` + param.id, formData, {
+      .put(`${API_SERVICE}/foto_after/` + param.id, formData, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
-        console.log(res);
+        Swal.fire({
+          icon: "success",
+          title: "Update Foto After Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
       .catch((err) => {
         console.log(err);
@@ -713,15 +729,15 @@ function DetailServiceTeknisi() {
                 </table>
                 <br />
                 <h1 className="font-semibold mt-3 text-lg">
-                  Status dan Laporan ({datas?.statusEnd})       
-                  
+                  Status dan Laporan ({datas?.statusEnd})
+
                 </h1>
                 <hr /> <br />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {datas?.teknisi?.id === idTeknisi ? (
                     <>
                       <div className="flex items-center justify-between">
-                        {datas?.fa != null ? (
+                        {datas?.fb != null ? (
                           <>
                             <div class="flex gap-2 items-end">
                               <Button
@@ -733,9 +749,9 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture Before
                               </Button>
-                              <IconButton size="md" color="red">
+                              {/* <IconButton size="md" color="red">
                                 <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton>
+                              </IconButton> */}
                             </div>
                           </>
                         ) : (
@@ -783,9 +799,9 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture After
                               </Button>
-                              <IconButton size="md" color="red">
+                              {/* <IconButton size="md" color="red">
                                 <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton>
+                              </IconButton> */}
                             </div>
                           </>
                         ) : (
@@ -836,9 +852,9 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture Before
                               </Button>
-                              <IconButton size="md" color="red">
+                              {/* <IconButton size="md" color="red">
                                 <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton>
+                              </IconButton> */}
                             </div>
                           </>
                         ) : (
@@ -858,9 +874,9 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture After
                               </Button>
-                              <IconButton size="md" color="red">
+                              {/* <IconButton size="md" color="red">
                                 <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton>
+                              </IconButton> */}
                             </div>
                           </>
                         ) : (

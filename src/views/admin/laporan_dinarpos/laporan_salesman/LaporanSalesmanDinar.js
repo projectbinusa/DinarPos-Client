@@ -382,7 +382,7 @@ function LaporanSalesmanDinar() {
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          {level === "Superadmin" ? (
+                          {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
                             <>
                               <IconButton size="md" color="red">
                                 <ArrowPathIcon
