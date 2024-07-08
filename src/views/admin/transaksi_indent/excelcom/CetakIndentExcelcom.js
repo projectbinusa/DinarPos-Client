@@ -83,11 +83,11 @@ function CetakIndentExcelcom() {
             <ul>
               <li className="flex">
                 <p>NO. FAKTUR :</p>
-                <p>{reportData.noFaktur}</p>
+                <p className='ml-3'>{reportData.noFaktur}</p>
               </li>
               <li className="flex">
                 <p>TGL FAKTUR :</p>
-                <p>{reportData.created_date}</p>
+                <p className='ml-3'>{reportData.tanggal}</p>
               </li>
             </ul>
           </div>
@@ -146,15 +146,19 @@ function CetakIndentExcelcom() {
             <ul className="text-sm">
               <li className="flex">
                 <p className="w-36">Jumlah</p>
-                <p>{reportData.totalBelanja}</p>
+                <p>{formatRupiah(reportData.totalBelanja)}</p>
               </li>
               <li className="flex">
                 <p className="w-36">DP</p>
-                <p>{reportData.pembayaran}</p>
+                <p>{formatRupiah(reportData.pembayaran)}</p>
               </li>
               <li className="flex">
                 <p className="w-36">Total</p>
-                <p>{reportData.totalBelanja - reportData.pembayaran}</p>
+                <p>{formatRupiah(reportData.totalBelanja - reportData.pembayaran)}</p>
+              </li>
+              <li className="flex">
+                <p className="w-36">Keterangan</p>
+                <p>{reportData.cashKredit}</p>
               </li>
             </ul>
           </div>

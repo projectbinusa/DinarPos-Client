@@ -4,11 +4,7 @@ import {
   Breadcrumbs,
   Button,
   Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
   IconButton,
-  Input,
   Typography,
 } from "@material-tailwind/react";
 
@@ -17,14 +13,12 @@ import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import {
   API_CUSTOMER,
-  API_CUSTOMER_CP,
-  API_SALESMAN,
 } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import ReactSelect from "react-select";
+import ModalTambahCustomerCp from "../../modal/ModalTambahCustomerCp";
 
 function DataCustomer() {
   const [open, setOpen] = useState(false);
@@ -33,14 +27,6 @@ function DataCustomer() {
   const tableRef = useRef(null);
 
   const [customers, setCustomer] = useState([]);
-  const [salesmans, setsalesmans] = useState([]);
-
-  const [salesmanId, setsalesmanId] = useState(0);
-  const [customerId, setcustomerId] = useState(0);
-  const [namaCp, setnamaCp] = useState("");
-  const [jabatan, setjabatan] = useState("");
-  const [email, setemail] = useState("");
-  const [noTelp, setnoTelp] = useState("");
 
   const history = useHistory();
 
@@ -64,22 +50,8 @@ function DataCustomer() {
     }
   };
 
-  // GET ALL SALESMAN
-  const allSalesman = async () => {
-    try {
-      const response = await axios.get(`${API_SALESMAN}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsalesmans(response.data.data);
-      console.log(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     getAll();
-    allSalesman();
   }, []);
 
   useEffect(() => {
@@ -121,119 +93,6 @@ function DataCustomer() {
       }
     });
   };
-
-  // ADD CUSTOMER CP
-  const addCustomerCp = async (e) => {
-    e.preventDefault();
-
-    const request = {
-      email: email,
-      id_salesman: salesmanId,
-      id_customer: customerId,
-      jabatan: jabatan,
-      nama_cp: namaCp,
-      no_telp: noTelp,
-    };
-
-    try {
-      await axios.post(`${API_CUSTOMER_CP}/add`, request, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Data Berhasil DiTambahkan",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      history.push("/data_customer_cp");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.clear();
-        history.push("/");
-      } else if (error.response.status === 400) {
-        Swal.fire({
-          icon: "error",
-          title: "Data Sudah Ada!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        console.log(error);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Tambah Data Gagal!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        console.log(error);
-      }
-    }
-  };
-
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-  };
-
-  // ALL SALESMAN
-  const [values, setvalues] = useState("");
-  const [options, setoptions] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const handle = async () => {
-    if (values.trim() !== "") {
-      const response = await fetch(
-        `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      const data = await response.json();
-      setoptions(data.data);
-      console.log(data);
-    } else {
-      return;
-    }
-  };
-
-  useEffect(() => {
-    handle();
-  }, [currentPage, values]);
-
-  const handleChange = (event) => {
-    setvalues(event.target.value);
-    setCurrentPage(1);
-  };
-  // END ALL SALESMAN
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -343,125 +202,7 @@ function DataCustomer() {
       </div>
       {/* MODAL TAMBAH CUSTOMER CP */}
       <Dialog open={open} handler={handleOpen} size="lg">
-        <DialogHeader>Tambah Customer CP</DialogHeader>
-        <form onSubmit={addCustomerCp}>
-          <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="flex gap-2 items-end">
-              <Input
-                label="Salesman"
-                variant="static"
-                color="blue"
-                list="salesman-list"
-                id="salesman"
-                name="salesman"
-                onChange={(event) => {
-                  handleChange(event);
-                  setsalesmanId(event.target.value);
-                }}
-                placeholder="Pilih Salesman"
-              />
-              <datalist id="salesman-list">
-                {options.length > 0 && (
-                  <>
-                    {options.map((option) => (
-                      <option value={option.id}>
-                        {option.namaSalesman}
-                      </option>
-                    ))}
-                  </>
-                )}
-              </datalist>
-
-              <div className="flex gap-2">
-                <button
-                  className="text-sm bg-gray-400 px-1"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  Prev
-                </button>
-                <button
-                  className="text-sm bg-gray-400 px-1"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={!options.length}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="customer"
-                className="text-[14px] text-blue-gray-400"
-              >
-                Customer
-              </label>
-              <ReactSelect
-                id="customer"
-                options={customers.map((down) => {
-                  return {
-                    value: down.id,
-                    label: down.nama_customer,
-                  };
-                })}
-                placeholder="Pilih Customer"
-                styles={customStyles}
-                onChange={(selectedOption) =>
-                  setcustomerId(selectedOption.value)
-                }
-              />
-              <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-            </div>
-            <Input
-              color="blue"
-              variant="static"
-              label="Nama CP"
-              placeholder="Masukkan Nama CP"
-              onChange={(e) => setnamaCp(e.target.value)}
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Jabatan"
-              placeholder="Masukkan Jabatan Customer"
-              onChange={(e) => setjabatan(e.target.value)}
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="Email"
-              type="email"
-              placeholder="Masukkan Email Customer"
-              onChange={(e) => setemail(e.target.value)}
-            />
-            <Input
-              color="blue"
-              variant="static"
-              label="No Telp"
-              type="number"
-              placeholder="Masukkan No Telp Customer"
-              onChange={(e) => setnoTelp(e.target.value)}
-            />
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="text"
-              color="gray"
-              onClick={handleOpen}
-              className="mr-1"
-            >
-              <span>Kembali</span>
-            </Button>
-            <Button
-              variant="gradient"
-              color="blue"
-              onClick={handleOpen}
-              type="submit"
-            >
-              <span>Simpan</span>
-            </Button>
-          </DialogFooter>
-        </form>
+        <ModalTambahCustomerCp handleOpen={handleOpen} />
       </Dialog>
       {/* END MODAL TAMBAH CUSTOMER CP */}
     </section>

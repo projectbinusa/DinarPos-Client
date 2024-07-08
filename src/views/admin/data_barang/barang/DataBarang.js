@@ -179,7 +179,6 @@ function DataBarang() {
   };
 
   const level = localStorage.getItem("level");
-  const roleToko = localStorage.getItem("roleToko");
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -214,7 +213,7 @@ function DataBarang() {
                     <Button
                       onClick={handleOpen}
                       variant="gradient"
-                      color="light-blue"
+                      color="green"
                     >
                       Import
                     </Button>
