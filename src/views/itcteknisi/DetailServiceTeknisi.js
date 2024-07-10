@@ -265,6 +265,39 @@ function DetailServiceTeknisi() {
         console.log(err);
       });
   };
+
+  const removePictureAfter = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", "");
+
+    try {
+      console.log('Sending request to:', `${API_SERVICE}/foto_after/${param.id}`);
+      console.log('FormData:', formData.get("file"));  
+      await axios.put(`${API_SERVICE}/foto_after/` + param.id, formData, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Remove Foto After Berhasil!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Remove Foto After Gagal!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(err);
+    }
+  };
+
+
   // END UPDATE PICTURE AFTER
 
   // GET ALL STATUS
@@ -296,6 +329,7 @@ function DetailServiceTeknisi() {
 
   // ALL TEKNISI
   const [valuesTeknisi, setvaluesTeknisi] = useState("");
+  const [teknisiToTake, setteknisiToTake] = useState(0);
   const [optionsTeknisi, setoptionsTeknisi] = useState([]);
   const [currentPageTeknisi, setCurrentPageTeknisi] = useState(1);
 
@@ -320,12 +354,59 @@ function DetailServiceTeknisi() {
   }, [currentPageTeknisi, valuesTeknisi]);
 
   const handleChangeTeknisi = (event) => {
+    setteknisiToTake(event.target.value);
     setvaluesTeknisi(event.target.value);
     setCurrentPageTeknisi(1);
   };
   // END ALL TEKNISI
 
-  console.log(datas);
+  // TAKE OVER TO
+  const takeOverto = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      id_service: param.id,
+      id_teknisi: teknisiToTake,
+    };
+
+    try {
+      await axios.post(`${API_SERVICE}/take_over`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Take Over Berhasil",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: error.response.data.data,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Take Over Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
+
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -616,7 +697,7 @@ function DetailServiceTeknisi() {
                         </div>
                         <br />
                         <div className="flex justify-end">
-                          <Button variant="gradient" color="blue">
+                          <Button variant="gradient" color="blue" onClick={takeOverto}>
                             TakeOver
                           </Button>
                         </div>
@@ -730,7 +811,6 @@ function DetailServiceTeknisi() {
                 <br />
                 <h1 className="font-semibold mt-3 text-lg">
                   Status dan Laporan ({datas?.statusEnd})
-
                 </h1>
                 <hr /> <br />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -799,9 +879,9 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture After
                               </Button>
-                              {/* <IconButton size="md" color="red">
+                              <IconButton size="md" color="red" onClick={removePictureAfter}>
                                 <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton> */}
+                              </IconButton>
                             </div>
                           </>
                         ) : (
@@ -852,9 +932,6 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture Before
                               </Button>
-                              {/* <IconButton size="md" color="red">
-                                <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton> */}
                             </div>
                           </>
                         ) : (
@@ -874,9 +951,6 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture After
                               </Button>
-                              {/* <IconButton size="md" color="red">
-                                <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton> */}
                             </div>
                           </>
                         ) : (

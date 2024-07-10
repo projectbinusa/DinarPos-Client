@@ -235,7 +235,7 @@ function DataService() {
           </div>
           <div className="flex justify-between items-center">
             <a href="/data_service_taken" className="mb-5">
-              <Button variant="gradient" color="light-blue">
+              <Button variant="gradient" color="green">
                 Taken
               </Button>
             </a>
