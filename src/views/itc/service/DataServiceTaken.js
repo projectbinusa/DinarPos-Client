@@ -16,11 +16,12 @@ import {
   InformationCircleIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
 
 function DataServiceTaken() {
   const tableRef = useRef(null);
   const [services, setservices] = useState([]);
-  const [servicesTgl, setservicesTgl] = useState([]);
+  // const [servicesTgl, setservicesTgl] = useState([]);
   const [validasi, setvalidasi] = useState(false);
 
   const [startDate, setStartDate] = useState("");
@@ -28,7 +29,7 @@ function DataServiceTaken() {
   const [tglKonfirm, setTglKonfirm] = useState([]);
 
   // FILTER
-  const [tglKonfirm2, setTglKonfirm2] = useState([]);
+  // const [tglKonfirm2, setTglKonfirm2] = useState([]);
 
   const formatDate = (value) => {
     const date = new Date(value);
@@ -41,31 +42,55 @@ function DataServiceTaken() {
     return formattedDate;
   };
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+  // NEW
+  const searchServiceTaken = async () => {
+    if (endDate === "" && startDate === "" && validasi === true) {
+      Swal.fire({
+        icon: "warning",
+        title: "Masukkan Tanggal Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
 
-    $(tableRef.current).DataTable({});
-  };
-
-  // GET ALL
-  const getAll = async () => {
     try {
-      const response = await axios.get(`${API_SERVICE}/taken`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setservices(response.data.data);
+      if (validasi === true) {
+        const response = await axios.get(
+          `${API_SERVICE}/service-taken-by-date?akhir=${endDate}&awal=${startDate}`,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        );
+        setservices(response.data);
+        console.log(validasi);
+        console.log(response.data);
+      } else {
+        const response = await axios.get(`${API_SERVICE}/taken`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+        setservices(response.data.data);
+        console.log(validasi);
+        console.log(response.data.data);
+      }
     } catch (error) {
-      console.log("get all", error);
+      console.error("Error fetching data", error);
     }
   };
 
   useEffect(() => {
-    if (services && services.length > 0) {
-      initializeDataTable();
+    searchServiceTaken();
+  }, []);
+
+  useEffect(() => {
+    if (validasi) {
+      searchServiceTaken();
+      setvalidasi(false);
     }
-  }, [services]);
+  }, [validasi, endDate, startDate]);
+
+  const handleSearchServiceTaken = () => {
+    setvalidasi(true);
+  };
 
   const tglKonfirmasi = async (transactionId) => {
     try {
@@ -96,71 +121,133 @@ function DataServiceTaken() {
     fetchTglKonfirm();
   }, [services]);
 
-  // GET ALL FILTER
-  const getAllFilterTgl = async () => {
-    try {
-      const response = await axios.get(
-        `${API_SERVICE}/service-taken-by-date?akhir=${endDate}&awal=${startDate}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      setservicesTgl(response.data);
-    } catch (error) {
-      console.log("get all", error);
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
     }
+    $(tableRef.current).DataTable({});
   };
 
   useEffect(() => {
-    if (servicesTgl && servicesTgl.length > 0) {
+    if (services.length > 0 && services) {
       initializeDataTable();
     }
-  }, [servicesTgl]);
+  }, [services]);
+  // END NEW
 
-  const tglKonfirmasi2 = async (transactionId) => {
-    try {
-      const response = await axios.get(
-        `${API_SERVICE}/tgl_konfirm?id=${transactionId}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      console.log("tglKonfirmasi", error);
-      return [];
-    }
-  };
+  // // GET ALL
+  // const getAll = async () => {
+  //   try {
+  //     const response = await axios.get(`${API_SERVICE}/taken`, {
+  //       headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //     });
+  //     setservices(response.data.data);
+  //   } catch (error) {
+  //     console.log("get all", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    const fetchTglKonfirm = async () => {
-      const tglList = await Promise.all(
-        servicesTgl.map(async (service) => {
-          const tglData = await tglKonfirmasi2(service.idTT);
-          return tglData;
-        })
-      );
-      setTglKonfirm2(tglList);
-    };
+  // useEffect(() => {
+  //   if (services && services.length > 0) {
+  //     initializeDataTable();
+  //   }
+  // }, [services]);
 
-    fetchTglKonfirm();
-  }, [servicesTgl]);
+  // const tglKonfirmasi = async (transactionId) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${API_SERVICE}/tgl_konfirm?id=${transactionId}`,
+  //       {
+  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       }
+  //     );
+  //     return response.data.data;
+  //   } catch (error) {
+  //     console.log("tglKonfirmasi", error);
+  //     return [];
+  //   }
+  // };
 
-  useEffect(() => {
-    getAll();
-  }, []);
+  // useEffect(() => {
+  //   const fetchTglKonfirm = async () => {
+  //     const tglList = await Promise.all(
+  //       services.map(async (service) => {
+  //         const tglData = await tglKonfirmasi(service.idTT);
+  //         return tglData;
+  //       })
+  //     );
+  //     setTglKonfirm(tglList);
+  //   };
 
-  useEffect(() => {
-    if (validasi) {
-      getAllFilterTgl();
-    }
-  }, [validasi]);
+  //   fetchTglKonfirm();
+  // }, [services]);
 
-  const filterTangggal = () => {
-    setvalidasi((prevValidasi) => !prevValidasi);
-  };
+  // // GET ALL FILTER
+  // const getAllFilterTgl = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${API_SERVICE}/service-taken-by-date?akhir=${endDate}&awal=${startDate}`,
+  //       {
+  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       }
+  //     );
+  //     setservicesTgl(response.data);
+  //   } catch (error) {
+  //     console.log("get all", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (servicesTgl && servicesTgl.length > 0) {
+  //     initializeDataTable();
+  //   }
+  // }, [servicesTgl]);
+
+  // const tglKonfirmasi2 = async (transactionId) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${API_SERVICE}/tgl_konfirm?id=${transactionId}`,
+  //       {
+  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       }
+  //     );
+  //     return response.data.data;
+  //   } catch (error) {
+  //     console.log("tglKonfirmasi", error);
+  //     return [];
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const fetchTglKonfirm = async () => {
+  //     const tglList = await Promise.all(
+  //       servicesTgl.map(async (service) => {
+  //         const tglData = await tglKonfirmasi2(service.idTT);
+  //         return tglData;
+  //       })
+  //     );
+  //     setTglKonfirm2(tglList);
+  //   };
+
+  //   fetchTglKonfirm();
+  // }, [servicesTgl]);
+
+  // useEffect(() => {
+  //   getAll();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (validasi) {
+  //     getAllFilterTgl();
+  //   }
+  // }, [validasi]);
+
+  // const filterTangggal = () => {
+  //   setvalidasi((prevValidasi) => !prevValidasi);
+  // };
 
   const level = localStorage.getItem("level");
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -235,7 +322,8 @@ function DataServiceTaken() {
               <Button
                 variant="gradient"
                 color="blue"
-                onClick={filterTangggal}
+                onClick={handleSearchServiceTaken}
+                // onClick={filterTangggal}
                 size="md"
               >
                 <MagnifyingGlassIcon className="w-5 h-5" />
@@ -261,6 +349,61 @@ function DataServiceTaken() {
                 </tr>
               </thead>
               <tbody>
+                {services.length > 0 ? (
+                  services.map((row, index) => {
+                    const tglKonfirms = tglKonfirm[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {row.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.customer.alamat}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.produk}{" "}
+                          <span className="block">{row.merk}</span>{" "}
+                          <span className="block">{row.type}</span>
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {formatDate(row.tanggalMasuk)}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {tglKonfirms.map((down, idx) => (
+                            <ul key={idx}>
+                              <li>{formatDate(down.tglKonf)}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          TAKEN ({row.statusEnd})
+                        </td>
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <div className="flex flex-row gap-3">
+                            <a href={"/detail_service_taken/" + row.idTT}>
+                              <IconButton size="md" color="light-blue">
+                                <InformationCircleIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="8"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+              {/* <tbody>
                 {validasi === true ? (
                   <>
                     {servicesTgl.length > 0 ? (
@@ -374,7 +517,7 @@ function DataServiceTaken() {
                     )}
                   </>
                 )}
-              </tbody>
+              </tbody> */}
             </table>
           </div>
         </main>
