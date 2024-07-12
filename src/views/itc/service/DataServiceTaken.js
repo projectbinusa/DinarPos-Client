@@ -21,7 +21,6 @@ import Swal from "sweetalert2";
 function DataServiceTaken() {
   const tableRef = useRef(null);
   const [services, setservices] = useState([]);
-  // const [servicesTgl, setservicesTgl] = useState([]);
   const [validasi, setvalidasi] = useState(false);
 
   const [startDate, setStartDate] = useState("");
@@ -30,6 +29,7 @@ function DataServiceTaken() {
 
   // FILTER
   // const [tglKonfirm2, setTglKonfirm2] = useState([]);
+  // const [servicesTgl, setservicesTgl] = useState([]);
 
   const formatDate = (value) => {
     const date = new Date(value);
@@ -118,19 +118,33 @@ function DataServiceTaken() {
       setTglKonfirm(tglList);
     };
 
-    fetchTglKonfirm();
+    if (services.length > 0) {
+      fetchTglKonfirm();
+    }
   }, [services]);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#example_data')) {
+      $('#example_data').DataTable().destroy();
     }
-    $(tableRef.current).DataTable({});
+    $('#example_data').DataTable({});
   };
 
+  // useEffect(() => {
+  //   if (services.length > 0 && tableRef.current) {
+  //     initializeDataTable();
+  //   }
+  // }, [services, tableRef]);
+
   useEffect(() => {
-    if (services.length > 0 && services) {
+    if (services.length > 0) {
       initializeDataTable();
+    } else {
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        console.log('Destroying DataTable instance because services are empty');
+        $(tableRef.current).DataTable().destroy();
+        // $(tableRef.current).empty();
+      }
     }
   }, [services]);
   // END NEW
@@ -340,19 +354,40 @@ function DataServiceTaken() {
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
+                  {/* <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
                   <th className="text-sm py-2 px-3 font-semibold">Produk</th>
                   <th className="text-sm py-2 px-3 font-semibold">In </th>
                   <th className="text-sm py-2 px-3 font-semibold">C </th>
                   <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th> */}
                 </tr>
               </thead>
               <tbody>
                 {services.length > 0 ? (
+                  services.map((row, index) => (
+                    <tr key={index}>
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.nama_customer}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="2"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+              {/* <tbody>
+                {services.length > 0 ? (
                   services.map((row, index) => {
                     const tglKonfirms = tglKonfirm[index] || [];
-
+                    
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
@@ -402,7 +437,7 @@ function DataServiceTaken() {
                     </td>
                   </tr>
                 )}
-              </tbody>
+              </tbody> */}
               {/* <tbody>
                 {validasi === true ? (
                   <>
