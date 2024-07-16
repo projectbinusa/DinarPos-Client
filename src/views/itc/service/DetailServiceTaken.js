@@ -1,17 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
-  Button,
-  Card,
   IconButton,
-  Option,
-  Input,
-  Select,
   Typography,
-  Dialog,
-  DialogBody,
-  DialogFooter,
 } from "@material-tailwind/react";
 import {
   ChatBubbleBottomCenterIcon,
@@ -21,18 +13,131 @@ import {
   PrinterIcon,
   ReceiptPercentIcon,
 } from "@heroicons/react/24/outline";
+import axios from "axios";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API_SERVICE, API_TRANSAKSI } from "../../../utils/BaseUrl";
 
 function DetailServiceTaken() {
+  const [datas, setdatas] = useState(null);
+  const param = useParams();
+
+  // FORMAT RUPIAH
+  const formatRupiah = (value) => {
+    const formatter = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    });
+    return formatter.format(value);
+  };
+
+  const [namaCustomer, setnamaCustomer] = useState(
+    datas?.customer?.nama_customer || ""
+  );
+  const [alamatCustomer, setalamatCustomer] = useState("");
+  const [cpCustomer, setcpCustomer] = useState("");
+  const [ketCustomer, setketCustomer] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`${API_SERVICE}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setdatas(res.data.data);
+        setketCustomer(res.data.data.ket);
+        setnamaCustomer(res.data.data.nama);
+        setcpCustomer(res.data.data.cp);
+        setalamatCustomer(res.data.data.alamat);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [param.id]);
+
+  console.log(datas);
+
+  // TRANSAKSI 
+  const [dataTransaksi, setDataTransaksi] = useState(null);
+  const [idTransaksi, setIdTransaksi] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(`${API_TRANSAKSI}/get-transaksi-by-id-tt/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const respon = res.data[0];
+        setDataTransaksi(respon);
+        setIdTransaksi(respon.idTransaksi);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [param.id]);
+
+  // ALL BARANG TRANSAKSI
+  const [brgTransaksi, setBrgTransaksi] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${API_TRANSAKSI}/get-barang-transaksi-by-id-transaksi/` + idTransaksi, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const respon = res.data;
+        // setDataTransaksi(respon);
+        // setIdTransaksi(respon.idTransaksi);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [idTransaksi]);
+
+
+  // GET ALL TGL KONF
+  const [tglKonfs, settglKonfs] = useState([]);
+
+  const allTglKonf = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/tgl_konfirm?id=` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      settglKonfs(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    allTglKonf()
+  }, [])
+
+  const level = localStorage.getItem("level");
+  let dashboard = "";
+
+  if (level === "Pimpinan") {
+    dashboard = "dashboard_pimpinan";
+  } else if (level === "Teknisi") {
+    dashboard = "dashboard_teknisi"
+  } else {
+    dashboard = "dashboard"
+  }
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Data Service
+            Detail Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href={'/' + dashboard} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -43,14 +148,14 @@ function DetailServiceTaken() {
               </svg>
             </a>
             <a href="/data_service">
-              <span>Service</span>
+              <span>Taken</span>
             </a>
             <span className="cursor-default capitalize">detail Service</span>
           </Breadcrumbs>
         </div>
         <main className="bg-blue-500 border-4 border-blue-500 shadow-lg my-5 rounded">
           <div className="flex justify-between items-center p-3">
-            <a href="/data_service">
+            <a href="/data_service_taken">
               <Typography
                 variant="paragraph"
                 className="capitalize font-semibold text-white flex"
@@ -62,22 +167,22 @@ function DetailServiceTaken() {
               <IconButton
                 size="md"
                 color="red"
-                // onClick={() => window.open("/print_service/" + datas?.idTT)}
+                onClick={() => window.open("/print_service/" + datas?.idTT)}
               >
                 <PrinterIcon className="w-6 h-6 white" />
               </IconButton>{" "}
               <IconButton size="md" color="green">
                 <ChatBubbleBottomCenterIcon
                   className="w-6 h-6 white"
-                  // onClick={() => {
-                  //   const phone = encodeURIComponent(datas?.customer?.telp);
-                  //   const message = encodeURIComponent(
-                  //     `Hallo kak ${datas?.customer?.nama_customer} Terima Kasih Telah Service di Excellent Computer Detail Produk No. TT : ${datas?.idTT} Jenis Produk : ${datas?.produk} Merk : ${datas?.merk} Type : ${datas?.type} SN : ${datas?.sn} Dengan Keluhan : ${datas?.keluhan}`
-                  //   );
-                  //   window.open(
-                  //     `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                  //   );
-                  // }}
+                  onClick={() => {
+                    const phone = encodeURIComponent(datas?.customer?.telp);
+                    const message = encodeURIComponent(
+                      `Hallo kak ${datas?.customer?.nama_customer} Terima Kasih Telah Service di Excellent Computer Detail Produk No. TT : ${datas?.idTT} Jenis Produk : ${datas?.produk} Merk : ${datas?.merk} Type : ${datas?.type} SN : ${datas?.sn} Dengan Keluhan : ${datas?.keluhan}`
+                    );
+                    window.open(
+                      `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                    );
+                  }}
                 />
               </IconButton>{" "}
             </div>
@@ -89,80 +194,65 @@ function DetailServiceTaken() {
                   <b>Data Pelanggan</b>
                 </h1>
                 <hr /> <br />
-                <form>
-                  <ol>
-                    <li className="mb-3">
-                      <div className="flex items-center">
-                        <label htmlFor="" className="w-32 text-center text-sm">
-                          Nama
-                        </label>
-                        <input
-                          type="text"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Nama"
-                          // value={namaCustomer}
-                          // onChange={(e) => setnamaCustomer(e.target.value)}
-                        />
-                      </div>
-                    </li>
-                    <li className="mb-3">
-                      <div className="flex items-center">
-                        <label htmlFor="" className="w-32 text-center text-sm">
-                          Alamat{" "}
-                        </label>
-                        <textarea
-                          name="alamat"
-                          id="alamat"
-                          cols="30"
-                          rows="3"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          // value={alamatCustomer}
-                          // onChange={(e) => setalamatCustomer(e.target.value)}
-                        ></textarea>
-                      </div>
-                    </li>
-                    <li className="mb-3">
-                      <div className="flex items-center">
-                        <label htmlFor="" className="w-32 text-center text-sm">
-                          CP
-                        </label>
-                        <input
-                          type="number"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="CP"
-                          // value={cpCustomer}
-                          // onChange={(e) => setcpCustomer(e.target.value)}
-                        />
-                      </div>
-                    </li>
-                    <li className="mb-3">
-                      <div className="flex items-center">
-                        <label htmlFor="" className="w-32 text-center text-sm">
-                          Ket
-                        </label>
-                        <textarea
-                          name="ket"
-                          id="ket"
-                          cols="30"
-                          rows="3"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          // value={ketCustomer}
-                          // onChange={(e) => setketCustomer(e.target.value)}
-                        ></textarea>
-                      </div>
-                    </li>
-                  </ol>
-                  <br />
-                  <Button
-                    variant="gradient"
-                    color="light-blue"
-                    className="float-right"
-                    type="submit"
-                  >
-                    {/* Simpan */}
-                  </Button>{" "}
-                </form>
-                <br /> <br /> <br />
+                <ol>
+                  <li className="mb-3">
+                    <div className="flex items-center">
+                      <label htmlFor="" className="w-32 text-center text-sm">
+                        Nama
+                      </label>
+                      <input
+                        type="text"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Nama"
+                        value={namaCustomer}
+                        readOnly />
+                    </div>
+                  </li>
+                  <li className="mb-3">
+                    <div className="flex items-center">
+                      <label htmlFor="" className="w-32 text-center text-sm">
+                        Alamat{" "}
+                      </label>
+                      <textarea
+                        name="alamat"
+                        id="alamat"
+                        cols="30"
+                        rows="3"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        readOnly
+                      >{alamatCustomer}</textarea>
+                    </div>
+                  </li>
+                  <li className="mb-3">
+                    <div className="flex items-center">
+                      <label htmlFor="" className="w-32 text-center text-sm">
+                        CP
+                      </label>
+                      <input
+                        type="number"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="CP"
+                        value={cpCustomer}
+                        readOnly />
+                    </div>
+                  </li>
+                  <li className="mb-3">
+                    <div className="flex items-center">
+                      <label htmlFor="" className="w-32 text-center text-sm">
+                        Ket
+                      </label>
+                      <textarea
+                        name="ket"
+                        id="ket"
+                        cols="30"
+                        rows="3"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        readOnly
+                      >{ketCustomer}</textarea>
+                    </div>
+                  </li>
+                </ol>
+                <br /> <br />
                 <h1 className="text-lg">
                   <b>Tanda Terima</b>
                 </h1>
@@ -173,13 +263,7 @@ function DetailServiceTaken() {
                       <label htmlFor="" className="w-32 text-center text-sm">
                         Tgl Masuk
                       </label>
-                      <input
-                        type="date"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Tanggal Masuk"
-                        readOnly
-                        // value={datas?.tgl_masuk}
-                      />
+                      <p className="w-full text-sm">{datas?.tgl_masuk}</p>
                     </div>
                   </li>
                   <li className="mb-3">
@@ -187,68 +271,39 @@ function DetailServiceTaken() {
                       <label htmlFor="" className="w-32 text-center text-sm">
                         Tgl Jadi
                       </label>
-                      <input
-                        type="date"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Tgl Jadi"
-                        readOnly
-                      />
+                      <p className="w-full text-sm">{datas?.tgl_jadi}</p>
                     </div>
                   </li>
                   <li className="mb-3">
-                    <form className="flex items-center">
+                    <div className="flex items-center">
                       <label htmlFor="" className="w-32 text-center text-sm">
                         Tgl Konf
                       </label>
                       <div className="w-full">
-                        {/* {tglKonfs.length > 0 ? (
+                        {tglKonfs.length > 0 ? (
                           <>
                             <ol>
                               {tglKonfs.map((row) => (
                                 <li className="mb-2 flex justify-between items-center">
                                   <span>
-                                    {new Date(row.tglKonf).toLocaleDateString()}
+                                    {new Date(dataTransaksi.tglKonf).toLocaleDateString()}
                                   </span>
-                                  <IconButton
-                                    size="sm"
-                                    color="red"
-                                    type="button"
-                                    onClick={() => deleteTglKonf(row.id)}
-                                  >
-                                    <TrashIcon className="w-6 h-6 white" />
-                                  </IconButton>
                                 </li>
                               ))}
                             </ol>
                           </>
                         ) : (
                           <></>
-                        )} */}
-                        <div className="flex gap-2 w-full">
-                          <input
-                            type="date"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Tgl Konf"
-                            // onChange={(e) => settglKonf(e.target.value)}
-                          />
-                          <IconButton size="lg" color="blue" type="submit">
-                            <PlusIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
+                        )}
                       </div>
-                    </form>
+                    </div>
                   </li>
                   <li className="mb-3">
                     <div className="flex items-center">
                       <label htmlFor="" className="w-32 text-center text-sm">
                         Tgl Ambil
                       </label>
-                      <input
-                        type="date"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Tgl Ambil"
-                        readOnly
-                      />
+                      <p className="w-full text-sm">{datas?.tgl_ambil}</p>
                     </div>
                   </li>
                   <li className="mb-3">
@@ -256,7 +311,7 @@ function DetailServiceTaken() {
                       <label htmlFor="" className="w-32 text-center text-sm">
                         Penerima
                       </label>
-                      {/* <p className="text-sm w-full">{datas?.penerima}</p> */}
+                      <p className="text-sm w-full">{datas?.penerima}</p>
                     </div>
                   </li>
                   <li className="mb-3">
@@ -264,7 +319,7 @@ function DetailServiceTaken() {
                       <label htmlFor="" className="w-32 text-center text-sm">
                         Checker
                       </label>
-                      {/* <p className="text-sm w-full">{datas?.checker}</p> */}
+                      <p className="text-sm w-full">{datas?.checker}</p>
                     </div>
                   </li>
                 </ol>
@@ -298,7 +353,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          // value={datas?.produk}
+                          value={datas?.produk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -306,7 +361,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          // value={datas?.merk}
+                          value={datas?.merk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -314,7 +369,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          // value={datas?.type}
+                          value={datas?.type}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -322,7 +377,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          // value={datas?.sn}
+                          value={datas?.sn}
                         />
                       </td>
                     </tr>
@@ -350,8 +405,7 @@ function DetailServiceTaken() {
                           rows="3"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          // value={datas?.perlengkapan}
-                        ></textarea>
+                        >{datas?.perlengkapan}</textarea>
                       </td>
                       <td
                         colSpan="2"
@@ -362,591 +416,211 @@ function DetailServiceTaken() {
                           rows="3"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          // value={datas?.keluhan}
-                        ></textarea>
+                        >{datas?.keluhan}</textarea>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-                <form>
-                  <div className="mt-6">
-                    <div className="flex items-center">
-                      <label htmlFor="" className="w-32 text-center text-sm">
-                        Note
-                      </label>
-                      <textarea
-                        id="note"
-                        cols="30"
-                        rows="3"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Catatan..."
-                        // value={note}
-                        // onChange={(e) => setnote(e.target.value)}
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex justify-end">
-                    {/* <Button variant="gradient" color="light-blue" type="submit">
-                      Simpan
-                    </Button> */}
-                  </div>
-                </form>
-              </div>
-            </div>
-            {/* {datas?.statusEnd === "PROSES" || datas?.statusEnd === "N_A" ? ( */}
-            <>
-              {/* JIKA BELUM ADA DATA */}
-              <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
-                <h1 className="font-semibold mt-1">Perincian Biaya</h1>
-                <hr />
-                <form>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-2">
-                    <div>
-                      <ol className="mt-3">
-                        <li className="mb-2">
-                          <div className="flex items-center">
-                            <label
-                              htmlFor=""
-                              className="w-32 text-center text-sm"
-                            >
-                              Sparepart
-                            </label>
-                            <input
-                              type="number"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              placeholder="Biaya Sparepart"
-                              id="sparepart"
-                              // onChange={(e) =>
-                              //   setbiayaSparepart(e.target.value)
-                              // }
-                              // required
-                            />
-                          </div>
-                        </li>
-                        <li className="mb-2">
-                          <div className="flex items-center">
-                            <label
-                              htmlFor=""
-                              className="w-32 text-center text-sm"
-                            >
-                              Service
-                            </label>
-                            <input
-                              type="number"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              placeholder="Biaya Service"
-                              id="service"
-                              // onChange={(e) =>
-                              //   setbiayaService(e.target.value)
-                              // }
-                              // required
-                            />
-                          </div>
-                        </li>
-                        <li className="mb-2">
-                          <div className="flex items-center">
-                            <label
-                              htmlFor=""
-                              className="w-32 text-center text-sm"
-                            >
-                              Total
-                            </label>
-                            <input
-                              type="number"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              placeholder="Biaya Total"
-                              id="total"
-                              // value={total}
-                              // onChange={(e) => settotal(e.target.value)}
-                              // readOnly
-                            />
-                          </div>
-                        </li>
-                      </ol>
-                    </div>
-                    <div>
-                      <ol className="mt-3">
-                        <li className="mb-2">
-                          <div className="flex items-center">
-                            <label
-                              htmlFor=""
-                              className="w-32 text-center text-sm"
-                            >
-                              Tgl Ready
-                            </label>
-                            <input
-                              type="date"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              id="tgl_ready"
-                              required
-                            />
-                          </div>
-                        </li>
-                        <li className="mb-2">
-                          <div className="flex items-center">
-                            <label
-                              htmlFor=""
-                              className="w-32 text-center text-sm"
-                            >
-                              Estimasi
-                            </label>
-                            <p className="w-full text-sm">
-                              {/* {formatRupiah(datas?.estimasi)} */}
-                            </p>
-                          </div>
-                        </li>
-                        <li className="mb-2">
-                          <div className="flex items-center">
-                            <label
-                              htmlFor=""
-                              className="w-32 text-center text-sm"
-                            >
-                              Status
-                            </label>
-                            <select
-                              id="status"
-                              // value={statusEnd}
-                              // onChange={(e) => setstatusEnd(e.target.value)}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 darkselect:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              required
-                            >
-                              <option value="READY_S">Ready (Sparepart)</option>
-                              <option value="READY_T">Ready (Teknisi)</option>
-                              <option value="CANCEL_S">
-                                Cancel (Sparepart)
-                              </option>
-                              <option value="CANCEL_T">Cancel (Teknisi)</option>
-                            </select>
-                          </div>
-                        </li>
-                      </ol>
-                      <div className="mt-3 flex justify-end">
-                        <Button variant="gradient" color="green" type="submit">
-                          Submit
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </>
-            {/* : ( */}
-            <>
-              {/* JIKA SUDAH ADA DATA */}
-              <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
-                <h1 className="font-semibold mt-1">Perincian Biaya</h1>
-                <hr /> <br />
-                <ol className="">
-                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                    <div className="flex items-center">
-                      <p className="w-36">Estimasi</p>
-                      <p className="w-full">
-                        {/* {formatRupiah(datas?.estimasi)} */}
-                      </p>
-                    </div>
-                  </li>
-                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                    <div className="flex items-center">
-                      <p className="w-36">Sparepart</p>
-                      <p className="w-full">
-                        {/* {formatRupiah(datas?.biayaSparepart)} */}
-                      </p>
-                    </div>
-                  </li>
-                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                    <div className="flex items-center">
-                      <p className="w-36">Service</p>
-                      <p className="w-full">
-                        {/* {formatRupiah(datas?.biayaService)} */}
-                      </p>
-                    </div>
-                  </li>
-                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                    <div className="flex items-center">
-                      <p className="w-36">Total</p>
-                      <p className="w-full"></p>
-                    </div>
-                  </li>
-                </ol>
-                <br />
-                <br />
-                <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-5">
-                  <div className="col-span-2 mt-3">
-                    <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
-                      <div className="lg:col-span-2">
-                        <label
-                          htmlFor="barang"
-                          className="text-[14px] text-blue-gray-400"
-                        >
-                          Barang
-                        </label>
-                        {/* <ReactSelect
-                            id="barang"
-                            options={barang.map((down) => {
-                              return {
-                                value: down.barcodeBarang,
-                                label:
-                                  down.barcodeBarang + " / " + down.namaBarang,
-                              };
-                            })}
-                            placeholder="Pilih Barang"
-                            styles={customStyles}
-                            value={selectedBarang}
-                            onChange={handleBarangChange}
-                          /> */}
-                        <hr className="mt-1 bg-gray-400 h-[0.1em]" />
-                      </div>
-                      <Input
-                        color="blue"
-                        variant="static"
-                        label="Harga"
-                        type="number"
-                        placeholder="Masukkan Harga"
-                        id="hargabarang"
-                        // value={hargaBrng}
-                        // onChange={(e) => sethargaBrng(e.target.value)}
-                      />
-                      <Input
-                        color="blue"
-                        variant="static"
-                        label="Diskon (%)"
-                        type="number"
-                        placeholder="Masukkan Diskon"
-                        // value={diskonBarang}
-                        // onChange={(e) => setdiskonBarang(e.target.value)}
-                      />
-                      <Input
-                        color="blue"
-                        variant="static"
-                        label="Stok Barang"
-                        id="stokbarang"
-                        type="number"
-                        // value={sisa}
-                        // onChange={(e) => setsisa(e.target.value)}
-                        // readOnly
-                      />
-                      <Input
-                        color="blue"
-                        variant="static"
-                        label="Jumlah"
-                        type="number"
-                        placeholder="Masukkan jumlah"
-                        id="jumlahBarang"
-                        // value={qty}
-                        // onKeyUp={checkEmpty()}
-                        // onChange={(e) => setqty(e.target.value)}
-                      />
-                    </div>
-                    <Button
-                      variant="gradient"
-                      color="blue"
-                      className="mt-5"
-                      id="tambah"
-                      // onClick={checkStok}
-                    >
-                      {/* <span>Tambah Barang</span> */}
-                    </Button>
-
-                    <Card className="overflow-auto my-5">
-                      <table
-                        id="example_data"
-                        className="rounded table-auto w-full"
-                      >
-                        <thead className="border-b-2 ">
-                          <tr>
-                            <th className="py-3 px-2">Barcode</th>
-                            <th className="py-3 px-2">Nama</th>
-                            <th className="py-3 px-2">Harga (Rp)</th>
-                            <th className="py-3 px-2">Disc (%)</th>
-                            <th className="py-3 px-2">Harga Diskon (Rp)</th>
-                            <th className="py-3 px-2">Jumlah</th>
-                            <th className="py-3 px-2">Total Harga (Rp)</th>
-                            <th className="py-3 px-2">Aksi</th>
-                          </tr>
-                        </thead>
-                        {/* <tbody>
-                            {produk.length > 0 ? (
-                              produk.map((down, index) => (
-                                <tr key={index}>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.barcode}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.nama}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.harga}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.disc}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.hargaDiskon}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.jumlah}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.totalHarga}
-                                  </td>
-                                  <td className="py-2 px-3 text-center border">
-                                    <div className="flex justify-center items-center gap-2">
-                                      <IconButton
-                                        id={down.barcode}
-                                        size="md"
-                                        color="light-blue"
-                                        onClick={() =>
-                                          edit(
-                                            down.barcode,
-                                            down.nama,
-                                            down.harga,
-                                            down.disc,
-                                            down.hargaDiskon,
-                                            down.jumlah,
-                                            down.totalHarga
-                                          )
-                                        }
-                                      >
-                                        <PencilIcon className="w-6 h-6 white" />
-                                      </IconButton>
-                                      <IconButton
-                                        id={down.barcode}
-                                        size="md"
-                                        color="red"
-                                        type="button"
-                                        onClick={() => remove(down.barcode)}
-                                      >
-                                        <TrashIcon className="w-6 h-6 white" />
-                                      </IconButton>
-                                    </div>
-                                  </td>{" "}
-                                </tr>
-                              ))
-                            ) : (
-                              <>
-                                <tr>
-                                  <td colSpan={8} className="text-center py-3">
-                                    Tidak ada data
-                                  </td>
-                                </tr>
-                              </>
-                            )}
-                          </tbody> */}
-                      </table>
-                    </Card>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 mb-12">
-                      <div className="mt-6">
-                        <Input
-                          color="blue"
-                          variant="static"
-                          label="Keterangan"
-                          placeholder="Masukkan Keterangan"
-                          // onChange={(e) => setketerangan(e.target.value)}
-                        />
-                      </div>
-                      <div className="flex gap-2 items-end">
-                        <Input
-                          label="Salesman"
-                          variant="static"
-                          color="blue"
-                          list="salesman-list"
-                          id="salesman"
-                          name="salesman"
-                          // onChange={(event) => {
-                          //   handleChangeSalesman(event);
-                          //   setmarkettingId(event.target.value);
-                          // }}
-                          placeholder="Pilih Salesman"
-                        />
-                        <datalist id="salesman-list">
-                          {/* {optionsSalesman.length > 0 && (
-                              <>
-                                {optionsSalesman.map((option) => (
-                                  <option value={option.id}>
-                                    {option.namaSalesman}
-                                  </option>
-                                ))}
-                              </>
-                            )} */}
-                        </datalist>
-
-                        <div className="flex gap-2">
-                          <button
-                            className="text-sm bg-gray-400 px-1"
-                            // onClick={() =>
-                            //   setCurrentPageSalesman(currentPageSalesman - 1)
-                            // }
-                            // disabled={currentPageSalesman === 1}
-                          >
-                            Prev
-                          </button>
-                          <button
-                            className="text-sm bg-gray-400 px-1"
-                            // onClick={() =>
-                            //   setCurrentPageSalesman(currentPageSalesman + 1)
-                            // }
-                            // disabled={!optionsSalesman.length}
-                          >
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                      <div className="bg-white shadow rounded px-3 py-2">
-                        <Typography variant="paragraph">Anda Hemat</Typography>
-                        <Typography variant="h6" id="ttl_bayar_hemat">
-                          Rp 0,00
-                        </Typography>
-                      </div>
-                      <div className="bg-white shadow rounded px-3 py-2">
-                        <Typography variant="paragraph" className="capitalize">
-                          total Belanja Tanpa diskon
-                        </Typography>
-                        <Typography variant="h6" id="total2">
-                          Rp 0,00
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-blue-50 shadow-lg px-4 py-6 ">
-                    <Select
-                      variant="static"
-                      label="Cash / Kredit"
-                      color="blue"
-                      className="w-full"
-                      id="cashKredit"
-                      // onChange={(selectedOption) =>
-                      //   setcashCredit(selectedOption)
-                      // }
-                    >
-                      <Option value="Cash">Cash</Option>
-                      <Option value="Kredit">Kredit</Option>
-                    </Select>
-                    <div className="flex flex-col gap-y-6 my-6">
-                      <Input
-                        color="blue"
-                        variant="static"
-                        label="Pembayaran"
-                        type="number"
-                        placeholder="Pembayaran"
-                        id="pembayaran"
-                        // onChange={(e) => setpembayaran(e.target.value)}
-                        // onKeyUp={getDiskon}
-                        // defaultValue={0}
-                      />
-                      <Input
-                        color="blue"
-                        variant="static"
-                        label="Potongan"
-                        type="number"
-                        placeholder="Potongan"
-                        id="potongan"
-                        // defaultValue={0}
-                        // onChange={(e) => setpotongan(e.target.value)}
-                        // onKeyUp={getPotongan}
-                      />
-                    </div>
-                    <div className="flex flex-col gap-y-4">
-                      <div className="bg-white shadow rounded px-3 py-2">
-                        <Typography variant="paragraph">
-                          Total Belanja
-                        </Typography>
-                        <Typography variant="h6" id="total">
-                          Rp 0,00
-                        </Typography>
-                      </div>
-                      <div className="bg-white shadow rounded px-3 py-2">
-                        <Typography variant="paragraph" id="title">
-                          Kembalian / Kekurangan{" "}
-                        </Typography>
-                        <Typography variant="h6" id="kembalian">
-                          Rp 0,00
-                        </Typography>
-                      </div>
-                    </div>
-                    <div className="bg-white shadow rounded px-3 py-2 mt-5">
-                      <p className="text-base my-2">
-                        <b>Nota :</b> <span></span>
-                      </p>
-                      <hr />
-                      <h1 className="text-3xl my-3 font-medium" id="ttl_bayar">
-                        Rp 0,00
-                      </h1>
-                    </div>
-                    <Button
-                      variant="gradient"
-                      color="blue"
-                      className="mt-5"
-                      type="submit"
-                      id="bayar"
-                      // onClick={() => add()}
-                    >
-                      <span>Lanjut</span>
-                    </Button>
+                <div className="mt-6">
+                  <div className="flex items-center">
+                    <label htmlFor="" className="w-32 text-center text-sm">
+                      Note
+                    </label>
+                    <textarea
+                      id="note"
+                      cols="30"
+                      rows="3"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Catatan..."
+                      readOnly
+                      defaultValue={datas?.catatan}
+                    ></textarea>
                   </div>
                 </div>
               </div>
-            </>
-            {/* ) */}
+            </div>
+            <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
+              <h1 className="font-semibold mt-1">Perincian Biaya</h1>
+              <hr /> <br />
+              <ol className="">
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Estimasi</p>
+                    <p className="w-full">
+                      {formatRupiah(datas?.estimasi)}
+                    </p>
+                  </div>
+                </li>
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Sparepart</p>
+                    <p className="w-full">
+                      {formatRupiah(datas?.biayaSparepart)}
+                    </p>
+                  </div>
+                </li>
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Service</p>
+                    <p className="w-full">
+                      {formatRupiah(datas?.biayaService)}
+                    </p>
+                  </div>
+                </li>
+                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                  <div className="flex items-center">
+                    <p className="w-36">Total</p>
+                    <p className="w-full">{formatRupiah(datas?.total)}</p>
+                  </div>
+                </li>
+              </ol>
+              {dataTransaksi ? (<>
+                <div>
+                  <br />
+                  <h1 className="text-base lg:text-xl font-medium">
+                    No Faktur : {dataTransaksi?.noFaktur}
+                  </h1>
+                  <hr /> <br />
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                    <ol>
+                      <li className="mb-3">
+                        <div className="flex items-center">
+                          <p className="text-sm lg:text-base font-medium w-28">Tanggal</p> :
+                          <p className="text-sm lg:text-base ml-2">{dataTransaksi?.tanggal}</p>
+                        </div>
+                      </li>
+                      <li className="mb-3">
+                        <div className="flex items-center">
+                          <p className="text-sm lg:text-base font-medium w-28">Customer</p>:
+                          <p className="text-sm lg:text-base ml-2">
+                            {dataTransaksi.customer?.nama_customer}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="mb-3">
+                        <div className="flex items-center">
+                          <p className="text-sm lg:text-base font-medium w-28">Salesman</p>:
+                          <p className="text-sm lg:text-base ml-2">
+                            {dataTransaksi.salesman?.namaSalesman}
+                          </p>
+                        </div>
+                      </li>
+                    </ol>
+                    <ol>
+                      <li className="mb-3">
+                        <div className="flex items-center">
+                          <p className="text-sm lg:text-base font-medium w-28">Total Belanja</p>:
+                          <p className="text-sm lg:text-base ml-2">
+                            {dataTransaksi.totalBelanja !== null ? formatRupiah(dataTransaksi.totalBelanja) : ""}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="mb-3">
+                        <div className="flex items-center">
+                          <p className="text-sm lg:text-base font-medium w-28">Potongan</p>:
+                          <p className="text-sm lg:text-base ml-2">
+                            {formatRupiah(dataTransaksi.potongan)}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="mb-3">
+                        <div className="flex items-center">
+                          <p className="text-sm lg:text-base font-medium w-28">Pembayaran</p>:
+                          <p className="text-sm lg:text-base ml-2">
+                            {formatRupiah(dataTransaksi.pembayaran)}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="mb-3">
+                        <div className="flex items-center">
+                          <p className="text-sm lg:text-base font-medium w-28">Kembalian</p>:
+                          <p className="text-sm lg:text-base ml-2">
+                            {formatRupiah(dataTransaksi.sisa)}
+                          </p>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse my-3">
+                      <thead>
+                        <tr>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                            Barcode
+                          </th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                            Nama Barang
+                          </th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                            Harga Barang (Rp)
+                          </th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                            QTY
+                          </th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                            Total Harga Barang (Rp)
+                          </th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                            Diskon
+                          </th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 px-1">
+                            Total Harga (Rp)
+                          </th>
+                        </tr>
+                      </thead>
+                      {/* <tbody>
+                                        <?php if ($barangs) : ?>
+                                            <?php foreach ($barangs as $brg) : ?>
+                                                <tr>
+                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->barcode_barang ?></td>
+                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo tampil_nama_barang_byid($brg->barcode_barang) ?></td>
+                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->harga_brng ?></td>
+                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->qty ?></td>
+                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->total_harga_barang ?></td>
+                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->diskon ?></td>
+                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->total_harga ?></td>
+                                                </tr>
+                                            <?php endforeach ?>
+                                        <?php else : ?>
+                                            <tr>
+                                                <td colspan="7" className="text-center text-xs border-gray-300 border bg-white p-2">Tidak Ada Barang !</td>
+                                            </tr>
+                                        <?php endif ?>
+                                    </tbody> */}
+                    </table>
+                  </div>
+                  <div className="mt-3 flex justify-end">
+                    <a
+                      href={`/print_histori_dinarpos/${dataTransaksi.idTransaksi}`}
+                    >
+                      {/* <Button variant="gradient" size="md" color="blue">
+                      Print
+                    </Button> */}
+                    </a>
+                  </div>
+                  <br />
+                  <br />
+                </div>
+              </>) : (<></>)}
+              <br />
+              <div>
+                <p className="font-semibold text-sm ">
+                  Aturan Pengisian Form Service:
+                </p>
+                <ol className="list-inside list-decimal">
+                  <li className="font-semibold text-sm">
+                    Harap isi semua kolom dengan tepat dan jelas.
+                  </li>
+                  <li className="font-semibold text-sm">
+                    Ketika barang sudah diambil / diantar ke customer / pelanggan,
+                    kolom tanggal ambil HARUS DIISI.
+                  </li>
+                </ol>
+              </div>
+            </div>
           </div>
         </main>
       </div>
-      {/* MODAL EDIT BARANG   */}
-      <Dialog size="lg">
-        <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
-          <Input
-            label="Harga Barang"
-            variant="static"
-            color="blue"
-            size="lg"
-            type="number"
-            placeholder="Masukkan Harga Barang"
-            // value={editHargaBarang}
-            // onChange={(e) => seteditHargaBarang(e.target.value)}
-            icon={<CurrencyDollarIcon />}
-          />
-          <Input
-            label="Jumlah Barang"
-            variant="static"
-            color="blue"
-            size="lg"
-            placeholder="Masukkan Jumlah Barang"
-            type="number"
-            // value={editJumlah}
-            // onChange={(e) => seteditJumlah(e.target.value)}
-            icon={<PlusIcon />}
-          />
-          <Input
-            label="Diskon"
-            variant="static"
-            color="blue"
-            size="lg"
-            type="number"
-            placeholder="Masukkan Diskon"
-            // value={editDiskon}
-            // onChange={(e) => seteditDiskon(e.target.value)}
-            icon={<ReceiptPercentIcon />}
-          />
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="gray"
-            // onClick={handleOpen3}
-            className="mr-1"
-          >
-            {/* <span>Kembali</span> */}
-          </Button>
-          <Button
-            variant="gradient"
-            color="blue"
-            id="btn-simpan-brng"
-            // onClick={handleButtonClick}
-          >
-            {/* <span>Simpan</span> */}
-          </Button>
-        </DialogFooter>
-      </Dialog>
-      {/* END MODAL EDIT BARANG   */}
     </section>
   );
 }

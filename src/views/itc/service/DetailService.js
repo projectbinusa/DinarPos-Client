@@ -430,7 +430,7 @@ function DetailService() {
     var total = convertToAngka($("#total").html());
     var pembayaran = $("#pembayaran").val();
     var cashKredit = $("#cashKredit").val();
-    if (cashKredit === "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash Uang" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#bayar").removeAttr("disabled");
@@ -456,7 +456,7 @@ function DetailService() {
     var kekurangan = total - pembayaran;
     var cashKredit = $("#cashKredit").val();
 
-    if (cashKredit === "Cash" && pembayaran < total) {
+    if (cashKredit === "Cash Uang" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
       $("#title").html("Kekurangan");
@@ -750,7 +750,6 @@ function DetailService() {
   // GET ALL TGL KONF
   const [tglKonfs, settglKonfs] = useState([]);
 
-  // GET ALL BARANG
   const allTglKonf = async () => {
     try {
       const response = await axios.get(
@@ -840,7 +839,7 @@ function DetailService() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Data Service
+            Detail Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -1642,7 +1641,8 @@ function DetailService() {
                           setcashCredit(selectedOption)
                         }
                       >
-                        <Option value="Cash">Cash</Option>
+                        <Option value="Cash Uang">Cash Uang</Option>
+                        <Option value="Cash Bank">Cash Bank</Option>
                         <Option value="Kredit">Kredit</Option>
                       </Select>
                       <div className="flex flex-col gap-y-6 my-6">

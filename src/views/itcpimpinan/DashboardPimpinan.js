@@ -183,10 +183,10 @@ function DashboardPimpinan() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Dashboard Pimpinan
+            Dashboard
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href="/dashboard_pimpinan" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
