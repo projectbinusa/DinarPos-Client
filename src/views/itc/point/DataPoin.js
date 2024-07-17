@@ -19,7 +19,6 @@ function DataPoin() {
   const tableRef = useRef(null);
   const tableRef2 = useRef(null);
   const [points, setPoints] = useState([]);
-  const [pointsDate, setPointsDate] = useState([]);
   const [tanggalAwal, setTanggalAwal] = useState("");
   const [tanggalAkhir, setTanggalAkhir] = useState("");
   const [validasi, setValidasi] = useState(false);
@@ -39,7 +38,7 @@ function DataPoin() {
 
     const bulan = validasi2 ? month2 : formattedDate;
 
-    if(month === "" && validasi === true) {
+    if (month === "" && validasi === true) {
       Swal.fire({
         icon: "warning",
         title: "Masukkan Bulan Terlebih Dahulu!",
@@ -76,20 +75,17 @@ function DataPoin() {
     setvalidasi2(true);
   };
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+  const initializeDataTable2 = () => {
+    if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable();
     }
-
-    $(tableRef.current).DataTable({});
   };
 
-  const initializeDataTable2 = () => {
-    if ($.fn.DataTable.isDataTable(tableRef2.current)) {
-      $(tableRef2.current).DataTable().destroy();
+  // POIN HISTORY
+  const initializeDataTable = () => {
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable();
     }
-
-    $(tableRef2.current).DataTable({});
   };
 
   // GET ALL
@@ -117,15 +113,19 @@ function DataPoin() {
           },
         }
       );
-      setPointsDate(response.data.data);
-      console.log(response.data.data);
+      setPoints(response.data.data);
+      setValidasi(false)
     } catch (error) {
       console.error("Error fetching data", error);
     }
   };
 
   useEffect(() => {
-    if (points && points.length > 0) {
+    getAll();
+  }, []);
+
+  useEffect(() => {
+    if (points.length > 0) {
       initializeDataTable();
     }
   }, [points]);
@@ -148,18 +148,33 @@ function DataPoin() {
   };
 
   useEffect(() => {
-    getAll();
-  }, []);
-
-  useEffect(() => {
-    if (validasi) {
+    if (validasi || tanggalAwal !== "" || tanggalAkhir !== "") {
       getAllByDate();
     }
   }, [validasi]);
 
   const searchHistoryPoin = () => {
-    setValidasi((prevValidasi) => !prevValidasi);
+    if (tanggalAwal === "" || tanggalAkhir === "" || tanggalAwal === tanggalAkhir) {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    setValidasi(true);
   };
+
+  const level = localStorage.getItem("level");
+  let dashboard = "";
+
+  if (level === "Superadmin") {
+    dashboard = "dashboard";
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service"
+  }
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -170,7 +185,7 @@ function DataPoin() {
             Poin Teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href={"/" + dashboard} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -324,7 +339,7 @@ function DataPoin() {
               <div>
                 <IconButton
                   size="md"
-                  color="light-blue"
+                  color="blue"
                   onClick={searchHistoryPoin}
                 >
                   <MagnifyingGlassIcon className="w-6 h-6 white" />
@@ -349,6 +364,39 @@ function DataPoin() {
                   </tr>
                 </thead>
                 <tbody>
+                  {points.length > 0 ? (
+                    points.map((point, index) => (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.teknisi.nama}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {formatDate(point.tanggal)}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.poin}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.nominal}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.keterangan}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                      >
+                        Tidak ada data
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+                {/* <tbody>
                   {validasi === true ? (
                     <>
                       {pointsDate.length > 0 ? (
@@ -418,7 +466,7 @@ function DataPoin() {
                       )}
                     </>
                   )}
-                </tbody>
+                </tbody> */}
               </table>
             </div>
           </div>

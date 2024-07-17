@@ -1316,7 +1316,7 @@ function SidebarAdmin() {
                       dashboard{" "}
                     </ListItem>
                   </a>
-                  <a href="/service_taken_teknisi">
+                  <a href="/data_service_taken">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       Taken
                     </ListItem>
@@ -2596,7 +2596,7 @@ function SidebarAdmin() {
                     Dashboard
                   </ListItem>
                 </a>
-                <a href="/service_taken_teknisi">
+                <a href="/data_service_taken">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Taken
                   </ListItem>

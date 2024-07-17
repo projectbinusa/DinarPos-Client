@@ -124,6 +124,8 @@ function DetailServiceTaken() {
     dashboard = "dashboard_pimpinan";
   } else if (level === "Teknisi") {
     dashboard = "dashboard_teknisi"
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service"
   } else {
     dashboard = "dashboard"
   }

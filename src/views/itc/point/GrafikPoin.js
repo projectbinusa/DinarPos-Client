@@ -51,7 +51,7 @@ function GrafikPoin() {
       // JANUARI
       const jan = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=01&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -61,7 +61,7 @@ function GrafikPoin() {
       // FEBRUARI
       const feb = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=02&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -71,7 +71,7 @@ function GrafikPoin() {
       // MARET
       const mar = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=03&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -81,7 +81,7 @@ function GrafikPoin() {
       // APRIL
       const apr = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=04&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -91,7 +91,7 @@ function GrafikPoin() {
       // MEI
       const may = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=05&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -101,7 +101,7 @@ function GrafikPoin() {
       // JUNI
       const jun = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=06&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -111,7 +111,7 @@ function GrafikPoin() {
       // JULI
       const jul = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=07&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -121,7 +121,7 @@ function GrafikPoin() {
       // AGUSTUS
       const agus = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=08&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -131,7 +131,7 @@ function GrafikPoin() {
       // SEPTEMBER
       const sep = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=09&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -141,7 +141,7 @@ function GrafikPoin() {
       // OKTOBER
       const okto = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=10&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -151,7 +151,7 @@ function GrafikPoin() {
       // NOVEMBER
       const nov = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=11&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -161,7 +161,7 @@ function GrafikPoin() {
       // DESEMBER
       const des = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${param.id}&month=12&year=` +
-          years,
+        years,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -280,6 +280,17 @@ function GrafikPoin() {
     },
   };
 
+  const level = localStorage.getItem("level");
+  let dashboard = "";
+
+  if (level === "Superadmin") {
+    dashboard = "dashboard";
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service"
+  } else if (level === "Pimpinan") {
+    dashboard = "dashboard_pimpinan"
+  }
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -289,7 +300,7 @@ function GrafikPoin() {
             GRAFIK Poin Teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href={"/" + dashboard} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
