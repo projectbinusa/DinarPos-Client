@@ -181,7 +181,7 @@ function DataRetur() {
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-row gap-3">
-                            <a href={"/detail_service/" + index + 1}>
+                            <a href={"/detail_service/" + row.ttbaru.idTT}>
                               <IconButton size="md" color="light-blue">
                                 <InformationCircleIcon className="w-6 h-6 white" />
                               </IconButton>

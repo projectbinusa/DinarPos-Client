@@ -287,7 +287,7 @@ function DataService() {
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-row gap-3">
-                            <a href={"/detail_service_teknisi/" + row.idTT}>
+                            <a href={"/detail_service/" + row.idTT}>
                               <IconButton size="md" color="light-blue">
                                 <InformationCircleIcon className="w-6 h-6 white" />
                               </IconButton>
@@ -308,125 +308,6 @@ function DataService() {
                   </tr>
                 )}
               </tbody>
-              {/* <tbody>
-                {validasi === true ? (
-                  <>
-                    {services.length > 0 ? (
-                      services.map((row, index) => {
-                        const tglKonfirms = tglKonfirm[index] || [];
-                        console.log("Rendering Service: ", row); // Debugging line
-                        console.log("Confirmation Dates: ", tglKonfirms); // Debugging line
-
-                        return (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.nama_customer}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.alamat}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.produk}{" "}
-                              <span className="block">{row.merk}</span>{" "}
-                              <span className="block">{row.type}</span>{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {formatDate(row.tanggalMasuk)}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {tglKonfirms.map((down, idx) => (
-                                <ul key={idx}>
-                                  <li>{formatDate(down.tglKonf)}</li>
-                                </ul>
-                              ))}{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.statusEnd}
-                            </td>
-                            <td className="text-sm py-2 px-3 flex items-center justify-center">
-                              <div className="flex flex-row gap-3">
-                                <a href={"/detail_service_teknisi/" + row.idTT}>
-                                  <IconButton size="md" color="light-blue">
-                                    <InformationCircleIcon className="w-6 h-6 white" />
-                                  </IconButton>
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="8"
-                          className="text-sm text-center capitalize py-3 bg-gray-100"
-                        >
-                          Tidak ada data
-                        </td>
-                      </tr>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {allService.length > 0 ? (
-                      allService.map((row, index) => {
-                        const tglKonfirms = tglKonfirm[index] || [];
-                        console.log("Rendering All Service: ", row); // Debugging line
-                        console.log("All Confirmation Dates: ", tglKonfirms); // Debugging line
-
-                        return (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.nama_customer}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.alamat}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.produk}{" "}
-                              <span className="block">{row.merk}</span>{" "}
-                              <span className="block">{row.type}</span>{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {formatDate(row.tanggalMasuk)}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {tglKonfirms.map((down, idx) => (
-                                <ul key={idx}>
-                                  <li>{formatDate(down.tglKonf)}</li>
-                                </ul>
-                              ))}{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.statusEnd}
-                            </td>
-                            <td className="text-sm py-2 px-3 flex items-center justify-center">
-                              <div className="flex flex-row gap-3">
-                                <a href={"/detail_service/" + row.idTT}>
-                                  <IconButton size="md" color="light-blue">
-                                    <InformationCircleIcon className="w-6 h-6 white" />
-                                  </IconButton>
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="8"
-                          className="text-sm text-center capitalize py-3 bg-gray-100"
-                        >
-                          Tidak ada data
-                        </td>
-                      </tr>
-                    )}
-                  </>
-                )}
-              </tbody> */}
             </table>
           </div>
         </main>
