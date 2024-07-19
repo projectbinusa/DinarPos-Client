@@ -218,9 +218,9 @@ function Notifikasi7Excelcom() {
                               onClick={() => {
                                 const phone = encodeURIComponent(
                                   penjualan.customer.telp
-                                ); // Mengkodekan nomor telepon
+                                );
                                 const message = encodeURIComponent(
-                                  `Selamat pagi kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  `Selamat pagi kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );
                                 window.open(
                                   `https://api.whatsapp.com/send?phone=${phone}&text=${message}`

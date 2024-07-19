@@ -257,9 +257,9 @@ function Notifikasi30Excelcom() {
 
           <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
-              id="example_data"
+              id="example_data2"
               ref={tableRef2}
-              className="rounded-sm table-auto w-ful overflow-auto"
+              className="rounded-sm table-auto w-full overflow-auto"
             >
               <thead className="bg-blue-500 text-white">
                 <tr>

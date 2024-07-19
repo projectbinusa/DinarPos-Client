@@ -25,6 +25,13 @@ function EditBonBarang() {
   const [serviceId, setserviceId] = useState(0);
   const [barangId, setbarangId] = useState(0);
 
+  const formatDate = (value) => {
+    if (!value) return '';
+    const [datePart] = value.split(' ');
+    const [year, month, day] = datePart.split('-');
+    return `${year}-${month}-${day}`;
+  };
+
   const history = useHistory();
 
   // EDIT BON BARANG
@@ -137,11 +144,10 @@ function EditBonBarang() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       const data = response.data.data;
-      // console.log(data);
-      settglAmbil(data.tgl_ambil);
+      settglAmbil(formatDate(data.tgl_ambil));
       setteknisiId(data.teknisi.id);
       setserviceId(data.serviceBarang.idTT);
-      setbarangId(data.barang.id);
+      setbarangId(data.barang.barcodeBarang);
     } catch (error) {
       console.log(error);
     }
@@ -266,7 +272,7 @@ function EditBonBarang() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option key={option.id} value={option.id}>
+                        <option key={option.barcodeBarang} value={option.barcodeBarang}>
                           {option.barcodeBarang} - {option.namaBarang}
                         </option>
                       ))}

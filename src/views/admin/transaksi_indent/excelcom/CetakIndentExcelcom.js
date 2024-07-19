@@ -153,7 +153,7 @@ function CetakIndentExcelcom() {
                 <p>{formatRupiah(reportData.pembayaran)}</p>
               </li>
               <li className="flex">
-                <p className="w-36">Total</p>
+                <p className="w-36">Total Kekurangan</p>
                 <p>{formatRupiah(reportData.totalBelanja - reportData.pembayaran)}</p>
               </li>
               <li className="flex">

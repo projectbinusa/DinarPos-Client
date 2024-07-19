@@ -118,7 +118,7 @@ function Konfirmasi90Excelcom() {
             <span className="cursor-default capitalize">Konfirmasi</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <Typography variant="paragraph" className="capitalize">
             Konfirmasi 90 hari {noFaktur}
           </Typography>
@@ -139,7 +139,7 @@ function Konfirmasi90Excelcom() {
                     setsalesmanId(event.target.value);
                   }}
                   placeholder="Pilih Salesman"
-required
+                  required
                 />
                 <datalist id="salesman-list">
                   {optionsSalesman.length > 0 && (
@@ -181,7 +181,7 @@ required
                 label="Keterangan"
                 placeholder="Masukkan Keterangan"
                 onChange={(e) => setket(e.target.value)}
-required
+                required
               />
             </div>
             <div className="mt-10 flex gap-4">

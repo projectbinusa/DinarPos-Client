@@ -224,7 +224,7 @@ function Notifikasi7Dinarpos() {
                               onClick={() => {
                                 const phone = encodeURIComponent(
                                   penjualan.customer.telp
-                                ); // Mengkodekan nomor telepon
+                                );
                                 const message = encodeURIComponent(
                                   `Hallo kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );
