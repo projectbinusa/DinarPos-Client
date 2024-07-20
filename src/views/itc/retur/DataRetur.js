@@ -97,6 +97,8 @@ function DataRetur() {
     dashboard = "dashboard_service"
   }
 
+  console.log(returs);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -157,17 +159,17 @@ function DataRetur() {
 
                     return (
                       <tr key={index}>
-                        <td className="text-sm w-[4%]">{row.ttbaru.idTT}</td>
-                        <td className="text-sm py-2 px-3">{row.ttlama.idTT}</td>
-                        <td className="text-sm py-2 px-3">{row.ttbaru.nama}</td>
+                        <td className="text-sm w-[4%]">{row?.ttBaru?.idTT}</td>
+                        <td className="text-sm py-2 px-3">{row?.ttLama?.idTT}</td>
+                        <td className="text-sm py-2 px-3">{row?.ttBaru?.nama}</td>
                         <td className="text-sm py-2 px-3">
-                          {row.ttbaru.alamat}
+                          {row?.ttBaru?.alamat}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.ttbaru.produk}
+                          {row?.ttBaru?.produk}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {formatDate(row.ttbaru.tanggalMasuk)}
+                          {formatDate(row?.ttBaru?.tanggalMasuk)}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {tglKonfirms.map((down, idx) => (
@@ -177,11 +179,11 @@ function DataRetur() {
                           ))}{" "}
                         </td>{" "}
                         <td className="text-sm py-2 px-3">
-                          {row.ttbaru.statusEnd}
+                          {row?.ttBaru?.statusEnd}
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-row gap-3">
-                            <a href={"/detail_service/" + row.ttbaru.idTT}>
+                            <a href={"/detail_service/" + row?.ttBaru?.idTT}>
                               <IconButton size="md" color="light-blue">
                                 <InformationCircleIcon className="w-6 h-6 white" />
                               </IconButton>

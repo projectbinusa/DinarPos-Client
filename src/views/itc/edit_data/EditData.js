@@ -184,7 +184,15 @@ function EditData() {
         setTimeout(() => {
           window.location.reload();
         }, 1500);
-      });
+      }).catch((err) => {
+        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Poin Gagal Diubah!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
   };
 
   // UPDATE ID TT
@@ -381,7 +389,15 @@ function EditData() {
             setTimeout(() => {
               window.location.reload();
             }, 1500);
-          });
+          }).catch((err) => {
+            console.log(err);
+            Swal.fire({
+              icon: "error",
+              title: "Poin Gagal Diubah!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          })
       }
     });
   };
@@ -912,7 +928,7 @@ function EditData() {
                           </thead>
                           <tbody id="tabless">
                             {dataStatus.map((row, index) => (
-                              <tr>
+                              <tr key={index}>
                                 <td className="text-sm text-center py-2 px-2 border-gray-300 border">
                                   {index + 1}
                                 </td>

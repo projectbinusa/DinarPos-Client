@@ -20,19 +20,132 @@ const PointTeknisi = () => {
   const [poins, setpoins] = useState([]);
   const [teknisi, setTeknisi] = useState([]);
   const tableRef = useRef(null);
+  const [validasi, setvalidasi] = useState(false);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable();
     }
-    $(tableRef.current).DataTable({});
   };
+
+  // THIS MONTH 
+  const getAll = async () => {
+    try {
+      const date = new Date();
+      const year = date.getFullYear();
+      const months = String(date.getMonth() + 1).padStart(2, "0");
+      const formattedDate = `${year}-${months}-01`;
+
+      const response = await axios.get(`${API_POIN}/month?month=${formattedDate}`, {
+        headers: {
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
+      });
+      setpoins(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  // BY MONTH
+  const getAllByDate = async () => {
+    try {
+      const response = await axios.get(`${API_POIN}/month?month=${month}-01`, {
+        headers: {
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
+      });
+      setpoins(response.data.data);
+      setvalidasi(false);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll()
+  }, [])
 
   useEffect(() => {
     if (poins && poins.length > 0) {
       initializeDataTable();
     }
   }, [poins]);
+
+  useEffect(() => {
+    if (validasi || month !== "") {
+      getAllByDate();
+    }
+  }, [validasi]);
+
+  const handleSearchPoinByMonth = () => {
+    if (month === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    setvalidasi(true);
+  };
+
+  // TOTAL POIN PER BULAN
+
+  // const searchPoinByMonth = async () => {
+  //   const date = new Date();
+  //   const year = date.getFullYear();
+  //   const months = String(date.getMonth() + 1).padStart(2, "0");
+  //   const day = String(date.getDate()).padStart(2, "0");
+  //   const formattedDate = `${year}-${months}-01`;
+  //   const month2 = `${month}-01`;
+
+  //   const bulan = validasi ? month2 : formattedDate;
+
+  //   if (month === "" && validasi === true) {
+  //     Swal.fire({
+  //       icon: "warning",
+  //       title: "Masukkan Bulan Terlebih Dahulu!",
+  //       showConfirmButton: false,
+  //       timer: 1500,
+  //     });
+  //   }
+
+  //   console.log(bulan);
+
+  //   try {
+  //     const response = await axios.get(`${API_POIN}/month?month=${bulan}`, {
+  //       headers: {
+  //         "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  //     setpoins(response.data.data);
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (validasi || month === "") {
+  //     searchPoinByMonth();
+  //     setvalidasi(false);
+  //   }
+  // }, [validasi]);
+
+  // useEffect(() => {
+  //   searchPoinByMonth();
+  // }, []);
+
+  // const handleSearchPoinByMonth = () => {
+  //   setvalidasi(true);
+  // };
+
+  console.log(validasi);
 
   const getAllTeknisi = async () => {
     try {
@@ -56,56 +169,6 @@ const PointTeknisi = () => {
       style: "currency",
       currency: "IDR",
     }).format(num);
-  };
-
-  // TOTAL POIN PER BULAN
-  const [validasi, setvalidasi] = useState(false);
-
-  const searchPoinByMonth = async () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const months = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${months}-${day}`;
-    const month2 = `${month}-01`;
-
-    const bulan = validasi ? month2 : formattedDate;
-
-    if (month === "" && validasi === true) {
-      Swal.fire({
-        icon: "warning",
-        title: "Masukkan Bulan Terlebih Dahulu!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-
-    try {
-      const response = await axios.get(`${API_POIN}/month?month=${bulan}`, {
-        headers: {
-          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-        },
-      });
-      setpoins(response.data.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-  };
-
-  useEffect(() => {
-    if (validasi) {
-      searchPoinByMonth();
-      setvalidasi(false);
-    }
-  }, [validasi, month]);
-
-  useEffect(() => {
-    searchPoinByMonth();
-  }, []);
-
-  const handleSearchPoinByMonth = () => {
-    setvalidasi(true);
   };
 
   return (
@@ -273,7 +336,7 @@ const PointTeknisi = () => {
                 </tfoot>
               </table>
             </div>
-          </div>
+          </div> <br />
         </div>
       </div>
     </section>

@@ -170,6 +170,18 @@ function DataService() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <div className="flex justify-between items-center">
+            <a href="/data_service_taken" className="mb-5">
+              <Button variant="gradient" color="green">
+                Taken
+              </Button>
+            </a>
+            <a href="/add_service" className="mb-5">
+              <Button variant="gradient" color="blue">
+                Tambah
+              </Button>
+            </a>
+          </div> <br/>
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
             <div className="w-full">
               <Input
@@ -223,18 +235,6 @@ function DataService() {
                 <MagnifyingGlassIcon className="w-5 h-5" />
               </Button>
             </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <a href="/data_service_taken" className="mb-5">
-              <Button variant="gradient" color="green">
-                Taken
-              </Button>
-            </a>
-            <a href="/add_service" className="mb-5">
-              <Button variant="gradient" color="blue">
-                Tambah
-              </Button>
-            </a>
           </div>
           <div className="rounded mt-10 p-2 w-full overflow-x-auto">
             <table
