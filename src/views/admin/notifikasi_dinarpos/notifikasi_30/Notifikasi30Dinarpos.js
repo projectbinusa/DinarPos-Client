@@ -52,7 +52,6 @@ function Notifikasi30Dinarpos() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setKonfirmasis(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log("get all", error);
     }

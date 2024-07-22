@@ -18,6 +18,7 @@ import { API_SERVICE } from "../../utils/BaseUrl";
 import $ from "jquery";
 import "datatables.net";
 import "../../assets/styles/datatables.css";
+import Swal from "sweetalert2";
 
 function DashboardTeknisi() {
   const tableRef = useRef(null);
@@ -26,9 +27,13 @@ function DashboardTeknisi() {
   const [endDate, setEndDate] = useState("");
   const [pilih, setPilih] = useState("");
   const [tglKonfirm, setTglKonfirm] = useState([]);
-
-  const [allService, setAllService] = useState([]);
   const [validasi, setvalidasi] = useState(false);
+
+  const initializeDataTable = () => {
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable();
+    }
+  };
 
   // GET ALL SERVICE
   const getAllService = async () => {
@@ -36,25 +41,27 @@ function DashboardTeknisi() {
       const response = await axios.get(`${API_SERVICE}/taken/N`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setAllService(response.data.data);
+      setservices(response.data.data);
     } catch (error) {
       console.log("get all", error);
     }
   };
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+  // GET ALL FILTER
+  const getAllServiceFilter = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/tanggal?status=${pilih}&tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setservices(response.data.data);
+      setvalidasi(false)
+    } catch (error) {
+      console.log("get all", error);
     }
-
-    $(tableRef.current).DataTable({});
   };
-
-  useEffect(() => {
-    if (allService && allService.length > 0) {
-      initializeDataTable();
-    }
-  }, [allService]);
 
   const tglKonfirmasi = async (transactionId) => {
     try {
@@ -72,9 +79,19 @@ function DashboardTeknisi() {
   };
 
   useEffect(() => {
+    getAllService()
+  }, [])
+
+  useEffect(() => {
+    if (services.length > 0) {
+      initializeDataTable();
+    }
+  }, [services]);
+
+  useEffect(() => {
     const fetchTglKonfirm = async () => {
       const tglList = await Promise.all(
-        allService.map(async (service) => {
+        services.map(async (service) => {
           const tglData = await tglKonfirmasi(service.idTT);
           return tglData;
         })
@@ -83,70 +100,26 @@ function DashboardTeknisi() {
     };
 
     fetchTglKonfirm();
-  }, [allService]);
-
-  // GET ALL FILTER
-  const getAllServiceFilter = async () => {
-    try {
-      const response = await axios.get(
-        `${API_SERVICE}/tanggal?status=${pilih}&tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      setservices(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
-  useEffect(() => {
-    if (services && services.length > 0) {
-      initializeDataTable();
-    }
-  }, [services]);
-
-  const tglKonfirmasi2 = async (transactionId) => {
-    try {
-      const response = await axios.get(
-        `${API_SERVICE}/tgl_konfirm?id=${transactionId}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      console.log("tglKonfirmasi", error);
-      return [];
-    }
-  };
-
-  useEffect(() => {
-    const fetchTglKonfirm = async () => {
-      const tglList = await Promise.all(
-        services.map(async (service) => {
-          const tglData = await tglKonfirmasi2(service.idTT);
-          return tglData;
-        })
-      );
-      setTglKonfirm(tglList);
-    };
-
-    fetchTglKonfirm();
   }, [services]);
 
   useEffect(() => {
-    getAllService();
-  }, []);
-
-  useEffect(() => {
-    if (validasi) {
+    if (validasi || endDate !== "" || startDate !== "" || pilih !== "") {
       getAllServiceFilter();
     }
   }, [validasi]);
 
-  const filterTangggal = () => {
-    setvalidasi((prevValidasi) => !prevValidasi);
+  const filterTangggal = async () => {
+    if (startDate === "" || endDate === "" || startDate === endDate || pilih === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    setvalidasi(true);
   };
 
   const formatDate = (value) => {
@@ -226,9 +199,9 @@ function DashboardTeknisi() {
                 className="w-full"
               >
                 <Option value="">Pilih</Option>
-                <Option value="New Arrival">New Arrival</Option>
-                <Option value="Proses">Proses</Option>
-                <Option value="Ready">Ready</Option>
+                <Option value="N_A">New Arrival</Option>
+                <Option value="PROSES">Proses</Option>
+                <Option value="READY">Ready</Option>
               </Select>
             </div>
             <div className="w-full lg:w-auto flex justify-start items-center">
@@ -261,118 +234,58 @@ function DashboardTeknisi() {
                 </tr>
               </thead>
               <tbody>
-                {validasi === true ? (
-                  <>
-                    {services.length > 0 ? (
-                      services.map((row, index) => {
-                        const tglKonfirms = tglKonfirm[index] || [];
+                {services.length > 0 ? (
+                  services.map((row, index) => {
+                    const tglKonfirms = tglKonfirm[index] || [];
 
-                        return (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.nama_customer}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.alamat}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.produk}{" "}
-                              <span className="block">{row.merk}</span>{" "}
-                              <span className="block">{row.type}</span>{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {formatDate(row.tanggalMasuk)}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {tglKonfirms.map((down, idx) => (
-                                <ul key={idx}>
-                                  <li>{formatDate(down.tglKonf)}</li>
-                                </ul>
-                              ))}{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.statusEnd}
-                            </td>
-                            <td className="text-sm py-2 px-3 flex items-center justify-center">
-                              <div className="flex flex-row gap-3">
-                                <a href={"/detail_service_teknisi/" + row.idTT}>
-                                  <IconButton size="md" color="light-blue">
-                                    <InformationCircleIcon className="w-6 h-6 white" />
-                                  </IconButton>
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="8"
-                          className="text-sm text-center capitalize py-3 bg-gray-100"
-                        >
-                          Tidak ada data
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {row.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.customer.alamat}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.produk}{" "}
+                          <span className="block">{row.merk}</span>{" "}
+                          <span className="block">{row.type}</span>{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {formatDate(row.tanggalMasuk)}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {tglKonfirms.map((down, idx) => (
+                            <ul key={idx}>
+                              <li>{formatDate(down.tglKonf)}</li>
+                            </ul>
+                          ))}{" "}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.statusEnd}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <div className="flex flex-row gap-3">
+                            <a href={"/detail_service_teknisi/" + row.idTT}>
+                              <IconButton size="md" color="light-blue">
+                                <InformationCircleIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </a>
+                          </div>
                         </td>
                       </tr>
-                    )}
-                  </>
+                    );
+                  })
                 ) : (
-                  <>
-                    {allService.length > 0 ? (
-                      allService.map((row, index) => {
-                        const tglKonfirms = tglKonfirm[index] || [];
-
-                        return (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.nama_customer}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.customer.alamat}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.produk}{" "}
-                              <span className="block">{row.merk}</span>{" "}
-                              <span className="block">{row.type}</span>{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {formatDate(row.tanggalMasuk)}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {tglKonfirms.map((down, idx) => (
-                                <ul key={idx}>
-                                  <li>{formatDate(down.tglKonf)}</li>
-                                </ul>
-                              ))}{" "}
-                            </td>
-                            <td className="text-sm py-2 px-3">
-                              {row.statusEnd}
-                            </td>
-                            <td className="text-sm py-2 px-3 flex items-center justify-center">
-                              <div className="flex flex-row gap-3">
-                                <a href={"/detail_service_teknisi/" + row.idTT}>
-                                  <IconButton size="md" color="light-blue">
-                                    <InformationCircleIcon className="w-6 h-6 white" />
-                                  </IconButton>
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="8"
-                          className="text-sm text-center capitalize py-3 bg-gray-100"
-                        >
-                          Tidak ada data
-                        </td>
-                      </tr>
-                    )}
-                  </>
+                  <tr>
+                    <td
+                      colSpan="8"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>

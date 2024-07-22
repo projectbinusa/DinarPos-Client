@@ -155,6 +155,7 @@ import EditSaldo from "./views/admin/accounting/kasharian/EditSaldo.js";
 import AddTransaksiFromIndentExcelcom from "./views/admin/transaksi_indent/excelcom/AddTransaksiFromIndentExcelcom.js";
 import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddTransaksiFromIndentDinarpos.js";
 import DashboardAdminService from "./views/itc/DashboardAdminService.js";
+import DetailServiceTaken from "./views/itc/service/DetailServiceTaken.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -836,6 +837,11 @@ function App() {
             <PrivateRoute
               path="/detail_service/:id"
               component={DetailService}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_service_taken/:id"
+              component={DetailServiceTaken}
               isAuthenticated={true}
             />
             <PrivateRoute

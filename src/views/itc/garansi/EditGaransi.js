@@ -20,11 +20,18 @@ function EditGaransi() {
   const [merek, setmerek] = useState("");
   const [masukKe, setmasukKe] = useState("");
   const [kerusakan, setkerusakan] = useState("");
-  const [idTT, setidTT] = useState(0);
+  const [idTT, setidTT] = useState("");
   const [tglMasuk, settglMasuk] = useState("");
 
   const param = useParams();
   const history = useHistory();
+
+  const formatDate = (value) => {
+    if (!value) return '';
+    const [datePart] = value.split(' ');
+    const [year, month, day] = datePart.split('-');
+    return `${year}-${month}-${day}`;
+  };
 
   useEffect(() => {
     axios
@@ -37,8 +44,8 @@ function EditGaransi() {
         setmerek(response.merek);
         setmasukKe(response.masukKe);
         setkerusakan(response.kerusakan);
-        setidTT(response.serviceBarang.idTT);
-        settglMasuk(response.tanggalMasuk);
+        setidTT(response.serviceBarang.idTT || '');
+        settglMasuk(formatDate(response.tanggalMasuk));
       })
       .catch((error) => {
         console.log(error);
@@ -58,6 +65,8 @@ function EditGaransi() {
       tanggalMasuk: tglMasuk,
     };
 
+    console.log(request);
+
     await axios
       .put(`${API_GARANSI}/update/` + param.id, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
@@ -75,6 +84,12 @@ function EditGaransi() {
         }, 1500);
       })
       .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Ubah Data Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         if (error.ressponse && error.response.status === 401) {
           localStorage.clear();
           history.push("/");
@@ -83,6 +98,15 @@ function EditGaransi() {
         }
       });
   };
+
+  const level = localStorage.getItem("level");
+  let dashboard = "";
+
+  if (level === "Superadmin") {
+    dashboard = "dashboard";
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service"
+  }
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -93,7 +117,7 @@ function EditGaransi() {
             edit garansi
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href={"/" + dashboard} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -131,11 +155,11 @@ function EditGaransi() {
                 onChange={(e) => setmerek(e.target.value)}
               />
               <Input
-                label="TGL Masuk"
+                label="Tanggal Masuk"
                 variant="static"
                 color="blue"
                 size="lg"
-                placeholder="Masukkan TGL Masuk"
+                placeholder="Masukkan Tanggal Masuk"
                 type="date"
                 defaultValue={tglMasuk}
                 onChange={(e) => settglMasuk(e.target.value)}
@@ -148,16 +172,6 @@ function EditGaransi() {
                 placeholder="Masukkan Masuk ke"
                 defaultValue={masukKe}
                 onChange={(e) => setmasukKe(e.target.value)}
-              />
-              <Input
-                label="ID TT"
-                variant="static"
-                color="blue"
-                size="lg"
-                type="number"
-                placeholder="Masukkan ID TT"
-                defaultValue={idTT}
-                onChange={(e) => setidTT(e.target.value)}
               />
               <div>
                 <Textarea

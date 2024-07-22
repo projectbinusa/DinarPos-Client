@@ -9,25 +9,22 @@ import Swal from "sweetalert2";
 
 function PrintHistoriExcelcom() {
   const [reportData, setReportData] = useState(null);
+  const [namaCustomer, setNamaCustomer] = useState("");
+  const [telpCustomer, setTelpCustomer] = useState("");
   const [barang, setbarang] = useState([]);
   const param = useParams();
 
   useEffect(() => {
-    fetchData();
-    getAllBarang();
-    openWhatsapp();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${GET_TRANSAKSI_JUAL}/` + param.id, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+    axios.get(`${GET_TRANSAKSI_JUAL}/` + param.id, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((response) => {
       setReportData(response.data.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+      setNamaCustomer(response.data.data.customer.nama_customer);
+      setTelpCustomer(response.data.data.customer.telp);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [])
 
   const openWhatsapp = () => {
     Swal.fire({
@@ -38,9 +35,9 @@ function PrintHistoriExcelcom() {
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
-        const phone = encodeURIComponent(reportData.customer.telp);
+        const phone = encodeURIComponent(telpCustomer);
         const message = encodeURIComponent(
-          `Terimakasih Kak ${reportData.customer.nama_customer} Telah Berbelanja di Excellent Computer`
+          `Terimakasih Kak ${namaCustomer} Telah Berbelanja di Excellent Computer`
         );
         window.open(
           `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
@@ -62,6 +59,16 @@ function PrintHistoriExcelcom() {
       console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    getAllBarang();
+  }, [param.id]);
+
+  useEffect(() => {
+    if (reportData) {
+      openWhatsapp();
+    }
+  }, [reportData]);
 
   if (!reportData) {
     return <div>Loading...</div>;

@@ -735,7 +735,7 @@ function TransaksiPembelianExcelcom() {
                       <th className="py-3 px-2">Barcode</th>
                       <th className="py-3 px-2">Nama</th>
                       <th className="py-3 px-2">Harga (Rp)</th>
-                      <th className="py-3 px-2">Disc</th>
+                      <th className="py-3 px-2">Disc (%)</th>
                       <th className="py-3 px-2">Harga Diskon (Rp)</th>
                       <th className="py-3 px-2">Jumlah</th>
                       <th className="py-3 px-2">Total Harga (Rp)</th>

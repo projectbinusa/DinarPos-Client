@@ -221,8 +221,8 @@ function Notifikasi365Excelcom() {
                               color="orange"
                               onClick={() => {
                                 const phone = encodeURIComponent(
-                                  row.noTelpCustomer
-                                ); // Mengkodekan nomor telepon
+                                  row.customer.telp
+                                ); 
                                 const message = encodeURIComponent(
                                   `Hallo kak ${row.customer.nama_customer} Perkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );

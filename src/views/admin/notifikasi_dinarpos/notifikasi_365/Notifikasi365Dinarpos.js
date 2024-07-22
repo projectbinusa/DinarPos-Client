@@ -266,7 +266,7 @@ function Notifikasi365Dinarpos() {
 
           <div className="rounded my-5 p-2 w-full overflow-auto">
             <table
-              id="example_data"
+              id="example_data2"
               ref={tableRef2}
               className="rounded-sm table-auto w-full overflow-auto"
             >

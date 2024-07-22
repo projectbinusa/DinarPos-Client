@@ -4,7 +4,6 @@ import {
   Breadcrumbs,
   Card,
   CardBody,
-  CardHeader,
   IconButton,
   Input,
   Typography,
@@ -14,19 +13,16 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { API_POIN, API_TEKNISI } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Chart from "react-apexcharts";
+import Swal from "sweetalert2";
 
 function HistoryPoint() {
   const [tanggalAwal, settanggalAwal] = useState("");
   const [tanggalAkhir, settanggalAkhir] = useState("");
   const [idTeknisi, setidTeknisi] = useState(0);
+  const [points, setPoints] = useState([]);
 
   const [validasi, setValidasi] = useState(false);
-
-  const [points, setPoints] = useState([]);
-  const [pointsDate, setPointsDate] = useState([]);
-
   const currentYear = new Date().getFullYear();
-
   const tableRef = useRef(null);
 
   useEffect(() => {
@@ -46,11 +42,9 @@ function HistoryPoint() {
   }, [API_TEKNISI]);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable();
     }
-
-    $(tableRef.current).DataTable({});
   };
 
   // GET ALL
@@ -81,7 +75,8 @@ function HistoryPoint() {
           },
         }
       );
-      setPointsDate(response.data);
+      setPoints(response.data.data);
+      setValidasi(false);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -89,13 +84,33 @@ function HistoryPoint() {
 
   useEffect(() => {
     getAll();
-  }, [idTeknisi, API_POIN]);
+  }, [idTeknisi]);
 
   useEffect(() => {
-    if (points && points.length > 0) {
+    if (points.length > 0) {
       initializeDataTable();
     }
   }, [points]);
+
+  useEffect(() => {
+    if (validasi || tanggalAwal !== "" || tanggalAkhir !== "") {
+      getAllByDate();
+    }
+  }, [validasi, idTeknisi]);
+
+  const searchHistoryPoin = () => {
+    if (tanggalAwal === "" || tanggalAkhir === "" || tanggalAwal === tanggalAkhir) {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    setValidasi(true);
+  };
 
   const formatDate = (value) => {
     const date = new Date(value);
@@ -106,11 +121,6 @@ function HistoryPoint() {
     const formattedDate = `${year}-${month}-${day}`;
 
     return formattedDate;
-  };
-
-  const searchHistoryPoin = () => {
-    getAllByDate();
-    setValidasi(true);
   };
 
   const [poinJan, setpoinJan] = useState(0);
@@ -131,7 +141,7 @@ function HistoryPoint() {
       // JANUARI
       const jan = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=01&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -141,7 +151,7 @@ function HistoryPoint() {
       // FEBRUARI
       const feb = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=02&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -151,7 +161,7 @@ function HistoryPoint() {
       // MARET
       const mar = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=03&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -161,7 +171,7 @@ function HistoryPoint() {
       // APRIL
       const apr = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=04&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -171,7 +181,7 @@ function HistoryPoint() {
       // MEI
       const may = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=05&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -181,7 +191,7 @@ function HistoryPoint() {
       // JUNI
       const jun = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=06&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -191,7 +201,7 @@ function HistoryPoint() {
       // JULI
       const jul = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=07&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -201,7 +211,7 @@ function HistoryPoint() {
       // AGUSTUS
       const agus = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=08&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -211,7 +221,7 @@ function HistoryPoint() {
       // SEPTEMBER
       const sep = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=09&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -221,7 +231,7 @@ function HistoryPoint() {
       // OKTOBER
       const okto = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=10&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -231,7 +241,7 @@ function HistoryPoint() {
       // NOVEMBER
       const nov = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=11&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -241,7 +251,7 @@ function HistoryPoint() {
       // DESEMBER
       const des = await axios.get(
         `${API_POIN}/pimpinan/total-by-month-year?idTeknisi=${idTeknisi}&month=12&year=` +
-          currentYear,
+        currentYear,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
@@ -369,7 +379,7 @@ function HistoryPoint() {
             Poin Teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href="/dashboard_teknisi" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -419,7 +429,7 @@ function HistoryPoint() {
               <div>
                 <IconButton
                   size="md"
-                  color="light-blue"
+                  color="blue"
                   onClick={searchHistoryPoin}
                 >
                   <MagnifyingGlassIcon className="w-6 h-6 white" />
@@ -442,62 +452,30 @@ function HistoryPoint() {
                   </tr>
                 </thead>
                 <tbody>
-                  {validasi === true ? (
-                    <>
-                      {pointsDate.length > 0 ? (
-                        pointsDate.map((poin, index) => (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {formatDate(poin.tanggal)}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {poin.poin}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {poin.keterangan}
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan="4"
-                            className="text-sm text-center capitalize py-3 bg-gray-100"
-                          >
-                            Tidak ada data
-                          </td>
-                        </tr>
-                      )}
-                    </>
+                  {points.length > 0 ? (
+                    points.map((point, index) => (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {formatDate(point.tanggal)}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.poin}
+                        </td>
+                        <td className="text-sm py-2 px-3 text-center">
+                          {point.keterangan}
+                        </td>
+                      </tr>
+                    ))
                   ) : (
-                    <>
-                      {points.length > 0 ? (
-                        points.map((point, index) => (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {formatDate(point.tanggal)}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {point.poin}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {point.keterangan}
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan="4"
-                            className="text-sm text-center capitalize py-3 bg-gray-100"
-                          >
-                            Tidak ada data
-                          </td>
-                        </tr>
-                      )}
-                    </>
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                      >
+                        Tidak ada data
+                      </td>
+                    </tr>
                   )}
                 </tbody>
               </table>

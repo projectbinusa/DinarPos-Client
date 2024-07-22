@@ -222,8 +222,8 @@ function Notifikasi120Excelcom() {
                               color="orange"
                               onClick={() => {
                                 const phone = encodeURIComponent(
-                                  down.noTelpCustomer
-                                ); // Mengkodekan nomor telepon
+                                  down.customer.telp
+                                ); 
                                 const message = encodeURIComponent(
                                   `Hallo kak ${down.customer.nama_customer} Perkenalkan saya ${down.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );

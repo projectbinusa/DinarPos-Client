@@ -117,7 +117,7 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div class="absolute bottom-2 right-3 ">
+            <div className="absolute bottom-2 right-3 ">
               {showPassword ? (
                 <EyeIcon
                   className="text-blue-500 h-5 w-5 cursor-pointer"
