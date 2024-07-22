@@ -413,7 +413,7 @@ function LaporanSalesmanExcelcom() {
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          {level === "Superadmin" ? (
+                          {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
                             <>
                               <div>
                                 <IconButton size="md" color="red">

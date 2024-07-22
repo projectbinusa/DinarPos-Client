@@ -122,6 +122,8 @@ function Notifikasi90Excelcom() {
     return formattedDate;
   };
 
+  console.log(notifikasis);
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -224,10 +226,10 @@ function Notifikasi90Excelcom() {
                               color="orange"
                               onClick={() => {
                                 const phone = encodeURIComponent(
-                                  penjualan.noTelpCustomer
-                                ); // Mengkodekan nomor telepon
+                                  penjualan.customer.telp
+                                );
                                 const message = encodeURIComponent(
-                                  `Hallo kak ${penjualan.namaCustomer}%0APerkenalkan saya ${penjualan.namaSalesman} dari Excellent Computer Semarang%0ABagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                                  `Hallo kak ${penjualan.namaCustomer} Perkenalkan saya ${penjualan.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
                                 );
                                 window.open(
                                   `https://api.whatsapp.com/send?phone=${phone}&text=${message}`

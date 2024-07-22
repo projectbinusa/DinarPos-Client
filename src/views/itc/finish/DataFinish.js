@@ -14,9 +14,20 @@ const DataFinish = () => {
   const today = new Date();
   const monthss = today.getMonth() + 1;
   const year = today.getFullYear();
-  const currentDate = (monthss < 10 ? `0${monthss}` : monthss) + "-" + year;
+  const currentMonths = (monthss < 10 ? `0${monthss}` : monthss) + "-" + year;
 
   const months = year + "-" + (monthss < 10 ? `0${monthss}` : monthss);
+
+  const formatMonth = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${month}-${year}`;
+
+    return formattedDate;
+  };
 
   const [datas, setdatas] = useState([]);
   const [totalElektro, setTotalElektro] = useState(0);
@@ -190,7 +201,7 @@ const DataFinish = () => {
             </div>
             <br />
             <h1 id="mont" className="text-lg font-medium">
-              {currentDate}
+              {month === "" ? currentMonths : formatMonth(month)}
             </h1>
             <br />
             <div className="overflow-x-auto" id="tables_finish">

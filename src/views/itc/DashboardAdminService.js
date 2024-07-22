@@ -32,11 +32,9 @@ function DashboardAdminService() {
     const [naTglKonf, setNATglKonf] = useState([])
     const tableRef = useRef(null);
     const initializeDataTable = () => {
-        if ($.fn.DataTable.isDataTable(tableRef.current)) {
-            $(tableRef.current).DataTable().destroy();
+        if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable();
         }
-
-        $(tableRef.current).DataTable({});
     };
 
     const getAllNA = async () => {
@@ -91,7 +89,7 @@ function DashboardAdminService() {
     }, [naAll]);
 
     useEffect(() => {
-        if (naAll && naAll.length > 0) {
+        if (naAll.length > 0) {
             initializeDataTable();
         }
     }, [naAll]);
@@ -102,11 +100,9 @@ function DashboardAdminService() {
     const [readyTglKonf, setReadyTglKonf] = useState([])
     const tableRef2 = useRef(null);
     const initializeDataTable2 = () => {
-        if ($.fn.DataTable.isDataTable(tableRef2.current)) {
-            $(tableRef2.current).DataTable().destroy();
+        if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
+            $(tableRef2.current).DataTable();
         }
-
-        $(tableRef2.current).DataTable({});
     };
 
     const getAllReady = async () => {
@@ -161,7 +157,7 @@ function DashboardAdminService() {
     }, [readyAll]);
 
     useEffect(() => {
-        if (readyAll && readyAll.length > 0) {
+        if (readyAll.length > 0) {
             initializeDataTable2();
         }
     }, [readyAll]);
@@ -172,11 +168,9 @@ function DashboardAdminService() {
     const [prosesTglKonf, setProsesTglKonf] = useState([])
     const tableRef3 = useRef(null);
     const initializeDataTable3 = () => {
-        if ($.fn.DataTable.isDataTable(tableRef3.current)) {
-            $(tableRef3.current).DataTable().destroy();
+        if (tableRef3.current && !$.fn.DataTable.isDataTable(tableRef3.current)) {
+            $(tableRef3.current).DataTable();
         }
-
-        $(tableRef3.current).DataTable({});
     };
 
     const getAllProses = async () => {
@@ -231,7 +225,7 @@ function DashboardAdminService() {
     }, [prosesAll]);
 
     useEffect(() => {
-        if (prosesAll && prosesAll.length > 0) {
+        if (prosesAll.length > 0) {
             initializeDataTable3();
         }
     }, [prosesAll]);
@@ -242,11 +236,9 @@ function DashboardAdminService() {
     const [returTglKonf, setReturTglKonf] = useState([])
     const tableRef4 = useRef(null);
     const initializeDataTable4 = () => {
-        if ($.fn.DataTable.isDataTable(tableRef4.current)) {
-            $(tableRef4.current).DataTable().destroy();
+        if (tableRef4.current && !$.fn.DataTable.isDataTable(tableRef4.current)) {
+            $(tableRef4.current).DataTable();
         }
-
-        $(tableRef4.current).DataTable({});
     };
 
     const getAllRetur = async () => {
@@ -301,7 +293,7 @@ function DashboardAdminService() {
     }, [returAll]);
 
     useEffect(() => {
-        if (returAll && returAll.length > 0) {
+        if (returAll.length > 0) {
             initializeDataTable4();
         }
     }, [returAll]);
@@ -312,11 +304,9 @@ function DashboardAdminService() {
     const [cancelTglKonf, setCancelTglKonf] = useState([])
     const tableRef5 = useRef(null);
     const initializeDataTable5 = () => {
-        if ($.fn.DataTable.isDataTable(tableRef5.current)) {
-            $(tableRef5.current).DataTable().destroy();
+        if (tableRef5.current && !$.fn.DataTable.isDataTable(tableRef5.current)) {
+            $(tableRef5.current).DataTable();
         }
-
-        $(tableRef5.current).DataTable({});
     };
 
     const getAllCancel = async () => {
@@ -371,7 +361,7 @@ function DashboardAdminService() {
     }, [cancelAll]);
 
     useEffect(() => {
-        if (cancelAll && cancelAll.length > 0) {
+        if (cancelAll.length > 0) {
             initializeDataTable5();
         }
     }, [cancelAll]);
@@ -382,11 +372,9 @@ function DashboardAdminService() {
     const [semingguTglKonf, setSemingguTglKonf] = useState([])
     const tableRef6 = useRef(null);
     const initializeDataTable6 = () => {
-        if ($.fn.DataTable.isDataTable(tableRef6.current)) {
-            $(tableRef6.current).DataTable().destroy();
+        if (tableRef6.current && !$.fn.DataTable.isDataTable(tableRef6.current)) {
+            $(tableRef6.current).DataTable();
         }
-
-        $(tableRef6.current).DataTable({});
     };
 
     const getAllSeminggu = async () => {
@@ -430,7 +418,7 @@ function DashboardAdminService() {
     }, [semingguAll]);
 
     useEffect(() => {
-        if (semingguAll && semingguAll.length > 0) {
+        if (semingguAll.length > 0) {
             initializeDataTable6();
         }
     }, [semingguAll]);
@@ -442,11 +430,9 @@ function DashboardAdminService() {
     const [takenTglKonf, setTakenTglKonf] = useState([])
     const tableRef7 = useRef(null);
     const initializeDataTable7 = () => {
-        if ($.fn.DataTable.isDataTable(tableRef7.current)) {
-            $(tableRef7.current).DataTable().destroy();
+        if (tableRef7.current && !$.fn.DataTable.isDataTable(tableRef7.current)) {
+            $(tableRef7.current).DataTable();
         }
-
-        $(tableRef7.current).DataTable({});
     };
 
     const getAllTaken = async () => {
@@ -501,14 +487,14 @@ function DashboardAdminService() {
     }, [takenAll]);
 
     useEffect(() => {
-        if (takenAll && takenAll.length > 0) {
+        if (takenAll.length > 0) {
             initializeDataTable7();
         }
     }, [takenAll]);
     // END SERVICE TAKEN
 
     useEffect(() => {
-        if (validasi || endDate != "" || startDate != "") {
+        if (validasi || endDate !== "" || startDate !== "") {
             setValidasi(false);
             getAllNATgl();
             getAllReadyTgl();
@@ -1034,10 +1020,10 @@ function DashboardAdminService() {
                                                 <tr key={index}>
                                                     <td className="text-sm w-[4%]">{index + 1}</td>
                                                     <td className="text-sm py-2 px-3">
-                                                        {row.customer.nama_customer}
+                                                        {row.customer?.nama_customer}
                                                     </td>
                                                     <td className="text-sm py-2 px-3">
-                                                        {row.customer.alamat}
+                                                        {row.customer?.alamat}
                                                     </td>
                                                     <td className="text-sm py-2 px-3">
                                                         {row.produk}{" "}

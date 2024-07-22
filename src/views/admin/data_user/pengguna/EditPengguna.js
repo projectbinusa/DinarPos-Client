@@ -181,6 +181,7 @@ function EditPengguna() {
                 <Option value="Kasir">Kasir</Option>
                 <Option value="Gudang">Gudang</Option>
                 <Option value="Accounting">Accounting</Option>
+                <Option value="Pimpinan">Pimpinan</Option>
                 <Option value="Admin">Admin</Option>
                 <Option value="AdminService">AdminService</Option>
               </Select>

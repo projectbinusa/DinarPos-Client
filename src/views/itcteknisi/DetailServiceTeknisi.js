@@ -221,7 +221,7 @@ function DetailServiceTeknisi() {
       .put(`${API_SERVICE}/foto_before/` + param.id, formData, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
-      .then((res) => {
+      .then(() => {
         Swal.fire({
           icon: "success",
           title: "Update Foto Before Berhasil!",
@@ -233,6 +233,37 @@ function DetailServiceTeknisi() {
         }, 1500);
       })
       .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const removePictureBefore = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .put(`${API_SERVICE}/remove/f_b/${param.id}`,
+        {},
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Remove Foto Before Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Remove Foto Before Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };
@@ -265,6 +296,34 @@ function DetailServiceTeknisi() {
         console.log(err);
       });
   };
+
+  const removePictureAfter = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`${API_SERVICE}/remove/f_a/${param.id}`,
+        {},
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+      Swal.fire({
+        icon: "success",
+        title: "Remove Foto After Berhasil!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Remove Foto After Gagal!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(err);
+    }
+  };
   // END UPDATE PICTURE AFTER
 
   // GET ALL STATUS
@@ -296,6 +355,7 @@ function DetailServiceTeknisi() {
 
   // ALL TEKNISI
   const [valuesTeknisi, setvaluesTeknisi] = useState("");
+  const [teknisiToTake, setteknisiToTake] = useState(0);
   const [optionsTeknisi, setoptionsTeknisi] = useState([]);
   const [currentPageTeknisi, setCurrentPageTeknisi] = useState(1);
 
@@ -320,12 +380,58 @@ function DetailServiceTeknisi() {
   }, [currentPageTeknisi, valuesTeknisi]);
 
   const handleChangeTeknisi = (event) => {
+    setteknisiToTake(event.target.value);
     setvaluesTeknisi(event.target.value);
     setCurrentPageTeknisi(1);
   };
   // END ALL TEKNISI
 
-  console.log(datas);
+  // TAKE OVER TO
+  const takeOverto = async (e) => {
+    e.preventDefault();
+
+    const request = {
+      id_service: param.id,
+      id_teknisi: teknisiToTake,
+    };
+
+    try {
+      await axios.post(`${API_SERVICE}/take_over`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Take Over Berhasil",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.status === 401) {
+        localStorage.clear();
+        history.push("/");
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: error.response.data.data,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Take Over Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -336,7 +442,7 @@ function DetailServiceTeknisi() {
             detail Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href="/dashboard_teknisi" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -346,7 +452,7 @@ function DetailServiceTeknisi() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/data_service">
+            <a href="/service_teknisi">
               <span>Service</span>
             </a>
             <span className="cursor-default capitalize">detail Service</span>
@@ -354,7 +460,7 @@ function DetailServiceTeknisi() {
         </div>
         <main className="bg-blue-500 border-4 border-blue-500 shadow-lg my-5 rounded">
           <div className="flex justify-between items-center p-3">
-            <a href="/data_service">
+            <a href="/service_teknisi">
               <Typography
                 variant="paragraph"
                 className="capitalize font-semibold text-white flex"
@@ -616,7 +722,7 @@ function DetailServiceTeknisi() {
                         </div>
                         <br />
                         <div className="flex justify-end">
-                          <Button variant="gradient" color="blue">
+                          <Button variant="gradient" color="blue" onClick={takeOverto}>
                             TakeOver
                           </Button>
                         </div>
@@ -629,108 +735,109 @@ function DetailServiceTeknisi() {
                 )}
               </div>
               <div className="border border-gray-400 rounded shadow lg:col-span-2 p-2">
-                <h1 className="text-lg">
-                  <b>Data Barang</b>
-                </h1>
-                <hr /> <br />
-                <table className="w-full border-collapse my-3">
-                  <thead>
-                    <tr>
-                      <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
-                        Produk
-                      </th>
-                      <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
-                        Merk
-                      </th>
-                      <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
-                        Type
-                      </th>
-                      <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
-                        No Seri
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="border-gray-300 border bg-white p-2">
-                        <input
-                          type="text"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          readOnly
-                          value={datas?.produk}
-                        />
-                      </td>
-                      <td className="border-gray-300 border bg-white p-2">
-                        <input
-                          type="text"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          readOnly
-                          value={datas?.merk}
-                        />
-                      </td>
-                      <td className="border-gray-300 border bg-white p-2">
-                        <input
-                          type="text"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          readOnly
-                          value={datas?.type}
-                        />
-                      </td>
-                      <td className="border-gray-300 border bg-white p-2">
-                        <input
-                          type="text"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          readOnly
-                          value={datas?.sn}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        className="border-gray-300 border bg-gray-200 text-sm text-center py-2"
-                        colSpan="2"
-                      >
-                        Perlengkapan
-                      </td>
-                      <td
-                        className="border-gray-300 border bg-gray-200 text-sm text-center py-2"
-                        colSpan="2"
-                      >
-                        Keluhan
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        colSpan="2"
-                        className="border-gray-300 border bg-white p-2"
-                      >
-                        <textarea
-                          cols="30"
-                          rows="3"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          readOnly
-                          value={datas?.perlengkapan}
-                        ></textarea>
-                      </td>
-                      <td
-                        colSpan="2"
-                        className="border-gray-300 border bg-white p-2"
-                      >
-                        <textarea
-                          cols="30"
-                          rows="3"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          readOnly
-                          value={datas?.keluhan}
-                        ></textarea>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br />
+                <div>
+                  <h1 className="text-lg">
+                    <b>Data Barang</b>
+                  </h1>
+                  <hr /> <br />
+                  <table className="w-full border-collapse my-3">
+                    <thead>
+                      <tr>
+                        <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                          Produk
+                        </th>
+                        <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                          Merk
+                        </th>
+                        <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                          Type
+                        </th>
+                        <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">
+                          No Seri
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="border-gray-300 border bg-white p-2">
+                          <input
+                            type="text"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            readOnly
+                            value={datas?.produk}
+                          />
+                        </td>
+                        <td className="border-gray-300 border bg-white p-2">
+                          <input
+                            type="text"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            readOnly
+                            value={datas?.merk}
+                          />
+                        </td>
+                        <td className="border-gray-300 border bg-white p-2">
+                          <input
+                            type="text"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            readOnly
+                            value={datas?.type}
+                          />
+                        </td>
+                        <td className="border-gray-300 border bg-white p-2">
+                          <input
+                            type="text"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            readOnly
+                            value={datas?.sn}
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          className="border-gray-300 border bg-gray-200 text-sm text-center py-2"
+                          colSpan="2"
+                        >
+                          Perlengkapan
+                        </td>
+                        <td
+                          className="border-gray-300 border bg-gray-200 text-sm text-center py-2"
+                          colSpan="2"
+                        >
+                          Keluhan
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          colSpan="2"
+                          className="border-gray-300 border bg-white p-2"
+                        >
+                          <textarea
+                            cols="30"
+                            rows="3"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            readOnly
+                            value={datas?.perlengkapan}
+                          ></textarea>
+                        </td>
+                        <td
+                          colSpan="2"
+                          className="border-gray-300 border bg-white p-2"
+                        >
+                          <textarea
+                            cols="30"
+                            rows="3"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            readOnly
+                            value={datas?.keluhan}
+                          ></textarea>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </div>
                 <h1 className="font-semibold mt-3 text-lg">
                   Status dan Laporan ({datas?.statusEnd})
-
                 </h1>
                 <hr /> <br />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -739,7 +846,7 @@ function DetailServiceTeknisi() {
                       <div className="flex items-center justify-between">
                         {datas?.fb != null ? (
                           <>
-                            <div class="flex gap-2 items-end">
+                            <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
                                 className="flex items-center"
@@ -749,9 +856,9 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture Before
                               </Button>
-                              {/* <IconButton size="md" color="red">
+                              <IconButton size="md" color="red" onClick={removePictureBefore}>
                                 <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton> */}
+                              </IconButton>
                             </div>
                           </>
                         ) : (
@@ -789,7 +896,7 @@ function DetailServiceTeknisi() {
                       <div className="flex items-center justify-between">
                         {datas?.fa != null ? (
                           <>
-                            <div class="flex gap-2 items-end">
+                            <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
                                 className="flex items-center"
@@ -799,9 +906,9 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture After
                               </Button>
-                              {/* <IconButton size="md" color="red">
+                              <IconButton size="md" color="red" onClick={removePictureAfter}>
                                 <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton> */}
+                              </IconButton>
                             </div>
                           </>
                         ) : (
@@ -842,7 +949,7 @@ function DetailServiceTeknisi() {
                       <div className="flex items-center justify-between">
                         {datas?.fa != null ? (
                           <>
-                            <div class="flex gap-2 items-end">
+                            <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
                                 className="flex items-center"
@@ -852,9 +959,6 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture Before
                               </Button>
-                              {/* <IconButton size="md" color="red">
-                                <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton> */}
                             </div>
                           </>
                         ) : (
@@ -864,7 +968,7 @@ function DetailServiceTeknisi() {
                       <div className="flex items-center justify-between">
                         {datas?.fa != null ? (
                           <>
-                            <div class="flex gap-2 items-end">
+                            <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
                                 className="flex items-center"
@@ -874,9 +978,6 @@ function DetailServiceTeknisi() {
                                 <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
                                 Picture After
                               </Button>
-                              {/* <IconButton size="md" color="red">
-                                <XMarkIcon className="w-6 h-6 white" />
-                              </IconButton> */}
                             </div>
                           </>
                         ) : (
@@ -997,6 +1098,7 @@ function DetailServiceTeknisi() {
                                   required
                                   onChange={(e) => setket(e.target.value)}
                                 >
+                                  <option value="">Pilih</option>
                                   <option value="WT">WT</option>
                                   <option value="WS">WS</option>
                                   <option value="WC">WC</option>
@@ -1077,6 +1179,7 @@ function DetailServiceTeknisi() {
                               required
                               onChange={(e) => setketNew(e.target.value)}
                             >
+                              <option value="">Pilih</option>
                               <option value="WT">WT</option>
                               <option value="WS">WS</option>
                               <option value="WC">WC</option>

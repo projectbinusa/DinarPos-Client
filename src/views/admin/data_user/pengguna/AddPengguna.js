@@ -122,6 +122,7 @@ function AddPengguna() {
                 <Option value="Kasir">Kasir</Option>
                 <Option value="Gudang">Gudang</Option>
                 <Option value="Accounting">Accounting</Option>
+                <Option value="Pimpinan">Pimpinan</Option>
                 <Option value="Admin">Admin</Option>
                 <Option value="AdminService">AdminService</Option>
               </Select>
@@ -134,6 +135,7 @@ function AddPengguna() {
               >
                 <Option value="excelcom">Excelcom</Option>
                 <Option value="dinarpos">Dinarpos</Option>
+                <Option value="Pimpinan">Pimpinan</Option>
                 <Option value="Admin">Admin</Option>
                 <Option value="AdminService">AdminService</Option>
               </Select>

@@ -127,7 +127,7 @@ function Konfirmasi90Dinarpos() {
             <span className="cursor-default capitalize">Konfirmasi</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <Typography variant="paragraph" className="capitalize">
             Konfirmasi 90 hari {noFaktur}
           </Typography>

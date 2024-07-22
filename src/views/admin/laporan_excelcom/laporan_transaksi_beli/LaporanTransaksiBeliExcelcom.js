@@ -170,6 +170,8 @@ function LaporanTransaksiBeliExcelcom() {
     window.open("/tanggalfilter_transaksi_beli_excelcom", "_blank");
   };
 
+  const level = localStorage.getItem('level');
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -351,35 +353,52 @@ function LaporanTransaksiBeliExcelcom() {
                           {laporan.totalBelanja}
                         </td>
                         <td className="text-sm py-2 px-3 flex flex-col gap-2 items-center">
-                          <a
-                            href={
-                              "/detail_histori_transaksi_beli_excelcom/" +
-                              laporan.idTransaksiBeli
-                            }
-                          >
-                            <IconButton size="md" color="light-blue">
-                              <EyeIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </a>
-                          <a
-                            href={
-                              "/print_histori_laporan_transaksi_beli_excelcom/" +
-                              laporan.idTransaksiBeli
-                            }
-                            target="_blank"
-                          >
-                            <IconButton size="md" color="green">
-                              <PrinterIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </a>
-                          <IconButton size="md" color="red">
-                            <ArrowPathIcon
-                              className="w-6 h-6 white"
-                              onClick={() =>
-                                returnTransaksiBeli(laporan.idTransaksiBeli)
-                              }
-                            />
-                          </IconButton>
+                          {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
+                            <>
+                              <a
+                                href={
+                                  "/detail_histori_transaksi_beli_excelcom/" +
+                                  laporan.idTransaksiBeli
+                                }
+                              >
+                                <IconButton size="md" color="light-blue">
+                                  <EyeIcon className="w-6 h-6 white" />
+                                </IconButton>
+                              </a>
+                              <a
+                                href={
+                                  "/print_histori_laporan_transaksi_beli_excelcom/" +
+                                  laporan.idTransaksiBeli
+                                }
+                                target="_blank"
+                              >
+                                <IconButton size="md" color="green">
+                                  <PrinterIcon className="w-6 h-6 white" />
+                                </IconButton>
+                              </a>
+                              <IconButton size="md" color="red">
+                                <ArrowPathIcon
+                                  className="w-6 h-6 white"
+                                  onClick={() =>
+                                    returnTransaksiBeli(laporan.idTransaksiBeli)
+                                  }
+                                />
+                              </IconButton>
+                            </>
+                          ) : (
+                            <>
+                              <a
+                                href={
+                                  "/print_histori_laporan_transaksi_beli_excelcom/" +
+                                  laporan.idTransaksiBeli
+                                }
+                                target="_blank"
+                              >
+                                <IconButton size="md" color="green">
+                                  <PrinterIcon className="w-6 h-6 white" />
+                                </IconButton>
+                              </a>
+                            </>)}
                         </td>
                       </tr>
                     );

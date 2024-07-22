@@ -42,9 +42,7 @@ function AddIndentDinarpos() {
   const handleOpen2 = () => setOpen2(!open2);
   const handleOpen3 = () => setOpen3(!open3);
 
-  const [salesman, setsalesman] = useState([]);
   const [barang, setbarang] = useState([]);
-  const [customer, setcustomer] = useState([]);
 
   // TRANSAKSI JUAL EXCEL
   const [markettingId, setmarkettingId] = useState(0);
@@ -105,30 +103,6 @@ function AddIndentDinarpos() {
     }),
   };
 
-  // GET ALL SALESMAN
-  const allSalesman = async () => {
-    try {
-      const response = await axios.get(`${API_SALESMAN}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsalesman(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
-  // GET ALL CUSTOMER
-  const allCustomer = async () => {
-    try {
-      const response = await axios.get(`${API_CUSTOMER}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setcustomer(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
   // GET ALL BARANG
   const allBarang = async () => {
     try {
@@ -142,9 +116,7 @@ function AddIndentDinarpos() {
   };
 
   useEffect(() => {
-    allCustomer();
     allBarang();
-    allSalesman();
   }, []);
 
   // FORMAT RUPIAH
@@ -744,7 +716,7 @@ function AddIndentDinarpos() {
                       <th className="py-3 px-2">Barcode</th>
                       <th className="py-3 px-2">Nama</th>
                       <th className="py-3 px-2">Harga (Rp)</th>
-                      <th className="py-3 px-2">Disc</th>
+                      <th className="py-3 px-2">Disc (%)</th>
                       <th className="py-3 px-2">Harga Diskon (Rp)</th>
                       <th className="py-3 px-2">Jumlah</th>
                       <th className="py-3 px-2">Total Harga (Rp)</th>

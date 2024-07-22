@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../component/SidebarAdmin";
 import {
   Breadcrumbs,
+  Button,
   IconButton,
   Input,
   Typography,
@@ -219,14 +220,14 @@ function ServiceCancelTeknisi() {
               />
             </div>
             <div className="w-full lg:w-auto flex justify-start items-center">
-              <IconButton
+              <Button
                 variant="gradient"
                 color="blue"
                 onClick={handleSearchByMonth}
                 size="md"
               >
                 <MagnifyingGlassIcon className="w-5 h-5" />
-              </IconButton>
+              </Button>
             </div>
           </div>
           <div className="rounded my-5 p-2 w-full overflow-x-auto" id="table_all">

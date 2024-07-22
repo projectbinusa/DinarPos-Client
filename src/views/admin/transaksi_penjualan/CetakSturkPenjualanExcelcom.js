@@ -149,15 +149,19 @@ function CetakStrukPenjualanExcelcom() {
           <ul className="text-sm">
             <li className="flex">
               <p className="w-36">Total</p>
-              <p>{reportData.totalBelanja}</p>
+              <p>{formatRupiah(reportData.totalBelanja)}</p>
             </li>
             <li className="flex">
               <p className="w-36">Potongan</p>
-              <p>{reportData.potongan}</p>
+              <p>{formatRupiah(reportData.potongan)}</p>
             </li>
             <li className="flex">
               <p className="w-36">Total Bayar</p>
-              <p>{reportData.totalBayarBarang}</p>
+              <p>{formatRupiah(reportData.totalBayarBarang)}</p>
+            </li>
+            <li className="flex">
+              <p className="w-36">Keterangan</p>
+              <p>{reportData.cashKredit}</p>
             </li>
           </ul>
         </div>

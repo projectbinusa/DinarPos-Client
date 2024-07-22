@@ -150,7 +150,7 @@ function DataSuplier() {
     await axios
       .post(`${API_SUPLIER}/import`, formData, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        responseType: "blob",
+        // responseType: "blob", 78
       })
       .then(() => {
         Swal.fire({
@@ -207,7 +207,7 @@ function DataSuplier() {
                 <Button
                   onClick={handleOpen}
                   variant="gradient"
-                  color="light-blue"
+                  color="green"
                 >
                   Import
                 </Button>
