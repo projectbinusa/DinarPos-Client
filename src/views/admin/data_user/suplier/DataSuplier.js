@@ -295,6 +295,7 @@ function DataSuplier() {
         <DialogHeader>Import Data Suplier</DialogHeader>
         <DialogBody>
           <p className="text-black">Silahkan download format di bawah ini</p>
+          <p className="text-red-500">* Untuk mengisi no telepon sertakan kode telepon internasional</p>
           <Button
             variant="gradient"
             color="blue"

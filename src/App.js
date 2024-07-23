@@ -156,6 +156,7 @@ import AddTransaksiFromIndentExcelcom from "./views/admin/transaksi_indent/excel
 import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinarpos/AddTransaksiFromIndentDinarpos.js";
 import DashboardAdminService from "./views/itc/DashboardAdminService.js";
 import DetailServiceTaken from "./views/itc/service/DetailServiceTaken.js";
+import LaporanMarketting from "./views/admin/accounting/laporan_marketting/LaporanMarketting.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1013,6 +1014,12 @@ function App() {
             <PrivateRoute
               path="/dashboard_service"
               component={DashboardAdminService}
+              isAuthenticated={true}
+            />
+            
+            <PrivateRoute
+              path="/laporan_marketting"
+              component={LaporanMarketting}
               isAuthenticated={true}
             />
           </Switch>

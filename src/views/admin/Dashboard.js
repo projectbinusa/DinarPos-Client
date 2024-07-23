@@ -929,7 +929,7 @@ function Dashboard() {
           </Card>
         </div>
         <br />
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 lg:mr-4 mx-5 lg:mx-0">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 lg:mr-4 mx-5 mb-5 lg:mx-0">
           <Card>
             <CardHeader
               floated={false}
