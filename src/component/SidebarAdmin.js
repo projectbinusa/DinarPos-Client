@@ -593,6 +593,17 @@ function SidebarAdmin() {
                             piutang{" "}
                           </ListItem>
                         </a>
+                        <a href="/laporan_marketting">
+                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                            <ListItemPrefix>
+                              <ChevronRightIcon
+                                strokeWidth={3}
+                                className="h-3 w-3"
+                              />
+                            </ListItemPrefix>
+                            laporan marketting
+                          </ListItem>
+                        </a>
                       </List>
                     </AccordionBody>
                   </Accordion>
@@ -870,21 +881,21 @@ function SidebarAdmin() {
                             {level === "Gudang" ||
                               level === "Superadmin" ||
                               level === "Admin" || level === "Accounting" ? (
-                            <>
-                              <a href="/laporan_transaksi_beli_excelcom">
-                                <ListItem className="uppercase rounded px-3 py-2 text-sm ">
-                                  <ListItemPrefix>
-                                    <ChevronRightIcon
-                                      strokeWidth={3}
-                                      className="h-3 w-3"
-                                    />
-                                  </ListItemPrefix>
-                                  laporan transaksi beli
-                                </ListItem>
-                              </a>
-                            </>
+                              <>
+                                <a href="/laporan_transaksi_beli_excelcom">
+                                  <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                                    <ListItemPrefix>
+                                      <ChevronRightIcon
+                                        strokeWidth={3}
+                                        className="h-3 w-3"
+                                      />
+                                    </ListItemPrefix>
+                                    laporan transaksi beli
+                                  </ListItem>
+                                </a>
+                              </>
                             ) : (
-                            <></>
+                              <></>
                             )}
                           </List>
                         </AccordionBody>
@@ -2150,7 +2161,7 @@ function SidebarAdmin() {
                           )}
                           {level === "Superadmin" ||
                             level === "Admin" ||
-                            level === "Gudang" || level === "Accounting"? (
+                            level === "Gudang" || level === "Accounting" ? (
                             <>
                               <a href="/laporan_transaksi_beli_excelcom">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2226,7 +2237,7 @@ function SidebarAdmin() {
                           </a>
                           {level === "Gudang" ||
                             level === "Superadmin" ||
-                            level === "Admin"|| level === "Accounting" ? (
+                            level === "Admin" || level === "Accounting" ? (
                             <>
                               <a href="/laporan_barang_dinarpos">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2243,7 +2254,7 @@ function SidebarAdmin() {
                           ) : (
                             <></>
                           )}
-                          {level === "Superadmin" || level === "Admin" || level === "Accounting"? (
+                          {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
                             <>
                               <a href="/laporan_suplier_dinarpos">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2273,7 +2284,7 @@ function SidebarAdmin() {
                           )}
                           {level === "Gudang" ||
                             level === "Superadmin" ||
-                            level === "Admin" || level === "Accounting"? (
+                            level === "Admin" || level === "Accounting" ? (
                             <>
                               <a href="/laporan_transaksi_beli_dinarpos">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
