@@ -100,6 +100,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* TRANSAKSI INDENT */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" ? (
@@ -175,6 +178,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* TRANSAKSI PENJUALAN */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Gudang" ||
@@ -251,6 +257,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* TRANSAKSI PEMBELIAN */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Gudang" ? (
@@ -327,6 +336,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* DATA USER */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" ||
@@ -442,6 +454,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* DATA BARANG */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" ||
@@ -530,6 +545,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* ACCOUNTING */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Accounting" ? (
@@ -611,6 +629,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* RETURN EXCELCOM */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Accounting" ? (
@@ -699,6 +720,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* RETURN DINARPOS */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Accounting" ? (
@@ -787,6 +811,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* LAPORAN EXCELCOM */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" || level === "Gudang" || level === "Accounting" ? (
@@ -908,6 +935,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* LAPORAN DINARPOS */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" || level === "Gudang" || level === "Accounting" ? (
@@ -1030,6 +1060,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* NOTIFIKASI EXCELCOM */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" ? (
@@ -1130,6 +1163,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* NOTIFIKASI DINARPOS */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" ? (
@@ -1232,12 +1268,18 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
-              {level === "AdminService" ? (<>
-                <a href="/dashboard_service">
-                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    Dashboard
-                  </ListItem>
-                </a></>) : (<></>)}
+
+
+              {/* ADMIN SERVICE */}
+              {level === "AdminService" ? (
+                <>
+                  <a href="/dashboard_service">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Dashboard
+                    </ListItem>
+                  </a>
+                </>
+              ) : (<></>)}
               {level === "Superadmin" || level === "AdminService" ? (
                 <>
                   <a href="/data_service">
@@ -1285,10 +1327,77 @@ function SidebarAdmin() {
                       edit data{" "}
                     </ListItem>
                   </a>
+                  <Accordion
+                    open={open === 11}
+                    icon={
+                      <ChevronDownIcon
+                        strokeWidth={2.5}
+                        className={`mx-auto  h-3 w-3 transition-transform ${open === 11 ? "rotate-180" : ""
+                          }`}
+                      />
+                    }
+                  >
+                    <ListItem
+                      className="p-0 rounded "
+                      selected={open === 11}
+                    >
+                      <AccordionHeader
+                        onClick={() => handleOpen(11)}
+                        className="border-b-0 px-3 py-2 "
+                      >
+                        <Typography
+                          color="blue-gray"
+                          className="font-poppins uppercase mr-auto text-sm font-normal"
+                        >
+                          LAPORAN SERVICE
+                        </Typography>
+                      </AccordionHeader>
+                    </ListItem>
+                    <AccordionBody className="py-2">
+                      <List className="p-0">
+                        <a href="/laporan_service">
+                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                            <ListItemPrefix>
+                              <ChevronRightIcon
+                                strokeWidth={3}
+                                className="h-3 w-3"
+                              />
+                            </ListItemPrefix>
+                            LAPORAN SERVICE
+                          </ListItem>
+                        </a>
+                        <a href="/laporan_pendapatan">
+                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                            <ListItemPrefix>
+                              <ChevronRightIcon
+                                strokeWidth={3}
+                                className="h-3 w-3"
+                              />
+                            </ListItemPrefix>
+                            laporan pendapatan
+                          </ListItem>
+                        </a>
+                        <a href="/laporan_status">
+                          <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                            <ListItemPrefix>
+                              <ChevronRightIcon
+                                strokeWidth={3}
+                                className="h-3 w-3"
+                              />
+                            </ListItemPrefix>
+                            laporan status
+                          </ListItem>
+                        </a>
+                      </List>
+                    </AccordionBody>
+                  </Accordion>
                 </>
               ) : (
                 <></>
               )}
+
+
+              {/* PIMPINAN */}
               {level === "Pimpinan" ? (
                 <>
                   <a href="/dashboard_pimpinan">
@@ -1320,6 +1429,9 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+
+              {/* TEKNISI */}
               {level === "Teknisi" ? (
                 <>
                   <a href="/dashboard_teknisi">
@@ -1390,6 +1502,8 @@ function SidebarAdmin() {
               <></>
             )}
 
+
+            {/* TRANSAKSI INDENT */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ? (
@@ -1466,6 +1580,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* TRANSAKSI PENJUALAN */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ||
@@ -1543,6 +1660,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* TRANSAKSI PEMBELIAN */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Gudang" ? (
@@ -1617,6 +1737,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* DATA USER */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Gudang" ||
@@ -1732,6 +1855,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* DATA BARANG */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ||
@@ -1819,6 +1945,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* ACCOUNTING */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Accounting" ? (
@@ -1881,6 +2010,17 @@ function SidebarAdmin() {
                           piutang{" "}
                         </ListItem>
                       </a>
+                      <a href="/laporan_marketting">
+                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                          <ListItemPrefix>
+                            <ChevronRightIcon
+                              strokeWidth={3}
+                              className="h-3 w-3"
+                            />
+                          </ListItemPrefix>
+                          laporan marketting
+                        </ListItem>
+                      </a>
                     </List>
                   </AccordionBody>
                 </Accordion>
@@ -1888,6 +2028,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* RETURN EXCELCOM */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Accounting" ? (
@@ -1977,6 +2120,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* RETURN DINARPOS */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Accounting" ? (
@@ -2066,6 +2212,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* LAPORAN EXCELCOM */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ||
@@ -2189,6 +2338,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* LAPORAN DINARPOS */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ||
@@ -2312,6 +2464,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* NOTIFIKASI EXCELCOM */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ? (
@@ -2411,6 +2566,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* NOTIFIKASI DINARPOS */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ? (
@@ -2511,6 +2669,9 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+
+
+            {/* ADMIN SERVICE */}
             {level === "AdminService" ? (<>
               <a href="/dashboard_service">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
@@ -2565,6 +2726,67 @@ function SidebarAdmin() {
                     Edit Data{" "}
                   </ListItem>
                 </a>
+                <Accordion
+                  open={open === 11}
+                  icon={
+                    <ChevronDownIcon
+                      strokeWidth={2.5}
+                      className={`mx-auto h-3 w-3 transition-transform ${open === 11 ? "rotate-180" : ""
+                        }`}
+                    />
+                  }
+                >
+                  <ListItem className="p-0 rounded" selected={open === 11}>
+                    <AccordionHeader
+                      onClick={() => handleOpen(11)}
+                      className="border-b-0 px-3 py-2 "
+                    >
+                      <Typography
+                        color="blue-gray"
+                        className="font-poppins uppercase mr-auto text-sm font-normal"
+                      >
+                        LAPORAN SERVICE
+                      </Typography>
+                    </AccordionHeader>
+                  </ListItem>
+                  <AccordionBody className="py-2">
+                    <List className="p-0">
+                      <a href="/laporan_service">
+                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                          <ListItemPrefix>
+                            <ChevronRightIcon
+                              strokeWidth={3}
+                              className="h-3 w-3"
+                            />
+                          </ListItemPrefix>
+                          laporan service
+                        </ListItem>
+                      </a>
+                      <a href="/laporan_pendapatan">
+                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                          <ListItemPrefix>
+                            <ChevronRightIcon
+                              strokeWidth={3}
+                              className="h-3 w-3"
+                            />
+                          </ListItemPrefix>
+                          laporan pendapatan
+                        </ListItem>
+                      </a>
+                      <a href="/laporan_status">
+                        <ListItem className="uppercase rounded px-3 py-2 text-sm ">
+                          <ListItemPrefix>
+                            <ChevronRightIcon
+                              strokeWidth={3}
+                              className="h-3 w-3"
+                            />
+                          </ListItemPrefix>
+                          laporan status
+                        </ListItem>
+                      </a>
+                    </List>
+                  </AccordionBody>
+                </Accordion>
               </>
             ) : (
               <></>
