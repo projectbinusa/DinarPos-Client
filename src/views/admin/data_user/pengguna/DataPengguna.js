@@ -13,13 +13,10 @@ import {
 } from "@material-tailwind/react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function DataPengguna() {
   const tableRef = useRef(null);
   const [penggunas, setPengguna] = useState([]);
-
-  const history = useHistory();
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
