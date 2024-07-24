@@ -6,7 +6,6 @@ import "../../assets/styles/datatables.css";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import {
   Breadcrumbs,
-  Button,
   IconButton,
   Typography,
 } from "@material-tailwind/react";

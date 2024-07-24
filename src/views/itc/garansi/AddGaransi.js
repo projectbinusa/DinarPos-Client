@@ -8,10 +8,11 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useHistory } from "react-router-dom";
-import { API_GARANSI, API_SERVICE } from "../../../utils/BaseUrl";
+import { API_GARANSI, API_PENGGUNA, API_SERVICE } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { API_CUSTOMER } from "../../../utils/BaseUrl";
+import Decrypt from "../../../component/Decrypt";
 
 function AddGaransi() {
   const history = useHistory();
@@ -97,7 +98,20 @@ function AddGaransi() {
     setvalues(event.target.value);
   };
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

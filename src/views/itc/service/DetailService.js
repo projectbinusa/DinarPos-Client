@@ -30,10 +30,11 @@ import {
 import axios from "axios";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
-import { API_BARANG, API_SALESMAN, API_SERVICE } from "../../../utils/BaseUrl";
+import { API_BARANG, API_PENGGUNA, API_SALESMAN, API_SERVICE } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import ReactSelect from "react-select";
 import $ from "jquery";
+import Decrypt from "../../../component/Decrypt";
 
 function DetailService() {
   const [datas, setdatas] = useState(null);
@@ -833,7 +834,20 @@ function DetailService() {
     return formattedDate;
   };
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

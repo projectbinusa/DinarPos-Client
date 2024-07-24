@@ -12,8 +12,9 @@ import axios from "axios";
 import $, { error } from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
-import { API_POIN } from "../../../utils/BaseUrl";
+import { API_PENGGUNA, API_POIN } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
+import Decrypt from "../../../component/Decrypt";
 
 function DataPoin() {
   const tableRef = useRef(null);
@@ -167,7 +168,20 @@ function DataPoin() {
     setValidasi(true);
   };
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

@@ -13,8 +13,9 @@ import {
   useHistory,
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
-import { API_SERVICE, API_SERVICE_RETUR } from "../../../utils/BaseUrl";
+import { API_PENGGUNA, API_SERVICE, API_SERVICE_RETUR } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
+import Decrypt from "../../../component/Decrypt";
 
 function AddRetur() {
   const [nama, setnama] = useState("");
@@ -107,7 +108,20 @@ function AddRetur() {
       });
   };
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

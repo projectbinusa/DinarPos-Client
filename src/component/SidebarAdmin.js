@@ -16,9 +16,12 @@ import {
   Bars3Icon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import brand from "../assets/brand.png";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Decrypt from "./Decrypt";
+import axios from "axios";
+import { API_PENGGUNA } from "../utils/BaseUrl";
 
 function SidebarAdmin() {
   const [open, setOpen] = useState(0);
@@ -41,8 +44,21 @@ function SidebarAdmin() {
     localStorage.clear();
   };
 
-  const level = localStorage.getItem("level");
-  const roleToko = localStorage.getItem("roleToko");
+  const [level, setlevel] = useState("");
+  const [roleToko, setroleToko] = useState("");
+
+  const id = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + id, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+      setroleToko(response.roleToko)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [id])
 
   return (
     <>
