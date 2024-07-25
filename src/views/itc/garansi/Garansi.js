@@ -9,10 +9,11 @@ import {
   IconButton,
   Typography,
 } from "@material-tailwind/react";
-import { API_GARANSI } from "../../../utils/BaseUrl";
+import { API_GARANSI, API_PENGGUNA } from "../../../utils/BaseUrl";
 import axios from "axios";
 import { CheckIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
+import Decrypt from "../../../component/Decrypt";
 
 function Garansi() {
   const tableRef = useRef(null);
@@ -125,7 +126,20 @@ function Garansi() {
       });
   };
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

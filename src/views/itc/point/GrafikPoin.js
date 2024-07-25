@@ -11,7 +11,8 @@ import {
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import Chart from "react-apexcharts";
 import axios from "axios";
-import { API_POIN } from "../../../utils/BaseUrl";
+import { API_PENGGUNA, API_POIN } from "../../../utils/BaseUrl";
+import Decrypt from "../../../component/Decrypt";
 
 function GrafikPoin() {
   const [validasi, setvalidasi] = useState(false);
@@ -280,7 +281,20 @@ function GrafikPoin() {
     },
   };
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

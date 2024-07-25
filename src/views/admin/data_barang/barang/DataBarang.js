@@ -14,11 +14,12 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import { API_BARANG } from "../../../../utils/BaseUrl";
+import { API_BARANG, API_PENGGUNA } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Decrypt from "../../../../component/Decrypt";
 
 function DataBarang() {
   const [open, setOpen] = useState(false);
@@ -178,7 +179,20 @@ function DataBarang() {
       });
   };
 
-  const level = localStorage.getItem("level");
+
+  const [level, setlevel] = useState("");
+
+  const id = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + id, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [id])
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -205,7 +219,7 @@ function DataBarang() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          {level === "Superadmin" || level === "Gudang" || level === "Admin"? (
+          {level === "Superadmin" || level === "Gudang" || level === "Admin" ? (
             <>
               <div className="flex justify-between">
                 <div className="flex flex-col lg:flex-row gap-4">
@@ -257,7 +271,7 @@ function DataBarang() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Unit Barang
                   </th>
-                  {level === "Superadmin" || level === "Gudang"? (
+                  {level === "Superadmin" || level === "Gudang" ? (
                     <>
                       <th className="text-sm py-2 px-3 font-semibold">
                         Harga Beli (Rp)
@@ -272,7 +286,7 @@ function DataBarang() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Jumlah <span className="text-sm block">Stok</span>
                   </th>
-                  {level === "Superadmin" || level === "Gudang"? (
+                  {level === "Superadmin" || level === "Gudang" ? (
                     <>
                       {" "}
                       <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
@@ -292,7 +306,7 @@ function DataBarang() {
                       </td>
                       <td className="text-sm py-2 px-3">{barang.namaBarang}</td>
                       <td className="text-sm py-2 px-3">{barang.unit}</td>
-                      {level === "Superadmin" || level === "Gudang"? (
+                      {level === "Superadmin" || level === "Gudang" ? (
                         <>
                           <td className="text-sm py-2 px-3">
                             {barang.hargaBeli}
@@ -305,7 +319,7 @@ function DataBarang() {
                         {barang.hargaBarang}
                       </td>
                       <td className="text-sm py-2 px-3">{barang.jumlahStok}</td>
-                      {level === "Superadmin" || level === "Gudang"? (
+                      {level === "Superadmin" || level === "Gudang" ? (
                         <>
                           <td className="text-sm py-2 px-3 flex items-center justify-center">
                             <div className="flex flex-row gap-3">

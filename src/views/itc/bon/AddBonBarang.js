@@ -6,16 +6,17 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import $ from "jquery";
 import "datatables.net";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import {
   API_BARANG,
   API_BON_BARANG,
+  API_PENGGUNA,
   API_TEKNISI,
 } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
+import Decrypt from "../../../component/Decrypt";
 
 function AddBonBarang() {
   const [tglAmbil, settglAmbil] = useState("");
@@ -130,7 +131,20 @@ function AddBonBarang() {
   };
   // END GET ALL TEKNISI
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

@@ -20,11 +20,13 @@ import {
 } from "@heroicons/react/24/outline";
 import {
   API_BARANG,
+  API_PENGGUNA,
   API_RETURN_DINARPOS,
   LAPORAN_BARANG,
 } from "../../../../utils/BaseUrl";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Swal from "sweetalert2";
+import Decrypt from "../../../../component/Decrypt";
 
 function LaporanBarangDinar() {
   const tableRef = useRef(null);
@@ -183,7 +185,19 @@ function LaporanBarangDinar() {
     window.open("/tanggalfilter_barang_dinarpos", "_blank");
   };
 
-  const level = localStorage.getItem('level');
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">
