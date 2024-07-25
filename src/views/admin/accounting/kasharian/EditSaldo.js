@@ -32,13 +32,14 @@ function EditSaldo() {
     const request = {
       shift: shift,
       saldoAwal: saldoAwal,
-      setorKasBesar: setorKasBesar,
+      setorKas: setorKasBesar,
     };
 
     axios
-      .get(`${API_KAS_HARIAN}/update/` + param.id, request, {
+      .put(`${API_KAS_HARIAN}/update/${param.id}`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
+
       .then(() => {
         Swal.fire({
           icon: "success",
