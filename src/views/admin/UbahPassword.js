@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../component/SidebarAdmin";
 import {
   Typography,
@@ -6,10 +6,11 @@ import {
   Button,
   Input,
 } from "@material-tailwind/react";
-import { API_UBAH_PASSWORD } from "../../utils/BaseUrl";
+import { API_PENGGUNA, API_UBAH_PASSWORD } from "../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Decrypt from "../../component/Decrypt";
 
 function UbahPassword() {
   const [oldPass, setoldPass] = useState("");
@@ -84,7 +85,21 @@ function UbahPassword() {
       });
   };
 
-  const level = localStorage.getItem("level");
+
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Pimpinan") {

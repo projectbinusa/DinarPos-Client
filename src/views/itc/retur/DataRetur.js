@@ -10,8 +10,9 @@ import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { API_SERVICE, API_SERVICE_RETUR } from "../../../utils/BaseUrl";
+import { API_PENGGUNA, API_SERVICE, API_SERVICE_RETUR } from "../../../utils/BaseUrl";
 import axios from "axios";
+import Decrypt from "../../../component/Decrypt";
 
 function DataRetur() {
   const tableRef = useRef(null);
@@ -88,7 +89,20 @@ function DataRetur() {
     return formattedDate;
   };
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

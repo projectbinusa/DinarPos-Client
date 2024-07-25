@@ -6,11 +6,24 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
+import CryptoJS from 'crypto-js';
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
+
+  const encryptData = (data, secretKey) => {
+    const ciphertext = CryptoJS.AES.encrypt(data, secretKey).toString();
+    return ciphertext;
+  };
+
+  const generateRandomKey = (length) => {
+    const randomBytes = CryptoJS.lib.WordArray.random(length);
+    return randomBytes.toString();
+  };
+
+  const secretKey = generateRandomKey(16);
 
   // AKSI LOGIN
   const login = async (e) => {
@@ -62,6 +75,11 @@ function Login() {
           localStorage.setItem("username", response.data.data.usernamePengguna);
           localStorage.setItem("roleToko", response.data.data.roleToko);
           localStorage.setItem("token", response.data.token);
+
+          const id = response.data.data.idPengguna;
+          const encrypt = encryptData(id.toString(), secretKey);
+          localStorage.setItem("encrypt", encrypt);
+          localStorage.setItem("secret", secretKey);
         }
       });
     } catch (err) {

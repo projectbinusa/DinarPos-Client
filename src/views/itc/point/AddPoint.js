@@ -7,9 +7,10 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useHistory } from "react-router-dom";
-import { API_POIN, API_TEKNISI } from "../../../utils/BaseUrl";
+import { API_PENGGUNA, API_POIN, API_TEKNISI } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Decrypt from "../../../component/Decrypt";
 
 function AddPoint() {
   const history = useHistory();
@@ -122,7 +123,20 @@ function AddPoint() {
   };
   // END GET ALL TEKNISI
 
-  const level = localStorage.getItem("level");
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {

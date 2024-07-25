@@ -14,9 +14,10 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import $ from "jquery";
-import { API_EDIT_DATA, API_POIN, API_SERVICE } from "../../../utils/BaseUrl";
+import { API_EDIT_DATA, API_PENGGUNA, API_POIN, API_SERVICE } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import axios from "axios";
+import Decrypt from "../../../component/Decrypt";
 
 function EditData() {
   const [visibleElement, setVisibleElement] = useState(null);
@@ -402,11 +403,20 @@ function EditData() {
     });
   };
 
-  const handleInputChange = (e) => {
-    setpoin(e.target.value); // Update state when input value changes
-  };
+  const [level, setlevel] = useState("");
 
-  const level = localStorage.getItem("level");
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   let dashboard = "";
 
   if (level === "Superadmin") {
