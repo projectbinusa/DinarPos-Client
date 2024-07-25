@@ -179,20 +179,22 @@ function DataBarang() {
       });
   };
 
-
   const [level, setlevel] = useState("");
 
-  const id = Decrypt()
+  const id = Decrypt();
   useEffect(() => {
-    axios.get(`${API_PENGGUNA}/` + id, {
-      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    }).then((res) => {
-      const response = res.data.data;
-      setlevel(response.levelPengguna)
-    }).catch((err) => {
-      console.log(err);
-    })
-  }, [id])
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setlevel(response.levelPengguna);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -323,7 +325,7 @@ function DataBarang() {
                         <>
                           <td className="text-sm py-2 px-3 flex items-center justify-center">
                             <div className="flex flex-row gap-3">
-                              <a href={"/edit_barang/" + barang.idBarang}>
+                              <a href={"/edit_barang/" + barang.id}>
                                 <IconButton size="md" color="light-blue">
                                   <PencilIcon className="w-6 h-6 white" />
                                 </IconButton>
@@ -332,7 +334,7 @@ function DataBarang() {
                                 size="md"
                                 color="red"
                                 type="button"
-                                onClick={() => deleteBarang(barang.idBarang)}
+                                onClick={() => deleteBarang(barang.id)}
                               >
                                 <TrashIcon className="w-6 h-6 white" />
                               </IconButton>{" "}
