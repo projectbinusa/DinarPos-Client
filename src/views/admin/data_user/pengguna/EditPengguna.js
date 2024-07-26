@@ -175,7 +175,7 @@ function EditPengguna() {
                 label="Level Pengguna"
                 color="blue"
                 size="lg"
-                onChange={(e) => setlevel(e.target.value)}
+                onChange={(event) => setlevel(event)}
                 value={level}
               >
                 <Option value="Kasir">Kasir</Option>

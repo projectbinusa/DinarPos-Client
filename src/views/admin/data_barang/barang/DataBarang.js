@@ -35,11 +35,9 @@ function DataBarang() {
   const history = useHistory();
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
     }
-
-    $(tableRef.current).DataTable({});
   };
 
   // GET ALL
