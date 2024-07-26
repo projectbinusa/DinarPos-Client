@@ -510,8 +510,11 @@ function TransaksiPembelianDinarpos() {
             if (result.isConfirmed) {
               window.open(
                 "/cetak_struk_transaksi_beli_dinarpos/" +
-                  res.data.data.idTransaksiBeli
+                res.data.data.idTransaksiBeli
               );
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
             } else {
               window.location.reload();
             }
@@ -521,6 +524,13 @@ function TransaksiPembelianDinarpos() {
         }
       })
       .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Transaksi Pembelian Dinarpos Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };

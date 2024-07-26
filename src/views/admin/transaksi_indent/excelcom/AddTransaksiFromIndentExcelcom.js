@@ -108,6 +108,13 @@ function AddTransaksiFromIndentExcelcom() {
         }
       })
       .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Transaksi Excelcom Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };
