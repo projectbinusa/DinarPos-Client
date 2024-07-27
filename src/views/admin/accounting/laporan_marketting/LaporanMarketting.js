@@ -58,7 +58,7 @@ function LaporanMarketting() {
                             // onChange={(e) => settglAkhir(e.target.value)}
                             />
                         </div>
-                        <div className="flex flex-col lg:flex-row gap-5">
+                        <div className="flex flex-col lg:flex-row items-start lg:gap-5">
                             <Button className="mt-5" color="blue" type="submit">
                                 Export
                             </Button>

@@ -87,7 +87,7 @@ function StokOpname() {
                     Jumlah Stok Opname
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    Keterangan Stok Masuk
+                    Keterangan Stok Opname
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">Waktu</th>
                 </tr>
