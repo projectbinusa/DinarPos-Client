@@ -196,7 +196,7 @@ function TglFilterTransaksiBeliDinarpos() {
                   ))}{" "}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-                  {row.totalHargaBarang}
+                  {row.totalBayarBarang}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {row.totalBelanja}

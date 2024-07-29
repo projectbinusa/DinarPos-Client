@@ -619,7 +619,7 @@ function TransaksiPembelianExcelcom() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.idSuplier}>
+                      <option value={option.idSuplier} key={option.idSuplier}>
                         {option.kodeSuplier} - {option.namaSuplier}
                       </option>
                     ))}
