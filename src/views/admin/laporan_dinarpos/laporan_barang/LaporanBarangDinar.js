@@ -11,12 +11,8 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
   ArrowPathIcon,
-  CheckIcon,
-  PhoneIcon,
-  PrinterIcon,
 } from "@heroicons/react/24/outline";
 import {
   API_BARANG,
@@ -37,11 +33,9 @@ function LaporanBarangDinar() {
   const [tglAkhir, settglAkhir] = useState(0);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
     }
-
-    $(tableRef.current).DataTable({});
   };
 
   const getAll = async () => {
@@ -76,37 +70,6 @@ function LaporanBarangDinar() {
       initializeDataTable();
     }
   }, [barangs]);
-
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-  };
 
   const history = useHistory();
 
@@ -224,8 +187,9 @@ function LaporanBarangDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%] flex gap-2 items-end">
+            <div className="w-full lg:w-[50%] flex gap-2 items-end">
               <Input
                 label="Barang"
                 variant="static"
@@ -244,7 +208,7 @@ function LaporanBarangDinar() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.barcodeBarang}>
+                      <option value={option.barcodeBarang} key={option.barcodeBarang}>
                         {option.namaBarang}
                       </option>
                     ))}
@@ -269,7 +233,7 @@ function LaporanBarangDinar() {
                 </button>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -279,7 +243,7 @@ function LaporanBarangDinar() {
                 required
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -337,7 +301,7 @@ function LaporanBarangDinar() {
                         {row.transaksi.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">{row.qty}</td>
-                      <td className="text-sm py-2 px-3">{row.qty}</td>
+                      <td className="text-sm py-2 px-3">{row.unit}</td>
                       <td className="text-sm py-2 px-3">{row.hargaBrng}</td>
                       <td className="text-sm py-2 px-3">
                         {row.totalHargaBarang}

@@ -76,8 +76,14 @@ function PembelianReturnDinar() {
             }, 1500);
           })
           .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Hapus Gagal!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
             console.log(err);
-          });
+          })
       }
     });
   };

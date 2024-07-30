@@ -198,7 +198,7 @@ function Notifikasi120Dinarpos() {
                             <ul key={idx}>
                               <li>{brg.namaBarang}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center gap-2">
                           <a
@@ -221,24 +221,22 @@ function Notifikasi120Dinarpos() {
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="orange">
-                            <IconButton
-                              size="md"
-                              color="orange"
-                              onClick={() => {
-                                const phone = encodeURIComponent(
-                                  penjualan.customer.telp
-                                ); // Mengkodekan nomor telepon
-                                const message = encodeURIComponent(
-                                  `Hallo kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                );
-                                window.open(
-                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                );
-                              }}
-                            >
-                              <PhoneIcon className="w-6 h-6 white" />
-                            </IconButton>
+                          <IconButton
+                            size="md"
+                            color="orange"
+                            onClick={() => {
+                              const phone = encodeURIComponent(
+                                penjualan.customer.telp
+                              ); // Mengkodekan nomor telepon
+                              const message = encodeURIComponent(
+                                `Hallo kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                              );
+                              window.open(
+                                `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                              );
+                            }}
+                          >
+                            <PhoneIcon className="w-6 h-6 white" />
                           </IconButton>
                         </td>
                       </tr>
@@ -274,7 +272,7 @@ function Notifikasi120Dinarpos() {
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    No Faktur{" "}
+                    No Faktur
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
@@ -315,8 +313,8 @@ function Notifikasi120Dinarpos() {
                           <IconButton size="md" color="light-blue">
                             <PrinterIcon className="w-6 h-6 white" />
                           </IconButton>
-                        </a>{" "}
-                      </td>{" "}
+                        </a>
+                      </td>
                     </tr>
                   ))
                 ) : (

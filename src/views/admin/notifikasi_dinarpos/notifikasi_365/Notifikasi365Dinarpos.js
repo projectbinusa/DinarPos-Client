@@ -221,24 +221,22 @@ function Notifikasi365Dinarpos() {
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="orange">
-                            <IconButton
-                              size="md"
-                              color="orange"
-                              onClick={() => {
-                                const phone = encodeURIComponent(
-                                  penjualan.customer.telp
-                                ); // Mengkodekan nomor telepon
-                                const message = encodeURIComponent(
-                                  `Hallo kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                );
-                                window.open(
-                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                );
-                              }}
-                            >
-                              <PhoneIcon className="w-6 h-6 white" />
-                            </IconButton>
+                          <IconButton
+                            size="md"
+                            color="orange"
+                            onClick={() => {
+                              const phone = encodeURIComponent(
+                                penjualan.customer.telp
+                              );
+                              const message = encodeURIComponent(
+                                `Hallo kak ${penjualan.customer.nama_customer} Perkenalkan saya ${penjualan.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                              );
+                              window.open(
+                                `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                              );
+                            }}
+                          >
+                            <PhoneIcon className="w-6 h-6 white" />
                           </IconButton>
                         </td>
                       </tr>

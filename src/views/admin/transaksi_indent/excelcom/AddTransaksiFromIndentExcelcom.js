@@ -67,7 +67,7 @@ function AddTransaksiFromIndentExcelcom() {
 
     $("#ttl_pembayaran").html(formatRupiah(ttl_pembayaran));
 
-    if (ttl_pembayaran < datas?.totalBelanja) {
+    if (ttl_pembayaran < datas?.totalBelanja && datas?.cashKredit !== 'Kredit') {
       $("#bayar").attr("disabled", "disabled");
     } else {
       $("#bayar").removeAttr("disabled");
@@ -96,7 +96,7 @@ function AddTransaksiFromIndentExcelcom() {
             if (result.isConfirmed) {
               window.open(
                 "/cetak_struk_transaksi_penjualan_excelcom/" +
-                  res.data.data.idTransaksi
+                res.data.data.idTransaksi
               );
               window.location.href = "/transaksi_indent_excelcom";
             } else {
@@ -331,13 +331,13 @@ function AddTransaksiFromIndentExcelcom() {
                   Rp {datas?.totalBelanja}
                 </h1>
               </div>
-              {ttl_pembayaran < datas?.totalBelanja ? (
+              {ttl_pembayaran < datas?.totalBelanja && datas?.cashKredit !== "Kredit" ? (
                 <>
                   <Button
                     variant="gradient"
                     color="blue"
                     className="mt-5"
-                    type="submit"
+                    type="button"
                     id="bayar"
                     disabled
                   >

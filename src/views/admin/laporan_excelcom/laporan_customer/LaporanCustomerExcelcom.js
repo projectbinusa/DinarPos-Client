@@ -10,11 +10,8 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
-  API_BARANG,
   API_CUSTOMER,
-  GET_BARANG_TRANSAKSI_BELI_EXCELCOM,
   GET_BARANG_TRANSAKSI_JUAL_EXCELCOM,
   LAPORAN_CUSTOMER,
 } from "../../../../utils/BaseUrl";
@@ -27,11 +24,9 @@ function LaporanCustomerExcelcom() {
   const [tglAkhir, settglAkhir] = useState(0);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
     }
-
-    $(tableRef.current).DataTable({});
   };
 
   const getAll = async () => {
@@ -149,8 +144,9 @@ function LaporanCustomerExcelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%] flex gap-2 items-end">
+            <div className="w-full lg:w-[50%] flex gap-2 items-end">
               <Input
                 label="Customer"
                 variant="static"
@@ -169,7 +165,7 @@ function LaporanCustomerExcelcom() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.id}>{option.nama_customer}</option>
+                      <option value={option.id} key={option.id}>{option.nama_customer}</option>
                     ))}
                   </>
                 )}
@@ -192,7 +188,7 @@ function LaporanCustomerExcelcom() {
                 </button>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -202,7 +198,7 @@ function LaporanCustomerExcelcom() {
                 required
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -252,15 +248,9 @@ function LaporanCustomerExcelcom() {
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">
-                          {laporan.created_date}
-                        </td>
-                        <td className="text-sm w-[15%] py-2 px-3">
-                          {laporan.noFaktur}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {laporan.customer.nama_customer}
-                        </td>
+                        <td className="text-sm py-2 px-3">{laporan.created_date}</td>
+                        <td className="text-sm w-[15%] py-2 px-3">{laporan.noFaktur}</td>
+                        <td className="text-sm py-2 px-3">{laporan.customer.nama_customer}</td>
                         <td className="text-sm py-2 px-3">
                           {barangLaporan.map((brg, idx) => (
                             <ul key={idx}>
@@ -269,23 +259,23 @@ function LaporanCustomerExcelcom() {
                           ))}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {barangLaporan.map((brg, idx) => (
-                            <ul key={idx}>
-                              <li>{brg.qty}</li>
+                          {barangLaporan.map((brg1, idx1) => (
+                            <ul key={idx1}>
+                              <li>{brg1.qty}</li>
                             </ul>
                           ))}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {barangLaporan.map((brg, idx) => (
-                            <ul key={idx}>
-                              <li>{brg.unit}</li>
+                          {barangLaporan.map((brg2, idx2) => (
+                            <ul key={idx2}>
+                              <li>{brg2.unit}</li>
                             </ul>
                           ))}
-                        </td>{" "}
+                        </td>
                         <td className="text-sm py-2 px-3">
-                          {barangLaporan.map((brg, idx) => (
-                            <ul key={idx}>
-                              <li>{brg.hargaBrng}</li>
+                          {barangLaporan.map((brg3, idx3) => (
+                            <ul key={idx3}>
+                              <li>{brg3.hargaBrng}</li>
                             </ul>
                           ))}
                         </td>

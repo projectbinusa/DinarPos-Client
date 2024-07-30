@@ -324,15 +324,37 @@ function AddIndentDinarpos() {
     setaddProduk(newProduk2);
   };
 
-  const remove = (barcode) => {
-    if (window.confirm("Apakah anda yakin?")) {
-      removeItemsById(barcode);
-      updateTotalHarga(produk);
-      $("#tambah").attr("disabled", "disabled");
-      if (parseInt(produk.length) === 0) {
-        $("#bayar").attr("disabled", "disabled");
+  // const remove = (barcode) => {
+  //   if (window.confirm("Apakah anda yakin?")) {
+  //     removeItemsById(barcode);
+  //     updateTotalHarga(produk);
+  //     $("#tambah").attr("disabled", "disabled");
+  //     if (parseInt(produk.length) === 0) {
+  //       $("#bayar").attr("disabled", "disabled");
+  //     }
+  //   }
+  // };
+
+  const remove = async (barcode) => {
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeItemsById(barcode);
+        updateTotalHarga(produk);
+        $("#tambah").attr("disabled", "disabled");
+        if (parseInt(produk.length) === 0) {
+          $("#bayar").attr("disabled", "disabled");
+        }
       }
-    }
+    });
   };
 
   // BUTTON EDIT BARANG
