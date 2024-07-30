@@ -115,8 +115,8 @@ function DetailHistoriTransaksiBeliExcelcom() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <Typography variant="small">Nama Barang</Typography>
           <p className="mt-2">
-            {namaBarangList.map((nama) => (
-              <span>{nama} || </span>
+            {namaBarangList.map((nama, index) => (
+              <span key={index}>{nama} || </span>
             ))}
           </p>
           <hr /> <br />

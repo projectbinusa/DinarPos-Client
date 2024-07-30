@@ -79,7 +79,8 @@ function ModalTambahCustomer({ handleOpen }) {
       } else if (error.response.status === 400) {
         Swal.fire({
           icon: "error",
-          title: "Data Sudah Ada!",
+          title: "Email dan No Telepon Sudah Ada!",
+          text: "Email dan No Telepon Tidak Boleh Sama!",
           showConfirmButton: false,
           timer: 1500,
         });

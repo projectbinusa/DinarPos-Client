@@ -472,6 +472,13 @@ function AddIndentDinarpos() {
         }
       })
       .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Transaksi Indent Dinarpos Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };

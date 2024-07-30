@@ -60,7 +60,8 @@ function ModalTambahSuplier({ handleOpen }) {
       } else if (error.response.status === 400) {
         Swal.fire({
           icon: "error",
-          title: "Data Sudah Ada!",
+          title: "Kode Suplier Sudah Ada!",
+          text: "Kode Suplier Tidak Boleh Sama!",
           showConfirmButton: false,
           timer: 1500,
         });

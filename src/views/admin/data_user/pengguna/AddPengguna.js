@@ -140,6 +140,9 @@ function AddPengguna() {
                 <Option value="AdminService">AdminService</Option>
               </Select>
             </div>
+            <br />
+            <p className="text-sm lg:text-base text-red-500">* Level Pengguna <b>Kasir, Gudang,</b> dan <b>Accounting</b> menggunakan Role <b>Excelcom</b> atau <b>Dinarpos</b> </p>
+            <p className="text-sm lg:text-base text-red-500">* Level Pengguna <b>Pimpinan, Admin,</b> dan <b>AdminService</b> menggunakan Role yang sama dengan level</p>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>

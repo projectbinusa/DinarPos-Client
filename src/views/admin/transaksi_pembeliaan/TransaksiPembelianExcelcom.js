@@ -505,8 +505,11 @@ function TransaksiPembelianExcelcom() {
             if (result.isConfirmed) {
               window.open(
                 "/cetak_struk_pembelian_excelcom/" +
-                  res.data.data.idTransaksiBeli
+                res.data.data.idTransaksiBeli
               );
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
             } else {
               window.location.reload();
             }
@@ -516,6 +519,13 @@ function TransaksiPembelianExcelcom() {
         }
       })
       .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Transaksi Pembelian Excelcom Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };
@@ -609,7 +619,7 @@ function TransaksiPembelianExcelcom() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.idSuplier}>
+                      <option value={option.idSuplier} key={option.idSuplier}>
                         {option.kodeSuplier} - {option.namaSuplier}
                       </option>
                     ))}
