@@ -113,7 +113,7 @@ function EditSuplier() {
             <span className="cursor-default">Edit Suplier</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={editSuplier}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input

@@ -175,7 +175,7 @@ function EditTeknisi() {
                 defaultValue={bagian}
                 onChange={(selected) => setbagian(selected)}
               >
-                <Option value="Electro">Electro</Option>
+                <Option value="Elektro">Elektro</Option>
                 <Option value="PC">PC</Option>
               </Select>
             </div>

@@ -69,7 +69,8 @@ function ModalTambahBarang({ handleOpen2 }) {
           } else if (error.response.status === 400) {
             Swal.fire({
               icon: "error",
-              title: "Data Sudah Ada!",
+              title: "Barcode Barang Sudah Ada!",
+              text: "Barcode Barang Tidak Boleh Sama!",
               showConfirmButton: false,
               timer: 1500,
             });

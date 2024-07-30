@@ -185,7 +185,7 @@ function EditCustomer() {
             <span className="cursor-default capitalize">edit Customer</span>
           </Breadcrumbs>
         </div>
-        <main className="container bg-white shadow-lg px-5 py-8 my-5 rounded">
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <div>
             <Typography variant="paragraph" className="uppercase">
               DATA CUSTOMER

@@ -707,7 +707,7 @@ function DashboardAdminService() {
                             <ClockIcon className="h-12 w-12 text-yellow-900" />
                             <div>
                                 <Typography variant="h3" className="text-yellow-900 text-right">
-                                    12
+                                    {semingguAll.length}
                                 </Typography>
                                 <Typography variant="paragraph" className="text-yellow-900">Service > 1 Minggu
                                 </Typography>

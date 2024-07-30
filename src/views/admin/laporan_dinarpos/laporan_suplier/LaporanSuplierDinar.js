@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import {
-  API_BARANG,
   API_SUPLIER,
   LAPORAN_SUPLIER,
 } from "../../../../utils/BaseUrl";
@@ -52,37 +51,37 @@ function LaporanSuplierDinar() {
     }
   }, [laporans]);
 
-  const [barang, setBarang] = useState([]);
+  // const [barang, setBarang] = useState([]);
 
-  const barangTransaksi = async (transactionId) => {
-    try {
-      const response = await axios.get(
-        `${API_BARANG}/barcode?barcode=${transactionId}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      console.log(response.data.data);
-      return response.data.data;
-    } catch (error) {
-      console.log("get all", error);
-      return [];
-    }
-  };
+  // const barangTransaksi = async (transactionId) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${API_BARANG}/barcode?barcode=${transactionId}`,
+  //       {
+  //         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+  //       }
+  //     );
+  //     console.log(response.data.data);
+  //     return response.data.data;
+  //   } catch (error) {
+  //     console.log("get all", error);
+  //     return [];
+  //   }
+  // };
 
-  useEffect(() => {
-    const fetchBarangTransaksi = async () => {
-      const barangList = await Promise.all(
-        laporans.map(async (laporan) => {
-          const barangData = await barangTransaksi(laporan.barcodeBarang);
-          return barangData;
-        })
-      );
-      setBarang(barangList);
-    };
+  // useEffect(() => {
+  //   const fetchBarangTransaksi = async () => {
+  //     const barangList = await Promise.all(
+  //       laporans.map(async (laporan) => {
+  //         const barangData = await barangTransaksi(laporan.barcodeBarang);
+  //         return barangData;
+  //       })
+  //     );
+  //     setBarang(barangList);
+  //   };
 
-    fetchBarangTransaksi();
-  }, [laporans]);
+  //   fetchBarangTransaksi();
+  // }, [laporans]);
 
   const [values, setvalues] = useState("");
   const [options, setoptions] = useState([]);
@@ -146,8 +145,9 @@ function LaporanSuplierDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%]">
+            <div className="w-full lg:w-[50%]">
               <div className="flex gap-2 items-end">
                 <Input
                   label="Suplier"
@@ -167,7 +167,7 @@ function LaporanSuplierDinar() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option value={option.idSuplier}>
+                        <option value={option.idSuplier} key={option.idSuplier}>
                           {option.namaSuplier}
                         </option>
                       ))}
@@ -193,7 +193,7 @@ function LaporanSuplierDinar() {
                 </div>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -203,7 +203,7 @@ function LaporanSuplierDinar() {
                 onChange={(e) => settglAwal(e.target.value)}
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -245,8 +245,6 @@ function LaporanSuplierDinar() {
               <tbody>
                 {laporans.length > 0 ? (
                   laporans.map((laporan, index) => {
-                    const barangLaporan = barang[index] || [];
-
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
@@ -260,9 +258,7 @@ function LaporanSuplierDinar() {
                           {laporan.namaBarang}
                         </td>
                         <td className="text-sm py-3 px-3">{laporan.qty}</td>
-                        <td className="text-sm py-2 px-3">
-                          <span>{barangLaporan.unit}</span>
-                        </td>{" "}
+                        <td className="text-sm py-2 px-3">{laporan.unit}</td>
                         <td className="text-sm py-3 px-3">
                           {laporan.hargaBrng}
                         </td>

@@ -210,8 +210,9 @@ function LaporanTransaksiBeliExcelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%]">
+            <div className="w-full lg:w-[50%]">
               <div className="flex gap-2 items-end">
                 <Input
                   label="Suplier"
@@ -231,14 +232,13 @@ function LaporanTransaksiBeliExcelcom() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option value={option.idSuplier}>
+                        <option value={option.idSuplier} key={option.idSuplier}>
                           {option.namaSuplier}
                         </option>
                       ))}
                     </>
                   )}
                 </datalist>
-
                 <div className="flex gap-2">
                   <button
                     className="text-sm bg-gray-400 px-1"
@@ -257,7 +257,7 @@ function LaporanTransaksiBeliExcelcom() {
                 </div>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -267,7 +267,7 @@ function LaporanTransaksiBeliExcelcom() {
                 onChange={(e) => settglAwal(e.target.value)}
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"

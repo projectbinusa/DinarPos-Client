@@ -22,6 +22,7 @@ function EditPengguna() {
   const [namapengguna, setnamapengguna] = useState("");
   const [level, setlevel] = useState("");
   const [password, setpassword] = useState("");
+  const [roleToko, setroleToko] = useState("");
 
   const [newPass, setnewPass] = useState("");
   const [konfirmPass, setkonfirmPass] = useState("");
@@ -37,6 +38,7 @@ function EditPengguna() {
       passwordPengguna: password,
       usernamePengguna: username,
       namaPengguna: namapengguna,
+      roleToko: roleToko
     };
 
     await axios
@@ -116,6 +118,7 @@ function EditPengguna() {
         setlevel(response.levelPengguna);
         setpassword(response.passwordPengguna);
         setusername(response.usernamePengguna);
+        setroleToko(response.roleToko)
       })
       .catch((error) => {
         console.log(error);
@@ -185,7 +188,24 @@ function EditPengguna() {
                 <Option value="Admin">Admin</Option>
                 <Option value="AdminService">AdminService</Option>
               </Select>
+              <Select
+                variant="static"
+                label="Role Toko"
+                color="blue"
+                size="lg"
+                onChange={(selectedOption) => setroleToko(selectedOption)}
+                value={roleToko}
+              >
+                <Option value="excelcom">Excelcom</Option>
+                <Option value="dinarpos">Dinarpos</Option>
+                <Option value="Pimpinan">Pimpinan</Option>
+                <Option value="Admin">Admin</Option>
+                <Option value="AdminService">AdminService</Option>
+              </Select>
             </div>
+            <br />
+            <p className="text-sm lg:text-base text-red-500">* Level Pengguna <b>Kasir, Gudang,</b> dan <b>Accounting</b> menggunakan Role <b>Excelcom</b> atau <b>Dinarpos</b> </p>
+            <p className="text-sm lg:text-base text-red-500">* Level Pengguna <b>Pimpinan, Admin,</b> dan <b>AdminService</b> menggunakan Role yang sama dengan level</p>
             <div className="mt-10 flex gap-4">
               <Button variant="gradient" color="blue" type="submit">
                 <span>Simpan</span>
