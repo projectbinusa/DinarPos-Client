@@ -347,6 +347,7 @@ const DataFinish = () => {
               <br />
             </div>
           </div>
+          <br />
         </div>
       </div>
     </section>

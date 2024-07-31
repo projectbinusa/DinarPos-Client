@@ -471,12 +471,6 @@ function TransaksiPembelianDinarpos() {
       kekurangan = 0;
     }
 
-    console.log(addProduk);
-
-    console.log(totalBayarBarang);
-
-    console.log(diskons);
-
     const request = {
       cashCredit: cashCredit,
       diskon: diskons,
@@ -572,7 +566,6 @@ function TransaksiPembelianDinarpos() {
   function setPembayaranCash(values) {
     if (values === "Cash Uang" || values === "Cash Bank") {
       var total = convertToAngka($("#total").html());
-      console.log(total);
       $("#pembayaran").val(total);
     } else {
       $("#pembayaran").val(0);
@@ -812,7 +805,7 @@ function TransaksiPembelianDinarpos() {
                                 <TrashIcon className="w-6 h-6 white" />
                               </IconButton>
                             </div>
-                          </td>{" "}
+                          </td>
                         </tr>
                       ))
                     ) : (
@@ -901,8 +894,8 @@ function TransaksiPembelianDinarpos() {
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph" id="title">
-                    Kembalian / Kekurangan{" "}
-                  </Typography>{" "}
+                    Kembalian / Kekurangan
+                  </Typography>
                   <Typography variant="h6" id="kembalian">
                     Rp 0,00
                   </Typography>
