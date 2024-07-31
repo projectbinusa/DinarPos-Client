@@ -54,37 +54,6 @@ function LaporanSalesmanExcelcom() {
     getAll();
   }, []);
 
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-  };
-
   const [values, setvalues] = useState("");
   const [options, setoptions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -188,6 +157,12 @@ function LaporanSalesmanExcelcom() {
             }, 1500);
           })
           .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Return Gagal!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
             console.log(err);
           });
       }
@@ -242,28 +217,29 @@ function LaporanSalesmanExcelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%]">
+            <div className="w-full lg:w-[50%]">
               <div className="flex gap-2 items-end">
                 <Input
-                  label="Suplier"
+                  label="Salesman"
                   variant="static"
                   color="blue"
-                  list="suplier-list"
-                  id="suplier"
-                  name="suplier"
+                  list="salesman-list"
+                  id="salesman"
+                  name="salesman"
                   onChange={(event) => {
                     handleChange(event);
                     setsalesmanId(event.target.value);
                   }}
-                  placeholder="Pilih Suplier"
+                  placeholder="Pilih Salesman"
                   required
                 />
-                <datalist id="suplier-list">
+                <datalist id="salesman-list">
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option value={option.id}>
+                        <option value={option.id} key={option.id}>
                           {option.namaSalesman}
                         </option>
                       ))}
@@ -289,7 +265,7 @@ function LaporanSalesmanExcelcom() {
                 </div>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -299,7 +275,7 @@ function LaporanSalesmanExcelcom() {
                 onChange={(e) => settglAwal(e.target.value)}
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"

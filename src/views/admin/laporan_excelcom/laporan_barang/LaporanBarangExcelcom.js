@@ -30,11 +30,9 @@ function LaporanBarangExcelcom() {
   const [tglAkhir, settglAkhir] = useState("");
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
     }
-
-    $(tableRef.current).DataTable({});
   };
 
   const currentDate = new Date();
@@ -180,8 +178,9 @@ function LaporanBarangExcelcom() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%] flex gap-2 items-end">
+            <div className="w-full lg:w-[50%] flex gap-2 items-end">
               <Input
                 label="Barang"
                 variant="static"
@@ -199,8 +198,8 @@ function LaporanBarangExcelcom() {
               <datalist id="barang-list">
                 {options.length > 0 && (
                   <>
-                    {options.map((option) => (
-                      <option value={option.barcodeBarang}>
+                    {options.map((option, idx) => (
+                      <option value={option.barcodeBarang} key={idx}>
                         {option.namaBarang}
                       </option>
                     ))}
@@ -225,7 +224,7 @@ function LaporanBarangExcelcom() {
                 </button>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -235,7 +234,7 @@ function LaporanBarangExcelcom() {
                 required
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -293,7 +292,7 @@ function LaporanBarangExcelcom() {
                         {row.transaksi.customer.nama_customer}
                       </td>
                       <td className="text-sm py-2 px-3">{row.qty}</td>
-                      <td className="text-sm py-2 px-3">{row.qty}</td>
+                      <td className="text-sm py-2 px-3">{row.unit}</td>
                       <td className="text-sm py-2 px-3">{row.hargaBrng}</td>
                       <td className="text-sm py-2 px-3">
                         {row.totalHargaBarang}
@@ -306,7 +305,8 @@ function LaporanBarangExcelcom() {
                               onClick={() => returnBarang(row.idBrgTransaksi)}
                             />
                           </IconButton>
-                        </td>{" "}</>) : (<></>)}
+                        </td>
+                      </>) : (<></>)}
                     </tr>
                   ))
                 ) : (

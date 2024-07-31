@@ -88,6 +88,12 @@ function Konfirmasi90Excelcom() {
           localStorage.clear();
           history.push("/");
         } else {
+          Swal.fire({
+            icon: "error",
+            title: "Konfirmasi Gagal!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
           console.log(error);
         }
       });
@@ -145,7 +151,7 @@ function Konfirmasi90Excelcom() {
                   {optionsSalesman.length > 0 && (
                     <>
                       {optionsSalesman.map((option) => (
-                        <option value={option.id}>
+                        <option value={option.id} key={option.id}>
                           {option.namaSalesman}
                         </option>
                       ))}

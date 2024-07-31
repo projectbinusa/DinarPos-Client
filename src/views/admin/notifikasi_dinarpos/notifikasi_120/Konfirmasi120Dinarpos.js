@@ -97,6 +97,12 @@ function Konfirmasi120Dinarpos() {
           localStorage.clear();
           history.push("/");
         } else {
+          Swal.fire({
+            icon: "error",
+            title: "Konfirmasi Gagal!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
           console.log(error);
         }
       });
@@ -148,13 +154,13 @@ function Konfirmasi120Dinarpos() {
                     setsalesmanId(event.target.value);
                   }}
                   placeholder="Pilih Salesman"
-required
+                  required
                 />
                 <datalist id="salesman-list">
                   {optionsSalesman.length > 0 && (
                     <>
                       {optionsSalesman.map((option) => (
-                        <option value={option.id}>
+                        <option value={option.id} key={option.id}>
                           {option.namaSalesman}
                         </option>
                       ))}
@@ -190,7 +196,7 @@ required
                 label="Keterangan"
                 placeholder="Masukkan Keterangan"
                 onChange={(e) => setket(e.target.value)}
-required
+                required
               />
             </div>
             <div className="mt-10 flex gap-4">

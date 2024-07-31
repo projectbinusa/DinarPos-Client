@@ -95,8 +95,8 @@ function DetailPembelianReturnDinarpos() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <Typography variant="small">Nama Barang</Typography>
           <p className="mt-2">
-            {barang.map((row) => (
-              <span>{row.namaBarang} || </span>
+            {barang.map((row, idx) => (
+              <span key={idx}>{row.namaBarang} || </span>
             ))}
           </p>
           <hr /> <br />

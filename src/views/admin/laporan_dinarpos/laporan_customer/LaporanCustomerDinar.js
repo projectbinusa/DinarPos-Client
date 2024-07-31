@@ -10,11 +10,8 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
-  API_BARANG,
   API_CUSTOMER,
-  GET_BARANG_TRANSAKSI_BELI_DINARPOS,
   GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
   LAPORAN_CUSTOMER,
 } from "../../../../utils/BaseUrl";
@@ -27,11 +24,9 @@ function LaporanCustomerDinar() {
   const [tglAkhir, settglAkhir] = useState(0);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
     }
-
-    $(tableRef.current).DataTable({});
   };
 
   const getAll = async () => {
@@ -149,8 +144,9 @@ function LaporanCustomerDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%] flex gap-2 items-end">
+            <div className="w-full lg:w-[50%] flex gap-2 items-end">
               <Input
                 label="Customer"
                 variant="static"
@@ -169,7 +165,7 @@ function LaporanCustomerDinar() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.id}>
+                      <option value={option.id} key={option.id}>
                         {option.nama_customer}
                       </option>
                     ))}
@@ -194,7 +190,7 @@ function LaporanCustomerDinar() {
                 </button>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -204,7 +200,7 @@ function LaporanCustomerDinar() {
                 required
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"

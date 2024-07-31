@@ -14,12 +14,6 @@ function PrintHistoriTransaksiDinarpos() {
   const [barang, setbarang] = useState([]);
   const param = useParams();
 
-  useEffect(() => {
-    fetchData();
-    getAllBarang();
-    openWhatsapp();
-  }, []);
-
   const fetchData = async () => {
     try {
       const response = await axios.get(`${GET_TRANSAKSI_JUAL}/` + param.id, {
@@ -28,7 +22,6 @@ function PrintHistoriTransaksiDinarpos() {
       setReportData(response.data.data);
       settelp(response.data.data.customer.telp);
       setnama(response.data.data.customer.nama_customer);
-      console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -63,6 +56,15 @@ function PrintHistoriTransaksiDinarpos() {
       console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+    getAllBarang();
+  }, []);
+
+  useEffect(() => {
+    openWhatsapp();
+  }, [telp, nama])
 
   if (!reportData) {
     return <div>Loading...</div>;

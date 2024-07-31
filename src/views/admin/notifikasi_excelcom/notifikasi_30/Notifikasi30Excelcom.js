@@ -175,7 +175,6 @@ function Notifikasi30Excelcom() {
                 {notifikasis.length > 0 ? (
                   notifikasis.map((row, index) => {
                     const dataBrg = barang[index] || [];
-
                     return (
                       <tr key={index}>
                         <td className="text-sm w-[4%]">{index + 1}</td>
@@ -194,14 +193,14 @@ function Notifikasi30Excelcom() {
                             <ul key={idx}>
                               <li>{brg.namaBarang}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center gap-2">
                           <a
                             href={"/print_histori_excelcom/" + row.idTransaksi}
                             target="_blank"
                           >
-                            <IconButton size="md" color="light-blue">
+                            <IconButton size="md" color="light-blue" type="button">
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
@@ -212,24 +211,23 @@ function Notifikasi30Excelcom() {
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="orange">
-                            <IconButton
-                              size="md"
-                              color="orange"
-                              onClick={() => {
-                                const phone = encodeURIComponent(
-                                  row.customer.telp
-                                ); // Mengkodekan nomor telepon
-                                const message = encodeURIComponent(
-                                  `Halo kak ${row.customer.nama_customer} Perkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                );
-                                window.open(
-                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                );
-                              }}
-                            >
-                              <PhoneIcon className="w-6 h-6 white" />
-                            </IconButton>
+                          <IconButton
+                            size="md"
+                            color="orange"
+                            type="button"
+                            onClick={() => {
+                              const phone = encodeURIComponent(
+                                row.customer.telp
+                              );
+                              const message = encodeURIComponent(
+                                `Halo kak ${row.customer.nama_customer} Perkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                              );
+                              window.open(
+                                `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                              );
+                            }}
+                          >
+                            <PhoneIcon className="w-6 h-6 white" />
                           </IconButton>
                         </td>
                       </tr>
@@ -301,7 +299,7 @@ function Notifikasi30Excelcom() {
                           href={"/print_histori_excelcom/" + row.idTransaksi}
                           target="_blank"
                         >
-                          <IconButton size="md" color="light-blue">
+                          <IconButton size="md" color="light-blue" type="button">
                             <PrinterIcon className="w-6 h-6 white" />
                           </IconButton>
                         </a>

@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import {
   API_RETURN_DINARPOS,
   API_RETURN_EXCELCOM,
-  GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
 } from "../../../../utils/BaseUrl";
 import { useEffect } from "react";
 

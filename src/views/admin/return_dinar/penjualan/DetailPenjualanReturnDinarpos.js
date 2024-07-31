@@ -2,10 +2,8 @@ import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
-  API_BARANG,
   API_RETURN_DINARPOS,
   API_RETURN_EXCELCOM,
-  GET_BARANG_TRANSAKSI_JUAL_DINARPOS,
 } from "../../../../utils/BaseUrl";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
@@ -95,8 +93,8 @@ function DetailPenjualanReturnDinarpos() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <Typography variant="small">Nama Barang</Typography>
           <p className="mt-2">
-            {barang.map((row) => (
-              <span>{row.namaBarang} || </span>
+            {barang.map((row, idx) => (
+              <span key={idx}>{row.namaBarang} || </span>
             ))}
           </p>
           <hr /> <br />
