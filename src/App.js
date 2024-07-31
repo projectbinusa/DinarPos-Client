@@ -157,6 +157,9 @@ import AddTransaksiFromIndentDinarpos from "./views/admin/transaksi_indent/dinar
 import DashboardAdminService from "./views/itc/DashboardAdminService.js";
 import DetailServiceTaken from "./views/itc/service/DetailServiceTaken.js";
 import LaporanMarketting from "./views/admin/accounting/laporan_marketting/LaporanMarketting.js";
+import LaporanPendapatan from "./views/itc/laporan/LaporanPendapatan.js";
+import LaporanStatusService from "./views/itc/laporan/LaporanStatusService.js";
+import LaporanService from "./views/itc/laporan/LaporanService.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1016,10 +1019,25 @@ function App() {
               component={DashboardAdminService}
               isAuthenticated={true}
             />
-            
+
             <PrivateRoute
               path="/laporan_marketting"
               component={LaporanMarketting}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_pendapatan"
+              component={LaporanPendapatan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_status"
+              component={LaporanStatusService}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_service"
+              component={LaporanService}
               isAuthenticated={true}
             />
           </Switch>
