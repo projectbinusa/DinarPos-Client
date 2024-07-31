@@ -49,42 +49,58 @@ function DataTeknisi() {
     }
   }, [teknisis]);
 
-  // DELETE TEKNISI
-  const deleteTeknisi = async (id) => {
-    Swal.fire({
-      title: "Apakah Anda Ingin Menghapus?",
-      text: "Perubahan data tidak bisa dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Hapus",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          axios
-            .delete(`${API_TEKNISI}/` + id, {
-              headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            })
-            .then(() => {
-              Swal.fire({
-                icon: "success",
-                title: "Dihapus!",
-                showConfirmButton: false,
-                timer: 1500,
-              });
+ // DELETE TEKNISI
+const deleteTeknisi = async (id) => {
+  Swal.fire({
+    title: "Apakah Anda Ingin Menghapus?",
+    text: "Perubahan data tidak bisa dikembalikan!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Hapus",
+    cancelButtonText: "Batal",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.delete(`${API_TEKNISI}/` + id, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
 
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 1500);
-            });
-        } catch (error) {
-          console.log(error);
+        console.log('Response:', response); // Log the response to see the details
+
+        Swal.fire({
+          icon: "success",
+          title: "Dihapus!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } catch (error) {
+        console.error("Error deleting teknisi:", error);
+
+        let errorMessage = "Terjadi kesalahan saat menghapus data.";
+        if (error.response) {
+          console.error("Error Response Data:", error.response.data); // Log the error response data
+          if (error.response.data && error.response.data.message) {
+            errorMessage = error.response.data.message; // Tampilkan pesan dari server jika ada
+          }
         }
+
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: errorMessage,
+          showConfirmButton: true,
+        });
       }
-    });
-  };
+    }
+  });
+};
+
 
   const [level, setlevel] = useState("");
 
