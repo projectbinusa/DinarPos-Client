@@ -211,8 +211,9 @@ function LaporanSalesmanDinar() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <br />
           <form onSubmit={tglFilter}>
-            <div className="w-72 lg:w-[50%]">
+            <div className="w-full lg:w-[50%]">
               <div className="flex gap-2 items-end">
                 <Input
                   label="Salesman"
@@ -232,7 +233,7 @@ function LaporanSalesmanDinar() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option value={option.id}>
+                        <option value={option.id} key={option.id}>
                           {option.namaSalesman}
                         </option>
                       ))}
@@ -258,7 +259,7 @@ function LaporanSalesmanDinar() {
                 </div>
               </div>
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -268,7 +269,7 @@ function LaporanSalesmanDinar() {
                 onChange={(e) => settglAwal(e.target.value)}
               />
             </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
+            <div className="mt-8 w-full lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"

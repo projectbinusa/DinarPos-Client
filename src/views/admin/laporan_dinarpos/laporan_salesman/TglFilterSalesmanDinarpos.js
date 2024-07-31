@@ -17,7 +17,7 @@ function TglFilterSalesmanDinarpos() {
   const getAll = async () => {
     try {
       const response = await axios.get(
-        `${LAPORAN_SALESMAN}/tanggal/excelcom?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
+        `${LAPORAN_SALESMAN}/tanggal/dinarpos?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }

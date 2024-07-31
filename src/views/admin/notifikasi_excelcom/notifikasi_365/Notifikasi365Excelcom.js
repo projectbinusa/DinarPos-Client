@@ -196,14 +196,14 @@ function Notifikasi365Excelcom() {
                             <ul key={idx}>
                               <li>{brg.namaBarang}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3 flex gap-2 items-center justify-center">
                           <a
                             href={"/print_histori_excelcom/" + row.idTransaksi}
                             target="_blank"
                           >
-                            {" "}
+                            
                             <IconButton size="md" color="light-blue">
                               <PrinterIcon className="w-6 h-6 white" />
                             </IconButton>
@@ -215,26 +215,24 @@ function Notifikasi365Excelcom() {
                               <CheckIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
-                          <IconButton size="md" color="orange">
-                            <IconButton
-                              size="md"
-                              color="orange"
-                              onClick={() => {
-                                const phone = encodeURIComponent(
-                                  row.customer.telp
-                                ); 
-                                const message = encodeURIComponent(
-                                  `Hallo kak ${row.customer.nama_customer} Perkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
-                                );
-                                window.open(
-                                  `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
-                                );
-                              }}
-                            >
-                              <PhoneIcon className="w-6 h-6 white" />
-                            </IconButton>
+                          <IconButton
+                            size="md"
+                            color="orange"
+                            onClick={() => {
+                              const phone = encodeURIComponent(
+                                row.customer.telp
+                              );
+                              const message = encodeURIComponent(
+                                `Hallo kak ${row.customer.nama_customer} Perkenalkan saya ${row.salesman.namaSalesman} dari Excellent Computer Semarang Bagaimana kabarnya Kak? Semoga selalu dalam lindunganNya Aamiin`
+                              );
+                              window.open(
+                                `https://api.whatsapp.com/send?phone=${phone}&text=${message}`
+                              );
+                            }}
+                          >
+                            <PhoneIcon className="w-6 h-6 white" />
                           </IconButton>
-                        </td>{" "}
+                        </td>
                       </tr>
                     );
                   })
@@ -268,7 +266,7 @@ function Notifikasi365Excelcom() {
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    No Faktur{" "}
+                    No Faktur
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
@@ -310,7 +308,7 @@ function Notifikasi365Excelcom() {
                             <PrinterIcon className="w-6 h-6 white" />
                           </IconButton>
                         </a>
-                      </td>{" "}
+                      </td>
                     </tr>
                   ))
                 ) : (

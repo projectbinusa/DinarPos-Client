@@ -119,8 +119,8 @@ function DetailHistoriSalesmanExcelcom() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <Typography variant="small">Nama Barang</Typography>
           <p className="mt-2">
-            {namaBarangList.map((nama) => (
-              <span>{nama} || </span>
+            {namaBarangList.map((nama, idx) => (
+              <span key={idx}>{nama} || </span>
             ))}
           </p>
           <hr /> <br />
