@@ -114,14 +114,12 @@ function EditData() {
         window.location.reload();
       }, 1500);
     } catch (err) {
-      if (err.response.data.code === 400) {
-        Swal.fire({
-          icon: "error",
-          title: "Update Biaya Service Gagal!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
+      Swal.fire({
+        icon: "error",
+        title: "Update Biaya Service Gagal!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       console.log("update biaya service", err.response.data.code);
       setTimeout(() => {
         window.location.reload();
@@ -144,7 +142,6 @@ function EditData() {
       );
 
       setpoins(response.data.data);
-      console.log(response);
     } catch (error) {
       if (error.response.code === 404) {
         Swal.fire({
@@ -315,14 +312,12 @@ function EditData() {
         window.location.reload();
       }, 1500);
     } catch (err) {
-      if (err.response.data.code === 400) {
         Swal.fire({
           icon: "error",
           title: "Update Status Service Gagal!",
           showConfirmButton: false,
           timer: 1500,
         });
-      }
       console.log("Update Status Service", err.response.data.code);
       setTimeout(() => {
         window.location.reload();
@@ -341,7 +336,6 @@ function EditData() {
       });
 
       setdataStatus(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       if (error.response.data.code === 404) {
         Swal.fire({
@@ -451,7 +445,7 @@ function EditData() {
         </div>
         <main className="grid grid-cols-1 lg:grid-cols-3 items-start gap-3">
           <div className="bg-white shadow-lg p-3 my-5 rounded">
-            <Typography variant="lead" className="capitalize font-medium">
+            <Typography variant="lead" className="capitalize font-medium font-poppins">
               Edit Data
             </Typography>
             <hr />
@@ -614,6 +608,7 @@ function EditData() {
                           variant="gradient"
                           size="md"
                           onClick={updateBiayaService}
+                          className="font-popins font-medium"
                         >
                           Simpan
                         </Button>
@@ -780,6 +775,7 @@ function EditData() {
                           color="blue"
                           size="md"
                           onClick={updateTandaTerima}
+                          className="font-popins font-medium"
                         >
                           Simpan
                         </Button>
@@ -869,6 +865,7 @@ function EditData() {
                         <Button
                           variant="gradient"
                           size="md"
+                          className="font-popins font-medium"
                           color="blue"
                           onClick={updateStatus}
                         >

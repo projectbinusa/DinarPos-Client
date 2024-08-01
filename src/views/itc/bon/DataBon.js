@@ -86,7 +86,16 @@ function DataBon() {
             setTimeout(() => {
               window.location.reload();
             }, 1500);
-          });
+          }).catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Gagal!",
+              text: "Hapus Bon Barang Gagal!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            console.log(err);
+          })
       }
     });
   };
@@ -218,7 +227,7 @@ function DataBon() {
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="flex justify-end">
             <a href="/add_bon_barang">
-              <Button variant="gradient" color="blue">
+              <Button variant="gradient" color="blue" className="font-popins font-medium">
                 Tambah
               </Button>
             </a>
@@ -371,14 +380,14 @@ function DataBon() {
             variant="text"
             color="gray"
             onClick={handleOpen}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Batal</span>
           </Button>
           <Button
             variant="gradient"
             color="blue"
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
             onClick={updateTglKembaliBonBarang}
           >
             <span>Konfirmasi</span>

@@ -29,7 +29,6 @@ function TakeOver() {
       setdata(response.data.data);
       setStatusEnd(response.data.data.statusEnd);
       setTaken(response.data.data.taken);
-      console.log(response.data.data.statusEnd);
     } catch (error) {
       if (error.response.data.code === 404) {
         Swal.fire({
@@ -183,7 +182,7 @@ function TakeOver() {
               placeholder="Cari Tanda Terima"
               required
             />
-            <Button variant="gradient" color="blue" onClick={searchTT}>
+            <Button variant="gradient" color="blue" onClick={searchTT} className="font-popins font-medium">
               GO!
             </Button>
           </div>
@@ -275,7 +274,7 @@ function TakeOver() {
                       required
                     >
                       {teknisi.map((row) => (
-                        <option value={row.id}>{row.nama}</option>
+                        <option value={row.id} key={row.id}>{row.nama}</option>
                       ))}
                     </select>
                     <button

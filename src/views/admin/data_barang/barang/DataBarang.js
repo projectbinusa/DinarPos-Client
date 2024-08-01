@@ -248,6 +248,32 @@ function DataBarang() {
                   </Button>
                 </a>
               </div>
+              <br />
+              <form >
+                <div className="mt-8 w-full lg:w-[50%]">
+                  <Input
+                    variant="static"
+                    color="blue"
+                    type="date"
+                    label="Tanggal Awal"
+                    required
+                  // onChange={(e) => settglAwal(e.target.value)}
+                  />
+                </div>
+                <div className="mt-8 w-full lg:w-[50%]">
+                  <Input
+                    variant="static"
+                    color="blue"
+                    type="date"
+                    label="Tanggal Akhir"
+                    required
+                  // onChange={(e) => settglAkhir(e.target.value)}
+                  />
+                </div>
+                <Button className="mt-5" color="blue" type="submit">
+                  Export persediaan barang
+                </Button>
+              </form>
             </>
           ) : (
             <></>

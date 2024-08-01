@@ -154,7 +154,7 @@ function Login() {
             className="w-full focus:outline-none"
             type="submit"
           >
-            <Typography variant="h6">Login</Typography>
+            <Typography variant="h6" className="font-poppins font-medium">Login</Typography>
           </Button>
         </form>
       </Card>

@@ -114,7 +114,7 @@ function DetailPenjualanReturnDinarpos() {
           <p className="mt-2">{formatRupiah(kembalian)}</p>
           <hr /> <br />
           <a href="/penjualan_return_dinarpos">
-            <Button variant="gradient" color="blue">
+            <Button variant="gradient" color="blue" className="font-poppins font-medium">
               Kembali
             </Button>
           </a>

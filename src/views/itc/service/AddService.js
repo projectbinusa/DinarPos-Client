@@ -104,7 +104,6 @@ function AddService() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -176,7 +175,7 @@ function AddService() {
                 >
                   Data Pelanggan
                 </Typography>
-                <Button onClick={handleOpen} variant="gradient" color="blue">
+                <Button onClick={handleOpen} variant="gradient" color="blue" className="font-popins font-medium">
                   New
                 </Button>
               </div>
@@ -201,7 +200,7 @@ function AddService() {
                         {options.length > 0 && (
                           <>
                             {options.map((option) => (
-                              <option value={option.id}>
+                              <option value={option.id} key={option.id}>
                                 {option.nama_customer}
                               </option>
                             ))}
@@ -385,7 +384,7 @@ function AddService() {
                   </li>
                 </ol>
                 <br />
-                <Button variant="gradient" color="blue" type="submit">
+                <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
                   Simpan{" "}
                 </Button>
               </CardBody>

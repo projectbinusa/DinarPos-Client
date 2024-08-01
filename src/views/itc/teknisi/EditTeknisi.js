@@ -229,11 +229,11 @@ function EditTeknisi() {
               </Select>
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit">
+              <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/data_teknisi">
-                <Button variant="text" color="gray" className="mr-1">
+                <Button variant="text" color="gray" className="mr-1 font-popins font-medium">
                   <span>Kembali</span>
                 </Button>
               </a>

@@ -846,7 +846,7 @@ function Dashboard() {
           style: {
             colors: "#616161",
             fontSize: "12px",
-            fontFamily: "inherit",
+            fontFamily: "Poppins",
             fontWeight: 400,
           },
         },
@@ -884,13 +884,13 @@ function Dashboard() {
               className="h-12 w-12 bg-blue-100 p-2 rounded-full mb-3"
               color="blue"
             />
-            <Typography variant="h3" color="blue-gray">
+            <Typography variant="h3" color="blue-gray" className="font-poppins">
               {jual.length}
             </Typography>
             <Typography
               variant="small"
               color="blue-gray"
-              className="font-normal"
+              className="font-normal font-poppins"
             >
               Total Transaksi Penjualan
             </Typography>
@@ -900,13 +900,13 @@ function Dashboard() {
               className="h-12 w-12 bg-blue-100 p-2 rounded-full mb-3"
               color="blue"
             />
-            <Typography variant="h3" color="blue-gray">
+            <Typography variant="h3" color="blue-gray" className="font-poppins">
               {beli.length}
             </Typography>
             <Typography
               variant="small"
               color="blue-gray"
-              className="font-normal"
+              className="font-normal font-poppins"
             >
               Total Transaksi Pembelian{" "}
             </Typography>
@@ -916,13 +916,13 @@ function Dashboard() {
               className="h-12 w-12 bg-blue-100 p-2 rounded-full mb-3"
               color="blue"
             />
-            <Typography variant="h3" color="blue-gray">
+            <Typography variant="h3" color="blue-gray" className="font-poppins">
               {produk.length}
             </Typography>
             <Typography
               variant="small"
               color="blue-gray"
-              className="font-normal"
+              className="font-normal font-poppins"
             >
               Total Produk
             </Typography>
@@ -938,7 +938,7 @@ function Dashboard() {
               className="flex flex-col gap-4 rounded-none lg:flex-row lg:items-center"
             >
               <div>
-                <Typography variant="h6" color="blue-gray">
+                <Typography variant="h6" color="blue-gray" className="font-poppins">
                   Grafik Penjualan {currentYear}
                 </Typography>
               </div>
@@ -955,7 +955,7 @@ function Dashboard() {
               className="flex flex-col gap-4 rounded-none lg:flex-row lg:items-center"
             >
               <div>
-                <Typography variant="h6" color="blue-gray">
+                <Typography variant="h6" color="blue-gray" className="font-poppins">
                   Grafik Pembelian {currentYear}
                 </Typography>
               </div>

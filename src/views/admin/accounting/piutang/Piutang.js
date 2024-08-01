@@ -166,14 +166,14 @@ function Piutang() {
                 onChange={(e) => settglAkhir(e.target.value)}
               />
             </div>
-            <Button className="mt-5" color="blue" type="submit">
+            <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
               Export
             </Button>
           </form>
           <div className="flex flex-col lg:flex-row lg:gap-4">
             <div>
               <Button
-                className="mt-5"
+                className="mt-5 font-poppins font-medium"
                 color="blue"
                 type="button"
                 onClick={rekapPiutang}
@@ -183,7 +183,7 @@ function Piutang() {
             </div>
             <div>
               <Button
-                className="mt-5"
+                className="mt-5 font-poppins font-medium"
                 color="blue"
                 type="button"
                 onClick={historyPiutang}

@@ -70,7 +70,6 @@ function DetailServiceTaken() {
         const respon = res.data[0];
         setDataTransaksi(respon);
         setIdTransaksi(respon.idTransaksi);
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -299,10 +298,10 @@ function DetailServiceTaken() {
                         {tglKonfs.length > 0 ? (
                           <>
                             <ol>
-                              {tglKonfs.map((row) => (
-                                <li className="mb-2 flex justify-between items-center">
+                              {tglKonfs.map((row, idx) => (
+                                <li className="mb-2 flex justify-between items-center" key={idx}>
                                   <span>
-                                    {new Date(dataTransaksi.tglKonf).toLocaleDateString()}
+                                    {new Date(row.tglKonf).toLocaleDateString()}
                                   </span>
                                 </li>
                               ))}

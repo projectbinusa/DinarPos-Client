@@ -111,7 +111,7 @@ function DetailPembelianReturnExcelcom() {
           <p className="mt-2">{formatRupiah(kembalian)}</p>
           <hr /> <br />
           <a href="/pembelian_return_excelcom">
-            <Button variant="gradient" color="blue">
+            <Button variant="gradient" color="blue" className="font-poppins font-medium">
               Kembali
             </Button>
           </a>

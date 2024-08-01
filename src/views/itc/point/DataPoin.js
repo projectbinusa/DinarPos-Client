@@ -9,7 +9,7 @@ import {
 } from "@material-tailwind/react";
 import { ChartBarIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-import $, { error } from "jquery";
+import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import { API_PENGGUNA, API_POIN } from "../../../utils/BaseUrl";
@@ -55,7 +55,6 @@ function DataPoin() {
         },
       });
       setpoins(response.data.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -224,7 +223,7 @@ function DataPoin() {
                 Poin{" "}
               </Typography>
               <a href="/add_point">
-                <Button variant="gradient" color="blue">
+                <Button variant="gradient" color="blue" className="font-popins font-medium">
                   Input{" "}
                 </Button>
               </a>
@@ -245,6 +244,7 @@ function DataPoin() {
                 variant="gradient"
                 color="blue"
                 size="md"
+                className="font-popins font-medium"
                 onClick={handleSearchPoinByMonth}
               >
                 GO!
@@ -410,77 +410,6 @@ function DataPoin() {
                     </tr>
                   )}
                 </tbody>
-                {/* <tbody>
-                  {validasi === true ? (
-                    <>
-                      {pointsDate.length > 0 ? (
-                        pointsDate.map((poin, index) => (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {poin.teknisi.nama}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {formatDate(poin.tanggal)}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {poin.poin}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {poin.nominal}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {poin.keterangan}
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan="6"
-                            className="text-sm text-center capitalize py-3 bg-gray-100"
-                          >
-                            Tidak ada data
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {points.length > 0 ? (
-                        points.map((point, index) => (
-                          <tr key={index}>
-                            <td className="text-sm w-[4%]">{index + 1}</td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {point.teknisi.nama}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {formatDate(point.tanggal)}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {point.poin}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {point.nominal}
-                            </td>
-                            <td className="text-sm py-2 px-3 text-center">
-                              {point.keterangan}
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan="6"
-                            className="text-sm text-center capitalize py-3 bg-gray-100"
-                          >
-                            Tidak ada data
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  )}
-                </tbody> */}
               </table>
             </div>
           </div>
