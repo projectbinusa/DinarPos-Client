@@ -324,17 +324,6 @@ function AddIndentDinarpos() {
     setaddProduk(newProduk2);
   };
 
-  // const remove = (barcode) => {
-  //   if (window.confirm("Apakah anda yakin?")) {
-  //     removeItemsById(barcode);
-  //     updateTotalHarga(produk);
-  //     $("#tambah").attr("disabled", "disabled");
-  //     if (parseInt(produk.length) === 0) {
-  //       $("#bayar").attr("disabled", "disabled");
-  //     }
-  //   }
-  // };
-
   const remove = async (barcode) => {
     Swal.fire({
       title: "Apakah Anda Ingin Menghapus?",
@@ -524,7 +513,6 @@ function AddIndentDinarpos() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -555,7 +543,6 @@ function AddIndentDinarpos() {
       );
       const data = await response.json();
       setoptionsSalesman(data.data);
-      console.log(data.data);
     } else {
       return;
     }
@@ -635,7 +622,7 @@ function AddIndentDinarpos() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.id}>{option.nama_customer}</option>
+                      <option value={option.id} key={option.id}>{option.nama_customer}</option>
                     ))}
                   </>
                 )}
@@ -807,7 +794,7 @@ function AddIndentDinarpos() {
                                 <TrashIcon className="w-6 h-6 white" />
                               </IconButton>
                             </div>
-                          </td>{" "}
+                          </td>
                         </tr>
                       ))
                     ) : (
@@ -851,7 +838,7 @@ function AddIndentDinarpos() {
                     {optionsSalesman.length > 0 && (
                       <>
                         {optionsSalesman.map((option) => (
-                          <option value={option.id}>
+                          <option value={option.id} key={option.id}>
                             {option.namaSalesman}
                           </option>
                         ))}

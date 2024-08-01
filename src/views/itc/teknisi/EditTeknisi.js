@@ -13,100 +13,149 @@ import {
 } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import {
-  useHistory,
-  useParams,
-} from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import { API_PENGGUNA, API_TEKNISI } from "../../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import Decrypt from "../../../component/Decrypt";
 
 function EditTeknisi() {
-  const [nama, setnama] = useState("");
-  const [alamat, setalamat] = useState("");
-  const [nohp, setnohp] = useState("");
-  const [bagian, setbagian] = useState("");
+  const [nama, setNama] = useState("");
+  const [alamat, setAlamat] = useState("");
+  const [nohp, setNohp] = useState("");
+  const [bagian, setBagian] = useState("");
 
   const history = useHistory();
   const param = useParams();
 
-  // EDIT BARANG
-  const editTeknisi = async (e) => {
-    e.preventDefault();
-
-    const request = {
-      alamat: alamat,
-      nama: nama,
-      nohp: nohp,
-      bagian: bagian,
-    };
-
-    await axios
-      .put(`${API_TEKNISI}/` + param.id, request, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      })
-      .then(() => {
-        Swal.fire({
-          icon: "success",
-          title: "Data Berhasil Diubah!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        history.push("/data_teknisi");
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      })
-      .catch((error) => {
-        if (error.ressponse && error.response.status === 401) {
-          localStorage.clear();
-          history.push("/");
-        } else {
-          console.log(error);
-        }
-      });
-  };
-
   useEffect(() => {
     axios
-      .get(`${API_TEKNISI}/` + param.id, {
+      .get(`${API_TEKNISI}/${param.id}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
         const response = res.data.data;
-        setnama(response.nama);
-        setalamat(response.alamat);
-        setbagian(response.bagian);
-        setnohp(response.nohp);
+        setNama(response.nama);
+        setAlamat(response.alamat);
+        setNohp(response.nohp);
+        setBagian(response.bagian);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error fetching teknisi data:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Terjadi kesalahan saat mengambil data teknisi.",
+          showConfirmButton: true,
+        });
       });
-  }, []);
+  }, [param.id]);
 
-  const [level, setlevel] = useState("");
+  const editTeknisi = async (e) => {
+    e.preventDefault();
 
-  const idPengguna = Decrypt()
+    const request = {
+      nama,
+      alamat,
+      nohp,
+      bagian,
+    };
+
+    try {
+      const response = await axios.put(`${API_TEKNISI}/${param.id}`, request, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Data Berhasil Diubah!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      history.push("/data_teknisi");
+    } catch (error) {
+      console.error("Error during update:", error);
+
+      if (error.response) {
+        console.error("Server error:", error.response.data);
+
+        if (error.response.status === 404) {
+          Swal.fire({
+            icon: "error",
+            title: "Not Found!",
+            text: "Teknisi tidak ditemukan atau URL tidak valid.",
+            showConfirmButton: true,
+          });
+        } else if (error.response.status === 500) {
+          Swal.fire({
+            icon: "error",
+            title: "Server Error!",
+            text: "Terjadi kesalahan pada server. Silakan coba lagi nanti.",
+            showConfirmButton: true,
+          });
+        } else if (error.response.status === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "Unauthorized!",
+            text: "Anda tidak memiliki izin untuk melakukan aksi ini.",
+            showConfirmButton: true,
+          });
+          localStorage.clear();
+          history.push("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: "Terjadi kesalahan saat mengubah data.",
+            showConfirmButton: true,
+          });
+        }
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Tidak ada respons dari server.",
+          showConfirmButton: true,
+        });
+      } else {
+        console.error("Request setup error:", error.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Terjadi kesalahan saat menyiapkan permintaan.",
+          showConfirmButton: true,
+        });
+      }
+    }
+  }; // Pastikan untuk menutup fungsi editTeknisi
+
+  const [level, setLevel] = useState("");
+
+  const idPengguna = Decrypt();
   useEffect(() => {
-    axios.get(`${API_PENGGUNA}/` + idPengguna, {
-      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    }).then((res) => {
-      const response = res.data.data;
-      setlevel(response.levelPengguna)
-    }).catch((err) => {
-      console.log(err);
-    })
-  }, [idPengguna])
+    axios
+      .get(`${API_PENGGUNA}/` + idPengguna, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setLevel(response.levelPengguna);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [idPengguna]);
 
   let dashboard = "";
 
   if (level === "Pimpinan") {
     dashboard = "dashboard_pimpinan";
   } else if (level === "AdminService") {
-    dashboard = "dashboard_service"
+    dashboard = "dashboard_service";
   } else {
-    dashboard = "dashboard"
+    dashboard = "dashboard";
   }
 
   return (
@@ -143,8 +192,8 @@ function EditTeknisi() {
                 color="blue"
                 size="lg"
                 icon={<UserCircleIcon />}
-                defaultValue={nama}
-                onChange={(e) => setnama(e.target.value)}
+                value={nama}
+                onChange={(e) => setNama(e.target.value)}
                 placeholder="Masukkan Nama Teknisi"
               />
               <Input
@@ -153,8 +202,8 @@ function EditTeknisi() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Alamat"
-                defaultValue={alamat}
-                onChange={(e) => setalamat(e.target.value)}
+                value={alamat}
+                onChange={(e) => setAlamat(e.target.value)}
                 icon={<MapPinIcon />}
               />
               <Input
@@ -163,8 +212,8 @@ function EditTeknisi() {
                 color="blue"
                 size="lg"
                 placeholder="Masukkan No HP"
-                defaultValue={nohp}
-                onChange={(e) => setnohp(e.target.value)}
+                value={nohp}
+                onChange={(e) => setNohp(e.target.value)}
                 icon={<PhoneIcon />}
               />
               <Select
@@ -172,8 +221,8 @@ function EditTeknisi() {
                 label="Bagian"
                 color="blue"
                 className="w-full"
-                defaultValue={bagian}
-                onChange={(selected) => setbagian(selected)}
+                value={bagian}
+                onChange={(e) => setBagian(e)}
               >
                 <Option value="Elektro">Elektro</Option>
                 <Option value="PC">PC</Option>
