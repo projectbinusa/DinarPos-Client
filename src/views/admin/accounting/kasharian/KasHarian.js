@@ -163,7 +163,7 @@ function KasHarian() {
                 required
               />
             </div>
-            <Button className="mt-5" color="blue" type="submit">
+            <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
               Export
             </Button>
           </form>
@@ -173,7 +173,7 @@ function KasHarian() {
           <div className="rounded mb-5 p-1 overflow-x-auto">
             <div className="flex justify-end">
               <a href="/add_saldo">
-                <Button color="blue" type="submit">
+                <Button color="blue" type="submit" className="font-poppins font-medium">
                   Tambah Saldo
                 </Button>
               </a>

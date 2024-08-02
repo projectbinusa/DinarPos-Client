@@ -297,7 +297,7 @@ function ModalTambahCustomer({ handleOpen }) {
             variant="text"
             color="gray"
             onClick={handleOpen}
-            className="mr-1"
+            className="mr-1 font-poppins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -306,6 +306,7 @@ function ModalTambahCustomer({ handleOpen }) {
             color="blue"
             onClick={handleOpen}
             type="submit"
+            className="font-poppins font-medium"
           >
             <span>Simpan</span>
           </Button>

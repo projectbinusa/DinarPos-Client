@@ -140,7 +140,7 @@ function DataSalesman() {
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="block">
             <a href="/add_salesman">
-              <Button variant="gradient" color="blue">
+              <Button variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah
               </Button>
             </a>

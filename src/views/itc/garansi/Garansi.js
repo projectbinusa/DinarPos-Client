@@ -87,7 +87,16 @@ function Garansi() {
             setTimeout(() => {
               window.location.reload();
             }, 1500);
-          });
+          }).catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Gagal!",
+              text: "Hapus Garansi Gagal!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            console.log(err);
+          })
       }
     });
   };
@@ -174,7 +183,7 @@ function Garansi() {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <a href="/add_garansi" className="float-right mb-5">
-            <Button variant="gradient" color="blue">
+            <Button variant="gradient" color="blue" className="font-popins font-medium">
               Tambah
             </Button>
           </a>

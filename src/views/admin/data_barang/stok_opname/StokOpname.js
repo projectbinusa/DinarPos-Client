@@ -66,7 +66,7 @@ function StokOpname() {
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div>
             <a href="/add_stok_keluar">
-              <Button variant="gradient" color="blue">
+              <Button variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah
               </Button>
             </a>

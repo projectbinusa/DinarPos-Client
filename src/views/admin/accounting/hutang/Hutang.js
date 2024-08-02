@@ -125,7 +125,7 @@ function Hutang() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Hutang{" "}
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -166,14 +166,14 @@ function Hutang() {
                 onChange={(e) => settglAkhir(e.target.value)}
               />
             </div>
-            <Button className="mt-5" color="blue" type="submit">
+            <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
               Export
             </Button>
           </form>
           <div className="flex flex-col lg:flex-row lg:gap-4">
             <div>
               <Button
-                className="mt-5"
+                className="mt-5 font-poppins font-medium"
                 color="blue"
                 type="button"
                 onClick={rekapHutang}
@@ -182,7 +182,7 @@ function Hutang() {
               </Button>
             </div>
             <div>
-              <Button className="mt-5" color="blue" type="button" onClick={historyHutang}>
+              <Button className="mt-5 font-poppins font-medium" color="blue" type="button" onClick={historyHutang}>
                 Export History Hutang
               </Button>
             </div>

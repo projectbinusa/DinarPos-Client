@@ -42,7 +42,6 @@ const PointTeknisi = () => {
         },
       });
       setpoins(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -58,7 +57,6 @@ const PointTeknisi = () => {
       });
       setpoins(response.data.data);
       setvalidasi(false);
-      console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -208,7 +206,7 @@ const PointTeknisi = () => {
                 color="blue"
                 onChange={(e) => setMonth(e.target.value)}
               />
-              <Button variant="gradient" color="blue" onClick={handleSearchPoinByMonth}>
+              <Button variant="gradient" color="blue" onClick={handleSearchPoinByMonth} className="font-popins font-medium">
                 GO!
               </Button>
             </div>

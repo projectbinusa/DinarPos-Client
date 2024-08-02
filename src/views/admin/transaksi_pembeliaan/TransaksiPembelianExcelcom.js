@@ -646,7 +646,7 @@ function TransaksiPembelianExcelcom() {
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH SUPLIER */}
-              <Button onClick={handleOpen} variant="gradient" color="blue">
+              <Button onClick={handleOpen} variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah SUPLIER
               </Button>
               {/* END MODAL TAMBAH SUPLIER */}
@@ -727,12 +727,13 @@ function TransaksiPembelianExcelcom() {
                     color="blue"
                     id="tambah"
                     onClick={checkStok}
+                    className="font-poppins font-medium"
                   >
                     Tambah Barang
                   </Button>
                 </div>
                 <div>
-                  <Button onClick={handleOpen2} variant="gradient" color="blue">
+                  <Button onClick={handleOpen2} variant="gradient" color="blue" className="font-poppins font-medium">
                     Tambah Barang Baru
                   </Button>
                 </div>
@@ -915,7 +916,7 @@ function TransaksiPembelianExcelcom() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-popins font-medium"
                 type="submit"
                 id="bayar"
                 onClick={() => add()}
@@ -980,7 +981,7 @@ function TransaksiPembelianExcelcom() {
             variant="text"
             color="gray"
             onClick={handleOpen3}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -988,6 +989,7 @@ function TransaksiPembelianExcelcom() {
             variant="gradient"
             color="blue"
             id="btn-simpan-brng"
+            className="font-popins font-medium"
             onClick={handleButtonClick}
           >
             <span>Simpan</span>

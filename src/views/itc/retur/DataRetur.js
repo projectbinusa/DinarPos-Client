@@ -111,8 +111,6 @@ function DataRetur() {
     dashboard = "dashboard_service"
   }
 
-  console.log(returs);
-
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -139,7 +137,7 @@ function DataRetur() {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <a href="/entri_retur" className="float-right mb-5">
-            <Button variant="gradient" color="blue">
+            <Button variant="gradient" color="blue" className="font-popins font-medium">
               Tambah
             </Button>
           </a>
@@ -190,8 +188,8 @@ function DataRetur() {
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
-                          ))}{" "}
-                        </td>{" "}
+                          ))}
+                        </td>
                         <td className="text-sm py-2 px-3">
                           {row?.ttBaru?.statusEnd}
                         </td>

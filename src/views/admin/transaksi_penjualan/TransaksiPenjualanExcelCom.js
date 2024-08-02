@@ -677,13 +677,13 @@ function TransaksiPenjualanExcelCom() {
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
-              <Button onClick={handleOpen} variant="gradient" color="blue">
+              <Button className="font-popins font-medium" onClick={handleOpen} variant="gradient" color="blue">
                 Tambah customer
               </Button>
               {/* END MODAL TAMBAH CUSTOMER */}
 
               {/* MODAL TAMBAH CUSTOMER CP */}
-              <Button onClick={handleOpen2} variant="gradient" color="blue">
+              <Button className="font-popins font-medium" onClick={handleOpen2} variant="gradient" color="blue">
                 Tambah customer CP
               </Button>
               {/* END MODAL TAMBAH CUSTOMER CP */}
@@ -759,7 +759,7 @@ function TransaksiPenjualanExcelCom() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-popins font-medium"
                 id="tambah"
                 onClick={checkStok}
               >
@@ -991,7 +991,7 @@ function TransaksiPenjualanExcelCom() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-popins font-medium"
                 type="submit"
                 id="bayar"
                 onClick={() => add()}
@@ -1056,7 +1056,7 @@ function TransaksiPenjualanExcelCom() {
             variant="text"
             color="gray"
             onClick={handleOpen3}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -1064,6 +1064,7 @@ function TransaksiPenjualanExcelCom() {
             variant="gradient"
             color="blue"
             id="btn-simpan-brng"
+            className="font-popins font-medium"
             onClick={handleButtonClick}
           >
             <span>Simpan</span>

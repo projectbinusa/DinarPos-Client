@@ -121,12 +121,12 @@ function DataCustomer() {
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="flex flex-col lg:flex-row gap-4">
             <a href="/add_customer">
-              <Button variant="gradient" color="blue">
+              <Button variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah Customer
               </Button>
             </a>
             <div>
-              <Button onClick={handleOpen} variant="gradient" color="blue">
+              <Button onClick={handleOpen} variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah customer cp
               </Button>
             </div>

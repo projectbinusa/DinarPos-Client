@@ -342,7 +342,7 @@ function AddTransaksiFromIndentExcelcom() {
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
+                    className="mt-5 font-poppins"
                     type="button"
                     id="bayar"
                     disabled
@@ -355,7 +355,7 @@ function AddTransaksiFromIndentExcelcom() {
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
+                    className="mt-5 font-poppins"
                     type="submit"
                     id="bayar"
                     onClick={() => add()}

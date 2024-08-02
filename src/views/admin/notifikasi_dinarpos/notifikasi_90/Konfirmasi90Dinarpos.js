@@ -200,11 +200,11 @@ function Konfirmasi90Dinarpos() {
               />
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit">
+              <Button variant="gradient" color="blue" type="submit" className="font-poppins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/notifikasi_90_dinarpos">
-                <Button variant="text" color="gray" className="mr-1">
+                <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
                   <span>Kembali</span>
                 </Button>
               </a>

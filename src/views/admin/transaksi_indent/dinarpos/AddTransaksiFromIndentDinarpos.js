@@ -340,7 +340,7 @@ function AddTransaksiFromIndentDinarpos() {
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
+                    className="mt-5 font-poppins font-medium"
                     type="button"
                     id="bayar"
                     disabled
@@ -353,7 +353,7 @@ function AddTransaksiFromIndentDinarpos() {
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
+                    className="mt-5 font-poppins font-medium"
                     type="submit"
                     id="bayar"
                     onClick={() => add()}

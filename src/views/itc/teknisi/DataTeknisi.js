@@ -152,7 +152,7 @@ const deleteTeknisi = async (id) => {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <a href="/add_teknisi" className="float-right mb-5">
-            <Button variant="gradient" color="blue">
+            <Button variant="gradient" color="blue" className="font-popins font-medium">
               Tambah
             </Button>
           </a>
@@ -195,7 +195,7 @@ const deleteTeknisi = async (id) => {
                             onClick={() => deleteTeknisi(teknisi.id)}
                           >
                             <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>{" "}
+                          </IconButton>
                         </div>
                       </td>
                     </tr>

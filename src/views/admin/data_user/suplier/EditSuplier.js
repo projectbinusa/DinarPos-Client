@@ -170,11 +170,11 @@ function EditSuplier() {
               />
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit">
+              <Button variant="gradient" color="blue" type="submit" className="font-poppins">
                 <span>Simpan</span>
               </Button>
               <a href="/data_suplier">
-                <Button variant="text" color="gray" className="mr-1">
+                <Button variant="text" color="gray" className="mr-1 font-poppins">
                   <span>Kembali</span>
                 </Button>
               </a>

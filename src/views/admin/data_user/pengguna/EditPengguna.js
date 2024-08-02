@@ -207,11 +207,11 @@ function EditPengguna() {
             <p className="text-sm lg:text-base text-red-500">* Level Pengguna <b>Kasir, Gudang,</b> dan <b>Accounting</b> menggunakan Role <b>Excelcom</b> atau <b>Dinarpos</b> </p>
             <p className="text-sm lg:text-base text-red-500">* Level Pengguna <b>Pimpinan, Admin,</b> dan <b>AdminService</b> menggunakan Role yang sama dengan level</p>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit">
+              <Button variant="gradient" color="blue" type="submit" className="font-poppins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/data_pengguna">
-                <Button variant="text" color="gray" className="mr-1">
+                <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
                   <span>Kembali</span>
                 </Button>
               </a>
@@ -245,11 +245,11 @@ function EditPengguna() {
               />
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit">
+              <Button variant="gradient" color="blue" type="submit" className="font-poppins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/data_pengguna">
-                <Button variant="text" color="gray" className="mr-1">
+                <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
                   <span>Kembali</span>
                 </Button>
               </a>

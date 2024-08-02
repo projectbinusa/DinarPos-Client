@@ -73,7 +73,7 @@ function SidebarAdmin() {
           </IconButton>
           <div className="flex items-center gap-1">
             <img src={brand} alt="brand" className="h-8 w-12" />
-            <Typography variant="h5" color="blue-gray">
+            <Typography variant="h5" color="blue-gray" className="font-poppins">
               EXCELLENT
             </Typography>
           </div>
@@ -96,7 +96,7 @@ function SidebarAdmin() {
           >
             <div className="mb-2 flex items-center gap-4 p-2">
               <img src={brand} alt="brand" className="h-8 w-12" />
-              <Typography variant="h5" color="blue-gray">
+              <Typography variant="h5" color="blue-gray" className="font-poppins">
                 EXCELLENT
               </Typography>
             </div>
@@ -1486,7 +1486,7 @@ function SidebarAdmin() {
               </a>
             </List>
             <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
-              <button onClick={logout} className="uppercase text-sm">
+              <button onClick={logout} className="uppercase text-sm font-poppins">
                 Logout
               </button>
             </div>{" "}
@@ -1497,7 +1497,7 @@ function SidebarAdmin() {
         <Card className="fixed z-15 lg:block hidden h-screen w-full max-w-[18rem] p-2 shadow-xl rounded-none overflow-y-auto sidebar ">
           <div className="mb-2 flex items-center gap-4 p-2">
             <img src={brand} alt="brand" className="h-8 w-12" />
-            <Typography variant="h5" color="blue-gray">
+            <Typography variant="h5" color="blue-gray" className="font-poppins">
               EXCELLENT
             </Typography>
           </div>
@@ -2876,7 +2876,7 @@ function SidebarAdmin() {
             </a>
           </List>
           <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
-            <button onClick={logout} className="uppercase text-sm">
+            <button onClick={logout} className="uppercase text-sm font-poppins">
               Logout
             </button>
           </div>

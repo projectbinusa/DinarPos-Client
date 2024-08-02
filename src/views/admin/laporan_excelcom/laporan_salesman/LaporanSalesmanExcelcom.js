@@ -285,7 +285,7 @@ function LaporanSalesmanExcelcom() {
                 onChange={(e) => settglAkhir(e.target.value)}
               />
             </div>
-            <Button className="mt-5" color="blue" type="submit">
+            <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
               Print
             </Button>
           </form>

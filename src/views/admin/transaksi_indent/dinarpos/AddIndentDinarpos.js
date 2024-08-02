@@ -647,13 +647,13 @@ function AddIndentDinarpos() {
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
-              <Button onClick={handleOpen} variant="gradient" color="blue">
+              <Button onClick={handleOpen} variant="gradient" color="blue" className="font-poppins">
                 Tambah customer
               </Button>
               {/* END MODAL TAMBAH CUSTOMER */}
 
               {/* MODAL TAMBAH CUSTOMER CP */}
-              <Button onClick={handleOpen2} variant="gradient" color="blue">
+              <Button onClick={handleOpen2} variant="gradient" color="blue" className="font-poppins">
                 Tambah customer CP
               </Button>
               {/* END MODAL TAMBAH CUSTOMER CP */}
@@ -719,7 +719,7 @@ function AddIndentDinarpos() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-poppins font-medium"
                 id="tambah"
                 onClick={checkStok}
               >
@@ -946,7 +946,7 @@ function AddIndentDinarpos() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-poppins font-medium"
                 type="submit"
                 id="bayar"
                 onClick={() => add()}
@@ -1011,7 +1011,7 @@ function AddIndentDinarpos() {
             variant="text"
             color="gray"
             onClick={handleOpen3}
-            className="mr-1"
+            className="mr-1 font-poppins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -1020,6 +1020,7 @@ function AddIndentDinarpos() {
             color="blue"
             id="btn-simpan-brng"
             onClick={handleButtonClick}
+            className="font-poppins font-medium"
           >
             <span>Simpan</span>
           </Button>
