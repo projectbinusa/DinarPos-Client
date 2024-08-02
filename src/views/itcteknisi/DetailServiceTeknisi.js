@@ -15,7 +15,7 @@ import {
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
-import { API_SERVICE, API_TEKNISI } from "../../utils/BaseUrl";
+import { API_PENGGUNA, API_SERVICE, API_TEKNISI } from "../../utils/BaseUrl";
 import {
   ArrowUpTrayIcon,
   ChatBubbleBottomCenterIcon,
@@ -26,6 +26,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
+import Decrypt from "../../component/Decrypt";
 
 function DetailServiceTeknisi() {
   const [datas, setdatas] = useState(null);
@@ -82,6 +83,21 @@ function DetailServiceTeknisi() {
     allTglKonf();
   }, []);
 
+  // PENGGUNA TEKNISI
+  const [username, setusername] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setusername(response?.usernamePengguna || "")
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
   //   ADD STATUS
   const [validasi, setvalidasi] = useState("");
   const [solusi, setsolusi] = useState("");
@@ -96,21 +112,22 @@ function DetailServiceTeknisi() {
   const [idTeknisiNew, setidTeknisiNew] = useState(0);
 
   useEffect(() => {
-    axios
-      .get(
-        `${API_TEKNISI}/username?username=` + localStorage.getItem("username"),
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      )
-      .then((res) => {
-        setidTeknisi(res.data.data.id);
-        setidTeknisiNew(res.data.data.id);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (username) {
+      axios
+        .get(
+          `${API_TEKNISI}/username?username=` + username,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        )
+        .then((res) => {
+          setidTeknisi(res.data.data.id);
+          setidTeknisiNew(res.data.data.id);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   // CEK ID TAKE
@@ -369,7 +386,6 @@ function DetailServiceTeknisi() {
       );
       const data = await response.json();
       setoptionsTeknisi(data.data);
-      console.log(data.data);
     } else {
       return;
     }
@@ -475,7 +491,7 @@ function DetailServiceTeknisi() {
                 onClick={() => window.open("/print_service/" + datas?.idTT)}
               >
                 <PrinterIcon className="w-6 h-6 white" />
-              </IconButton>{" "}
+              </IconButton>
               <IconButton size="md" color="green">
                 <ChatBubbleBottomCenterIcon
                   className="w-6 h-6 white"
@@ -489,7 +505,7 @@ function DetailServiceTeknisi() {
                     );
                   }}
                 />
-              </IconButton>{" "}
+              </IconButton>
             </div>
           </div>
           <div className="bg-white p-3 rounded">
@@ -510,14 +526,14 @@ function DetailServiceTeknisi() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Nama"
                         readOnly
-                        value={datas?.nama}
+                        value={datas?.nama || ""}
                       />
                     </div>
                   </li>
                   <li className="mb-3">
                     <div className="flex items-center">
                       <label htmlFor="" className="w-32 text-center text-sm">
-                        Alamat{" "}
+                        Alamat
                       </label>
                       <textarea
                         name="alamat"
@@ -540,7 +556,7 @@ function DetailServiceTeknisi() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="CP"
                         readOnly
-                        value={datas?.cp}
+                        value={datas?.cp || ""}
                       />
                     </div>
                   </li>
@@ -578,7 +594,7 @@ function DetailServiceTeknisi() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Tanggal Masuk"
                         readOnly
-                        value={datas?.tgl_masuk}
+                        value={datas?.tgl_masuk || ""}
                       />
                     </div>
                   </li>
@@ -604,8 +620,8 @@ function DetailServiceTeknisi() {
                         {tglKonfs.length > 0 ? (
                           <>
                             <ol>
-                              {tglKonfs.map((row) => (
-                                <li className="mb-2">
+                              {tglKonfs.map((row, idx) => (
+                                <li className="mb-2" key={idx}>
                                   <span>
                                     {new Date(row.tglKonf).toLocaleDateString()}
                                   </span>
@@ -661,7 +677,7 @@ function DetailServiceTeknisi() {
                         <h1 className="text-lg">
                           <b>Take Over to</b>
                         </h1>
-                        <hr /> <br />{" "}
+                        <hr /> <br />
                         <p className="text-sm">{namaTeknisiTake}</p>
                       </>
                     ) : (
@@ -764,7 +780,7 @@ function DetailServiceTeknisi() {
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             readOnly
-                            value={datas?.produk}
+                            value={datas?.produk || ""}
                           />
                         </td>
                         <td className="border-gray-300 border bg-white p-2">
@@ -772,7 +788,7 @@ function DetailServiceTeknisi() {
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             readOnly
-                            value={datas?.merk}
+                            value={datas?.merk || ""}
                           />
                         </td>
                         <td className="border-gray-300 border bg-white p-2">
@@ -780,7 +796,7 @@ function DetailServiceTeknisi() {
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             readOnly
-                            value={datas?.type}
+                            value={datas?.type || ""}
                           />
                         </td>
                         <td className="border-gray-300 border bg-white p-2">
@@ -788,7 +804,7 @@ function DetailServiceTeknisi() {
                             type="text"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             readOnly
-                            value={datas?.sn}
+                            value={datas?.sn || ""}
                           />
                         </td>
                       </tr>
@@ -853,7 +869,7 @@ function DetailServiceTeknisi() {
                                 color="blue"
                                 onClick={handleOpen}
                               >
-                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />
                                 Picture Before
                               </Button>
                               <IconButton size="md" color="red" onClick={removePictureBefore}>
@@ -903,7 +919,7 @@ function DetailServiceTeknisi() {
                                 color="blue"
                                 onClick={handleOpen2}
                               >
-                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />
                                 Picture After
                               </Button>
                               <IconButton size="md" color="red" onClick={removePictureAfter}>
@@ -956,7 +972,7 @@ function DetailServiceTeknisi() {
                                 color="blue"
                                 onClick={handleOpen}
                               >
-                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />
                                 Picture Before
                               </Button>
                             </div>
@@ -975,7 +991,7 @@ function DetailServiceTeknisi() {
                                 color="blue"
                                 onClick={handleOpen2}
                               >
-                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />{" "}
+                                <MagnifyingGlassPlusIcon className="w-4 h-4 white" />
                                 Picture After
                               </Button>
                             </div>
@@ -1035,7 +1051,6 @@ function DetailServiceTeknisi() {
                         })}
                         {datas?.teknisi?.id === idTeknisi ? (
                           <>
-                            {" "}
                             <tr>
                               <td className="text-sm text-center py-2 border-gray-300 border">
                                 <IconButton
@@ -1104,7 +1119,7 @@ function DetailServiceTeknisi() {
                                   <option value="WC">WC</option>
                                 </select>
                               </td>
-                            </tr>{" "}
+                            </tr>
                           </>
                         ) : (
                           <></>
@@ -1112,7 +1127,6 @@ function DetailServiceTeknisi() {
                       </>
                     ) : (
                       <>
-                        {" "}
                         <tr>
                           <td className="text-sm text-center py-2 border-gray-300 border">
                             <IconButton
@@ -1214,7 +1228,7 @@ function DetailServiceTeknisi() {
                     </div>
                     <div className="flex items-center">
                       <label htmlFor="" className="w-32 text-center text-sm">
-                        Biaya Max.{" "}
+                        Biaya Max.
                       </label>
                       <p>{formatRupiah(datas?.bmax)}</p>
                     </div>

@@ -657,6 +657,9 @@ function DetailService() {
                 "/cetak_struk_transaksi_penjualan_dinarpos/" +
                 res.data.data.idTransaksi
               );
+              setTimeout(() => {
+                history.push("/data_service")
+              }, 1500);
             } else {
               window.location.reload();
             }
@@ -767,6 +770,23 @@ function DetailService() {
     }
   };
 
+  // GET ALL STATUS SERVICE
+  const [allStatus, setallStatus] = useState([]);
+
+  const getAllStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/status/` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setallStatus(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
   // DELETE BARANG
   const deleteTglKonf = async (id) => {
     Swal.fire({
@@ -795,7 +815,7 @@ function DetailService() {
             setTimeout(() => {
               window.location.reload();
             }, 1500);
-          }).then((err) => {
+          }).catch((err) => {
             Swal.fire({
               icon: "error",
               title: "Gagal!",
@@ -811,7 +831,8 @@ function DetailService() {
 
   useEffect(() => {
     allTglKonf();
-  }, []);
+    getAllStatus();
+  }, [param.id]);
   // END GET ALL TGL KONF
 
   // GET SERVICE
@@ -909,7 +930,7 @@ function DetailService() {
                 onClick={() => window.open("/print_service/" + datas?.idTT)}
               >
                 <PrinterIcon className="w-6 h-6 white" />
-              </IconButton>{" "}
+              </IconButton>
               <IconButton size="md" color="green">
                 <ChatBubbleBottomCenterIcon
                   className="w-6 h-6 white"
@@ -923,7 +944,7 @@ function DetailService() {
                     );
                   }}
                 />
-              </IconButton>{" "}
+              </IconButton>
             </div>
           </div>
           <div className="bg-white p-3 rounded">
@@ -952,7 +973,7 @@ function DetailService() {
                     <li className="mb-3">
                       <div className="flex items-center">
                         <label htmlFor="" className="w-32 text-center text-sm">
-                          Alamat{" "}
+                          Alamat
                         </label>
                         <textarea
                           name="alamat"
@@ -1004,7 +1025,7 @@ function DetailService() {
                     type="submit"
                   >
                     Simpan
-                  </Button>{" "}
+                  </Button>
                 </form>
                 <br /> <br /> <br />
                 <h1 className="text-lg">
@@ -1141,8 +1162,8 @@ function DetailService() {
                         <input
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          value={datas?.produk || ""}
                           readOnly
-                          value={datas?.produk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -1150,7 +1171,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.merk}
+                          value={datas?.merk || ""}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -1158,7 +1179,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.type}
+                          value={datas?.type || ""}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -1166,7 +1187,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.sn}
+                          value={datas?.sn || ""}
                         />
                       </td>
                     </tr>
@@ -1212,6 +1233,45 @@ function DetailService() {
                     </tr>
                   </tbody>
                 </table>
+
+                {/* STATUS SERVICE */}
+                <div>
+                  <br />
+                  <h1 className="text-lg">
+                    <b>
+                      Status dan Laporan {datas?.statusEnd}
+                    </b>
+                  </h1>
+                  <hr />
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse my-3">
+                      <thead>
+                        <tr>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 w-24">Tanggal</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Teknisi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Status</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Solusi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Ket</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {allStatus.length > 0 ? (allStatus.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{formatDate(row.created_date)}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.teknisi?.nama}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.status}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.solusi}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.ket}</td>
+                          </tr>
+                        ))) : (<>
+                          <tr>
+                            <td colSpan="5" className="text-center text-xs border-gray-300 border bg-white p-2">Data Belum Ada !</td>
+                          </tr></>)}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
                 <form onSubmit={updateNote}>
                   <div className="mt-6">
                     <div className="flex items-center">
@@ -1572,7 +1632,7 @@ function DetailService() {
                                         <TrashIcon className="w-6 h-6 white" />
                                       </IconButton>
                                     </div>
-                                  </td>{" "}
+                                  </td>
                                 </tr>
                               ))
                             ) : (
@@ -1715,7 +1775,7 @@ function DetailService() {
                         </div>
                         <div className="bg-white shadow rounded px-3 py-2">
                           <Typography variant="paragraph" id="title">
-                            Kembalian / Kekurangan{" "}
+                            Kembalian / Kekurangan
                           </Typography>
                           <Typography variant="h6" id="kembalian">
                             Rp 0,00

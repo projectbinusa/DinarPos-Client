@@ -56,7 +56,6 @@ function ServiceCancelTeknisi() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setservicesTgl(response.data.data)
-      console.log(response.data.data)
     } catch (error) {
       console.log("get all", error);
     }

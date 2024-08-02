@@ -424,7 +424,7 @@ function EditData() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Edit Data
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -505,7 +505,7 @@ function EditData() {
           </div>
           <div className="bg-white shadow-lg p-3 my-5 rounded lg:col-span-2">
             <div id="b_service" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
                 Biaya Service{" "}
               </Typography>
               <hr />
@@ -625,7 +625,7 @@ function EditData() {
               </div>
             </div>
             <div id="poin" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
                 Edit Poin{" "}
               </Typography>
               <hr />
@@ -706,7 +706,7 @@ function EditData() {
               </div>
             </div>
             <div id="tanda_terima" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
                 Edit Tanda Terima
               </Typography>
               <hr />
@@ -792,7 +792,7 @@ function EditData() {
               </div>
             </div>
             <div id="status_tanda_terima" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
                 Edit Status Tanda Terima{" "}
               </Typography>
               <hr />
@@ -884,7 +884,7 @@ function EditData() {
               </div>
             </div>
             <div id="hapus_status" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
                 Hapus Tanda Terima{" "}
               </Typography>
               <hr />
