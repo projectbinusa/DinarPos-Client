@@ -29,14 +29,12 @@ function EditTeknisi() {
   const param = useParams();
 
   useEffect(() => {
-    console.log("Fetching data for teknisi with ID:", param.id);
     axios
       .get(`${API_TEKNISI}/${param.id}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
         const response = res.data.data;
-        console.log("Fetched data:", response);
         setNama(response.nama);
         setAlamat(response.alamat);
         setNohp(response.nohp);
@@ -224,18 +222,18 @@ function EditTeknisi() {
                 color="blue"
                 className="w-full"
                 value={bagian}
-                onChange={(e) => setBagian(e.target.value)}
+                onChange={(e) => setBagian(e)}
               >
-                <Option value="Electro">Electro</Option>
+                <Option value="Elektro">Elektro</Option>
                 <Option value="PC">PC</Option>
               </Select>
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit">
+              <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/data_teknisi">
-                <Button variant="text" color="gray" className="mr-1">
+                <Button variant="text" color="gray" className="mr-1 font-popins font-medium">
                   <span>Kembali</span>
                 </Button>
               </a>

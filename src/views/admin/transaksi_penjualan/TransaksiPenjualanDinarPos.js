@@ -390,8 +390,6 @@ function TransaksiPenjualanDinarPos() {
     const total_harga = parseInt(harga_diskon * editJumlah);
     const total_harga_barang = parseInt(editHargaBarang * editJumlah);
 
-    // removeItemsById(editBarcode);
-
     setproduk((prevState) => {
       const indexToUpdate = prevState.findIndex((item) => {
         return item.barcode === editBarcode;
@@ -488,7 +486,7 @@ function TransaksiPenjualanDinarPos() {
       totalBelanja: totalBelanja,
       ttlBayarHemat: ttlBayarHemat,
     };
-    console.log(request);
+
     axios
       .post(`${API_TRANSAKSI_JUAL_DINARPOS}`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
@@ -507,7 +505,7 @@ function TransaksiPenjualanDinarPos() {
             if (result.isConfirmed) {
               window.open(
                 "/cetak_struk_transaksi_penjualan_dinarpos/" +
-                  res.data.data.idTransaksi
+                res.data.data.idTransaksi
               );
               setTimeout(() => {
                 window.location.reload();
@@ -521,6 +519,13 @@ function TransaksiPenjualanDinarPos() {
         }
       })
       .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Transaksi Penjualan Dinarpos Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };
@@ -543,7 +548,6 @@ function TransaksiPenjualanDinarPos() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -573,7 +577,6 @@ function TransaksiPenjualanDinarPos() {
       );
       const data = await response.json();
       setoptionsSalesman(data.data);
-      console.log(data.data);
     } else {
       return;
     }
@@ -644,7 +647,7 @@ function TransaksiPenjualanDinarPos() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.id}>{option.nama_customer}</option>
+                      <option value={option.id} key={option.id}>{option.nama_customer}</option>
                     ))}
                   </>
                 )}
@@ -669,13 +672,13 @@ function TransaksiPenjualanDinarPos() {
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
-              <Button onClick={handleOpen} variant="gradient" color="blue">
+              <Button className="font-popins font-medium" onClick={handleOpen} variant="gradient" color="blue">
                 Tambah customer
               </Button>
               {/* END MODAL TAMBAH CUSTOMER */}
 
               {/* MODAL TAMBAH CUSTOMER CP */}
-              <Button onClick={handleOpen2} variant="gradient" color="blue">
+              <Button className="font-popins font-medium" onClick={handleOpen2} variant="gradient" color="blue">
                 Tambah customer CP
               </Button>
               {/* END MODAL TAMBAH CUSTOMER CP */}
@@ -751,7 +754,7 @@ function TransaksiPenjualanDinarPos() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-popins font-medium"
                 id="tambah"
                 onClick={checkStok}
               >
@@ -827,7 +830,7 @@ function TransaksiPenjualanDinarPos() {
                                 <TrashIcon className="w-6 h-6 white" />
                               </IconButton>
                             </div>
-                          </td>{" "}
+                          </td>
                         </tr>
                       ))
                     ) : (
@@ -871,7 +874,7 @@ function TransaksiPenjualanDinarPos() {
                     {optionsSalesman.length > 0 && (
                       <>
                         {optionsSalesman.map((option) => (
-                          <option value={option.id}>
+                          <option value={option.id} key={option.id}>
                             {option.namaSalesman}
                           </option>
                         ))}
@@ -984,7 +987,7 @@ function TransaksiPenjualanDinarPos() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-popins font-medium"
                 type="submit"
                 id="bayar"
                 onClick={() => add()}
@@ -1049,7 +1052,7 @@ function TransaksiPenjualanDinarPos() {
             variant="text"
             color="gray"
             onClick={handleOpen3}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -1057,6 +1060,7 @@ function TransaksiPenjualanDinarPos() {
             variant="gradient"
             color="blue"
             id="btn-simpan-brng"
+            className="font-popins font-medium"
             onClick={handleButtonClick}
           >
             <span>Simpan</span>

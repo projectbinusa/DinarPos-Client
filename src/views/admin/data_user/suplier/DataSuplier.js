@@ -208,6 +208,7 @@ function DataSuplier() {
                   onClick={handleOpen}
                   variant="gradient"
                   color="green"
+                  className="font-poppins font-medium"
                 >
                   Import
                 </Button>
@@ -217,13 +218,14 @@ function DataSuplier() {
                   variant="gradient"
                   color="light-blue"
                   onClick={exportDataSuplier}
+                  className="font-poppins font-medium"
                 >
                   Export
                 </Button>
               </div>
             </div>
             <a href="/add_suplier">
-              <Button variant="gradient" color="blue">
+              <Button variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah
               </Button>
             </a>
@@ -299,7 +301,7 @@ function DataSuplier() {
           <Button
             variant="gradient"
             color="blue"
-            className="mt-2 mb-5"
+            className="mt-2 mb-5 font-poppins font-medium"
             onClick={downloadFormat}
           >
             Download Format
@@ -323,7 +325,7 @@ function DataSuplier() {
               variant="text"
               color="gray"
               onClick={handleOpen}
-              className="mr-1"
+              className="mr-1 font-poppins font-medium"
             >
               <span>Kembali</span>
             </Button>
@@ -332,6 +334,7 @@ function DataSuplier() {
               color="blue"
               onClick={handleOpen}
               type="submit"
+              className="font-poppins font-medium"
             >
               <span>Import</span>
             </Button>

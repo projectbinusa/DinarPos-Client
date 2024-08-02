@@ -59,10 +59,10 @@ function LaporanMarketting() {
                             />
                         </div>
                         <div className="flex flex-col lg:flex-row items-start lg:gap-5">
-                            <Button className="mt-5" color="blue" type="submit">
+                            <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
                                 Export
                             </Button>
-                            <Button className="mt-5" color="blue" type="submit">
+                            <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
                                 Export Data Persediaan
                             </Button>
                         </div>

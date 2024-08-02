@@ -156,7 +156,8 @@ function AddTransaksiFromIndentExcelcom() {
                 color="blue"
                 id="customer"
                 name="customer"
-                value={datas?.customer?.id}
+                value={datas?.customer?.id || ""}
+                readOnly
               />
             </div>
           </div>
@@ -178,7 +179,6 @@ function AddTransaksiFromIndentExcelcom() {
                     {produk.length > 0 ? (
                       produk.map((down, index) => {
                         const jmlDiskon = down.hargaBrng * (down.diskon / 100);
-
                         return (
                           <tr key={index}>
                             <td className="py-3 px-2 text-center border">
@@ -221,7 +221,8 @@ function AddTransaksiFromIndentExcelcom() {
                     variant="static"
                     label="Keterangan"
                     placeholder="Masukkan Keterangan"
-                    value={datas?.keterangan}
+                    value={datas?.keterangan || ""}
+                    readOnly
                   />
                 </div>
                 <div className="mt-6">
@@ -230,7 +231,8 @@ function AddTransaksiFromIndentExcelcom() {
                     variant="static"
                     label="Salesman"
                     placeholder="Masukkan Salesman"
-                    value={datas?.salesman?.id}
+                    readOnly
+                    value={datas?.salesman?.id || ""}
                   />
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
@@ -255,7 +257,8 @@ function AddTransaksiFromIndentExcelcom() {
                 variant="static"
                 label="Cash / Kredit"
                 placeholder="Masukkan Cash / Kredit"
-                value={datas?.cashKredit}
+                readOnly
+                value={datas?.cashKredit || ""}
               />
               <div className="flex flex-col gap-y-6 my-6">
                 <Input
@@ -265,7 +268,8 @@ function AddTransaksiFromIndentExcelcom() {
                   type="number"
                   placeholder="DP"
                   id="dp"
-                  value={datas?.pembayaran}
+                  readOnly
+                  value={datas?.pembayaran || ""}
                 />
                 <Input
                   color="blue"
@@ -274,6 +278,7 @@ function AddTransaksiFromIndentExcelcom() {
                   type="number"
                   placeholder="Pembayaran"
                   id="pembayaran"
+                  value={pembayaran}
                   onChange={(e) => setpembayaran(e.target.value)}
                   onInput={() => totalBayar()}
                 />
@@ -284,7 +289,8 @@ function AddTransaksiFromIndentExcelcom() {
                   type="number"
                   placeholder="Potongan"
                   id="potongan"
-                  value={datas?.potongan}
+                  readOnly
+                  value={datas?.potongan || ""}
                 />
               </div>
               <div className="flex flex-col gap-y-4">
@@ -336,7 +342,7 @@ function AddTransaksiFromIndentExcelcom() {
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
+                    className="mt-5 font-poppins"
                     type="button"
                     id="bayar"
                     disabled
@@ -349,7 +355,7 @@ function AddTransaksiFromIndentExcelcom() {
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
+                    className="mt-5 font-poppins"
                     type="submit"
                     id="bayar"
                     onClick={() => add()}

@@ -471,12 +471,6 @@ function TransaksiPembelianDinarpos() {
       kekurangan = 0;
     }
 
-    console.log(addProduk);
-
-    console.log(totalBayarBarang);
-
-    console.log(diskons);
-
     const request = {
       cashCredit: cashCredit,
       diskon: diskons,
@@ -572,7 +566,6 @@ function TransaksiPembelianDinarpos() {
   function setPembayaranCash(values) {
     if (values === "Cash Uang" || values === "Cash Bank") {
       var total = convertToAngka($("#total").html());
-      console.log(total);
       $("#pembayaran").val(total);
     } else {
       $("#pembayaran").val(0);
@@ -580,7 +573,7 @@ function TransaksiPembelianDinarpos() {
   }
 
   return (
-    <section className="lg:flex font-popins bg-gray-50 ">
+    <section className="lg:flex font-poppins bg-gray-50 ">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
@@ -651,7 +644,7 @@ function TransaksiPembelianDinarpos() {
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH SUPLIER */}
-              <Button onClick={handleOpen} variant="gradient" color="blue">
+              <Button onClick={handleOpen} variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah SUPLIER
               </Button>
               {/* END MODAL TAMBAH SUPLIER */}
@@ -732,12 +725,13 @@ function TransaksiPembelianDinarpos() {
                     color="blue"
                     id="tambah"
                     onClick={checkStok}
+                    className="font-poppins font-medium"
                   >
                     Tambah Barang
                   </Button>
                 </div>
                 <div>
-                  <Button onClick={handleOpen2} variant="gradient" color="blue">
+                  <Button onClick={handleOpen2} variant="gradient" color="blue" className="font-poppins font-medium" >
                     Tambah Barang Baru
                   </Button>
                 </div>
@@ -812,7 +806,7 @@ function TransaksiPembelianDinarpos() {
                                 <TrashIcon className="w-6 h-6 white" />
                               </IconButton>
                             </div>
-                          </td>{" "}
+                          </td>
                         </tr>
                       ))
                     ) : (
@@ -901,8 +895,8 @@ function TransaksiPembelianDinarpos() {
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
                   <Typography variant="paragraph" id="title">
-                    Kembalian / Kekurangan{" "}
-                  </Typography>{" "}
+                    Kembalian / Kekurangan
+                  </Typography>
                   <Typography variant="h6" id="kembalian">
                     Rp 0,00
                   </Typography>
@@ -920,7 +914,7 @@ function TransaksiPembelianDinarpos() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-poppins font-medium"
                 type="submit"
                 id="bayar"
                 onClick={() => add()}
@@ -986,7 +980,7 @@ function TransaksiPembelianDinarpos() {
             variant="text"
             color="gray"
             onClick={handleOpen3}
-            className="mr-1"
+            className="mr-1 font-poppins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -994,6 +988,7 @@ function TransaksiPembelianDinarpos() {
             variant="gradient"
             color="blue"
             id="btn-simpan-brng"
+            className="font-poppins font-medium"
             onClick={handleButtonClick}
           >
             <span>Simpan</span>

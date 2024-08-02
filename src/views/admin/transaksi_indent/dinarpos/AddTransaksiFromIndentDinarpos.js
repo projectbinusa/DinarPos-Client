@@ -65,7 +65,7 @@ function AddTransaksiFromIndentDinarpos() {
 
     $("#ttl_pembayaran").html(formatRupiah(ttl_pembayaran));
 
-    if (ttl_pembayaran < datas?.totalBelanja) {
+    if (ttl_pembayaran < datas?.totalBelanja && datas?.cashKredit != "Kredit") {
       $("#bayar").attr("disabled", "disabled");
     } else {
       $("#bayar").removeAttr("disabled");
@@ -154,7 +154,8 @@ function AddTransaksiFromIndentDinarpos() {
                 color="blue"
                 id="customer"
                 name="customer"
-                value={datas?.customer?.id}
+                readOnly
+                value={datas?.customer?.id || ""}
               />
             </div>
           </div>
@@ -219,7 +220,8 @@ function AddTransaksiFromIndentDinarpos() {
                     variant="static"
                     label="Keterangan"
                     placeholder="Masukkan Keterangan"
-                    value={datas?.keterangan}
+                    readOnly
+                    value={datas?.keterangan || ""}
                   />
                 </div>
                 <div className="mt-6">
@@ -228,7 +230,8 @@ function AddTransaksiFromIndentDinarpos() {
                     variant="static"
                     label="Salesman"
                     placeholder="Masukkan Salesman"
-                    value={datas?.salesman?.id}
+                    readOnly
+                    value={datas?.salesman?.id || ""}
                   />
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
@@ -253,7 +256,8 @@ function AddTransaksiFromIndentDinarpos() {
                 variant="static"
                 label="Cash / Kredit"
                 placeholder="Masukkan Cash / Kredit"
-                value={datas?.cashKredit}
+                readOnly
+                value={datas?.cashKredit || ""}
               />
               <div className="flex flex-col gap-y-6 my-6">
                 <Input
@@ -263,7 +267,8 @@ function AddTransaksiFromIndentDinarpos() {
                   type="number"
                   placeholder="DP"
                   id="dp"
-                  value={datas?.pembayaran}
+                  readOnly
+                  value={datas?.pembayaran || ""}
                 />
                 <Input
                   color="blue"
@@ -282,7 +287,8 @@ function AddTransaksiFromIndentDinarpos() {
                   type="number"
                   placeholder="Potongan"
                   id="potongan"
-                  value={datas?.potongan}
+                  readOnly
+                  value={datas?.potongan || ""}
                 />
               </div>
               <div className="flex flex-col gap-y-4">
@@ -329,13 +335,13 @@ function AddTransaksiFromIndentDinarpos() {
                   Rp {datas?.totalBelanja}
                 </h1>
               </div>
-              {ttl_pembayaran < datas?.totalBelanja ? (
+              {ttl_pembayaran < datas?.totalBelanja && datas?.cashKredit != "Kredit" ? (
                 <>
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
-                    type="submit"
+                    className="mt-5 font-poppins font-medium"
+                    type="button"
                     id="bayar"
                     disabled
                   >
@@ -347,7 +353,7 @@ function AddTransaksiFromIndentDinarpos() {
                   <Button
                     variant="gradient"
                     color="blue"
-                    className="mt-5"
+                    className="mt-5 font-poppins font-medium"
                     type="submit"
                     id="bayar"
                     onClick={() => add()}

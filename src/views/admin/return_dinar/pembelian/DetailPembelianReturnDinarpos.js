@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import {
-  API_BARANG,
   API_RETURN_DINARPOS,
   API_RETURN_EXCELCOM,
-  GET_BARANG_TRANSAKSI_BELI_DINARPOS,
 } from "../../../../utils/BaseUrl";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
@@ -116,7 +114,7 @@ function DetailPembelianReturnDinarpos() {
           <p className="mt-2">{formatRupiah(kembalian)}</p>
           <hr /> <br />
           <a href="/pembelian_return_dinarpos">
-            <Button variant="gradient" color="blue">
+            <Button variant="gradient" color="blue" className="font-poppins font-medium">
               Kembali
             </Button>
           </a>

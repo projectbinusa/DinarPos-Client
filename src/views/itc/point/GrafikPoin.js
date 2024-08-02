@@ -350,6 +350,7 @@ function GrafikPoin() {
                 variant="gradient"
                 color="blue"
                 size="md"
+                className="font-popins font-medium"
                 onClick={searchHistoryPoin}
               >
                 GO!

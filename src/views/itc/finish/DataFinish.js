@@ -195,7 +195,7 @@ const DataFinish = () => {
                 color="blue"
                 onChange={(e) => setMonth(e.target.value)}
               />
-              <Button variant="gradient" color="blue" onClick={handleClick}>
+              <Button variant="gradient" color="blue" onClick={handleClick} className="font-popins font-medium">
                 GO!
               </Button>
             </div>
@@ -347,6 +347,7 @@ const DataFinish = () => {
               <br />
             </div>
           </div>
+          <br />
         </div>
       </div>
     </section>

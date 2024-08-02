@@ -636,7 +636,6 @@ function DetailService() {
       totalBelanja: totalBelanja,
       ttlBayarHemat: ttlBayarHemat,
     };
-    console.log(request);
 
     axios
       .put(`${API_SERVICE}/taken_service/` + param.id, request, {
@@ -667,6 +666,13 @@ function DetailService() {
         }
       })
       .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Transaksi Penjualan Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };
@@ -690,7 +696,6 @@ function DetailService() {
       );
       const data = await response.json();
       setoptionsSalesman(data.data);
-      console.log(data.data);
     } else {
       return;
     }
@@ -741,9 +746,6 @@ function DetailService() {
           showConfirmButton: false,
           timer: 1500,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
       });
   };
   // END ADD TGL KONF
@@ -793,7 +795,16 @@ function DetailService() {
             setTimeout(() => {
               window.location.reload();
             }, 1500);
-          });
+          }).then((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Gagal!",
+              text: "Hapus Tanggal Konfirmasi Gagal!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            console.log(err);
+          })
       }
     });
   };
@@ -970,7 +981,7 @@ function DetailService() {
                     </li>
                     <li className="mb-3">
                       <div className="flex items-center">
-                        <label htmlFor="" className="w-32 text-center text-sm">
+                        <label htmlFor="ket" className="w-32 text-center text-sm">
                           Ket
                         </label>
                         <textarea
@@ -989,7 +1000,7 @@ function DetailService() {
                   <Button
                     variant="gradient"
                     color="light-blue"
-                    className="float-right"
+                    className="float-right font-popins font-medium"
                     type="submit"
                   >
                     Simpan
@@ -1037,8 +1048,8 @@ function DetailService() {
                         {tglKonfs.length > 0 ? (
                           <>
                             <ol>
-                              {tglKonfs.map((row) => (
-                                <li className="mb-2 flex justify-between items-center">
+                              {tglKonfs.map((row, idx) => (
+                                <li className="mb-2 flex justify-between items-center" key={idx}>
                                   <span>
                                     {formatDate(row.tglKonf)}
                                   </span>
@@ -1219,7 +1230,7 @@ function DetailService() {
                     </div>
                   </div>
                   <div className="mt-3 flex justify-end">
-                    <Button variant="gradient" color="light-blue" type="submit">
+                    <Button variant="gradient" color="light-blue" type="submit" className="font-popins font-medium">
                       Simpan
                     </Button>
                   </div>
@@ -1259,7 +1270,7 @@ function DetailService() {
                           <li className="mb-2">
                             <div className="flex items-center">
                               <label
-                                htmlFor=""
+                                htmlFor="service"
                                 className="w-32 text-center text-sm"
                               >
                                 Service
@@ -1302,7 +1313,7 @@ function DetailService() {
                           <li className="mb-2">
                             <div className="flex items-center">
                               <label
-                                htmlFor=""
+                                htmlFor="tgl_ready"
                                 className="w-32 text-center text-sm"
                               >
                                 Tgl Ready
@@ -1362,6 +1373,7 @@ function DetailService() {
                             variant="gradient"
                             color="green"
                             type="submit"
+                            className="font-popins font-medium"
                           >
                             Submit
                           </Button>
@@ -1481,7 +1493,7 @@ function DetailService() {
                       <Button
                         variant="gradient"
                         color="blue"
-                        className="mt-5"
+                        className="mt-5 font-popins font-medium"
                         id="tambah"
                         onClick={checkStok}
                       >
@@ -1603,7 +1615,7 @@ function DetailService() {
                             {optionsSalesman.length > 0 && (
                               <>
                                 {optionsSalesman.map((option) => (
-                                  <option value={option.id}>
+                                  <option value={option.id} key={option.id}>
                                     {option.namaSalesman}
                                   </option>
                                 ))}
@@ -1725,7 +1737,7 @@ function DetailService() {
                       <Button
                         variant="gradient"
                         color="blue"
-                        className="mt-5"
+                        className="mt-5 font-popins font-medium"
                         type="submit"
                         id="bayar"
                         onClick={() => add()}
@@ -1782,7 +1794,7 @@ function DetailService() {
             variant="text"
             color="gray"
             onClick={handleOpen3}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -1790,6 +1802,7 @@ function DetailService() {
             variant="gradient"
             color="blue"
             id="btn-simpan-brng"
+            className="font-popins font-medium"
             onClick={handleButtonClick}
           >
             <span>Simpan</span>

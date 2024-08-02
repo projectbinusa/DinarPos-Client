@@ -138,7 +138,7 @@ function ServiceTeknisi() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <div className="flex justify-end">
             <a href="/service_retur_teknisi">
-              <Button variant="gradient" size="md" color="red">
+              <Button variant="gradient" size="md" color="red" className="font-popins font-medium">
                 Service Retur
               </Button>
             </a>

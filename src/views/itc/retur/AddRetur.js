@@ -101,7 +101,7 @@ function AddRetur() {
         console.log(err);
         Swal.fire({
           icon: "error",
-          title: "Tambah Data Gagal!",
+          title: "Tambah Data Retur Gagal!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -366,7 +366,7 @@ function AddRetur() {
                   </li>
                 </ol>
                 <br />
-                <Button variant="gradient" color="blue" type="submit">
+                <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
                   Simpan{" "}
                 </Button>
               </CardBody>

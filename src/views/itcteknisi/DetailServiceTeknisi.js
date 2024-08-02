@@ -722,7 +722,7 @@ function DetailServiceTeknisi() {
                         </div>
                         <br />
                         <div className="flex justify-end">
-                          <Button variant="gradient" color="blue" onClick={takeOverto}>
+                          <Button variant="gradient" color="blue" onClick={takeOverto} className="font-popins font-medium">
                             TakeOver
                           </Button>
                         </div>
@@ -849,7 +849,7 @@ function DetailServiceTeknisi() {
                             <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
-                                className="flex items-center"
+                                className="flex items-center font-popins font-medium"
                                 color="blue"
                                 onClick={handleOpen}
                               >
@@ -899,7 +899,7 @@ function DetailServiceTeknisi() {
                             <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
-                                className="flex items-center"
+                                className="flex items-center font-popins font-medium"
                                 color="blue"
                                 onClick={handleOpen2}
                               >
@@ -952,7 +952,7 @@ function DetailServiceTeknisi() {
                             <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
-                                className="flex items-center"
+                                className="flex items-center font-popins font-medium"
                                 color="blue"
                                 onClick={handleOpen}
                               >
@@ -971,7 +971,7 @@ function DetailServiceTeknisi() {
                             <div className="flex gap-2 items-end">
                               <Button
                                 type="gradient"
-                                className="flex items-center"
+                                className="flex items-center font-popins font-medium"
                                 color="blue"
                                 onClick={handleOpen2}
                               >
@@ -1310,7 +1310,7 @@ function DetailServiceTeknisi() {
             variant="text"
             color="gray"
             onClick={handleOpen}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Tutup</span>
           </Button>
@@ -1334,7 +1334,7 @@ function DetailServiceTeknisi() {
             variant="text"
             color="gray"
             onClick={handleOpen2}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Tutup</span>
           </Button>

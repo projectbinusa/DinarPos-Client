@@ -186,12 +186,12 @@ function DataService() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <div className="flex justify-between items-center">
             <a href="/data_service_taken" className="mb-5">
-              <Button variant="gradient" color="green">
+              <Button variant="gradient" color="green" className="font-popins font-medium">
                 Taken
               </Button>
             </a>
             <a href="/add_service" className="mb-5">
-              <Button variant="gradient" color="blue">
+              <Button variant="gradient" color="blue" className="font-popins font-medium">
                 Tambah
               </Button>
             </a>
@@ -244,6 +244,7 @@ function DataService() {
                 variant="gradient"
                 color="blue"
                 onClick={filterTangggal}
+                className="font-popins font-medium"
                 size="md"
               >
                 <MagnifyingGlassIcon className="w-5 h-5" />
@@ -282,9 +283,9 @@ function DataService() {
                           {row.customer.alamat}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.produk}{" "}
-                          <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
+                          {row.produk}
+                          <span className="block">{row.merk}</span>
+                          <span className="block">{row.type}</span>
                         </td>
                         <td className="text-sm py-2 px-3">
                           {formatDate(row.tanggalMasuk)}
@@ -294,7 +295,7 @@ function DataService() {
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {row.statusEnd}

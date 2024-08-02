@@ -74,7 +74,7 @@ function AddSaldo() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Tambah Saldo Awal
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -125,11 +125,11 @@ function AddSaldo() {
               />
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit">
+              <Button variant="gradient" color="blue" type="submit" className="font-poppins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/kas_harian">
-                <Button variant="text" color="gray" className="mr-1">
+                <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
                   <span>Kembali</span>
                 </Button>
               </a>

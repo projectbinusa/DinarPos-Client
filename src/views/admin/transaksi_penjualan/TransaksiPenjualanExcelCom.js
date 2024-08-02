@@ -340,14 +340,25 @@ function TransaksiPenjualanExcelCom() {
   };
 
   const remove = (barcode) => {
-    if (window.confirm("Apakah anda yakin?")) {
-      removeItemsById(barcode);
-      updateTotalHarga(produk);
-      $("#tambah").attr("disabled", "disabled");
-      if (parseInt(produk.length) === 0) {
-        $("#bayar").attr("disabled", "disabled");
+    Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeItemsById(barcode);
+        updateTotalHarga(produk);
+        $("#tambah").attr("disabled", "disabled");
+        if (parseInt(produk.length) === 0) {
+          $("#bayar").attr("disabled", "disabled");
+        }
       }
-    }
+    });
   };
 
   // BUTTON EDIT BARANG
@@ -491,6 +502,13 @@ function TransaksiPenjualanExcelCom() {
         }
       })
       .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Transaksi Penjualan Excelcom Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         console.log(err);
       });
   };
@@ -514,7 +532,6 @@ function TransaksiPenjualanExcelCom() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -545,7 +562,6 @@ function TransaksiPenjualanExcelCom() {
       );
       const data = await response.json();
       setoptionsSalesman(data.data);
-      console.log(data.data);
     } else {
       return;
     }
@@ -636,7 +652,7 @@ function TransaksiPenjualanExcelCom() {
                 {options.length > 0 && (
                   <>
                     {options.map((option) => (
-                      <option value={option.id}>{option.nama_customer}</option>
+                      <option value={option.id} key={option.id}>{option.nama_customer}</option>
                     ))}
                   </>
                 )}
@@ -661,13 +677,13 @@ function TransaksiPenjualanExcelCom() {
             </div>
             <div className="mt-5 flex gap-5">
               {/* MODAL TAMBAH CUSTOMER */}
-              <Button onClick={handleOpen} variant="gradient" color="blue">
+              <Button className="font-popins font-medium" onClick={handleOpen} variant="gradient" color="blue">
                 Tambah customer
               </Button>
               {/* END MODAL TAMBAH CUSTOMER */}
 
               {/* MODAL TAMBAH CUSTOMER CP */}
-              <Button onClick={handleOpen2} variant="gradient" color="blue">
+              <Button className="font-popins font-medium" onClick={handleOpen2} variant="gradient" color="blue">
                 Tambah customer CP
               </Button>
               {/* END MODAL TAMBAH CUSTOMER CP */}
@@ -743,7 +759,7 @@ function TransaksiPenjualanExcelCom() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-popins font-medium"
                 id="tambah"
                 onClick={checkStok}
               >
@@ -818,7 +834,7 @@ function TransaksiPenjualanExcelCom() {
                                 <TrashIcon className="w-6 h-6 white" />
                               </IconButton>
                             </div>
-                          </td>{" "}
+                          </td>
                         </tr>
                       ))
                     ) : (
@@ -862,7 +878,7 @@ function TransaksiPenjualanExcelCom() {
                     {optionsSalesman.length > 0 && (
                       <>
                         {optionsSalesman.map((option) => (
-                          <option value={option.id}>
+                          <option value={option.id} key={option.id}>
                             {option.namaSalesman}
                           </option>
                         ))}
@@ -975,7 +991,7 @@ function TransaksiPenjualanExcelCom() {
               <Button
                 variant="gradient"
                 color="blue"
-                className="mt-5"
+                className="mt-5 font-popins font-medium"
                 type="submit"
                 id="bayar"
                 onClick={() => add()}
@@ -1040,7 +1056,7 @@ function TransaksiPenjualanExcelCom() {
             variant="text"
             color="gray"
             onClick={handleOpen3}
-            className="mr-1"
+            className="mr-1 font-popins font-medium"
           >
             <span>Kembali</span>
           </Button>
@@ -1048,6 +1064,7 @@ function TransaksiPenjualanExcelCom() {
             variant="gradient"
             color="blue"
             id="btn-simpan-brng"
+            className="font-popins font-medium"
             onClick={handleButtonClick}
           >
             <span>Simpan</span>
