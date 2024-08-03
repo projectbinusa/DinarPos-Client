@@ -199,32 +199,32 @@ function TakeOver() {
           )}
           {data && (taken === "Y" || statusEnd.includes("CANCEL") || statusEnd.includes("READY")) && (
             <>
-              <div class="border border-gray-400 rounded">
-                <div class="bg-gray-300 p-3">
+              <div className="border border-gray-400 rounded">
+                <div className="bg-gray-300 p-3">
                   <p>TT {data?.idTT}</p>
                 </div>
-                <div class="bg-gray-50 p-3">
-                  <table class="border-collapse rounded-sm w-full">
+                <div className="bg-gray-50 p-3">
+                  <table className="border-collapse rounded-sm w-full">
                     <thead>
                       <tr>
-                        <th class="text-sm font-normal text-white text-center border border-blue-700 bg-blue-700 py-2">
+                        <th className="text-sm font-normal text-white text-center border border-blue-700 bg-blue-700 py-2">
                           Teknisi
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="text-sm font-normal border border-gray-400 text-center bg-white py-2">
+                        <td className="text-sm font-normal border border-gray-400 text-center bg-white py-2">
                           {data?.teknisi?.nama}
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <div class="text-center my-4">
-                    <h1 class="text-medium text-lg mb-2">TAKE OVER</h1>
-                    <i class="text-4xl fas fa-sync"></i>
+                  <div className="text-center my-4">
+                    <h1 className="text-medium text-lg mb-2">TAKE OVER</h1>
+                    <i className="text-4xl fas fa-sync"></i>
                   </div>
-                  <div class="text-center bg-blue-700 text-white py-2 rounded">
+                  <div className="text-center bg-blue-700 text-white py-2 rounded">
                     {dataTake.length > 0 ? (<>
                       {dataTake.map((row) => (
                         <ol>
@@ -241,36 +241,36 @@ function TakeOver() {
           )}
           {data && statusEnd === "PROSES" && (
             <>
-              <form onSubmit={takeOver} class="border border-gray-400 rounded">
-                <div class="bg-gray-300 p-3">
+              <form onSubmit={takeOver} className="border border-gray-400 rounded">
+                <div className="bg-gray-300 p-3">
                   <p>TT {data?.idTT} </p>
                 </div>
-                <div class="bg-gray-50 p-3">
-                  <table class="border-collapse rounded-sm w-full">
+                <div className="bg-gray-50 p-3">
+                  <table className="border-collapse rounded-sm w-full">
                     <thead>
                       <tr>
-                        <th class="text-sm font-normal text-white text-center border border-blue-700 bg-blue-700 py-2">
+                        <th className="text-sm font-normal text-white text-center border border-blue-700 bg-blue-700 py-2">
                           Teknisi
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="text-sm font-normal border border-gray-400 text-center bg-white py-2">
+                        <td className="text-sm font-normal border border-gray-400 text-center bg-white py-2">
                           {data?.teknisi?.nama}
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <div class="text-center my-4">
-                    <h1 class="text-medium text-lg mb-2">TAKE OVER</h1>
-                    <i class="text-4xl fas fa-sync"></i>
+                  <div className="text-center my-4">
+                    <h1 className="text-medium text-lg mb-2">TAKE OVER</h1>
+                    <i className="text-4xl fas fa-sync"></i>
                   </div>
-                  <div class="flex items-center gap-2 w-full">
+                  <div className="flex items-center gap-2 w-full">
                     <select
                       id="teknisi"
                       onChange={(e) => setidTeknisi(e.target.value)}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required
                     >
                       {teknisi.map((row) => (
@@ -278,7 +278,7 @@ function TakeOver() {
                       ))}
                     </select>
                     <button
-                      class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-3 text-center rounded"
+                      className="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-3 text-center rounded"
                       type="submit"
                     >
                       TakeOver

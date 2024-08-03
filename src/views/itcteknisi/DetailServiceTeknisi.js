@@ -86,17 +86,19 @@ function DetailServiceTeknisi() {
   // PENGGUNA TEKNISI
   const [username, setusername] = useState("");
 
-  const idPengguna = Decrypt()
+  const idPengguna = Decrypt();
   useEffect(() => {
-    axios.get(`${API_PENGGUNA}/` + idPengguna, {
-      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    }).then((res) => {
-      const response = res.data.data;
-      setusername(response?.usernamePengguna || "")
-    }).catch((err) => {
-      console.log(err);
-    })
-  }, [idPengguna])
+    if (idPengguna) {
+      axios.get(`${API_PENGGUNA}/` + idPengguna, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      }).then((res) => {
+        const response = res.data.data;
+        setusername(response?.usernamePengguna)
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  }, [])
 
   //   ADD STATUS
   const [validasi, setvalidasi] = useState("");
@@ -128,7 +130,7 @@ function DetailServiceTeknisi() {
           console.log(err);
         });
     }
-  }, []);
+  }, [username]);
 
   // CEK ID TAKE
   const [idTake, setidTake] = useState(0);
@@ -199,6 +201,7 @@ function DetailServiceTeknisi() {
       type: validasiNew,
     };
 
+    console.log(request)
     await axios
       .post(`${API_SERVICE}/proses/` + param.id, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },

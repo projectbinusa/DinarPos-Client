@@ -644,7 +644,7 @@ function DetailService() {
       .then((res) => {
         if (res.data.code === 200) {
           Swal.fire({
-            title: "Transaksi Penjualan Berhasil. Cetak Struk?",
+            title: "Transaksi Berhasil. Cetak Struk?",
             icon: "success",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -661,7 +661,9 @@ function DetailService() {
                 history.push("/data_service")
               }, 1500);
             } else {
-              window.location.reload();
+              setTimeout(() => {
+                history.push("/data_service")
+              }, 1500);
             }
           });
         } else {
@@ -672,7 +674,7 @@ function DetailService() {
         Swal.fire({
           icon: "error",
           title: "Gagal!",
-          text: "Transaksi Penjualan Gagal!",
+          text: "Transaksi Gagal!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -1410,7 +1412,7 @@ function DetailService() {
                               <select
                                 id="status"
                                 value={statusEnd}
-                                onChange={(e) => setstatusEnd(e.target.value)}
+                                onChange={(e) => setstatusEnd(e)}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 darkselect:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required
                               >
