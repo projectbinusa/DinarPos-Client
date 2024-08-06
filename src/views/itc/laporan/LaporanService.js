@@ -10,6 +10,7 @@ import {
 } from "@material-tailwind/react";
 import { API_LAPORAN_SERVICE_EXPORT } from "../../../utils/BaseUrl";
 import axios from "axios";
+import Swal from "sweetalert2";
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -35,7 +36,12 @@ function LaporanService() {
   const exportLaporanService = async (e) => {
     e.preventDefault();
     if (!startDate || !endDate) {
-      alert("Tanggal Awal dan Tanggal Akhir harus diisi.");
+      Swal.fire({
+        icon: "warning",
+        title: "Tanggal Awal dan Tanggal Akhir harus diisi.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       return;
     }
     try {
@@ -51,13 +57,213 @@ function LaporanService() {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "Laporan_Service_Export.xlsx");
+      link.setAttribute("download", "LaporanServiceAll.xlsx");
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
-      console.log("Export successful");
+
+      Swal.fire({
+        icon: "success",
+        title: "Export successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
-      console.error("Error saat mengunduh file:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  // EXPORT LAPORAN SERVICE READY
+  const exportLaporanServiceReady = async (e) => {
+    e.preventDefault();
+    if (!startDate || !endDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Tanggal Awal dan Tanggal Akhir harus diisi.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${API_LAPORAN_SERVICE_EXPORT}/export/laporanServiceReady?tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      // Handle the blob response and download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "LaporanServiceReady.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  // EXPORT LAPORAN SERVICE PROSES
+  const exportLaporanServiceProses = async (e) => {
+    e.preventDefault();
+    if (!startDate || !endDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Tanggal Awal dan Tanggal Akhir harus diisi.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${API_LAPORAN_SERVICE_EXPORT}/export/laporanServiceProses?tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      // Handle the blob response and download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "LaporanServiceProses.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  // EXPORT LAPORAN SERVICE CANCEL
+  const exportLaporanServiceCancel = async (e) => {
+    e.preventDefault();
+    if (!startDate || !endDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Tanggal Awal dan Tanggal Akhir harus diisi.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${API_LAPORAN_SERVICE_EXPORT}/export/laporanServiceCancel?tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      // Handle the blob response and download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "LaporanServiceCancel.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  // EXPORT LAPORAN SERVICE TAKEN
+  const exportLaporanServiceTaken = async (e) => {
+    e.preventDefault();
+    if (!startDate || !endDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Tanggal Awal dan Tanggal Akhir harus diisi.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${API_LAPORAN_SERVICE_EXPORT}/export/laporanServiceTaken?tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      // Handle the blob response and download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "LaporanServiceTaken.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
@@ -142,8 +348,13 @@ function LaporanService() {
               >
                 Service Ready
               </Typography>
-              <Button variant="filled" color="green" className="mt-4">
-                Action
+              <Button
+                variant="filled"
+                color="blue"
+                className="mt-4"
+                onClick={exportLaporanServiceReady} // Ensure onClick is used instead of type="submit"
+              >
+                Export
               </Button>
             </CardBody>
           </Card>
@@ -156,8 +367,13 @@ function LaporanService() {
               >
                 Service Proses
               </Typography>
-              <Button variant="filled" color="yellow" className="mt-4">
-                Action
+              <Button
+                variant="filled"
+                color="blue"
+                className="mt-4"
+                onClick={exportLaporanServiceProses} // Ensure onClick is used instead of type="submit"
+              >
+                Export
               </Button>
             </CardBody>
           </Card>
@@ -173,8 +389,13 @@ function LaporanService() {
               >
                 Service Cancel
               </Typography>
-              <Button variant="filled" color="red" className="mt-4">
-                Action
+              <Button
+                variant="filled"
+                color="blue"
+                className="mt-4"
+                onClick={exportLaporanServiceCancel} // Ensure onClick is used instead of type="submit"
+              >
+                Export
               </Button>
             </CardBody>
           </Card>
@@ -187,8 +408,13 @@ function LaporanService() {
               >
                 Service Taken
               </Typography>
-              <Button variant="filled" color="blue" className="mt-4">
-                Action
+              <Button
+                variant="filled"
+                color="blue"
+                className="mt-4"
+                onClick={exportLaporanServiceTaken} // Ensure onClick is used instead of type="submit"
+              >
+                Export
               </Button>
             </CardBody>
           </Card>
