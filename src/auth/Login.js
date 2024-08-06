@@ -70,10 +70,6 @@ function Login() {
           }
 
           // SET LOCAL STORAGE
-          localStorage.setItem("id", response.data.data.idPengguna);
-          localStorage.setItem("level", response.data.data.levelPengguna);
-          localStorage.setItem("username", response.data.data.usernamePengguna);
-          localStorage.setItem("roleToko", response.data.data.roleToko);
           localStorage.setItem("token", response.data.token);
 
           const id = response.data.data.idPengguna;

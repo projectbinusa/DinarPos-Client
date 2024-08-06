@@ -43,6 +43,7 @@ function TransaksiPembelianExcelcom() {
   const handleOpen3 = () => setOpen3(!open3);
 
   const [barang, setbarang] = useState([]);
+  const [ttlTanpaDiskon, setttlTanpaDiskon] = useState("");
 
   // TRANSAKSI BELI
   const [suplierId, setsuplierId] = useState(0);
@@ -164,7 +165,7 @@ function TransaksiPembelianExcelcom() {
 
     $("#total").html(formatRupiah(totale));
     $("#total2").html(formatRupiah(totale2));
-    $("#total3").html(totale2);
+    setttlTanpaDiskon(totale2)
     $("#ttl_bayar_hemat").html(formatRupiah(parseInt(totale2 - totale)));
   };
 
@@ -217,6 +218,7 @@ function TransaksiPembelianExcelcom() {
             qty: jumlah,
             totalHarga: totalHarga,
             totalHargaBarang: totalHargaBarang,
+            hemat: 0,
           };
 
           const newData2 = {
@@ -428,6 +430,7 @@ function TransaksiPembelianExcelcom() {
           qty: editJumlah,
           totalHarga: total_harga,
           totalHargaBarang: total_harga_barang,
+          hemat: 0,
         };
         return updatedProduk;
       } else {
@@ -480,12 +483,21 @@ function TransaksiPembelianExcelcom() {
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
-      kekurangan: kekurangan,
+      hutang: kekurangan,
       sisa: sisas,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
       ttlBayarHemat: ttlBayarHemat,
+      dpp: '0',
+      dpp2: '0',
+      ppn: '0',
+      ppn2: '0',
+      total3: ttlTanpaDiskon,
+      totalBayar2: totalBayarBarang
     };
+
+    console.log(request);
+    
 
     axios
       .post(`${API_TRANSAKSI_BELI_EXCELCOM}`, request, {

@@ -204,7 +204,7 @@ function PrintService() {
                       :<br />
                       :<br />:<br />:
                     </td>
-                    <td colspan="2">
+                    <td colSpan="2">
                       {datas?.perlengkapan}
                       <br />
                       {datas?.keluhan}

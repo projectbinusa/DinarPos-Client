@@ -218,7 +218,7 @@ function DataPoin() {
             <div className="flex justify-between items-center">
               <Typography
                 variant="paragraph"
-                className="capitalize font-semibold"
+                className="capitalize font-semibold font-poppins"
               >
                 Poin{" "}
               </Typography>
@@ -323,7 +323,7 @@ function DataPoin() {
           <div className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
             <Typography
               variant="paragraph"
-              className="capitalize font-semibold"
+              className="capitalize font-semibold font-poppins"
             >
               History Poin{" "}
             </Typography>
