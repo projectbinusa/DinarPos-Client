@@ -344,21 +344,21 @@ function LaporanTransaksiBeliDinar() {
                             <ul key={idx}>
                               <li>{brg.hargaBrng}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {barangLaporan.map((brg, idx) => (
                             <ul key={idx}>
                               <li>{brg.qty}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {barangLaporan.map((brg, idx) => (
                             <ul key={idx}>
                               <li>{brg.totalHargaBarang}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {laporan.totalBelanja}

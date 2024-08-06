@@ -454,7 +454,7 @@ function HistoryPoint() {
                   <MagnifyingGlassIcon className="w-6 h-6 white" />
                 </IconButton>
               </div>
-            </div>{" "}
+            </div>
             <br />
             <div className="rounded p-1 w-full overflow-x-auto mt-5">
               <table

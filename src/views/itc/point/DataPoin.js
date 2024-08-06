@@ -220,11 +220,11 @@ function DataPoin() {
                 variant="paragraph"
                 className="capitalize font-semibold font-poppins"
               >
-                Poin{" "}
+                Poin
               </Typography>
               <a href="/add_point">
                 <Button variant="gradient" color="blue" className="font-popins font-medium">
-                  Input{" "}
+                  Input
                 </Button>
               </a>
             </div>
@@ -325,7 +325,7 @@ function DataPoin() {
               variant="paragraph"
               className="capitalize font-semibold font-poppins"
             >
-              History Poin{" "}
+              History Poin
             </Typography>
             <br />
             <hr /> <br /> <br />

@@ -838,16 +838,16 @@ function TransaksiPembelianExcelcom() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Anda Hemat</Typography>
-                  <Typography variant="h6" id="ttl_bayar_hemat">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Anda Hemat</Typography>
+                  <Typography variant="h6" id="ttl_bayar_hemat" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" className="capitalize">
+                  <Typography variant="paragraph" className="capitalize font-poppins font-medium">
                     total Belanja Tanpa diskon
                   </Typography>
-                  <Typography variant="h6" id="total2">
+                  <Typography variant="h6" id="total2" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
@@ -902,26 +902,26 @@ function TransaksiPembelianExcelcom() {
               </div>
               <div className="flex flex-col gap-y-4">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Total Belanja</Typography>
-                  <Typography variant="h6" id="total">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Total Belanja</Typography>
+                  <Typography variant="h6" id="total" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" id="title">
-                    Kembalian / Kekurangan{" "}
-                  </Typography>{" "}
-                  <Typography variant="h6" id="kembalian">
+                  <Typography variant="paragraph" id="title" className="font-poppins font-medium">
+                    Kembalian / Kekurangan
+                  </Typography>
+                  <Typography variant="h6" id="kembalian" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
               </div>
               <div className="bg-white shadow rounded px-3 py-2 mt-5">
-                <p className="text-base my-2">
+                <p className="text-base my-2 font-poppins">
                   <b>Nota :</b> <span></span>
                 </p>
                 <hr />
-                <h1 className="text-3xl my-3 font-medium" id="ttl_bayar">
+                <h1 className="text-3xl my-3 font-medium font-poppins" id="ttl_bayar">
                   Rp 0,00
                 </h1>
               </div>

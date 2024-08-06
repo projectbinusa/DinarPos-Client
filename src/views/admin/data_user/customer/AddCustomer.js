@@ -36,7 +36,6 @@ function AddCustomer() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setsalesman(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -143,7 +142,6 @@ function AddCustomer() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -205,7 +203,7 @@ function AddCustomer() {
                   {options.length > 0 && (
                     <>
                       {options.map((option) => (
-                        <option value={option.id}>
+                        <option value={option.id} key={option.id}>
                           {option.namaSalesman}
                         </option>
                       ))}

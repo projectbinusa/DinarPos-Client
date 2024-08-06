@@ -235,7 +235,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Keterangan"
                       onChange={(e) => setket(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                 </ol>
               </CardBody>
@@ -257,7 +257,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Jenis Produk"
                       onChange={(e) => setproduk(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -268,7 +268,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Merk"
                       onChange={(e) => setmerek(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -279,7 +279,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Type"
                       onChange={(e) => settype(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -290,7 +290,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan No Seri"
                       onChange={(e) => setnoseri(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -301,7 +301,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Perlengkapan"
                       onChange={(e) => setperlengkapan(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -312,7 +312,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Keluhan"
                       onChange={(e) => setkeluhan(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                 </ol>
               </CardBody>
@@ -334,7 +334,7 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Penerima"
                       onChange={(e) => setpenerima(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -345,7 +345,7 @@ function AddService() {
                       size="lg"
                       type="date"
                       onChange={(e) => settglMasuk(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -357,7 +357,7 @@ function AddService() {
                       placeholder="Masukkan Biaya Maksimal"
                       type="number"
                       onChange={(e) => setbmax(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -369,7 +369,7 @@ function AddService() {
                       placeholder="Masukkan Estimasi Biaya"
                       type="number"
                       onChange={(e) => setestimasi(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -380,12 +380,12 @@ function AddService() {
                       size="lg"
                       placeholder="Masukkan Checker"
                       onChange={(e) => setchecker(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                 </ol>
                 <br />
                 <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
-                  Simpan{" "}
+                  Simpan
                 </Button>
               </CardBody>
             </Card>

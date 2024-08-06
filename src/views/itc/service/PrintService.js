@@ -59,7 +59,7 @@ function PrintService() {
               Jl. ISMOYO NO.27 SIDOMUKTI, SALATIGA TELP.(0298)328707,
               HP.081138010102
               <br />
-              Tracking Page :{" "}
+              Tracking Page :
               <a href="http://tracking.dinartechshare-e.com">
                 http://tracking.dinartechshare-e.com
               </a>
