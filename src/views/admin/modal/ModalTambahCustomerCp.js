@@ -213,7 +213,7 @@ function ModalTambahCustomerCp({ handleOpen }) {
 
   return (
     <div>
-      {" "}
+      
       <DialogHeader>Tambah Customer CP</DialogHeader>
       <form onSubmit={addCustomerCp}>
         <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">

@@ -106,7 +106,7 @@ function PrintHistoriDinarpos() {
           NPWP : 02.779.101.7-508.000
           <span className="block">Banker's:</span>
           <span className="block">
-            Bank Syariah Mandiri : 777.9696.965 a/n PT. Dinar Tech Share-E{" "}
+            Bank Syariah Mandiri : 777.9696.965 a/n PT. Dinar Tech Share-E
           </span>
         </h3>
         <div>

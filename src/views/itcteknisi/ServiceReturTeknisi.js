@@ -187,8 +187,8 @@ function ServiceReturTeknisi() {
                           {row.customer.alamat}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.produk} <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
+                          {row.produk} <span className="block">{row.merk}</span>
+                          <span className="block">{row.type}</span>
                         </td>
                         <td className="text-sm py-2 px-3">
                           {formatDate(row.tanggalMasuk)}
@@ -198,7 +198,7 @@ function ServiceReturTeknisi() {
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">{row.statusEnd}</td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">

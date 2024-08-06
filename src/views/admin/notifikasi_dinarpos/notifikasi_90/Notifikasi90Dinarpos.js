@@ -269,7 +269,7 @@ function Notifikasi90Dinarpos() {
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    No Faktur{" "}
+                    No Faktur
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi

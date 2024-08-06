@@ -198,7 +198,7 @@ function Notifikasi365Dinarpos() {
                             <ul key={idx}>
                               <li>{brg.namaBarang}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center gap-2">
                           <a
@@ -272,7 +272,7 @@ function Notifikasi365Dinarpos() {
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    No Faktur{" "}
+                    No Faktur
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">
                     Tanggal Konfirmasi
@@ -310,12 +310,12 @@ function Notifikasi365Dinarpos() {
                           href={"/print_histori_dinarpos/" + row.idTransaksi}
                           target="_blank"
                         >
-                          {" "}
+                          
                           <IconButton size="md" color="light-blue">
                             <PrinterIcon className="w-6 h-6 white" />
                           </IconButton>
                         </a>
-                      </td>{" "}
+                      </td>
                     </tr>
                   ))
                 ) : (

@@ -63,7 +63,7 @@ function PrintHistoriTransaksiBeliExcelcom() {
     <div className="mx-5 my-3">
       <div className=" my-3">
         <h3 className="text-sm">
-          EXCEL COM{" "}
+          EXCEL COM
           <span className="block">
             Jl. Bulustalan 1 No.27 Semarang 087729244899
           </span>

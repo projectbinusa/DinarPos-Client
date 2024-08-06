@@ -64,7 +64,7 @@ function CetakStrukPenjualanDinar() {
           PT. DINAR TECH SHARE-E /
           <span className="block">Excellent Computer</span>
           <span className="block">
-            Jl. Bulustalan 1 No.27 Semarang (024) 3515176 Fax (024) 3546330{" "}
+            Jl. Bulustalan 1 No.27 Semarang (024) 3515176 Fax (024) 3546330
           </span>
         </h3>
         <div>
@@ -78,9 +78,9 @@ function CetakStrukPenjualanDinar() {
       </div>
       <div className="flex justify-between items-center my-3">
         <h3 className="text-sm">
-          NPWP : 02.779.101.7-508.000 <span className="block">Banker's:</span>{" "}
+          NPWP : 02.779.101.7-508.000 <span className="block">Banker's:</span>
           <span className="block">
-            Bank Syariah Mandiri : 777.9696.965 a/n PT. Dinar Tech Share-E{" "}
+            Bank Syariah Mandiri : 777.9696.965 a/n PT. Dinar Tech Share-E
           </span>
         </h3>
         <div>

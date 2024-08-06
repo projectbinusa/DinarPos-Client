@@ -123,7 +123,7 @@ function SidebarAdmin() {
                 level === "Admin" ||
                 level === "Kasir" ? (
                 <>
-                  {" "}
+                  
                   <Accordion
                     open={open === 11}
                     icon={
@@ -202,7 +202,7 @@ function SidebarAdmin() {
                 level === "Gudang" ||
                 level === "Kasir" ? (
                 <>
-                  {" "}
+                  
                   <Accordion
                     open={open === 1}
                     icon={
@@ -280,7 +280,7 @@ function SidebarAdmin() {
                 level === "Admin" ||
                 level === "Gudang" ? (
                 <>
-                  {" "}
+                  
                   <Accordion
                     open={open === 2}
                     icon={
@@ -310,7 +310,7 @@ function SidebarAdmin() {
                           roleToko === "Admin" ||
                           roleToko === "excelcom" ? (
                           <>
-                            {" "}
+                            
                             <a href="/transaksi_pembelian_excelcom">
                               <ListItem className="uppercase rounded px-3 py-2 text-sm">
                                 <ListItemPrefix>
@@ -360,7 +360,7 @@ function SidebarAdmin() {
                 level === "Kasir" ||
                 level === "Gudang" ? (
                 <>
-                  {" "}
+                  
                   <Accordion
                     open={open === 3}
                     icon={
@@ -478,7 +478,7 @@ function SidebarAdmin() {
                 level === "Kasir" ||
                 level === "Gudang" ? (
                 <>
-                  {" "}
+                  
                   <Accordion
                     open={open === 4}
                     icon={
@@ -568,7 +568,7 @@ function SidebarAdmin() {
                 level === "Admin" ||
                 level === "Accounting" ? (
                 <>
-                  {" "}
+                  
                   <Accordion
                     open={open === 12}
                     icon={
@@ -624,7 +624,7 @@ function SidebarAdmin() {
                                 className="h-3 w-3"
                               />
                             </ListItemPrefix>
-                            piutang{" "}
+                            piutang
                           </ListItem>
                         </a>
                         <a href="/laporan_marketting">
@@ -962,7 +962,7 @@ function SidebarAdmin() {
                     roleToko === "Superadmin" ||
                     roleToko === "Admin" ? (
                     <>
-                      {" "}
+                      
                       <Accordion
                         open={open === 8}
                         icon={
@@ -1087,7 +1087,7 @@ function SidebarAdmin() {
                     roleToko === "Superadmin" ||
                     roleToko === "Admin" ? (
                     <>
-                      {" "}
+                      
                       <Accordion
                         open={open === 9}
                         icon={
@@ -1320,27 +1320,27 @@ function SidebarAdmin() {
                   </a>
                   <a href="/data_poin_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      poin{" "}
+                      poin
                     </ListItem>
                   </a>
                   <a href="/finish">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      finish{" "}
+                      finish
                     </ListItem>
                   </a>
                   <a href="/garansi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      garansi{" "}
+                      garansi
                     </ListItem>
                   </a>
                   <a href="/bon_barang">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      bon barang{" "}
+                      bon barang
                     </ListItem>
                   </a>
                   <a href="/edit_data">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      edit data{" "}
+                      edit data
                     </ListItem>
                   </a>
                   <Accordion
@@ -1418,22 +1418,22 @@ function SidebarAdmin() {
                 <>
                   <a href="/dashboard_pimpinan">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      dashboard{" "}
+                      dashboard
                     </ListItem>
                   </a>
                   <a href="/data_service_taken">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      TAKEN{" "}
+                      TAKEN
                     </ListItem>
                   </a>
                   <a href="/poin_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      poin teknisi{" "}
+                      poin teknisi
                     </ListItem>
                   </a>
                   <a href="/finish">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      finish{" "}
+                      finish
                     </ListItem>
                   </a>
                   <a href="/data_teknisi">
@@ -1452,7 +1452,7 @@ function SidebarAdmin() {
                 <>
                   <a href="/dashboard_teknisi">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                      dashboard{" "}
+                      dashboard
                     </ListItem>
                   </a>
                   <a href="/data_service_taken">
@@ -1489,7 +1489,7 @@ function SidebarAdmin() {
               <button onClick={logout} className="uppercase text-sm font-poppins">
                 Logout
               </button>
-            </div>{" "}
+            </div>
           </Card>
         </Drawer>
 
@@ -1524,7 +1524,7 @@ function SidebarAdmin() {
               level === "Admin" ||
               level === "Kasir" ? (
               <>
-                {" "}
+                
                 <Accordion
                   open={open === 11}
                   icon={
@@ -1554,7 +1554,7 @@ function SidebarAdmin() {
                         roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                         <>
-                          {" "}
+                          
                           <a href="/transaksi_indent_excelcom">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
                               <ListItemPrefix>
@@ -1604,7 +1604,7 @@ function SidebarAdmin() {
               level === "Kasir" ||
               level === "Gudang" ? (
               <>
-                {" "}
+                
                 <Accordion
                   open={open === 1}
                   icon={
@@ -1634,7 +1634,7 @@ function SidebarAdmin() {
                         roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                         <>
-                          {" "}
+                          
                           <a href="/transaksi_penjualan_excelcom">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
                               <ListItemPrefix>
@@ -1761,7 +1761,7 @@ function SidebarAdmin() {
               level === "Gudang" ||
               level === "Kasir" ? (
               <>
-                {" "}
+                
                 <Accordion
                   open={open === 3}
                   icon={
@@ -2012,7 +2012,7 @@ function SidebarAdmin() {
                               className="h-3 w-3"
                             />
                           </ListItemPrefix>
-                          hutang{" "}
+                          hutang
                         </ListItem>
                       </a>
                       <a href="/data_piutang">
@@ -2023,7 +2023,7 @@ function SidebarAdmin() {
                               className="h-3 w-3"
                             />
                           </ListItemPrefix>
-                          piutang{" "}
+                          piutang
                         </ListItem>
                       </a>
                       <a href="/laporan_marketting">
@@ -2055,7 +2055,7 @@ function SidebarAdmin() {
                   roleToko === "Admin" ||
                   roleToko === "excelcom" ? (
                   <>
-                    {" "}
+                    
                     <Accordion
                       open={open === 5}
                       icon={
@@ -2147,7 +2147,7 @@ function SidebarAdmin() {
                   roleToko === "Admin" ||
                   roleToko === "dinarpos" ? (
                   <>
-                    {" "}
+                    
                     <Accordion
                       open={open === 6}
                       icon={
@@ -2240,7 +2240,7 @@ function SidebarAdmin() {
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-                    {" "}
+                    
                     <Accordion
                       open={open === 7}
                       icon={
@@ -2366,7 +2366,7 @@ function SidebarAdmin() {
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-                    {" "}
+                    
                     <Accordion
                       open={open === 8}
                       icon={
@@ -2593,7 +2593,7 @@ function SidebarAdmin() {
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-                    {" "}
+                    
                     <Accordion
                       open={open === 10}
                       icon={
@@ -2739,7 +2739,7 @@ function SidebarAdmin() {
                 </a>
                 <a href="/edit_data">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    Edit Data{" "}
+                    Edit Data
                   </ListItem>
                 </a>
                 <Accordion
@@ -2811,12 +2811,12 @@ function SidebarAdmin() {
               <>
                 <a href="/dashboard_pimpinan">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    dashboard{" "}
+                    dashboard
                   </ListItem>
                 </a>
                 <a href="/data_service_taken">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    taken{" "}
+                    taken
                   </ListItem>
                 </a>
                 <a href="/poin_teknisi">

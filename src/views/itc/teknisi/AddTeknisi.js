@@ -180,7 +180,7 @@ function AddTeknisi() {
                 />
                 <Typography variant="small" className="text-red-400">
                   * Password minimal 8 karakter dengan kombinasi angka, huruf
-                  besar dan kecil{" "}
+                  besar dan kecil
                 </Typography>
               </div>
             </div>

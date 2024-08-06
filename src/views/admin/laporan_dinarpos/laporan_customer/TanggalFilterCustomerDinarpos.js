@@ -167,21 +167,21 @@ function TanggalFilterCustomerDinarpos() {
                     <ul key={idx}>
                       <li>{brg.namaBarang}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.qty}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.hargaBrng}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {row.totalBayarBarang}

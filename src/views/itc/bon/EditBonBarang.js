@@ -92,7 +92,6 @@ function EditBonBarang() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -123,7 +122,6 @@ function EditBonBarang() {
       );
       const data = await response.json();
       setoptions2(data.data);
-      console.log(data);
     } else {
       return;
     }

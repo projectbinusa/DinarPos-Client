@@ -140,7 +140,7 @@ function Register() {
           </div>
           <Typography variant="small" className="mt-6 text-red-400 font-poppins">
             * Password minimal 8 karakter dengan kombinasi angka, huruf besar
-            dan kecil{" "}
+            dan kecil
           </Typography>
 
           <Button
@@ -152,7 +152,7 @@ function Register() {
           </Button>
         </form>
         <Typography variant="small" className="mt-6 text-center font-poppins">
-          Sudah Punya Akun?{" "}
+          Sudah Punya Akun?
           <a href="/" className="text-blue-500 underline">
             Login
           </a>
