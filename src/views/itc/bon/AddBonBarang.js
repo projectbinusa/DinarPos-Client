@@ -84,7 +84,6 @@ function AddBonBarang() {
       );
       const data = await response.json();
       setoptions(data.data);
-      console.log(data);
     } else {
       return;
     }
@@ -115,7 +114,6 @@ function AddBonBarang() {
       );
       const data = await response.json();
       setoptions2(data.data);
-      console.log(data.data);
     } else {
       return;
     }

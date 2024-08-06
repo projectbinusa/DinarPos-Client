@@ -14,7 +14,7 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import { API_BARANG, API_PENGGUNA } from "../../../../utils/BaseUrl";
+import { API_BARANG, API_PENGGUNA, API_POIN } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
@@ -31,6 +31,9 @@ function DataBarang() {
   const tableRef = useRef(null);
   const [barangs, setBarang] = useState([]);
   const [excel, setExcel] = useState("");
+
+  const [tglAwal, setTglAwal] = useState("");
+  const [tglAkhir, setTglAkhir] = useState("");
 
   const history = useHistory();
 
@@ -177,6 +180,51 @@ function DataBarang() {
       });
   };
 
+  // EXPORT PERSEDIAAN BARANG 
+  const exportPersediaanBarang = async (e) => {
+    e.preventDefault();
+    if (!tglAwal || !tglAkhir) {
+      Swal.fire({
+        icon: "warning",
+        title: "Masukkan Tanggal Terlebih Dahulu",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+
+    try {
+      const response = await axios.get(`${API_POIN}/export/excel?endDate=${tglAkhir}&startDate=${tglAwal}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Persediaan_Barang.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export Berhasil!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
+
   const [level, setlevel] = useState("");
 
   const id = Decrypt();
@@ -228,6 +276,7 @@ function DataBarang() {
                       onClick={handleOpen}
                       variant="gradient"
                       color="green"
+                      className="font-poppins font-medium"
                     >
                       Import
                     </Button>
@@ -237,19 +286,20 @@ function DataBarang() {
                       onClick={handleOpen2}
                       variant="gradient"
                       color="light-blue"
+                      className="font-poppins font-medium"
                     >
                       Export
                     </Button>
                   </div>
                 </div>
                 <a href="/add_barang">
-                  <Button variant="gradient" color="blue">
+                  <Button variant="gradient" color="blue" className="font-poppins font-medium">
                     Tambah
                   </Button>
                 </a>
               </div>
               <br />
-              <form >
+              <div >
                 <div className="mt-8 w-full lg:w-[50%]">
                   <Input
                     variant="static"
@@ -257,7 +307,7 @@ function DataBarang() {
                     type="date"
                     label="Tanggal Awal"
                     required
-                  // onChange={(e) => settglAwal(e.target.value)}
+                    onChange={(e) => setTglAwal(e.target.value)}
                   />
                 </div>
                 <div className="mt-8 w-full lg:w-[50%]">
@@ -267,13 +317,13 @@ function DataBarang() {
                     type="date"
                     label="Tanggal Akhir"
                     required
-                  // onChange={(e) => settglAkhir(e.target.value)}
+                    onChange={(e) => setTglAkhir(e.target.value)}
                   />
                 </div>
-                <Button className="mt-5" color="blue" type="submit">
+                <Button className="mt-5 font-poppins font-medium" color="blue" type="button" onClick={exportPersediaanBarang}>
                   Export persediaan barang
                 </Button>
-              </form>
+              </div>
             </>
           ) : (
             <></>
@@ -314,7 +364,7 @@ function DataBarang() {
                   </th>
                   {level === "Superadmin" || level === "Gudang" ? (
                     <>
-                      {" "}
+                      
                       <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                     </>
                   ) : (
@@ -361,9 +411,9 @@ function DataBarang() {
                                 onClick={() => deleteBarang(barang.id)}
                               >
                                 <TrashIcon className="w-6 h-6 white" />
-                              </IconButton>{" "}
+                              </IconButton>
                             </div>
-                          </td>{" "}
+                          </td>
                         </>
                       ) : (
                         <></>
@@ -387,13 +437,13 @@ function DataBarang() {
       </div>
       {/* MODAL IMPORT */}
       <Dialog open={open} handler={handleOpen} size="md">
-        <DialogHeader>Import Data Barang</DialogHeader>
+        <DialogHeader className="font-poppins font-medium">Import Data Barang</DialogHeader>
         <DialogBody>
           <p className="text-black">Silahkan download format di bawah ini</p>
           <Button
             variant="gradient"
             color="blue"
-            className="mt-2 mb-5"
+            className="mt-2 mb-5 font-poppins font-medium"
             onClick={downloadFormat}
           >
             Download Format
@@ -410,14 +460,14 @@ function DataBarang() {
               required
               accept=".xlsx"
               onChange={(e) => setExcel(e.target.files[0])}
-            />{" "}
+            />
           </DialogBody>
           <DialogFooter>
             <Button
               variant="text"
               color="gray"
               onClick={handleOpen}
-              className="mr-1"
+              className="mr-1 font-poppins font-medium"
             >
               <span>Kembali</span>
             </Button>
@@ -426,6 +476,7 @@ function DataBarang() {
               color="blue"
               onClick={handleOpen}
               type="submit"
+              className="font-poppins font-medium"
             >
               <span>Import</span>
             </Button>
@@ -463,7 +514,7 @@ function DataBarang() {
                 variant="static"
                 color="blue"
                 type="date"
-              />{" "}
+              />
             </div>
           </DialogBody>
           <DialogFooter>

@@ -127,25 +127,25 @@ function TglFilterTransaksiBeliDinarpos() {
               Nama Barang
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Harga Beli (Rp){" "}
+              Harga Beli (Rp)
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Diskon{" "}
+              Diskon
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              QTY{" "}
+              QTY
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Total Harga Barang (Rp){" "}
+              Total Harga Barang (Rp)
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Total Belanja (Rp){" "}
+              Total Belanja (Rp)
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Potongan Harga (Rp){" "}
+              Potongan Harga (Rp)
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Total Keseluruhan (Rp){" "}
+              Total Keseluruhan (Rp)
             </th>
           </tr>
         </thead>
@@ -172,28 +172,28 @@ function TglFilterTransaksiBeliDinarpos() {
                     <ul key={idx}>
                       <li>{brg.namaBarang}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.hargaBrng}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.diskon}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.qty}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {row.totalBayarBarang}

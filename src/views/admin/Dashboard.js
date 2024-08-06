@@ -908,7 +908,7 @@ function Dashboard() {
               color="blue-gray"
               className="font-normal font-poppins"
             >
-              Total Transaksi Pembelian{" "}
+              Total Transaksi Pembelian
             </Typography>
           </Card>
           <Card className="p-4">

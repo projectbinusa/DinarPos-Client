@@ -91,7 +91,7 @@ function TanggalFilterSuplierExcelcom() {
   return (
     <div className="mx-5 my-3">
       <h3 className="text-sm">
-        EXCEL COM{" "}
+        EXCEL COM
         <span className="block">
           Jl. Bulustalan 1 No.27 Semarang 087729244899
         </span>
@@ -123,7 +123,7 @@ function TanggalFilterSuplierExcelcom() {
               Jumlah Barang
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Unit Barang{" "}
+              Unit Barang
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
               Harga Satuan (Rp)
@@ -150,28 +150,28 @@ function TanggalFilterSuplierExcelcom() {
                     <ul key={idx}>
                       <li>{brg.namaBarang}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.qty}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.unit}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.hargaBrng}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
               </tr>
             );

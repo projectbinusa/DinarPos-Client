@@ -303,7 +303,7 @@ const DataFinish = () => {
                   <p className="bg-green-500 py-1 px-2 text-white rounded">
                     {totalElektro !== 0
                       ? ((successElektro / totalElektro) * 100).toFixed(2)
-                      : 0}{" "}
+                      : 0}
                     %
                   </p>
                 </div>
@@ -340,7 +340,7 @@ const DataFinish = () => {
                 <p className="bg-green-500 py-1 px-2 text-white rounded">
                   {totalCpu !== 0
                     ? ((successCpu / totalCpu) * 100).toFixed(2)
-                    : 0}{" "}
+                    : 0}
                   %
                 </p>
               </div>

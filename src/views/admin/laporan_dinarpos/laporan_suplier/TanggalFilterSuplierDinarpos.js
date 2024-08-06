@@ -127,7 +127,7 @@ function TanggalFilterSuplierDinarpos() {
               Jumlah Barang
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Unit Barang{" "}
+              Unit Barang
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
               Harga Satuan (Rp)
@@ -154,28 +154,28 @@ function TanggalFilterSuplierDinarpos() {
                     <ul key={idx}>
                       <li>{brg.namaBarang}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.qty}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.unit}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
                 <td className="text-center text-sm py-2 border-gray-700 border-collapse border-2 px-2">
                   {barangLaporan.map((brg, idx) => (
                     <ul key={idx}>
                       <li>{brg.hargaBrng}</li>
                     </ul>
-                  ))}{" "}
+                  ))}
                 </td>
               </tr>
             );

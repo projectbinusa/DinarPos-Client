@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -7,10 +7,51 @@ import {
   Input,
 } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import $ from "jquery";
 import "datatables.net";
 import "../../../assets/styles/datatables.css";
+import Decrypt from "../../../component/Decrypt";
+import { API_PENGGUNA } from "../../../utils/BaseUrl";
+import axios from "axios";
 
 function LaporanStatusService() {
+  const tableRef = useRef(null);
+  const [status, setstatus] = useState([]);
+
+  const initializeDataTable = () => {
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
+    }
+  };
+
+  useEffect(() => {
+    if (status && status.length > 0) {
+      initializeDataTable();
+    }
+  }, [status]);
+
+  const [level, setlevel] = useState("");
+
+  const idPengguna = Decrypt()
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
+  let dashboard = "";
+
+  if (level === "Superadmin") {
+    dashboard = "dashboard";
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service"
+  }
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -20,7 +61,7 @@ function LaporanStatusService() {
             Laporan Status Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href={"dashboard"} className="opacity-60">
+            <a href={"/" + dashboard} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -36,18 +77,6 @@ function LaporanStatusService() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="flex justify-between items-center">
-            <a href="/laporan_pendapatan" className="mb-5">
-              {/* <Button variant="gradient" color="green">
-                Taken
-              </Button>
-            </a>
-            <a href="/add_service" className="mb-5">
-              <Button variant="gradient" color="blue">
-                Tambah
-              </Button> */}
-            </a>
-          </div>{" "}
           <br />
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
             <div className="w-full">
@@ -58,7 +87,6 @@ function LaporanStatusService() {
                 color="blue"
                 variant="outlined"
                 required
-                // value={startDate}
                 // onChange={(e) => setStartDate(e.target.value)}
                 className="w-full"
               />
@@ -71,7 +99,6 @@ function LaporanStatusService() {
                 color="blue"
                 variant="outlined"
                 required
-                // value={endDate}
                 // onChange={(e) => setEndDate(e.target.value)}
                 className="w-full"
               />
@@ -87,8 +114,18 @@ function LaporanStatusService() {
               </Button>
             </div>
           </div>
+          <div className="w-full lg:w-auto flex justify-start items-center">
+            <Button
+              variant="gradient"
+              color="blue"
+              // onClick={filterTangggal}
+              size="md"
+              className="font-poppins font-medium"
+            >
+              Export            </Button>
+          </div>
           <div className="rounded mt-10 p-2 w-full overflow-x-auto">
-            {/* <table
+            <table
               id="example_data"
               ref={tableRef}
               className="rounded-sm table-auto w-full"
@@ -96,70 +133,71 @@ function LaporanStatusService() {
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                  <th className="text-sm py-2 px-3 font-semibold">In </th>
-                  <th className="text-sm py-2 px-3 font-semibold">C </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-2 px-3 font-semibold">ID TT</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Customer </th>
+                  <th className="text-sm py-2 px-3 font-semibold">TGL Masuk</th>
+                  <th className="text-sm py-2 px-3 font-semibold">No Faktur </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Keluhan </th>
+                  <th className="text-sm py-2 px-3 font-semibold">TGL </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Status</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Solusi</th>
                 </tr>
               </thead>
-              <tbody>
-                {services.length > 0 ? (
-                  services.map((row, index) => {
-                    const tglKonfirms = tglKonfirm[index] || [];
+              {/* <tbody>
+                {status.length > 0 ? (
+                  status.map((row, index) => {
                     return (
-                      <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">
-                          {row.customer.nama_customer}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.customer.alamat}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.produk}{" "}
-                          <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {formatDate(row.tanggalMasuk)}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {tglKonfirms.map((down, idx) => (
-                            <ul key={idx}>
-                              <li>{formatDate(down.tglKonf)}</li>
-                            </ul>
-                          ))}{" "}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.statusEnd}
-                        </td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
-                          <div className="flex flex-row gap-3">
-                            <a href={"/detail_service/" + row.idTT}>
-                              <IconButton size="md" color="light-blue">
-                                <InformationCircleIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
+                      // <tr key={index}>
+                      //   <td className="text-sm w-[4%]">{index + 1}</td>
+                      //   <td className="text-sm py-2 px-3">
+                      //     {row.customer.nama_customer}
+                      //   </td>
+                      //   <td className="text-sm py-2 px-3">
+                      //     {row.customer.alamat}
+                      //   </td>
+                      //   <td className="text-sm py-2 px-3">
+                      //     {row.produk}
+                      //     <span className="block">{row.merk}</span>
+                      //     <span className="block">{row.type}</span>
+                      //   </td>
+                      //   <td className="text-sm py-2 px-3">
+                      //     {formatDate(row.tanggalMasuk)}
+                      //   </td>
+                      //   <td className="text-sm py-2 px-3">
+                      //     {tglKonfirms.map((down, idx) => (
+                      //       <ul key={idx}>
+                      //         <li>{formatDate(down.tglKonf)}</li>
+                      //       </ul>
+                      //     ))}
+                      //   </td>
+                      //   <td className="text-sm py-2 px-3">
+                      //     {row.statusEnd}
+                      //   </td>
+                      //   <td className="text-sm py-2 px-3 flex items-center justify-center">
+                      //     <div className="flex flex-row gap-3">
+                      //       <a href={"/detail_service/" + row.idTT}>
+                      //         <IconButton size="md" color="light-blue">
+                      //           <InformationCircleIcon className="w-6 h-6 white" />
+                      //         </IconButton>
+                      //       </a>
+                      //     </div>
+                      //   </td>
+                      // </tr>
                     );
                   })
                 ) : (
                   <tr>
                     <td
-                      colSpan="8"
+                      colSpan="10"
                       className="text-sm text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>
                   </tr>
                 )}
-              </tbody>
-            </table> */}
+              </tbody> */}
+            </table>
           </div>
         </main>
       </div>

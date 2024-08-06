@@ -1052,7 +1052,7 @@ function DetailServiceTeknisi() {
                             </>
                           );
                         })}
-                        {datas?.teknisi?.id === idTeknisi ? (
+                        {datas?.teknisi?.id === idTeknisi && datas?.statusEnd !== "READY_S" && datas?.statusEnd !== "READY_T" && datas?.taken !== "Y" ? (
                           <>
                             <tr>
                               <td className="text-sm text-center py-2 border-gray-300 border">
@@ -1130,79 +1130,81 @@ function DetailServiceTeknisi() {
                       </>
                     ) : (
                       <>
-                        <tr>
-                          <td className="text-sm text-center py-2 border-gray-300 border">
-                            <IconButton
-                              color="blue"
-                              size="md"
-                              onClick={newStatus}
-                            >
-                              <PlusIcon className="w-6 h-6 white" />
-                            </IconButton>
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            Type <br />
-                            <input
-                              type="radio"
-                              id="validasi_U"
-                              name="validasi"
-                              value="U"
-                              onChange={(e) =>
-                                setvalidasiNew(e.target.value)
-                              }
-                            />
-                            <label htmlFor="validasi_U" className="ml-1">
-                              U
-                            </label>
-                            <br />
-                            <input
-                              type="radio"
-                              id="validasi_I"
-                              name="validasi"
-                              value="I"
-                              onChange={(e) =>
-                                setvalidasiNew(e.target.value)
-                              }
-                            />
-                            <label htmlFor="validasi_I" className="ml-1">
-                              I
-                            </label>
-                            <br />
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            <textarea
-                              cols="30"
-                              rows="3"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
-                              placeholder="Status"
-                              id="status"
-                              onChange={(e) => setstatusNew(e.target.value)}
-                            ></textarea>
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            <textarea
-                              cols="30"
-                              rows="3"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
-                              placeholder="Solusi"
-                              id="solusi"
-                              onChange={(e) => setsolusiNew(e.target.value)}
-                            ></textarea>
-                          </td>
-                          <td className="text-sm text-left py-2 px-3 border-gray-300 border">
-                            <select
-                              id="ket"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
-                              required
-                              onChange={(e) => setketNew(e.target.value)}
-                            >
-                              <option value="">Pilih</option>
-                              <option value="WT">WT</option>
-                              <option value="WS">WS</option>
-                              <option value="WC">WC</option>
-                            </select>
-                          </td>
-                        </tr>
+                        {datas?.statusEnd === "READY_S" || datas?.statusEnd === "READY_T" || datas?.taken === "Y" ? (<></>) : (<>
+                          <tr>
+                            <td className="text-sm text-center py-2 border-gray-300 border">
+                              <IconButton
+                                color="blue"
+                                size="md"
+                                onClick={newStatus}
+                              >
+                                <PlusIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </td>
+                            <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                              Type <br />
+                              <input
+                                type="radio"
+                                id="validasi_U"
+                                name="validasi"
+                                value="U"
+                                onChange={(e) =>
+                                  setvalidasiNew(e.target.value)
+                                }
+                              />
+                              <label htmlFor="validasi_U" className="ml-1">
+                                U
+                              </label>
+                              <br />
+                              <input
+                                type="radio"
+                                id="validasi_I"
+                                name="validasi"
+                                value="I"
+                                onChange={(e) =>
+                                  setvalidasiNew(e.target.value)
+                                }
+                              />
+                              <label htmlFor="validasi_I" className="ml-1">
+                                I
+                              </label>
+                              <br />
+                            </td>
+                            <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                              <textarea
+                                cols="30"
+                                rows="3"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                                placeholder="Status"
+                                id="status"
+                                onChange={(e) => setstatusNew(e.target.value)}
+                              ></textarea>
+                            </td>
+                            <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                              <textarea
+                                cols="30"
+                                rows="3"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                                placeholder="Solusi"
+                                id="solusi"
+                                onChange={(e) => setsolusiNew(e.target.value)}
+                              ></textarea>
+                            </td>
+                            <td className="text-sm text-left py-2 px-3 border-gray-300 border">
+                              <select
+                                id="ket"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500 dark:focus:border-sky-500"
+                                required
+                                onChange={(e) => setketNew(e.target.value)}
+                              >
+                                <option value="">Pilih</option>
+                                <option value="WT">WT</option>
+                                <option value="WS">WS</option>
+                                <option value="WC">WC</option>
+                              </select>
+                            </td>
+                          </tr>
+                        </>)}
                       </>
                     )}
                   </tbody>

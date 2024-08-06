@@ -904,16 +904,16 @@ function TransaksiPenjualanDinarPos() {
                   </div>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Anda Hemat</Typography>
-                  <Typography variant="h6" id="ttl_bayar_hemat">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Anda Hemat</Typography>
+                  <Typography variant="h6" id="ttl_bayar_hemat" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" className="capitalize">
+                  <Typography variant="paragraph" className="capitalize font-poppins font-medium">
                     total Belanja Tanpa diskon
                   </Typography>
-                  <Typography variant="h6" id="total2">
+                  <Typography variant="h6" id="total2" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
@@ -961,16 +961,16 @@ function TransaksiPenjualanDinarPos() {
               </div>
               <div className="flex flex-col gap-y-4">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Total Belanja</Typography>
-                  <Typography variant="h6" id="total">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Total Belanja</Typography>
+                  <Typography variant="h6" id="total" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" id="title">
-                    Kembalian / Kekurangan{" "}
+                  <Typography variant="paragraph" id="title" className="font-poppins font-medium">
+                    Kembalian / Kekurangan
                   </Typography>
-                  <Typography variant="h6" id="kembalian">
+                  <Typography variant="h6" id="kembalian" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>

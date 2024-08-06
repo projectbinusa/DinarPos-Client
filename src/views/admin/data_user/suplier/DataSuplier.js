@@ -271,9 +271,9 @@ function DataSuplier() {
                             onClick={() => deleteSuplier(suplier.idSuplier)}
                           >
                             <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>{" "}
+                          </IconButton>
                         </div>
-                      </td>{" "}
+                      </td>
                     </tr>
                   ))
                 ) : (
@@ -318,7 +318,7 @@ function DataSuplier() {
               required
               accept=".xlsx"
               onChange={(e) => setExcel(e.target.files[0])}
-            />{" "}
+            />
           </DialogBody>
           <DialogFooter>
             <Button

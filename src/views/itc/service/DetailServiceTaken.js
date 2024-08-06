@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
+  Button,
   IconButton,
   Typography,
 } from "@material-tailwind/react";
@@ -32,7 +33,7 @@ function DetailServiceTaken() {
   };
 
   const [namaCustomer, setnamaCustomer] = useState(
-    datas?.customer?.nama_customer || ""
+    datas?.customer?.nama_customer
   );
   const [alamatCustomer, setalamatCustomer] = useState("");
   const [cpCustomer, setcpCustomer] = useState("");
@@ -54,8 +55,6 @@ function DetailServiceTaken() {
         console.log(error);
       });
   }, [param.id]);
-
-  console.log(datas);
 
   // TRANSAKSI 
   const [dataTransaksi, setDataTransaksi] = useState(null);
@@ -81,14 +80,12 @@ function DetailServiceTaken() {
 
   useEffect(() => {
     axios
-      .get(`${API_TRANSAKSI}/get-barang-transaksi-by-id-transaksi/` + idTransaksi, {
+      .get(`${API_TRANSAKSI}/barang/penjualan/dinarpos?id_transaksi=` + idTransaksi, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       })
       .then((res) => {
-        const respon = res.data;
-        // setDataTransaksi(respon);
-        // setIdTransaksi(respon.idTransaksi);
-        console.log(res.data);
+        const respon = res.data.data;
+        setBrgTransaksi(respon);
       })
       .catch((error) => {
         console.log(error);
@@ -175,7 +172,7 @@ function DetailServiceTaken() {
                 variant="paragraph"
                 className="capitalize font-semibold text-white flex"
               >
-                <ChevronLeftIcon className="w-6 h-6 white" /> NO.
+                <ChevronLeftIcon className="w-6 h-6 white" /> NO. {datas?.idTT}
               </Typography>
             </a>
             <div>
@@ -185,7 +182,7 @@ function DetailServiceTaken() {
                 onClick={() => window.open("/print_service/" + datas?.idTT)}
               >
                 <PrinterIcon className="w-6 h-6 white" />
-              </IconButton>{" "}
+              </IconButton>
               <IconButton size="md" color="green">
                 <ChatBubbleBottomCenterIcon
                   className="w-6 h-6 white"
@@ -199,7 +196,7 @@ function DetailServiceTaken() {
                     );
                   }}
                 />
-              </IconButton>{" "}
+              </IconButton>
             </div>
           </div>
           <div className="bg-white p-3 rounded">
@@ -219,14 +216,14 @@ function DetailServiceTaken() {
                         type="text"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Nama"
-                        value={namaCustomer}
+                        defaultValue={datas?.customer?.nama_customer}
                         readOnly />
                     </div>
                   </li>
                   <li className="mb-3">
                     <div className="flex items-center">
                       <label htmlFor="" className="w-32 text-center text-sm">
-                        Alamat{" "}
+                        Alamat
                       </label>
                       <textarea
                         name="alamat"
@@ -235,7 +232,8 @@ function DetailServiceTaken() {
                         rows="3"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         readOnly
-                      >{alamatCustomer}</textarea>
+                        value={alamatCustomer}
+                      ></textarea>
                     </div>
                   </li>
                   <li className="mb-3">
@@ -247,7 +245,7 @@ function DetailServiceTaken() {
                         type="number"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="CP"
-                        value={cpCustomer}
+                        defaultValue={datas?.cp}
                         readOnly />
                     </div>
                   </li>
@@ -263,7 +261,8 @@ function DetailServiceTaken() {
                         rows="3"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         readOnly
-                      >{ketCustomer}</textarea>
+                        value={ketCustomer}
+                      ></textarea>
                     </div>
                   </li>
                 </ol>
@@ -368,7 +367,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.produk}
+                          defaultValue={datas?.produk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -376,7 +375,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.merk}
+                          defaultValue={datas?.merk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -384,7 +383,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.type}
+                          defaultValue={datas?.type}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -392,7 +391,7 @@ function DetailServiceTaken() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.sn}
+                          defaultValue={datas?.sn}
                         />
                       </td>
                     </tr>
@@ -420,7 +419,8 @@ function DetailServiceTaken() {
                           rows="3"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                        >{datas?.perlengkapan}</textarea>
+                          value={datas?.perlengkapan}
+                        ></textarea>
                       </td>
                       <td
                         colSpan="2"
@@ -431,7 +431,8 @@ function DetailServiceTaken() {
                           rows="3"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                        >{datas?.keluhan}</textarea>
+                          value={datas?.keluhan}
+                        ></textarea>
                       </td>
                     </tr>
                   </tbody>
@@ -448,7 +449,7 @@ function DetailServiceTaken() {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Catatan..."
                       readOnly
-                      defaultValue={datas?.catatan}
+                      value={datas?.catatan}
                     ></textarea>
                   </div>
                 </div>
@@ -583,34 +584,37 @@ function DetailServiceTaken() {
                           </th>
                         </tr>
                       </thead>
-                      {/* <tbody>
-                                        <?php if ($barangs) : ?>
-                                            <?php foreach ($barangs as $brg) : ?>
-                                                <tr>
-                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->barcode_barang ?></td>
-                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo tampil_nama_barang_byid($brg->barcode_barang) ?></td>
-                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->harga_brng ?></td>
-                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->qty ?></td>
-                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->total_harga_barang ?></td>
-                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->diskon ?></td>
-                                                    <td className="text-sm text-center py-2 border-gray-300 border"><?php echo $brg->total_harga ?></td>
-                                                </tr>
-                                            <?php endforeach ?>
-                                        <?php else : ?>
-                                            <tr>
-                                                <td colspan="7" className="text-center text-xs border-gray-300 border bg-white p-2">Tidak Ada Barang !</td>
-                                            </tr>
-                                        <?php endif ?>
-                                    </tbody> */}
+                      <tbody>
+                        {brgTransaksi.length > 0 ? (
+                          <>
+                            {brgTransaksi.map((row, idx) => (
+                              <tr key={idx}>
+                                <td className="text-sm text-center p-2 border-gray-300 border">{row.barcodeBarang}</td>
+                                <td className="text-sm text-center p-2 border-gray-300 border">{row.namaBarang}</td>
+                                <td className="text-sm text-center p-2 border-gray-300 border">{row.hargaBrng}</td>
+                                <td className="text-sm text-center p-2 border-gray-300 border">{row.qty}</td>
+                                <td className="text-sm text-center p-2 border-gray-300 border">{row.totalHargaBarang}</td>
+                                <td className="text-sm text-center p-2 border-gray-300 border">{row.diskon}</td>
+                                <td className="text-sm text-center p-2 border-gray-300 border">{row.totalHarga}</td>
+                              </tr>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            <tr>
+                              <td colSpan="7" className="text-center text-xs border-gray-300 border bg-white p-2">Tidak Ada Barang !</td>
+                            </tr>
+                          </>)}
+                      </tbody>
                     </table>
                   </div>
                   <div className="mt-3 flex justify-end">
                     <a
                       href={`/print_histori_dinarpos/${dataTransaksi.idTransaksi}`}
                     >
-                      {/* <Button variant="gradient" size="md" color="blue">
+                      <Button variant="gradient" size="md" color="blue" className="font-poppins font-medium">
                       Print
-                    </Button> */}
+                    </Button>
                     </a>
                   </div>
                   <br />

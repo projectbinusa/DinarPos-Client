@@ -194,6 +194,8 @@ function TransaksiPembelianDinarpos() {
       ttlPpnAll += ppn;
     }
     setttlTanpaDiskon(totale2)
+    $("#dpp").html(formatRupiah(ttlDppAll));
+    $("#ppn").html(formatRupiah(ttlPpnAll));
     settotalDpp(ttlDppAll);
     settotalPpn(ttlPpnAll);
   };
@@ -645,7 +647,7 @@ function TransaksiPembelianDinarpos() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             TRANSAKSI Pembelian dinarpos
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -892,16 +894,16 @@ function TransaksiPembelianDinarpos() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Anda Hemat</Typography>
-                  <Typography variant="h6" id="ttl_bayar_hemat">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Anda Hemat</Typography>
+                  <Typography variant="h6" id="ttl_bayar_hemat" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" className="capitalize">
+                  <Typography variant="paragraph" className="capitalize font-poppins font-medium">
                     total Belanja Tanpa diskon
                   </Typography>
-                  <Typography variant="h6" id="total2">
+                  <Typography variant="h6" id="total2" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
@@ -956,16 +958,31 @@ function TransaksiPembelianDinarpos() {
               </div>
               <div className="flex flex-col gap-y-4">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Total Belanja</Typography>
-                  <Typography variant="h6" id="total">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Total Belanja</Typography>
+                  <Typography variant="h6" id="total" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" id="title">
+                  <Typography variant="paragraph" id="title" className="font-poppins font-medium">
                     Kembalian / Kekurangan
                   </Typography>
-                  <Typography variant="h6" id="kembalian">
+                  <Typography variant="h6" id="kembalian" className="font-poppins font-medium">
+                    Rp 0,00
+                  </Typography>
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-4 mt-5">
+                <div className="bg-white shadow rounded px-3 py-2">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Total DPP</Typography>
+                  <Typography variant="h6" id="dpp" className="font-poppins font-medium">
+                    Rp 0,00
+                  </Typography>
+                </div>
+                <div className="bg-white shadow rounded px-3 py-2">
+                  <Typography variant="paragraph" className="font-poppins font-medium">
+                    Total PPN                  </Typography>
+                  <Typography variant="h6" id="ppn" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
