@@ -43,6 +43,9 @@ function TransaksiPembelianDinarpos() {
   const handleOpen3 = () => setOpen3(!open3);
 
   const [barang, setbarang] = useState([]);
+  const [ttlTanpaDiskon, setttlTanpaDiskon] = useState("");
+  const [totalPpn, settotalPpn] = useState(0);
+  const [totalDpp, settotalDpp] = useState(0);
 
   // TRANSAKSI BELI
   const [suplierId, setsuplierId] = useState(0);
@@ -149,10 +152,16 @@ function TransaksiPembelianDinarpos() {
     return formatter.format(value);
   };
 
+  const formatAngka = (value) => {
+    const formatter = new Intl.NumberFormat("id-ID");
+    return formatter.format(value);
+  };
+
+
   // TOTAL HARGA
   const updateTotalHarga = (produk = []) => {
-    var totale = 0;
-    var totale2 = 0;
+    let totale = 0;
+    let totale2 = 0;
 
     for (var i in produk) {
       var total_harga = parseInt(produk[i].totalHarga);
@@ -163,10 +172,32 @@ function TransaksiPembelianDinarpos() {
       totale2 += parseInt(harga_barang * jumlah_barang);
     }
 
+
     $("#total").html(formatRupiah(totale));
     $("#total2").html(formatRupiah(totale2));
-    $("#total3").html(totale2);
     $("#ttl_bayar_hemat").html(formatRupiah(parseInt(totale2 - totale)));
+  };
+
+  const ppnDpp = (addProduk = []) => {
+    let totale2 = 0;
+    let ttlPpnAll = 0;
+    let ttlDppAll = 0;
+
+    for (var i in addProduk) {
+      var jumlah_barang = parseInt(addProduk[i].qty);
+      var harga_barang = parseInt(addProduk[i].hargaBrng);
+      var dpp = addProduk[i].ttlDpp;
+      var ppn = addProduk[i].ttlPpn;
+
+      totale2 += parseInt(harga_barang * jumlah_barang);
+      ttlDppAll += dpp;
+      ttlPpnAll += ppn;
+    }
+    setttlTanpaDiskon(totale2)
+    $("#dpp").html(formatRupiah(ttlDppAll));
+    $("#ppn").html(formatRupiah(ttlPpnAll));
+    settotalDpp(ttlDppAll);
+    settotalPpn(ttlPpnAll);
   };
 
   // CEK BARANG
@@ -211,6 +242,13 @@ function TransaksiPembelianDinarpos() {
           const totalHarga = hargaDiskon * jumlah;
           const totalHargaBarang = hargaBrngs * jumlah;
 
+          // DPP & PPN
+          const dpp = hargaBrng / 1.11;
+          const ppn = dpp * 11 / 100;
+
+          const ttlDppBrg = dpp * jumlah;
+          const ttlPpnBrg = ppn * jumlah;
+
           const newData = {
             barcodeBarang: barcodes,
             diskon: diskon,
@@ -218,7 +256,13 @@ function TransaksiPembelianDinarpos() {
             qty: jumlah,
             totalHarga: totalHarga,
             totalHargaBarang: totalHargaBarang,
+            hemat: 0,
+            dpp: parseFloat(dpp.toFixed(2)),
+            ppn: parseFloat(ppn.toFixed(2)),
+            ttlDpp: parseFloat(ttlDppBrg.toFixed(2)),
+            ttlPpn: parseFloat(ttlPpnBrg.toFixed(2))
           };
+
 
           const newData2 = {
             barcode: res.data.barcodeBarang,
@@ -234,6 +278,7 @@ function TransaksiPembelianDinarpos() {
           setaddProduk([...addProduk, newData]);
 
           updateTotalHarga(produk);
+          ppnDpp(addProduk);
 
           setqty(0);
           setdiskonBarang(0);
@@ -371,6 +416,7 @@ function TransaksiPembelianDinarpos() {
       if (result.isConfirmed) {
         removeItemsById(barcode);
         updateTotalHarga(produk);
+        ppnDpp(addProduk);
         $("#tambah").attr("disabled", "disabled");
         if (parseInt(produk.length) === 0) {
           $("#bayar").attr("disabled", "disabled");
@@ -420,6 +466,13 @@ function TransaksiPembelianDinarpos() {
       });
       if (indexToUpdate !== -1) {
         const updatedProduk = [...prevState];
+
+        const dpp = editHargaBarang / 1.11;
+        const ppn = dpp * 11 / 100;
+
+        const ttlDppBrg = dpp * editJumlah;
+        const ttlPpnBrg = ppn * editJumlah;
+
         updatedProduk[indexToUpdate] = {
           barcodeBarang: editBarcode,
           diskon: editDiskon,
@@ -427,6 +480,11 @@ function TransaksiPembelianDinarpos() {
           qty: editJumlah,
           totalHarga: total_harga,
           totalHargaBarang: total_harga_barang,
+          hemat: 0,
+          dpp: parseFloat(dpp.toFixed(2)),
+          ppn: parseFloat(ppn.toFixed(2)),
+          ttlDpp: parseFloat(ttlDppBrg.toFixed(2)),
+          ttlPpn: parseFloat(ttlPpnBrg.toFixed(2))
         };
         return updatedProduk;
       } else {
@@ -438,6 +496,7 @@ function TransaksiPembelianDinarpos() {
     });
 
     updateTotalHarga(produk);
+    ppnDpp(addProduk);
 
     handleOpen3();
   };
@@ -479,11 +538,17 @@ function TransaksiPembelianDinarpos() {
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
-      kekurangan: kekurangan,
+      hutang: kekurangan,
       sisa: sisas,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
       ttlBayarHemat: ttlBayarHemat,
+      total3: ttlTanpaDiskon,
+      totalBayar2: totalBayarBarang,
+      dpp: formatAngka(totalDpp),
+      dpp2: totalDpp,
+      ppn: formatAngka(totalPpn),
+      ppn2: totalPpn
     };
 
     axios
@@ -527,11 +592,16 @@ function TransaksiPembelianDinarpos() {
         });
         console.log(err);
       });
+
   };
 
   useEffect(() => {
     updateTotalHarga(produk);
   }, [produk]);
+
+  useEffect(() => {
+    ppnDpp(addProduk);
+  }, [addProduk]);
 
   // ALL SUPLIER
   const [values, setvalues] = useState("");
@@ -577,7 +647,7 @@ function TransaksiPembelianDinarpos() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             TRANSAKSI Pembelian dinarpos
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -824,16 +894,16 @@ function TransaksiPembelianDinarpos() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Anda Hemat</Typography>
-                  <Typography variant="h6" id="ttl_bayar_hemat">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Anda Hemat</Typography>
+                  <Typography variant="h6" id="ttl_bayar_hemat" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" className="capitalize">
+                  <Typography variant="paragraph" className="capitalize font-poppins font-medium">
                     total Belanja Tanpa diskon
                   </Typography>
-                  <Typography variant="h6" id="total2">
+                  <Typography variant="h6" id="total2" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
@@ -888,16 +958,31 @@ function TransaksiPembelianDinarpos() {
               </div>
               <div className="flex flex-col gap-y-4">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Total Belanja</Typography>
-                  <Typography variant="h6" id="total">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Total Belanja</Typography>
+                  <Typography variant="h6" id="total" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" id="title">
+                  <Typography variant="paragraph" id="title" className="font-poppins font-medium">
                     Kembalian / Kekurangan
                   </Typography>
-                  <Typography variant="h6" id="kembalian">
+                  <Typography variant="h6" id="kembalian" className="font-poppins font-medium">
+                    Rp 0,00
+                  </Typography>
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-4 mt-5">
+                <div className="bg-white shadow rounded px-3 py-2">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Total DPP</Typography>
+                  <Typography variant="h6" id="dpp" className="font-poppins font-medium">
+                    Rp 0,00
+                  </Typography>
+                </div>
+                <div className="bg-white shadow rounded px-3 py-2">
+                  <Typography variant="paragraph" className="font-poppins font-medium">
+                    Total PPN                  </Typography>
+                  <Typography variant="h6" id="ppn" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>

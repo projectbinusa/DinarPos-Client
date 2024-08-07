@@ -325,7 +325,7 @@ function AddTransaksiFromIndentExcelcom() {
               <div className="bg-white shadow rounded px-3 py-2 mt-5">
                 <Typography variant="paragraph">Total Pembayaran</Typography>
                 <Typography variant="h6" id="ttl_pembayaran">
-                  Rp 0,00{" "}
+                  Rp 0,00
                 </Typography>
               </div>
               <div className="bg-white shadow rounded px-3 py-2 mt-5">

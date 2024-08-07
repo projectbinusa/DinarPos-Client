@@ -142,7 +142,6 @@ import EditData from "./views/itc/edit_data/EditData.js";
 import EditGaransi from "./views/itc/garansi/EditGaransi.js";
 import EditBonBarang from "./views/itc/bon/EditBonBarang.js";
 import GrafikPoin from "./views/itc/point/GrafikPoin.js";
-import ServiceTakenTeknisi from "./views/itcteknisi/ServiceTakenTeknisi.js";
 import ServiceCancelTeknisi from "./views/itcteknisi/ServiceCancelTeknisi.js";
 import ServiceTeknisi from "./views/itcteknisi/ServiceTeknisi.js";
 import ServiceReturTeknisi from "./views/itcteknisi/ServiceReturTeknisi.js";
@@ -967,11 +966,6 @@ function App() {
             <PrivateRoute
               path="/dashboard_teknisi"
               component={DashboardTeknisi}
-              isAuthenticated={true}
-            />
-            <PrivateRoute
-              path="/service_taken_teknisi"
-              component={ServiceTakenTeknisi}
               isAuthenticated={true}
             />
             <PrivateRoute

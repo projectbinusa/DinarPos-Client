@@ -98,7 +98,7 @@ function TanggalFilterBarangDinarpos() {
               Jumlah
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
-              Unit{" "}
+              Unit
             </th>
             <th className="text-sm py-2 border-gray-700 border-collapse border-2 px-2">
               Harga Satuan (Rp)

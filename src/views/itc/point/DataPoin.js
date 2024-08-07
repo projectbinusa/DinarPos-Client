@@ -218,13 +218,13 @@ function DataPoin() {
             <div className="flex justify-between items-center">
               <Typography
                 variant="paragraph"
-                className="capitalize font-semibold"
+                className="capitalize font-semibold font-poppins"
               >
-                Poin{" "}
+                Poin
               </Typography>
               <a href="/add_point">
                 <Button variant="gradient" color="blue" className="font-popins font-medium">
-                  Input{" "}
+                  Input
                 </Button>
               </a>
             </div>
@@ -323,9 +323,9 @@ function DataPoin() {
           <div className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">
             <Typography
               variant="paragraph"
-              className="capitalize font-semibold"
+              className="capitalize font-semibold font-poppins"
             >
-              History Poin{" "}
+              History Poin
             </Typography>
             <br />
             <hr /> <br /> <br />

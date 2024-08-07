@@ -47,7 +47,7 @@ function LaporanPendapatan() {
                 Tambah
               </Button> */}
             </a>
-          </div>{" "}
+          </div>
           <br />
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
             <div className="w-full">
@@ -119,9 +119,9 @@ function LaporanPendapatan() {
                           {row.customer.alamat}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.produk}{" "}
-                          <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
+                          {row.produk}
+                          <span className="block">{row.merk}</span>
+                          <span className="block">{row.type}</span>
                         </td>
                         <td className="text-sm py-2 px-3">
                           {formatDate(row.tanggalMasuk)}
@@ -131,7 +131,7 @@ function LaporanPendapatan() {
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">
                           {row.statusEnd}

@@ -198,13 +198,13 @@ function Garansi() {
                   <th className="text-sm py-2 px-3 font-semibold">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">ID TT</th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    TGL Masuk{" "}
+                    TGL Masuk
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">Barang</th>
                   <th className="text-sm py-2 px-3 font-semibold">Merek </th>
                   <th className="text-sm py-2 px-3 font-semibold">Masuk ke </th>
                   <th className="text-sm py-2 px-3 font-semibold">
-                    Kerusakan{" "}
+                    Kerusakan
                   </th>
                   <th className="text-sm py-2 px-3 font-semibold">TGL Jadi</th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>

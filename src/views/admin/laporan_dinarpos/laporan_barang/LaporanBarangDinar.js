@@ -314,7 +314,7 @@ function LaporanBarangDinar() {
                               onClick={() => returnBarang(row.idBrgTransaksi)}
                             />
                           </IconButton>
-                        </td>{" "}
+                        </td>
                       </>) : (<></>)}
                     </tr>
                   ))

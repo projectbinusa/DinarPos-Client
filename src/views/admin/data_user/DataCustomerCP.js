@@ -151,9 +151,9 @@ function DataCustomerCP() {
                             onClick={() => deleteCustomerCp(down.id)}
                           >
                             <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>{" "}
+                          </IconButton>
                         </div>
-                      </td>{" "}
+                      </td>
                     </tr>
                   ))
                 ) : (

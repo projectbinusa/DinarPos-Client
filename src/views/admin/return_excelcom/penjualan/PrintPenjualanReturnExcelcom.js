@@ -60,7 +60,7 @@ function PrintPenjualanReturnExcelcom() {
       <h3 className="text-center">FAKTUR PENJUALAN</h3>
       <div className="flex justify-between items-center my-3">
         <h3 className="text-sm">
-          EXCEL COM{" "}
+          EXCEL COM
           <span className="block">
             Jl. Bulustalan 1 No.27 Semarang 087729244899
           </span>
@@ -79,7 +79,7 @@ function PrintPenjualanReturnExcelcom() {
           NPWP : 02.779.101.7-508.000
           <span className="block">Banker's:</span>
           <span className="block">
-            Bank Syariah Mandiri : 777.9696.965 a/n PT. Dinar Tech Share-E{" "}
+            Bank Syariah Mandiri : 777.9696.965 a/n PT. Dinar Tech Share-E
           </span>
         </h3>
         <div>

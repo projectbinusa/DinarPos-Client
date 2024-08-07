@@ -88,7 +88,7 @@ function PrintHistoriExcelcom() {
       <h3 className="text-center">FAKTUR PENJUALAN</h3>
       <div className="flex justify-between items-center my-3">
         <h3 className="text-sm">
-          EXCEL COM{" "}
+          EXCEL COM
           <span className="block">
             Jl. Bulustalan 1 No.27 Semarang 087729244899
           </span>
@@ -104,9 +104,9 @@ function PrintHistoriExcelcom() {
       </div>
       <div className="flex justify-between items-center my-3">
         <h3 className="text-sm">
-          Banker's:{" "}
+          Banker's:
           <span className="block">
-            Bank BCA : 836-0344-518 a/n INNANI LU'LU'UL CHASANAH{" "}
+            Bank BCA : 836-0344-518 a/n INNANI LU'LU'UL CHASANAH
           </span>
         </h3>
         <div>

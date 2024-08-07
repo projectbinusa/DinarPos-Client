@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { API_SERVICE, API_TEKNISI } from "../../utils/BaseUrl";
+import { API_PENGGUNA, API_SERVICE, API_TEKNISI } from "../../utils/BaseUrl";
 import $ from "jquery";
 import "../../assets/styles/datatables.css";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
@@ -10,28 +10,45 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import SidebarAdmin from "../../component/SidebarAdmin";
+import Decrypt from "../../component/Decrypt";
 
 function ServiceReturTeknisi() {
   const tableRef = useRef(null);
   const [services, setservices] = useState([]);
   const [idTeknisi, setidTeknisi] = useState(0);
 
+  // PENGGUNA TEKNISI
+  const [username, setusername] = useState("");
+
+  const idPengguna = Decrypt()
   useEffect(() => {
-    axios
-      .get(
-        `${API_TEKNISI}/username?username=` + localStorage.getItem("username"),
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      )
-      .then((res) => {
-        setidTeknisi(res.data.data.id);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setusername(response?.usernamePengguna || "")
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
+  useEffect(() => {
+    if (username) {
+      axios
+        .get(
+          `${API_TEKNISI}/username?username=` + username,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        )
+        .then((res) => {
+          setidTeknisi(res.data.data.id);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [username]);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -170,8 +187,8 @@ function ServiceReturTeknisi() {
                           {row.customer.alamat}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.produk} <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
+                          {row.produk} <span className="block">{row.merk}</span>
+                          <span className="block">{row.type}</span>
                         </td>
                         <td className="text-sm py-2 px-3">
                           {formatDate(row.tanggalMasuk)}
@@ -181,7 +198,7 @@ function ServiceReturTeknisi() {
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">{row.statusEnd}</td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">

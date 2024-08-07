@@ -43,6 +43,7 @@ function TransaksiPembelianExcelcom() {
   const handleOpen3 = () => setOpen3(!open3);
 
   const [barang, setbarang] = useState([]);
+  const [ttlTanpaDiskon, setttlTanpaDiskon] = useState("");
 
   // TRANSAKSI BELI
   const [suplierId, setsuplierId] = useState(0);
@@ -164,7 +165,7 @@ function TransaksiPembelianExcelcom() {
 
     $("#total").html(formatRupiah(totale));
     $("#total2").html(formatRupiah(totale2));
-    $("#total3").html(totale2);
+    setttlTanpaDiskon(totale2)
     $("#ttl_bayar_hemat").html(formatRupiah(parseInt(totale2 - totale)));
   };
 
@@ -217,6 +218,7 @@ function TransaksiPembelianExcelcom() {
             qty: jumlah,
             totalHarga: totalHarga,
             totalHargaBarang: totalHargaBarang,
+            hemat: 0,
           };
 
           const newData2 = {
@@ -428,6 +430,7 @@ function TransaksiPembelianExcelcom() {
           qty: editJumlah,
           totalHarga: total_harga,
           totalHargaBarang: total_harga_barang,
+          hemat: 0,
         };
         return updatedProduk;
       } else {
@@ -480,12 +483,21 @@ function TransaksiPembelianExcelcom() {
       pembayaran: pembayaran,
       potongan: potongan,
       produk: addProduk,
-      kekurangan: kekurangan,
+      hutang: kekurangan,
       sisa: sisas,
       totalBayarBarang: totalBayarBarang,
       totalBelanja: totalBelanja,
       ttlBayarHemat: ttlBayarHemat,
+      dpp: '0',
+      dpp2: '0',
+      ppn: '0',
+      ppn2: '0',
+      total3: ttlTanpaDiskon,
+      totalBayar2: totalBayarBarang
     };
+
+    console.log(request);
+    
 
     axios
       .post(`${API_TRANSAKSI_BELI_EXCELCOM}`, request, {
@@ -826,16 +838,16 @@ function TransaksiPembelianExcelcom() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 my-12">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Anda Hemat</Typography>
-                  <Typography variant="h6" id="ttl_bayar_hemat">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Anda Hemat</Typography>
+                  <Typography variant="h6" id="ttl_bayar_hemat" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" className="capitalize">
+                  <Typography variant="paragraph" className="capitalize font-poppins font-medium">
                     total Belanja Tanpa diskon
                   </Typography>
-                  <Typography variant="h6" id="total2">
+                  <Typography variant="h6" id="total2" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
@@ -890,26 +902,26 @@ function TransaksiPembelianExcelcom() {
               </div>
               <div className="flex flex-col gap-y-4">
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph">Total Belanja</Typography>
-                  <Typography variant="h6" id="total">
+                  <Typography variant="paragraph" className="font-poppins font-medium">Total Belanja</Typography>
+                  <Typography variant="h6" id="total" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
                 <div className="bg-white shadow rounded px-3 py-2">
-                  <Typography variant="paragraph" id="title">
-                    Kembalian / Kekurangan{" "}
-                  </Typography>{" "}
-                  <Typography variant="h6" id="kembalian">
+                  <Typography variant="paragraph" id="title" className="font-poppins font-medium">
+                    Kembalian / Kekurangan
+                  </Typography>
+                  <Typography variant="h6" id="kembalian" className="font-poppins font-medium">
                     Rp 0,00
                   </Typography>
                 </div>
               </div>
               <div className="bg-white shadow rounded px-3 py-2 mt-5">
-                <p className="text-base my-2">
+                <p className="text-base my-2 font-poppins">
                   <b>Nota :</b> <span></span>
                 </p>
                 <hr />
-                <h1 className="text-3xl my-3 font-medium" id="ttl_bayar">
+                <h1 className="text-3xl my-3 font-medium font-poppins" id="ttl_bayar">
                   Rp 0,00
                 </h1>
               </div>

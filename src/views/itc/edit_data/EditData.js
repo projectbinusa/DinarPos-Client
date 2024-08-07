@@ -424,7 +424,7 @@ function EditData() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Edit Data
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -497,7 +497,7 @@ function EditData() {
                   className="text-gray-800 hover:bg-blue-50 flex items-center p-2 rounded-lg dark:text-white group w-full"
                   onClick={() => toggleElement("hapus_status")}
                 >
-                  <TrashIcon className="w-6 h-5" />{" "}
+                  <TrashIcon className="w-6 h-5" />
                   <span className=" ms-3 whitespace-nowrap">Hapus Status</span>
                 </button>
               </li>
@@ -505,8 +505,8 @@ function EditData() {
           </div>
           <div className="bg-white shadow-lg p-3 my-5 rounded lg:col-span-2">
             <div id="b_service" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
-                Biaya Service{" "}
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
+                Biaya Service
               </Typography>
               <hr />
               <div className="flex gap-2 mt-5 items-center">
@@ -573,7 +573,7 @@ function EditData() {
                               <i className="text-sm mt-2">
                                 * isi 0 jika kosong
                               </i>
-                            </div>{" "}
+                            </div>
                           </div>
                         </li>
                         <li className="mb-2">
@@ -598,7 +598,7 @@ function EditData() {
                               <i className="text-sm mt-2">
                                 * isi 0 jika kosong
                               </i>
-                            </div>{" "}
+                            </div>
                           </div>
                         </li>
                       </ol>
@@ -625,8 +625,8 @@ function EditData() {
               </div>
             </div>
             <div id="poin" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
-                Edit Poin{" "}
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
+                Edit Poin
               </Typography>
               <hr />
               <div className="flex gap-2 mt-5 items-center">
@@ -688,7 +688,7 @@ function EditData() {
                                   onClick={() => updatePoin(row.id)}
                                 >
                                   <BookmarkIcon className="w-6 h-6" />
-                                </IconButton>{" "}
+                                </IconButton>
                               </td>
                             </tr>
                           ))}
@@ -706,7 +706,7 @@ function EditData() {
               </div>
             </div>
             <div id="tanda_terima" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
                 Edit Tanda Terima
               </Typography>
               <hr />
@@ -792,8 +792,8 @@ function EditData() {
               </div>
             </div>
             <div id="status_tanda_terima" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
-                Edit Status Tanda Terima{" "}
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
+                Edit Status Tanda Terima
               </Typography>
               <hr />
               <div className="flex gap-2 mt-5 items-center">
@@ -884,8 +884,8 @@ function EditData() {
               </div>
             </div>
             <div id="hapus_status" hidden>
-              <Typography variant="lead" className="capitalize font-medium">
-                Hapus Tanda Terima{" "}
+              <Typography variant="lead" className="capitalize font-medium font-poppins">
+                Hapus Tanda Terima
               </Typography>
               <hr />
               <div className="flex gap-2 mt-5 items-center">

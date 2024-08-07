@@ -56,7 +56,6 @@ function ServiceCancelTeknisi() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setservicesTgl(response.data.data)
-      console.log(response.data.data)
     } catch (error) {
       console.log("get all", error);
     }
@@ -262,8 +261,8 @@ function ServiceCancelTeknisi() {
                           {row.customer.alamat}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.produk} <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
+                          {row.produk} <span className="block">{row.merk}</span>
+                          <span className="block">{row.type}</span>
                         </td>
                         <td className="text-sm py-2 px-3">
                           {formatDate(row.tanggalMasuk)}
@@ -273,7 +272,7 @@ function ServiceCancelTeknisi() {
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">{row.statusEnd}</td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">
@@ -333,8 +332,8 @@ function ServiceCancelTeknisi() {
                           {row.customer.alamat}
                         </td>
                         <td className="text-sm py-2 px-3">
-                          {row.produk} <span className="block">{row.merk}</span>{" "}
-                          <span className="block">{row.type}</span>{" "}
+                          {row.produk} <span className="block">{row.merk}</span>
+                          <span className="block">{row.type}</span>
                         </td>
                         <td className="text-sm py-2 px-3">
                           {formatDate(row.tanggalMasuk)}
@@ -344,7 +343,7 @@ function ServiceCancelTeknisi() {
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
-                          ))}{" "}
+                          ))}
                         </td>
                         <td className="text-sm py-2 px-3">{row.statusEnd}</td>
                         <td className="text-sm py-2 px-3 flex items-center justify-center">

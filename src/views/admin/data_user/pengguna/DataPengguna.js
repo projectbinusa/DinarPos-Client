@@ -149,9 +149,9 @@ function DataPengguna() {
                             onClick={() => deletePengguna(pengguna.idPengguna)}
                           >
                             <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>{" "}
+                          </IconButton>
                         </div>
-                      </td>{" "}
+                      </td>
                     </tr>
                   ))
                 ) : (

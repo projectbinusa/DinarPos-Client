@@ -177,7 +177,7 @@ function AddRetur() {
                       placeholder="Masukkan Nama Customer"
                       value={nama}
                       onChange={(e) => setnama(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -189,7 +189,7 @@ function AddRetur() {
                       placeholder="Masukkan Alamat"
                       value={alamat}
                       onChange={(e) => setalamat(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -202,7 +202,7 @@ function AddRetur() {
                       type="number"
                       value={cp}
                       onChange={(e) => setcp(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -213,7 +213,7 @@ function AddRetur() {
                       size="lg"
                       placeholder="Masukkan Keterangan"
                       onChange={(e) => setket(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                 </ol>
               </CardBody>
@@ -236,7 +236,7 @@ function AddRetur() {
                       placeholder="Masukkan Jenis Produk"
                       value={produk}
                       onChange={(e) => setproduk(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -248,7 +248,7 @@ function AddRetur() {
                       placeholder="Masukkan Merk"
                       value={merk}
                       onChange={(e) => setmerk(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -260,7 +260,7 @@ function AddRetur() {
                       placeholder="Masukkan Type"
                       value={type}
                       onChange={(e) => settype(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -272,7 +272,7 @@ function AddRetur() {
                       placeholder="Masukkan No Seri"
                       value={sn}
                       onChange={(e) => setsn(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -283,7 +283,7 @@ function AddRetur() {
                       size="lg"
                       placeholder="Masukkan Perlengkapan"
                       onChange={(e) => setperlengkapan(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -294,7 +294,7 @@ function AddRetur() {
                       size="lg"
                       placeholder="Masukkan Keluhan"
                       onChange={(e) => setkeluhan(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                 </ol>
               </CardBody>
@@ -316,7 +316,7 @@ function AddRetur() {
                       size="lg"
                       placeholder="Masukkan Penerima"
                       onChange={(e) => setpenerima(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -327,7 +327,7 @@ function AddRetur() {
                       size="lg"
                       type="date"
                       onChange={(e) => settglMasuk(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -339,7 +339,7 @@ function AddRetur() {
                       placeholder="Masukkan Biaya Maksimal"
                       type="number"
                       onChange={(e) => setbmax(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -351,7 +351,7 @@ function AddRetur() {
                       placeholder="Masukkan Estimasi Biaya"
                       type="number"
                       onChange={(e) => setestimasi(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                   <br />
                   <li>
@@ -362,12 +362,12 @@ function AddRetur() {
                       size="lg"
                       placeholder="Masukkan Checker"
                       onChange={(e) => setchecker(e.target.value)}
-                    />{" "}
+                    />
                   </li>
                 </ol>
                 <br />
                 <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
-                  Simpan{" "}
+                  Simpan
                 </Button>
               </CardBody>
             </Card>

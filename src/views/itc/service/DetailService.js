@@ -644,7 +644,7 @@ function DetailService() {
       .then((res) => {
         if (res.data.code === 200) {
           Swal.fire({
-            title: "Transaksi Penjualan Berhasil. Cetak Struk?",
+            title: "Transaksi Berhasil. Cetak Struk?",
             icon: "success",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -657,8 +657,13 @@ function DetailService() {
                 "/cetak_struk_transaksi_penjualan_dinarpos/" +
                 res.data.data.idTransaksi
               );
+              setTimeout(() => {
+                history.push("/data_service")
+              }, 1500);
             } else {
-              window.location.reload();
+              setTimeout(() => {
+                history.push("/data_service")
+              }, 1500);
             }
           });
         } else {
@@ -669,7 +674,7 @@ function DetailService() {
         Swal.fire({
           icon: "error",
           title: "Gagal!",
-          text: "Transaksi Penjualan Gagal!",
+          text: "Transaksi Gagal!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -767,6 +772,23 @@ function DetailService() {
     }
   };
 
+  // GET ALL STATUS SERVICE
+  const [allStatus, setallStatus] = useState([]);
+
+  const getAllStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/status/` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setallStatus(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
   // DELETE BARANG
   const deleteTglKonf = async (id) => {
     Swal.fire({
@@ -795,7 +817,7 @@ function DetailService() {
             setTimeout(() => {
               window.location.reload();
             }, 1500);
-          }).then((err) => {
+          }).catch((err) => {
             Swal.fire({
               icon: "error",
               title: "Gagal!",
@@ -811,7 +833,8 @@ function DetailService() {
 
   useEffect(() => {
     allTglKonf();
-  }, []);
+    getAllStatus();
+  }, [param.id]);
   // END GET ALL TGL KONF
 
   // GET SERVICE
@@ -909,7 +932,7 @@ function DetailService() {
                 onClick={() => window.open("/print_service/" + datas?.idTT)}
               >
                 <PrinterIcon className="w-6 h-6 white" />
-              </IconButton>{" "}
+              </IconButton>
               <IconButton size="md" color="green">
                 <ChatBubbleBottomCenterIcon
                   className="w-6 h-6 white"
@@ -923,7 +946,7 @@ function DetailService() {
                     );
                   }}
                 />
-              </IconButton>{" "}
+              </IconButton>
             </div>
           </div>
           <div className="bg-white p-3 rounded">
@@ -952,7 +975,7 @@ function DetailService() {
                     <li className="mb-3">
                       <div className="flex items-center">
                         <label htmlFor="" className="w-32 text-center text-sm">
-                          Alamat{" "}
+                          Alamat
                         </label>
                         <textarea
                           name="alamat"
@@ -1004,7 +1027,7 @@ function DetailService() {
                     type="submit"
                   >
                     Simpan
-                  </Button>{" "}
+                  </Button>
                 </form>
                 <br /> <br /> <br />
                 <h1 className="text-lg">
@@ -1141,8 +1164,8 @@ function DetailService() {
                         <input
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          value={datas?.produk || ""}
                           readOnly
-                          value={datas?.produk}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -1150,7 +1173,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.merk}
+                          value={datas?.merk || ""}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -1158,7 +1181,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.type}
+                          value={datas?.type || ""}
                         />
                       </td>
                       <td className="border-gray-300 border bg-white p-2">
@@ -1166,7 +1189,7 @@ function DetailService() {
                           type="text"
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           readOnly
-                          value={datas?.sn}
+                          value={datas?.sn || ""}
                         />
                       </td>
                     </tr>
@@ -1212,6 +1235,45 @@ function DetailService() {
                     </tr>
                   </tbody>
                 </table>
+
+                {/* STATUS SERVICE */}
+                <div>
+                  <br />
+                  <h1 className="text-lg">
+                    <b>
+                      Status dan Laporan {datas?.statusEnd}
+                    </b>
+                  </h1>
+                  <hr />
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse my-3">
+                      <thead>
+                        <tr>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 w-24">Tanggal</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Teknisi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Status</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Solusi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Ket</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {allStatus.length > 0 ? (allStatus.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{formatDate(row.created_date)}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.teknisi?.nama}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.status}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.solusi}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.ket}</td>
+                          </tr>
+                        ))) : (<>
+                          <tr>
+                            <td colSpan="5" className="text-center text-xs border-gray-300 border bg-white p-2">Data Belum Ada !</td>
+                          </tr></>)}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
                 <form onSubmit={updateNote}>
                   <div className="mt-6">
                     <div className="flex items-center">
@@ -1237,7 +1299,7 @@ function DetailService() {
                 </form>
               </div>
             </div>
-            {datas?.statusEnd === "PROSES" || datas?.statusEnd === "N_A" ? (
+            {datas?.statusEnd === "PROSES" ? (
               <>
                 {/* JIKA BELUM ADA DATA */}
                 <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
@@ -1350,7 +1412,7 @@ function DetailService() {
                               <select
                                 id="status"
                                 value={statusEnd}
-                                onChange={(e) => setstatusEnd(e.target.value)}
+                                onChange={(e) => setstatusEnd(e)}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 darkselect:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required
                               >
@@ -1385,368 +1447,370 @@ function DetailService() {
               </>
             ) : (
               <>
-                {/* JIKA SUDAH ADA DATA */}
-                <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
-                  <h1 className="font-semibold mt-1">Perincian Biaya</h1>
-                  <hr /> <br />
-                  <ol className="">
-                    <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                      <div className="flex items-center">
-                        <p className="w-36">Estimasi</p>
-                        <p className="w-full">
-                          {formatRupiah(datas?.estimasi)}
-                        </p>
-                      </div>
-                    </li>
-                    <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                      <div className="flex items-center">
-                        <p className="w-36">Sparepart</p>
-                        <p className="w-full">
-                          {formatRupiah(datas?.biayaSparepart)}
-                        </p>
-                      </div>
-                    </li>
-                    <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                      <div className="flex items-center">
-                        <p className="w-36">Service</p>
-                        <p className="w-full">
-                          {formatRupiah(datas?.biayaService)}
-                        </p>
-                      </div>
-                    </li>
-                    <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                      <div className="flex items-center">
-                        <p className="w-36">Total</p>
-                        <p className="w-full">{formatRupiah(datas?.total)}</p>
-                      </div>
-                    </li>
-                  </ol>
-                  <br />
-                  <br />
-                  <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-5">
-                    <div className="col-span-2 mt-3">
-                      <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
-                        <div className="lg:col-span-2">
-                          <label
-                            htmlFor="barang"
-                            className="text-[14px] text-blue-gray-400"
-                          >
-                            Barang
-                          </label>
-                          <ReactSelect
-                            id="barang"
-                            options={barang.map((down) => {
-                              return {
-                                value: down.barcodeBarang,
-                                label:
-                                  down.barcodeBarang + " / " + down.namaBarang,
-                              };
-                            })}
-                            placeholder="Pilih Barang"
-                            styles={customStyles}
-                            value={selectedBarang}
-                            onChange={handleBarangChange}
-                          />
-                          <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+                {datas?.statusEnd !== "N_A" ? (<>
+                  {/* JIKA SUDAH ADA DATA */}
+                  <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
+                    <h1 className="font-semibold mt-1">Perincian Biaya</h1>
+                    <hr /> <br />
+                    <ol className="">
+                      <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                        <div className="flex items-center">
+                          <p className="w-36">Estimasi</p>
+                          <p className="w-full">
+                            {formatRupiah(datas?.estimasi)}
+                          </p>
                         </div>
-                        <Input
+                      </li>
+                      <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                        <div className="flex items-center">
+                          <p className="w-36">Sparepart</p>
+                          <p className="w-full">
+                            {formatRupiah(datas?.biayaSparepart)}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                        <div className="flex items-center">
+                          <p className="w-36">Service</p>
+                          <p className="w-full">
+                            {formatRupiah(datas?.biayaService)}
+                          </p>
+                        </div>
+                      </li>
+                      <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                        <div className="flex items-center">
+                          <p className="w-36">Total</p>
+                          <p className="w-full">{formatRupiah(datas?.total)}</p>
+                        </div>
+                      </li>
+                    </ol>
+                    <br />
+                    <br />
+                    <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-5">
+                      <div className="col-span-2 mt-3">
+                        <div className=" grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-y-8">
+                          <div className="lg:col-span-2">
+                            <label
+                              htmlFor="barang"
+                              className="text-[14px] text-blue-gray-400"
+                            >
+                              Barang
+                            </label>
+                            <ReactSelect
+                              id="barang"
+                              options={barang.map((down) => {
+                                return {
+                                  value: down.barcodeBarang,
+                                  label:
+                                    down.barcodeBarang + " / " + down.namaBarang,
+                                };
+                              })}
+                              placeholder="Pilih Barang"
+                              styles={customStyles}
+                              value={selectedBarang}
+                              onChange={handleBarangChange}
+                            />
+                            <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+                          </div>
+                          <Input
+                            color="blue"
+                            variant="static"
+                            label="Harga"
+                            type="number"
+                            placeholder="Masukkan Harga"
+                            id="hargabarang"
+                            value={hargaBrng}
+                            onChange={(e) => sethargaBrng(e.target.value)}
+                          />
+                          <Input
+                            color="blue"
+                            variant="static"
+                            label="Diskon (%)"
+                            type="number"
+                            placeholder="Masukkan Diskon"
+                            value={diskonBarang}
+                            onChange={(e) => setdiskonBarang(e.target.value)}
+                          />
+                          <Input
+                            color="blue"
+                            variant="static"
+                            label="Stok Barang"
+                            id="stokbarang"
+                            type="number"
+                            value={sisa}
+                            onChange={(e) => setsisa(e.target.value)}
+                            readOnly
+                          />
+                          <Input
+                            color="blue"
+                            variant="static"
+                            label="Jumlah"
+                            type="number"
+                            placeholder="Masukkan jumlah"
+                            id="jumlahBarang"
+                            value={qty}
+                            onKeyUp={checkEmpty()}
+                            onChange={(e) => setqty(e.target.value)}
+                          />
+                        </div>
+                        <Button
+                          variant="gradient"
                           color="blue"
-                          variant="static"
-                          label="Harga"
-                          type="number"
-                          placeholder="Masukkan Harga"
-                          id="hargabarang"
-                          value={hargaBrng}
-                          onChange={(e) => sethargaBrng(e.target.value)}
-                        />
-                        <Input
-                          color="blue"
-                          variant="static"
-                          label="Diskon (%)"
-                          type="number"
-                          placeholder="Masukkan Diskon"
-                          value={diskonBarang}
-                          onChange={(e) => setdiskonBarang(e.target.value)}
-                        />
-                        <Input
-                          color="blue"
-                          variant="static"
-                          label="Stok Barang"
-                          id="stokbarang"
-                          type="number"
-                          value={sisa}
-                          onChange={(e) => setsisa(e.target.value)}
-                          readOnly
-                        />
-                        <Input
-                          color="blue"
-                          variant="static"
-                          label="Jumlah"
-                          type="number"
-                          placeholder="Masukkan jumlah"
-                          id="jumlahBarang"
-                          value={qty}
-                          onKeyUp={checkEmpty()}
-                          onChange={(e) => setqty(e.target.value)}
-                        />
-                      </div>
-                      <Button
-                        variant="gradient"
-                        color="blue"
-                        className="mt-5 font-popins font-medium"
-                        id="tambah"
-                        onClick={checkStok}
-                      >
-                        <span>Tambah Barang</span>
-                      </Button>
-
-                      <Card className="overflow-auto my-5">
-                        <table
-                          id="example_data"
-                          className="rounded table-auto w-full"
+                          className="mt-5 font-popins font-medium"
+                          id="tambah"
+                          onClick={checkStok}
                         >
-                          <thead className="border-b-2 ">
-                            <tr>
-                              <th className="py-3 px-2">Barcode</th>
-                              <th className="py-3 px-2">Nama</th>
-                              <th className="py-3 px-2">Harga (Rp)</th>
-                              <th className="py-3 px-2">Disc (%)</th>
-                              <th className="py-3 px-2">Harga Diskon (Rp)</th>
-                              <th className="py-3 px-2">Jumlah</th>
-                              <th className="py-3 px-2">Total Harga (Rp)</th>
-                              <th className="py-3 px-2">Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {produk.length > 0 ? (
-                              produk.map((down, index) => (
-                                <tr key={index}>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.barcode}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.nama}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.harga}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.disc}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.hargaDiskon}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.jumlah}
-                                  </td>
-                                  <td className="py-3 px-2 text-center border">
-                                    {down.totalHarga}
-                                  </td>
-                                  <td className="py-2 px-3 text-center border">
-                                    <div className="flex justify-center items-center gap-2">
-                                      <IconButton
-                                        id={down.barcode}
-                                        size="md"
-                                        color="light-blue"
-                                        onClick={() =>
-                                          edit(
-                                            down.barcode,
-                                            down.nama,
-                                            down.harga,
-                                            down.disc,
-                                            down.hargaDiskon,
-                                            down.jumlah,
-                                            down.totalHarga
-                                          )
-                                        }
-                                      >
-                                        <PencilIcon className="w-6 h-6 white" />
-                                      </IconButton>
-                                      <IconButton
-                                        id={down.barcode}
-                                        size="md"
-                                        color="red"
-                                        type="button"
-                                        onClick={() => remove(down.barcode)}
-                                      >
-                                        <TrashIcon className="w-6 h-6 white" />
-                                      </IconButton>
-                                    </div>
-                                  </td>{" "}
-                                </tr>
-                              ))
-                            ) : (
-                              <>
-                                <tr>
-                                  <td colSpan={8} className="text-center py-3">
-                                    Tidak ada data
-                                  </td>
-                                </tr>
-                              </>
-                            )}
-                          </tbody>
-                        </table>
-                      </Card>
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 mb-12">
-                        <div className="mt-6">
-                          <Input
-                            color="blue"
-                            variant="static"
-                            label="Keterangan"
-                            placeholder="Masukkan Keterangan"
-                            onChange={(e) => setketerangan(e.target.value)}
-                          />
-                        </div>
-                        <div className="flex gap-2 items-end">
-                          <Input
-                            label="Salesman"
-                            variant="static"
-                            color="blue"
-                            list="salesman-list"
-                            id="salesman"
-                            name="salesman"
-                            onChange={(event) => {
-                              handleChangeSalesman(event);
-                              setmarkettingId(event.target.value);
-                            }}
-                            placeholder="Pilih Salesman"
-                          />
-                          <datalist id="salesman-list">
-                            {optionsSalesman.length > 0 && (
-                              <>
-                                {optionsSalesman.map((option) => (
-                                  <option value={option.id} key={option.id}>
-                                    {option.namaSalesman}
-                                  </option>
-                                ))}
-                              </>
-                            )}
-                          </datalist>
+                          <span>Tambah Barang</span>
+                        </Button>
 
-                          <div className="flex gap-2">
-                            <button
-                              className="text-sm bg-gray-400 px-1"
-                              onClick={() =>
-                                setCurrentPageSalesman(currentPageSalesman - 1)
-                              }
-                              disabled={currentPageSalesman === 1}
+                        <Card className="overflow-auto my-5">
+                          <table
+                            id="example_data"
+                            className="rounded table-auto w-full"
+                          >
+                            <thead className="border-b-2 ">
+                              <tr>
+                                <th className="py-3 px-2">Barcode</th>
+                                <th className="py-3 px-2">Nama</th>
+                                <th className="py-3 px-2">Harga (Rp)</th>
+                                <th className="py-3 px-2">Disc (%)</th>
+                                <th className="py-3 px-2">Harga Diskon (Rp)</th>
+                                <th className="py-3 px-2">Jumlah</th>
+                                <th className="py-3 px-2">Total Harga (Rp)</th>
+                                <th className="py-3 px-2">Aksi</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {produk.length > 0 ? (
+                                produk.map((down, index) => (
+                                  <tr key={index}>
+                                    <td className="py-3 px-2 text-center border">
+                                      {down.barcode}
+                                    </td>
+                                    <td className="py-3 px-2 text-center border">
+                                      {down.nama}
+                                    </td>
+                                    <td className="py-3 px-2 text-center border">
+                                      {down.harga}
+                                    </td>
+                                    <td className="py-3 px-2 text-center border">
+                                      {down.disc}
+                                    </td>
+                                    <td className="py-3 px-2 text-center border">
+                                      {down.hargaDiskon}
+                                    </td>
+                                    <td className="py-3 px-2 text-center border">
+                                      {down.jumlah}
+                                    </td>
+                                    <td className="py-3 px-2 text-center border">
+                                      {down.totalHarga}
+                                    </td>
+                                    <td className="py-2 px-3 text-center border">
+                                      <div className="flex justify-center items-center gap-2">
+                                        <IconButton
+                                          id={down.barcode}
+                                          size="md"
+                                          color="light-blue"
+                                          onClick={() =>
+                                            edit(
+                                              down.barcode,
+                                              down.nama,
+                                              down.harga,
+                                              down.disc,
+                                              down.hargaDiskon,
+                                              down.jumlah,
+                                              down.totalHarga
+                                            )
+                                          }
+                                        >
+                                          <PencilIcon className="w-6 h-6 white" />
+                                        </IconButton>
+                                        <IconButton
+                                          id={down.barcode}
+                                          size="md"
+                                          color="red"
+                                          type="button"
+                                          onClick={() => remove(down.barcode)}
+                                        >
+                                          <TrashIcon className="w-6 h-6 white" />
+                                        </IconButton>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <>
+                                  <tr>
+                                    <td colSpan={8} className="text-center py-3">
+                                      Tidak ada data
+                                    </td>
+                                  </tr>
+                                </>
+                              )}
+                            </tbody>
+                          </table>
+                        </Card>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5 mb-12">
+                          <div className="mt-6">
+                            <Input
+                              color="blue"
+                              variant="static"
+                              label="Keterangan"
+                              placeholder="Masukkan Keterangan"
+                              onChange={(e) => setketerangan(e.target.value)}
+                            />
+                          </div>
+                          <div className="flex gap-2 items-end">
+                            <Input
+                              label="Salesman"
+                              variant="static"
+                              color="blue"
+                              list="salesman-list"
+                              id="salesman"
+                              name="salesman"
+                              onChange={(event) => {
+                                handleChangeSalesman(event);
+                                setmarkettingId(event.target.value);
+                              }}
+                              placeholder="Pilih Salesman"
+                            />
+                            <datalist id="salesman-list">
+                              {optionsSalesman.length > 0 && (
+                                <>
+                                  {optionsSalesman.map((option) => (
+                                    <option value={option.id} key={option.id}>
+                                      {option.namaSalesman}
+                                    </option>
+                                  ))}
+                                </>
+                              )}
+                            </datalist>
+
+                            <div className="flex gap-2">
+                              <button
+                                className="text-sm bg-gray-400 px-1"
+                                onClick={() =>
+                                  setCurrentPageSalesman(currentPageSalesman - 1)
+                                }
+                                disabled={currentPageSalesman === 1}
+                              >
+                                Prev
+                              </button>
+                              <button
+                                className="text-sm bg-gray-400 px-1"
+                                onClick={() =>
+                                  setCurrentPageSalesman(currentPageSalesman + 1)
+                                }
+                                disabled={!optionsSalesman.length}
+                              >
+                                Next
+                              </button>
+                            </div>
+                          </div>
+                          <div className="bg-white shadow rounded px-3 py-2">
+                            <Typography variant="paragraph">
+                              Anda Hemat
+                            </Typography>
+                            <Typography variant="h6" id="ttl_bayar_hemat">
+                              Rp 0,00
+                            </Typography>
+                          </div>
+                          <div className="bg-white shadow rounded px-3 py-2">
+                            <Typography
+                              variant="paragraph"
+                              className="capitalize"
                             >
-                              Prev
-                            </button>
-                            <button
-                              className="text-sm bg-gray-400 px-1"
-                              onClick={() =>
-                                setCurrentPageSalesman(currentPageSalesman + 1)
-                              }
-                              disabled={!optionsSalesman.length}
-                            >
-                              Next
-                            </button>
+                              total Belanja Tanpa diskon
+                            </Typography>
+                            <Typography variant="h6" id="total2">
+                              Rp 0,00
+                            </Typography>
                           </div>
                         </div>
-                        <div className="bg-white shadow rounded px-3 py-2">
-                          <Typography variant="paragraph">
-                            Anda Hemat
-                          </Typography>
-                          <Typography variant="h6" id="ttl_bayar_hemat">
-                            Rp 0,00
-                          </Typography>
-                        </div>
-                        <div className="bg-white shadow rounded px-3 py-2">
-                          <Typography
-                            variant="paragraph"
-                            className="capitalize"
-                          >
-                            total Belanja Tanpa diskon
-                          </Typography>
-                          <Typography variant="h6" id="total2">
-                            Rp 0,00
-                          </Typography>
-                        </div>
                       </div>
-                    </div>
-                    <div className="bg-blue-50 shadow-lg px-4 py-6 ">
-                      <Select
-                        variant="static"
-                        label="Cash / Kredit"
-                        color="blue"
-                        className="w-full"
-                        id="cashKredit"
-                        onChange={(selectedOption) =>
-                          setcashCredit(selectedOption)
-                        }
-                      >
-                        <Option value="Cash Uang">Cash Uang</Option>
-                        <Option value="Cash Bank">Cash Bank</Option>
-                        <Option value="Kredit">Kredit</Option>
-                      </Select>
-                      <div className="flex flex-col gap-y-6 my-6">
-                        <Input
-                          color="blue"
+                      <div className="bg-blue-50 shadow-lg px-4 py-6 ">
+                        <Select
                           variant="static"
-                          label="Pembayaran"
-                          type="number"
-                          placeholder="Pembayaran"
-                          id="pembayaran"
-                          onChange={(e) => setpembayaran(e.target.value)}
-                          onKeyUp={getDiskon}
-                          defaultValue={0}
-                        />
-                        <Input
+                          label="Cash / Kredit"
                           color="blue"
-                          variant="static"
-                          label="Potongan"
-                          type="number"
-                          placeholder="Potongan"
-                          id="potongan"
-                          defaultValue={0}
-                          onChange={(e) => setpotongan(e.target.value)}
-                          onKeyUp={getPotongan}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-y-4">
-                        <div className="bg-white shadow rounded px-3 py-2">
-                          <Typography variant="paragraph">
-                            Total Belanja
-                          </Typography>
-                          <Typography variant="h6" id="total">
-                            Rp 0,00
-                          </Typography>
-                        </div>
-                        <div className="bg-white shadow rounded px-3 py-2">
-                          <Typography variant="paragraph" id="title">
-                            Kembalian / Kekurangan{" "}
-                          </Typography>
-                          <Typography variant="h6" id="kembalian">
-                            Rp 0,00
-                          </Typography>
-                        </div>
-                      </div>
-                      <div className="bg-white shadow rounded px-3 py-2 mt-5">
-                        <p className="text-base my-2">
-                          <b>Nota :</b> <span></span>
-                        </p>
-                        <hr />
-                        <h1
-                          className="text-3xl my-3 font-medium"
-                          id="ttl_bayar"
+                          className="w-full"
+                          id="cashKredit"
+                          onChange={(selectedOption) =>
+                            setcashCredit(selectedOption)
+                          }
                         >
-                          Rp 0,00
-                        </h1>
+                          <Option value="Cash Uang">Cash Uang</Option>
+                          <Option value="Cash Bank">Cash Bank</Option>
+                          <Option value="Kredit">Kredit</Option>
+                        </Select>
+                        <div className="flex flex-col gap-y-6 my-6">
+                          <Input
+                            color="blue"
+                            variant="static"
+                            label="Pembayaran"
+                            type="number"
+                            placeholder="Pembayaran"
+                            id="pembayaran"
+                            onChange={(e) => setpembayaran(e.target.value)}
+                            onKeyUp={getDiskon}
+                            defaultValue={0}
+                          />
+                          <Input
+                            color="blue"
+                            variant="static"
+                            label="Potongan"
+                            type="number"
+                            placeholder="Potongan"
+                            id="potongan"
+                            defaultValue={0}
+                            onChange={(e) => setpotongan(e.target.value)}
+                            onKeyUp={getPotongan}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-y-4">
+                          <div className="bg-white shadow rounded px-3 py-2">
+                            <Typography variant="paragraph">
+                              Total Belanja
+                            </Typography>
+                            <Typography variant="h6" id="total">
+                              Rp 0,00
+                            </Typography>
+                          </div>
+                          <div className="bg-white shadow rounded px-3 py-2">
+                            <Typography variant="paragraph" id="title">
+                              Kembalian / Kekurangan
+                            </Typography>
+                            <Typography variant="h6" id="kembalian">
+                              Rp 0,00
+                            </Typography>
+                          </div>
+                        </div>
+                        <div className="bg-white shadow rounded px-3 py-2 mt-5">
+                          <p className="text-base my-2">
+                            <b>Nota :</b> <span></span>
+                          </p>
+                          <hr />
+                          <h1
+                            className="text-3xl my-3 font-medium"
+                            id="ttl_bayar"
+                          >
+                            Rp 0,00
+                          </h1>
+                        </div>
+                        <Button
+                          variant="gradient"
+                          color="blue"
+                          className="mt-5 font-popins font-medium"
+                          type="submit"
+                          id="bayar"
+                          onClick={() => add()}
+                        >
+                          <span>Lanjut</span>
+                        </Button>
                       </div>
-                      <Button
-                        variant="gradient"
-                        color="blue"
-                        className="mt-5 font-popins font-medium"
-                        type="submit"
-                        id="bayar"
-                        onClick={() => add()}
-                      >
-                        <span>Lanjut</span>
-                      </Button>
                     </div>
                   </div>
-                </div>
+                </>) : (<></>)}
               </>
             )}
           </div>

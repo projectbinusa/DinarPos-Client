@@ -10,10 +10,11 @@ import {
 } from "@material-tailwind/react";
 import $ from "jquery";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { API_POIN, API_TEKNISI } from "../../../utils/BaseUrl";
+import { API_PENGGUNA, API_POIN, API_TEKNISI } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Chart from "react-apexcharts";
 import Swal from "sweetalert2";
+import Decrypt from "../../../component/Decrypt";
 
 function HistoryPoint() {
   const [tanggalAwal, settanggalAwal] = useState("");
@@ -25,21 +26,39 @@ function HistoryPoint() {
   const currentYear = new Date().getFullYear();
   const tableRef = useRef(null);
 
+  // PENGGUNA TEKNISI
+  const [username, setusername] = useState("");
+
+  const idPengguna = Decrypt()
   useEffect(() => {
-    axios
-      .get(
-        `${API_TEKNISI}/username?username=` + localStorage.getItem("username"),
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      )
-      .then((res) => {
-        setidTeknisi(res.data.data.id);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [API_TEKNISI]);
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setusername(response?.usernamePengguna || "")
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
+
+
+  useEffect(() => {
+    if (username) {
+      axios
+        .get(
+          `${API_TEKNISI}/username?username=` + username,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        )
+        .then((res) => {
+          setidTeknisi(res.data.data.id);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [username]);
 
   const initializeDataTable = () => {
     if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
@@ -435,7 +454,7 @@ function HistoryPoint() {
                   <MagnifyingGlassIcon className="w-6 h-6 white" />
                 </IconButton>
               </div>
-            </div>{" "}
+            </div>
             <br />
             <div className="rounded p-1 w-full overflow-x-auto mt-5">
               <table

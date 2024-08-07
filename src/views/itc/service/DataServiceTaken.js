@@ -91,7 +91,6 @@ function DataServiceTaken() {
   }, [])
 
   useEffect(() => {
-    console.log('Services updated:', services);
     if (services.length > 0) {
       initializeDataTable();
     }
@@ -213,7 +212,6 @@ function DataServiceTaken() {
               <Button
                 variant="gradient"
                 color="blue"
-                // onClick={handleSearchServiceTaken}
                 onClick={filterTangggal}
                 size="md"
               >
