@@ -219,6 +219,10 @@ function TransaksiPembelianExcelcom() {
             totalHarga: totalHarga,
             totalHargaBarang: totalHargaBarang,
             hemat: 0,
+            ppn: 0,
+            dpp: 0,
+            totalPpn: 0,
+            totalDpp: 0,
           };
 
           const newData2 = {
@@ -431,6 +435,10 @@ function TransaksiPembelianExcelcom() {
           totalHarga: total_harga,
           totalHargaBarang: total_harga_barang,
           hemat: 0,
+          ppn: 0,
+          dpp: 0,
+          totalPpn: 0,
+          totalDpp: 0,
         };
         return updatedProduk;
       } else {
@@ -495,9 +503,6 @@ function TransaksiPembelianExcelcom() {
       total3: ttlTanpaDiskon,
       totalBayar2: totalBayarBarang
     };
-
-    console.log(request);
-    
 
     axios
       .post(`${API_TRANSAKSI_BELI_EXCELCOM}`, request, {
@@ -579,7 +584,6 @@ function TransaksiPembelianExcelcom() {
   function setPembayaranCash(values) {
     if (values === "Cash Uang" || values === "Cash Bank") {
       var total = convertToAngka($("#total").html());
-      console.log(total);
       $("#pembayaran").val(total);
     } else {
       $("#pembayaran").val(0);

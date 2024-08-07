@@ -73,7 +73,10 @@ function EditTeknisi() {
         timer: 1500,
       });
 
-      history.push("/data_teknisi");
+      setTimeout(() => {
+        history.push("/data_teknisi");
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       console.error("Error during update:", error);
 
