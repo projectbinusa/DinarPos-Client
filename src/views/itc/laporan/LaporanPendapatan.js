@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -6,11 +6,71 @@ import {
   Button,
   Input,
 } from "@material-tailwind/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+import axios from "axios";
 import "datatables.net";
 import "../../../assets/styles/datatables.css";
+import { API_POIN } from "../../../utils/BaseUrl";
 
 function LaporanPendapatan() {
+  const [startMonth, setStartMonth] = useState("");
+  const [endMonth, setEndMonth] = useState("");
+
+  const handleStartDateChange = (e) => {
+    setStartMonth(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndMonth(e.target.value);
+  };
+
+  // EXPORT LAPORAN SERVICE TAKEN
+  const exportLaporanPendapatan = async (e) => {
+    e.preventDefault();
+    if (!startMonth || !endMonth) {
+      Swal.fire({
+        icon: "warning",
+        title: "Bulan Awal dan Bulan Akhir harus diisi.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${API_POIN}/export?bulanAkhir=${endMonth}&bulanAwal=${startMonth}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      // Handle the blob response and download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "LaporanPendapatan.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export berhasil",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -36,134 +96,52 @@ function LaporanPendapatan() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="flex justify-between items-center">
-            <a href="/laporan_pendapatan" className="mb-5">
-              {/* <Button variant="gradient" color="green">
-                Taken
-              </Button>
-            </a>
-            <a href="/add_service" className="mb-5">
-              <Button variant="gradient" color="blue">
-                Tambah
-              </Button> */}
-            </a>
-          </div>
-          <br />
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
             <div className="w-full">
               <Input
-                type="date"
-                id="startDate"
-                label="Tanggal Awal"
-                color="blue"
+                type="month"
+                id="startMonth"
+                label="Bulan Awal"
                 variant="outlined"
                 required
-                // value={startDate}
-                // onChange={(e) => setStartDate(e.target.value)}
-                className="w-full"
+                value={startMonth}
+                onChange={handleStartDateChange}
+                // fullWidth
+                // InputLabelProps={{
+                //   shrink: true,
+                // }}
               />
             </div>
             <div className="w-full">
               <Input
-                type="date"
-                id="endDate"
-                label="Tanggal Akhir"
-                color="blue"
+                type="month"
+                id="endMonth"
+                label="Bulan Akhir"
                 variant="outlined"
                 required
-                // value={endDate}
-                // onChange={(e) => setEndDate(e.target.value)}
-                className="w-full"
+                value={endMonth}
+                onChange={handleEndDateChange}
+                // fullWidth
+                // InputLabelProps={{
+                //   shrink: true,
+                // }}
               />
             </div>
             <div className="w-full lg:w-auto flex justify-start items-center">
               <Button
-                variant="gradient"
+                variant="filled"
                 color="blue"
-                // onClick={filterTangggal}
-                size="md"
+                className="mt-1"
+                onClick={exportLaporanPendapatan}
               >
-                <MagnifyingGlassIcon className="w-5 h-5" />
+                Export
               </Button>
             </div>
-          </div>
-          <div className="rounded mt-10 p-2 w-full overflow-x-auto">
-            {/* <table
-              id="example_data"
-              ref={tableRef}
-              className="rounded-sm table-auto w-full"
-            >
-              <thead className="bg-blue-500 text-white">
-                <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                  <th className="text-sm py-2 px-3 font-semibold">In </th>
-                  <th className="text-sm py-2 px-3 font-semibold">C </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {services.length > 0 ? (
-                  services.map((row, index) => {
-                    const tglKonfirms = tglKonfirm[index] || [];
-                    return (
-                      <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">
-                          {row.customer.nama_customer}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.customer.alamat}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.produk}
-                          <span className="block">{row.merk}</span>
-                          <span className="block">{row.type}</span>
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {formatDate(row.tanggalMasuk)}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {tglKonfirms.map((down, idx) => (
-                            <ul key={idx}>
-                              <li>{formatDate(down.tglKonf)}</li>
-                            </ul>
-                          ))}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {row.statusEnd}
-                        </td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
-                          <div className="flex flex-row gap-3">
-                            <a href={"/detail_service/" + row.idTT}>
-                              <IconButton size="md" color="light-blue">
-                                <InformationCircleIcon className="w-6 h-6 white" />
-                              </IconButton>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="8"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
-                    >
-                      Tidak ada data
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table> */}
           </div>
         </main>
       </div>
     </section>
   );
 }
+
 export default LaporanPendapatan;
