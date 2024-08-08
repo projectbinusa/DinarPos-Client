@@ -406,12 +406,12 @@ function LaporanSalesmanExcelcom() {
                           {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
                             <>
                               <div>
-                                <IconButton size="md" color="red">
+                                <IconButton size="md" color="red" onClick={() =>
+                                  returnSalesman(laporan.idTransaksi)
+                                }
+                                >
                                   <ArrowPathIcon
                                     className="w-6 h-6 white"
-                                    onClick={() =>
-                                      returnSalesman(laporan.idTransaksi)
-                                    }
                                   />
                                 </IconButton>
                               </div>

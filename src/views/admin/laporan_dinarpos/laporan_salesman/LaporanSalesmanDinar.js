@@ -11,7 +11,6 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
   API_PENGGUNA,
   API_RETURN_DINARPOS,
@@ -399,12 +398,12 @@ function LaporanSalesmanDinar() {
                           </a>
                           {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
                             <>
-                              <IconButton size="md" color="red">
+                              <IconButton size="md" color="red" onClick={() =>
+                                returnSalesman(laporan.idTransaksi)
+                              }
+                              >
                                 <ArrowPathIcon
                                   className="w-6 h-6 white"
-                                  onClick={() =>
-                                    returnSalesman(laporan.idTransaksi)
-                                  }
                                 />
                               </IconButton>
                             </>
