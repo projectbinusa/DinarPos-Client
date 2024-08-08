@@ -282,7 +282,7 @@ function LaporanBarangDinar() {
                   <th className="text-sm py-2 px-3 font-semibold">
                     Total Harga
                   </th>
-                  {level === "Superadmin" || level === "Admin" || level === "Accounting"? (<>
+                  {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (<>
                     <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                   </>) : (<></>)}
                 </tr>
@@ -308,10 +308,10 @@ function LaporanBarangDinar() {
                       </td>
                       {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (<>
                         <td className="text-sm py-2 px-3 text-center">
-                          <IconButton size="md" color="red">
+                          <IconButton size="md" color="red" onClick={() => returnBarang(row.idBrgTransaksi)}
+                          >
                             <ArrowPathIcon
                               className="w-6 h-6 white"
-                              onClick={() => returnBarang(row.idBrgTransaksi)}
                             />
                           </IconButton>
                         </td>

@@ -186,8 +186,8 @@ function TransaksiPembelianDinarpos() {
     for (var i in addProduk) {
       var jumlah_barang = parseInt(addProduk[i].qty);
       var harga_barang = parseInt(addProduk[i].hargaBrng);
-      var dpp = addProduk[i].ttlDpp;
-      var ppn = addProduk[i].ttlPpn;
+      var dpp = addProduk[i].totalDpp;
+      var ppn = addProduk[i].totalPpn;
 
       totale2 += parseInt(harga_barang * jumlah_barang);
       ttlDppAll += dpp;
@@ -259,8 +259,8 @@ function TransaksiPembelianDinarpos() {
             hemat: 0,
             dpp: parseFloat(dpp.toFixed(2)),
             ppn: parseFloat(ppn.toFixed(2)),
-            ttlDpp: parseFloat(ttlDppBrg.toFixed(2)),
-            ttlPpn: parseFloat(ttlPpnBrg.toFixed(2))
+            totalDpp: parseFloat(ttlDppBrg.toFixed(2)),
+            totalPpn: parseFloat(ttlPpnBrg.toFixed(2))
           };
 
 
@@ -483,8 +483,8 @@ function TransaksiPembelianDinarpos() {
           hemat: 0,
           dpp: parseFloat(dpp.toFixed(2)),
           ppn: parseFloat(ppn.toFixed(2)),
-          ttlDpp: parseFloat(ttlDppBrg.toFixed(2)),
-          ttlPpn: parseFloat(ttlPpnBrg.toFixed(2))
+          totalDpp: parseFloat(ttlDppBrg.toFixed(2)),
+          totalPpn: parseFloat(ttlPpnBrg.toFixed(2))
         };
         return updatedProduk;
       } else {

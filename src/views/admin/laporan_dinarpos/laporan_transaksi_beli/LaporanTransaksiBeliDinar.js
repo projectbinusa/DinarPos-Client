@@ -389,12 +389,12 @@ function LaporanTransaksiBeliDinar() {
                                 <PrinterIcon className="w-6 h-6 white" />
                               </IconButton>
                             </a>
-                            <IconButton size="md" color="red">
+                            <IconButton size="md" color="red" onClick={() =>
+                              returnTransaksiBeli(laporan.idTransaksiBeli)
+                            }
+                            >
                               <ArrowPathIcon
                                 className="w-6 h-6 white"
-                                onClick={() =>
-                                  returnTransaksiBeli(laporan.idTransaksiBeli)
-                                }
                               />
                             </IconButton>
                           </>) : (<>
