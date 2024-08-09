@@ -68,8 +68,26 @@ function DetailServicePimpinan() {
     }
   };
 
+  // GET ALL STATUS SERVICE
+  const [allStatus, setallStatus] = useState([]);
+
+  const getAllStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/status/` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setallStatus(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
   useEffect(() => {
     allTglKonf();
+    getAllStatus()
   }, [param.id]);
 
   return (
@@ -100,7 +118,7 @@ function DetailServicePimpinan() {
             <a href="/dashboard_pimpinan">
               <Typography
                 variant="paragraph"
-                className="capitalize font-semibold text-white flex"
+                className="capitalize font-semibold text-white flex font-poppins"
               >
                 <ChevronLeftIcon className="w-6 h-6 white" /> NO. {datas?.idTT}
               </Typography>
@@ -385,6 +403,42 @@ function DetailServicePimpinan() {
                   </tbody>
                 </table>
                 <div>
+                  <br />
+                  <h1 className="text-lg">
+                    <b>
+                      Status dan Laporan {datas?.statusEnd}
+                    </b>
+                  </h1>
+                  <hr />
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse my-3">
+                      <thead>
+                        <tr>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 w-24">Tanggal</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Teknisi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Status</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Solusi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Ket</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {allStatus.length > 0 ? (allStatus.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{formatDate(row.created_date)}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.teknisi?.nama}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.status}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.solusi}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.ket}</td>
+                          </tr>
+                        ))) : (<>
+                          <tr>
+                            <td colSpan="5" className="text-center text-xs border-gray-300 border bg-white p-2">Data Belum Ada !</td>
+                          </tr></>)}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                   <div className="mt-6">
                     <div className="flex items-center">
                       <label htmlFor="" className="w-32 text-center text-sm">
@@ -400,57 +454,73 @@ function DetailServicePimpinan() {
                       ></textarea>
                     </div>
                   </div>
+                  <div className="mt-6">
+                    <ol className="">
+                      <li className="flex items-center text-sm">
+                        <p className="w-36">Estimasi</p>
+                        <p className="w-full">{formatRupiah(datas?.estimasi)}</p>
+                      </li>
+                      <li className="flex items-center text-sm">
+                        <p className="w-36">Biaya Max.</p>
+                        <p className="w-full">
+                          {formatRupiah(datas?.biayaSparepart)}
+                        </p>
+                      </li>
+                    </ol>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
-              <h1 className="font-semibold mt-1">Perincian Biaya</h1>
-              <hr /> <br />
-              <ol className="">
-                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                  <div className="flex items-center">
-                    <p className="w-36">Estimasi</p>
-                    <p className="w-full">{formatRupiah(datas?.estimasi)}</p>
-                  </div>
-                </li>
-                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                  <div className="flex items-center">
-                    <p className="w-36">Sparepart</p>
-                    <p className="w-full">
-                      {formatRupiah(datas?.biayaSparepart)}
-                    </p>
-                  </div>
-                </li>
-                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                  <div className="flex items-center">
-                    <p className="w-36">Service</p>
-                    <p className="w-full">
-                      {formatRupiah(datas?.biayaService)}
-                    </p>
-                  </div>
-                </li>
-                <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
-                  <div className="flex items-center">
-                    <p className="w-36">Total</p>
-                    <p className="w-full">{formatRupiah(datas?.total)}</p>
-                  </div>
-                </li>
-              </ol>
-              <br />
-              <br />
-              <p class="font-semibold text-sm ">
-                Aturan Pengisian Form Service:
-              </p>
-              <ol class="list-inside list-decimal">
-                <li class="font-semibold text-sm">
-                  Harap isi semua kolom dengan tepat dan jelas.
-                </li>
-                <li class="font-semibold text-sm">
-                  Ketika barang sudah diambil / diantar ke customer / pelanggan,
-                  kolom tanggal ambil HARUS DIISI.
-                </li>
-              </ol>
-            </div>
+            {datas?.statusEnd !== "PROSES" && datas?.statusEnd !== "N_A" ? (<>
+              <div className="border-gray-400 shadow bg-white border rounded p-2 mt-5">
+                <h1 className="font-semibold mt-1">Perincian Biaya</h1>
+                <hr /> <br />
+                <ol className="">
+                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                    <div className="flex items-center">
+                      <p className="w-36">Estimasi</p>
+                      <p className="w-full">{formatRupiah(datas?.estimasi)}</p>
+                    </div>
+                  </li>
+                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                    <div className="flex items-center">
+                      <p className="w-36">Sparepart</p>
+                      <p className="w-full">
+                        {formatRupiah(datas?.biayaSparepart)}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                    <div className="flex items-center">
+                      <p className="w-36">Service</p>
+                      <p className="w-full">
+                        {formatRupiah(datas?.biayaService)}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="border border-t-gray-300 border-b-gray-300 p-2 bg-gray-50">
+                    <div className="flex items-center">
+                      <p className="w-36">Total</p>
+                      <p className="w-full">{formatRupiah(datas?.total)}</p>
+                    </div>
+                  </li>
+                </ol>
+                <br />
+                <br />
+                <p class="font-semibold text-sm ">
+                  Aturan Pengisian Form Service:
+                </p>
+                <ol class="list-inside list-decimal">
+                  <li class="font-semibold text-sm">
+                    Harap isi semua kolom dengan tepat dan jelas.
+                  </li>
+                  <li class="font-semibold text-sm">
+                    Ketika barang sudah diambil / diantar ke customer / pelanggan,
+                    kolom tanggal ambil HARUS DIISI.
+                  </li>
+                </ol>
+              </div>
+            </>) : (<></>)}
           </div>
         </main>
       </div>

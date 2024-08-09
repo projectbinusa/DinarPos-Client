@@ -23,6 +23,17 @@ function DetailServiceTaken() {
   const [datas, setdatas] = useState(null);
   const param = useParams();
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
   // FORMAT RUPIAH
   const formatRupiah = (value) => {
     const formatter = new Intl.NumberFormat("id-ID", {
@@ -128,6 +139,27 @@ function DetailServiceTaken() {
     })
   }, [idPengguna])
 
+  // GET ALL STATUS SERVICE
+  const [allStatus, setallStatus] = useState([]);
+
+  const getAllStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/status/` + param.id,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setallStatus(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllStatus()
+  }, [param.id])
+
   let dashboard = "";
 
   if (level === "Pimpinan") {
@@ -170,7 +202,7 @@ function DetailServiceTaken() {
             <a href="/data_service_taken">
               <Typography
                 variant="paragraph"
-                className="capitalize font-semibold text-white flex"
+                className="capitalize font-semibold text-white flex font-poppins"
               >
                 <ChevronLeftIcon className="w-6 h-6 white" /> NO. {datas?.idTT}
               </Typography>
@@ -437,6 +469,42 @@ function DetailServiceTaken() {
                     </tr>
                   </tbody>
                 </table>
+                <div>
+                  <br />
+                  <h1 className="text-lg">
+                    <b>
+                      Status dan Laporan {datas?.statusEnd}
+                    </b>
+                  </h1>
+                  <hr />
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse my-3">
+                      <thead>
+                        <tr>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2 w-24">Tanggal</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Teknisi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Status</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Solusi</th>
+                          <th className="border-gray-300 border bg-gray-200 font-normal text-sm py-2">Ket</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {allStatus.length > 0 ? (allStatus.map((row, idx) => (
+                          <tr key={idx}>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{formatDate(row.created_date)}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.teknisi?.nama}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.status}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.solusi}</td>
+                            <td className="text-sm text-center p-2 border-gray-300 border">{row.ket}</td>
+                          </tr>
+                        ))) : (<>
+                          <tr>
+                            <td colSpan="5" className="text-center text-xs border-gray-300 border bg-white p-2">Data Belum Ada !</td>
+                          </tr></>)}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
                 <div className="mt-6">
                   <div className="flex items-center">
                     <label htmlFor="" className="w-32 text-center text-sm">
@@ -613,8 +681,8 @@ function DetailServiceTaken() {
                       href={`/print_histori_dinarpos/${dataTransaksi.idTransaksi}`}
                     >
                       <Button variant="gradient" size="md" color="blue" className="font-poppins font-medium">
-                      Print
-                    </Button>
+                        Print
+                      </Button>
                     </a>
                   </div>
                   <br />
