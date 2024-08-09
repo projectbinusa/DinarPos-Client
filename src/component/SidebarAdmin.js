@@ -81,13 +81,9 @@ function SidebarAdmin() {
         <Drawer
           open={isDrawerOpen}
           onClose={closeDrawer}
-          overlay={true}
-          overlayRef={(ref) => {
-            if (ref) {
-              document.body.style.overflow = isDrawerOpen ? "hidden" : "auto";
-            }
+          overlayProps={{
+            className: "fixed inset-0 bg-black opacity-50"
           }}
-          className={isDrawerOpen ? "sidebar overflow-y-scroll" : ""}
         >
           <Card
             color="white"
@@ -123,7 +119,7 @@ function SidebarAdmin() {
                 level === "Admin" ||
                 level === "Kasir" ? (
                 <>
-                  
+
                   <Accordion
                     open={open === 11}
                     icon={
@@ -202,7 +198,7 @@ function SidebarAdmin() {
                 level === "Gudang" ||
                 level === "Kasir" ? (
                 <>
-                  
+
                   <Accordion
                     open={open === 1}
                     icon={
@@ -280,7 +276,7 @@ function SidebarAdmin() {
                 level === "Admin" ||
                 level === "Gudang" ? (
                 <>
-                  
+
                   <Accordion
                     open={open === 2}
                     icon={
@@ -310,7 +306,7 @@ function SidebarAdmin() {
                           roleToko === "Admin" ||
                           roleToko === "excelcom" ? (
                           <>
-                            
+
                             <a href="/transaksi_pembelian_excelcom">
                               <ListItem className="uppercase rounded px-3 py-2 text-sm">
                                 <ListItemPrefix>
@@ -360,7 +356,7 @@ function SidebarAdmin() {
                 level === "Kasir" ||
                 level === "Gudang" ? (
                 <>
-                  
+
                   <Accordion
                     open={open === 3}
                     icon={
@@ -478,7 +474,7 @@ function SidebarAdmin() {
                 level === "Kasir" ||
                 level === "Gudang" ? (
                 <>
-                  
+
                   <Accordion
                     open={open === 4}
                     icon={
@@ -568,7 +564,7 @@ function SidebarAdmin() {
                 level === "Admin" ||
                 level === "Accounting" ? (
                 <>
-                  
+
                   <Accordion
                     open={open === 12}
                     icon={
@@ -962,7 +958,7 @@ function SidebarAdmin() {
                     roleToko === "Superadmin" ||
                     roleToko === "Admin" ? (
                     <>
-                      
+
                       <Accordion
                         open={open === 8}
                         icon={
@@ -1087,7 +1083,7 @@ function SidebarAdmin() {
                     roleToko === "Superadmin" ||
                     roleToko === "Admin" ? (
                     <>
-                      
+
                       <Accordion
                         open={open === 9}
                         icon={
@@ -1524,7 +1520,7 @@ function SidebarAdmin() {
               level === "Admin" ||
               level === "Kasir" ? (
               <>
-                
+
                 <Accordion
                   open={open === 11}
                   icon={
@@ -1554,7 +1550,7 @@ function SidebarAdmin() {
                         roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                         <>
-                          
+
                           <a href="/transaksi_indent_excelcom">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
                               <ListItemPrefix>
@@ -1604,7 +1600,7 @@ function SidebarAdmin() {
               level === "Kasir" ||
               level === "Gudang" ? (
               <>
-                
+
                 <Accordion
                   open={open === 1}
                   icon={
@@ -1634,7 +1630,7 @@ function SidebarAdmin() {
                         roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                         <>
-                          
+
                           <a href="/transaksi_penjualan_excelcom">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
                               <ListItemPrefix>
@@ -1761,7 +1757,7 @@ function SidebarAdmin() {
               level === "Gudang" ||
               level === "Kasir" ? (
               <>
-                
+
                 <Accordion
                   open={open === 3}
                   icon={
@@ -2055,7 +2051,7 @@ function SidebarAdmin() {
                   roleToko === "Admin" ||
                   roleToko === "excelcom" ? (
                   <>
-                    
+
                     <Accordion
                       open={open === 5}
                       icon={
@@ -2147,7 +2143,7 @@ function SidebarAdmin() {
                   roleToko === "Admin" ||
                   roleToko === "dinarpos" ? (
                   <>
-                    
+
                     <Accordion
                       open={open === 6}
                       icon={
@@ -2240,7 +2236,7 @@ function SidebarAdmin() {
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-                    
+
                     <Accordion
                       open={open === 7}
                       icon={
@@ -2366,7 +2362,7 @@ function SidebarAdmin() {
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-                    
+
                     <Accordion
                       open={open === 8}
                       icon={
@@ -2593,7 +2589,7 @@ function SidebarAdmin() {
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-                    
+
                     <Accordion
                       open={open === 10}
                       icon={

@@ -43,7 +43,6 @@ function LaporanMarketting() {
       setLaporan([]);
     }
   };
-  
 
   // Hapus laporan marketing
   const handleDelete = async (id) => {
@@ -97,6 +96,44 @@ function LaporanMarketting() {
     }
   }, [laporans]);
 
+  // EXPORT LAPORAN MARKETING
+  const exportLaporanMarketting = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        `${API_PERSEDIAN_EXPORT}/export?PersediaanToExcel`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      // Handle the blob response and download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "PersediaanToExcel.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export successful",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -128,7 +165,7 @@ function LaporanMarketting() {
               <Button className="mt-5" color="blue" type="submit">
                 Export
               </Button>
-              <Button className="mt-5" color="blue" type="submit">
+              <Button className="mt-5" color="blue" type="button" onClick={exportLaporanMarketting}>
                 Export Data Persediaan
               </Button>
             </div>
