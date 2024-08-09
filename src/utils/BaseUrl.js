@@ -119,3 +119,6 @@ export const API_KAS_HARIAN = `${url}/kas_harian`;
 
 // EXPORT LAPORAN SERVICE
 export const API_LAPORAN_SERVICE_EXPORT = `${url}/laporan_service`;
+
+// EXPORT LAPORAN SERVICE
+export const API_PERSEDIAN_EXPORT = `${url}/persediaan`;
