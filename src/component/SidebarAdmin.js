@@ -198,7 +198,6 @@ function SidebarAdmin() {
                 level === "Gudang" ||
                 level === "Kasir" ? (
                 <>
-
                   <Accordion
                     open={open === 1}
                     icon={
@@ -276,7 +275,6 @@ function SidebarAdmin() {
                 level === "Admin" ||
                 level === "Gudang" ? (
                 <>
-
                   <Accordion
                     open={open === 2}
                     icon={
@@ -356,7 +354,6 @@ function SidebarAdmin() {
                 level === "Kasir" ||
                 level === "Gudang" ? (
                 <>
-
                   <Accordion
                     open={open === 3}
                     icon={
@@ -474,7 +471,6 @@ function SidebarAdmin() {
                 level === "Kasir" ||
                 level === "Gudang" ? (
                 <>
-
                   <Accordion
                     open={open === 4}
                     icon={
