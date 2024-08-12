@@ -4,15 +4,14 @@ import $ from "jquery";
 import {
   Breadcrumbs,
   Button,
-  Input,
   IconButton,
   Typography,
 } from "@material-tailwind/react";
-import { API_LAPORAN_MARKETING } from "../../../../utils/BaseUrl";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { API_LAPORAN_MARKETING, API_PERSEDIAN_EXPORT, GET_BARANG_TRANSAKSI_JUAL_EXCELCOM } from "../../../../utils/BaseUrl";
 import "datatables.net";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { PrinterIcon } from "@heroicons/react/24/outline";
 
 function LaporanMarketting() {
   const tableRef = useRef(null);
@@ -31,6 +30,7 @@ function LaporanMarketting() {
       }
     }, 0);
   };
+  
   const getAll = async () => {
     try {
       const response = await axios.get(`${API_LAPORAN_MARKETING}`, {
@@ -44,48 +44,6 @@ function LaporanMarketting() {
     }
   };
 
-  // Hapus laporan marketing
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: "Apakah Anda Ingin Menghapus?",
-      text: "Perubahan data tidak bisa dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Hapus",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`${API_LAPORAN_MARKETING}/${id}`, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-          })
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Dihapus!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-
-            // Refresh data setelah penghapusan
-            getAll();
-          })
-          .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              title: "Gagal!",
-              text: "Hapus laporan gagal!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            console.log(err);
-          });
-      }
-    });
-  };
-
   useEffect(() => {
     getAll();
   }, []);
@@ -95,6 +53,38 @@ function LaporanMarketting() {
       initializeDataTable();
     }
   }, [laporans]);
+
+  const [barang, setBarang] = useState([]);
+
+  const barangTransaksi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${GET_BARANG_TRANSAKSI_JUAL_EXCELCOM}?id_transaksi=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("get all", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchBarangTransaksi = async () => {
+      const barangList = await Promise.all(
+        laporans.map(async (laporan) => {
+          const barangData = await barangTransaksi(laporan.idTransaksi);
+          return barangData;
+        })
+      );
+      setBarang(barangList);
+    };
+
+    fetchBarangTransaksi();
+  }, [laporans]);
+
 
   // EXPORT LAPORAN MARKETING
   const exportLaporanMarketting = async (e) => {
@@ -119,7 +109,7 @@ function LaporanMarketting() {
 
       Swal.fire({
         icon: "success",
-        title: "Export successful",
+        title: "Export Berhasil!",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -154,22 +144,9 @@ function LaporanMarketting() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <form>
-            <div className="mt-8 w-72 lg:w-[50%]">
-              <Input variant="static" color="blue" type="date" label="Tanggal Awal" required />
-            </div>
-            <div className="mt-8 w-72 lg:w-[50%]">
-              <Input variant="static" color="blue" type="date" label="Tanggal Akhir" required />
-            </div>
-            <div className="flex flex-col lg:flex-row items-start lg:gap-5">
-              <Button className="mt-5" color="blue" type="submit">
-                Export
-              </Button>
-              <Button className="mt-5" color="blue" type="button" onClick={exportLaporanMarketting}>
-                Export Data Persediaan
-              </Button>
-            </div>
-          </form>
+          <Button className="mt-5" color="blue" type="button" onClick={exportLaporanMarketting}>
+            Export Data Persediaan
+          </Button>
 
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table id="example_data" ref={tableRef} className="rounded-sm table-auto w-full overflow-x-auto">
@@ -191,30 +168,62 @@ function LaporanMarketting() {
               </thead>
               <tbody>
                 {laporans.length > 0 ? (
-                  laporans.map((laporan, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{laporan.tanggal}</td>
-                      <td className="text-sm w-[15%] py-2 px-3">{laporan.noFaktur}</td>
-                      <td className="text-sm py-2 px-3">{laporan.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{laporan.namaCustomer}</td>
-                      <td className="text-sm py-2 px-3">{laporan.barcodeBarang}</td>
-                      <td className="text-sm py-2 px-3">{laporan.harga}</td>
-                      <td className="text-sm py-2 px-3">{laporan.qty}</td>
-                      <td className="text-sm py-2 px-3">{laporan.totalHargaBarang}</td>
-                      <td className="text-sm py-2 px-3">{laporan.totalBelanja}</td>
-                      <td className="text-sm py-2 px-3">{laporan.totalKeseluruhan}</td>
-                      <td className="text-sm py-2 px-2.5">
-                        <IconButton
-                          size="md"
-                          color="red"
-                          onClick={() => handleDelete(laporan.id)}
-                        >
-                          <TrashIcon className="w-6 h-6" />
-                        </IconButton>
-                      </td>
-                    </tr>
-                  ))
+                  laporans.map((laporan, index) => {
+                    const barangLaporan = barang[index] || [];
+
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">{laporan.tanggal}</td>
+                        <td className="text-sm w-[15%] py-2 px-3">{laporan.noFaktur}</td>
+                        <td className="text-sm py-2 px-3">{laporan.namaSalesman}</td>
+                        <td className="text-sm py-2 px-3">{laporan.namaCustomer}</td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.barcodeBarang}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.hargaBrng}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.qty}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {barangLaporan.map((brg, idx) => (
+                            <ul key={idx}>
+                              <li>{brg.totalHargaBarang}</li>
+                            </ul>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">{laporan.totalBelanja}</td>
+                        <td className="text-sm py-2 px-3">{laporan.totalBelanja}</td>
+                        <td className="text-sm py-2 px-2.5">
+                          <a
+                            href={
+                              "/print_histori_laporan_salesman_excelcom/" +
+                              laporan.idTransaksi
+                            }
+                            target="_blank"
+                          >
+                            <IconButton size="md" color="green">
+                              <PrinterIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                        </td>
+                      </tr>
+                    )
+                  })
                 ) : (
                   <tr>
                     <td colSpan="12" className="text-center capitalize py-3 bg-gray-100">

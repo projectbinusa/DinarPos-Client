@@ -122,3 +122,4 @@ export const API_LAPORAN_SERVICE_EXPORT = `${url}/laporan_service`;
 
 // LAPORAN MARKETING
 export const API_LAPORAN_MARKETING = `${url}/laporan/laporan-marketing`;
+export const API_PERSEDIAN_EXPORT = `${url}/persediaan`;

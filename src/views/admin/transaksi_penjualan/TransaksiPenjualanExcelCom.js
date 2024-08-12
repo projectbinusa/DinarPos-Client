@@ -289,8 +289,6 @@ function TransaksiPenjualanExcelCom() {
     var kekurangan = total - pembayaran;
     var cashKredit = $("#cashKredit").val();
 
-    console.log(cashCredit);
-
     if (cashKredit === "Cash" && pembayaran < total) {
       $("#bayar").attr("disabled", "disabled");
     } else if (pembayaran < total) {
@@ -600,7 +598,6 @@ function TransaksiPenjualanExcelCom() {
   function setPembayaranCash(values) {
     if (values === "Cash Uang" || values === "Cash Bank") {
       var total = convertToAngka($("#total").html());
-      console.log(total);
       $("#pembayaran").val(total);
     } else {
       $("#pembayaran").val(0);
