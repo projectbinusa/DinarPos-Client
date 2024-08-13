@@ -113,6 +113,12 @@ function KasHarian() {
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
+      Swal.fire({
+        icon: "success",
+        title: "Export Berhasil!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       console.error("Error saat mengunduh file:", error);
     }
