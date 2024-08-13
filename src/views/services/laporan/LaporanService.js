@@ -64,7 +64,7 @@ function LaporanService() {
 
       Swal.fire({
         icon: "success",
-        title: "Export successful",
+        title: "Export Berhasil!",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -111,7 +111,7 @@ function LaporanService() {
 
       Swal.fire({
         icon: "success",
-        title: "Export successful",
+        title: "Export Berhasil!",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -158,7 +158,7 @@ function LaporanService() {
 
       Swal.fire({
         icon: "success",
-        title: "Export successful",
+        title: "Export Berhasil!",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -205,7 +205,7 @@ function LaporanService() {
 
       Swal.fire({
         icon: "success",
-        title: "Export successful",
+        title: "Export Berhasil!",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -252,7 +252,7 @@ function LaporanService() {
 
       Swal.fire({
         icon: "success",
-        title: "Export successful",
+        title: "Export Berhasil!",
         showConfirmButton: false,
         timer: 1500,
       });
