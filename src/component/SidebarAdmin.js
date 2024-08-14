@@ -2861,6 +2861,11 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
+            <a href="/data_itc">
+              <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                ITC
+              </ListItem>
+            </a>
             <a href="/ubah_password">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 ubah password

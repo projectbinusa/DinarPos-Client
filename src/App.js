@@ -159,6 +159,9 @@ import LaporanMarketting from "./views/admin/accounting/laporan_marketting/Lapor
 import LaporanPendapatan from "./views/services/laporan/LaporanPendapatan.js";
 import LaporanStatusService from "./views/services/laporan/LaporanStatusService.js";
 import LaporanService from "./views/services/laporan/LaporanService.js";
+import DataItc from "./views/itc/itc/DataItc.js";
+import AddItc from "./views/itc/itc/AddItc.js";
+import EditItc from "./views/itc/itc/EditItc.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1032,6 +1035,24 @@ function App() {
             <PrivateRoute
               path="/laporan_service"
               component={LaporanService}
+              isAuthenticated={true}
+            />
+            
+            
+            {/* ITC */}
+            <PrivateRoute
+              path="/data_itc"
+              component={DataItc}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_itc"
+              component={AddItc}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_itc/:id"
+              component={EditItc}
               isAuthenticated={true}
             />
           </Switch>
