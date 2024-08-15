@@ -11,12 +11,24 @@ import $ from "jquery";
 import "datatables.net";
 import "../../../assets/styles/datatables.css";
 import Decrypt from "../../../component/Decrypt";
-import { API_PENGGUNA } from "../../../utils/BaseUrl";
+import { API_LAPORAN_SERVICE_EXPORT, API_PENGGUNA, API_TRANSAKSI } from "../../../utils/BaseUrl";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function LaporanStatusService() {
   const tableRef = useRef(null);
   const [status, setstatus] = useState([]);
+  const [noFaktur, setnoFaktur] = useState([]);
+  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   const initializeDataTable = () => {
     if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
@@ -24,10 +36,99 @@ function LaporanStatusService() {
     }
   };
 
+  const getAll = async () => {
+    await axios.get(`${API_LAPORAN_SERVICE_EXPORT}`, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      setstatus(res.data.data);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  useEffect(() => {
+    getAll()
+  }, [])
+
   useEffect(() => {
     if (status && status.length > 0) {
       initializeDataTable();
     }
+  }, [status]);
+
+  const exportStatus = async (e) => {
+    e.preventDefault();
+    if (!startDate || !endDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Tanggal Awal dan Tanggal Akhir harus diisi.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${API_LAPORAN_SERVICE_EXPORT}/export/laporanStatus?tanggal_akhir=${endDate}&tanggal_awal=${startDate}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          responseType: "blob",
+        }
+      );
+
+      // Handle the blob response and download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "LaporanStatusService.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      Swal.fire({
+        icon: "success",
+        title: "Export Berhasil!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error saat mengunduh file:",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  const getNoFaktur = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${API_TRANSAKSI}/get-transaksi-by-id-tt/${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log('No faktur', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchNoFaktur = async () => {
+      const tglList = await Promise.all(
+        status.map(async (row) => {
+          const tglData = await getNoFaktur(row.service.idTT);
+          return tglData;
+        })
+      );
+      setnoFaktur(tglList);
+    };
+
+    fetchNoFaktur();
   }, [status]);
 
   const [level, setlevel] = useState("");
@@ -87,7 +188,7 @@ function LaporanStatusService() {
                 color="blue"
                 variant="outlined"
                 required
-                // onChange={(e) => setStartDate(e.target.value)}
+                onChange={(e) => setStartDate(e.target.value)}
                 className="w-full"
               />
             </div>
@@ -99,7 +200,7 @@ function LaporanStatusService() {
                 color="blue"
                 variant="outlined"
                 required
-                // onChange={(e) => setEndDate(e.target.value)}
+                onChange={(e) => setEndDate(e.target.value)}
                 className="w-full"
               />
             </div>
@@ -107,22 +208,14 @@ function LaporanStatusService() {
               <Button
                 variant="gradient"
                 color="blue"
-                // onClick={filterTangggal}
+                onClick={exportStatus}
                 size="md"
+                className="font-poppins font-medium"
+                type="button"
               >
-                <MagnifyingGlassIcon className="w-5 h-5" />
+                Export
               </Button>
             </div>
-          </div>
-          <div className="w-full lg:w-auto flex justify-start items-center">
-            <Button
-              variant="gradient"
-              color="blue"
-              // onClick={filterTangggal}
-              size="md"
-              className="font-poppins font-medium"
-            >
-              Export            </Button>
           </div>
           <div className="rounded mt-10 p-2 w-full overflow-x-auto">
             <table
@@ -144,46 +237,44 @@ function LaporanStatusService() {
                   <th className="text-sm py-2 px-3 font-semibold">Solusi</th>
                 </tr>
               </thead>
-              {/* <tbody>
+              <tbody>
                 {status.length > 0 ? (
                   status.map((row, index) => {
+                    const noFakturs = noFaktur[index] || [];
+
                     return (
-                      // <tr key={index}>
-                      //   <td className="text-sm w-[4%]">{index + 1}</td>
-                      //   <td className="text-sm py-2 px-3">
-                      //     {row.customer.nama_customer}
-                      //   </td>
-                      //   <td className="text-sm py-2 px-3">
-                      //     {row.customer.alamat}
-                      //   </td>
-                      //   <td className="text-sm py-2 px-3">
-                      //     {row.produk}
-                      //     <span className="block">{row.merk}</span>
-                      //     <span className="block">{row.type}</span>
-                      //   </td>
-                      //   <td className="text-sm py-2 px-3">
-                      //     {formatDate(row.tanggalMasuk)}
-                      //   </td>
-                      //   <td className="text-sm py-2 px-3">
-                      //     {tglKonfirms.map((down, idx) => (
-                      //       <ul key={idx}>
-                      //         <li>{formatDate(down.tglKonf)}</li>
-                      //       </ul>
-                      //     ))}
-                      //   </td>
-                      //   <td className="text-sm py-2 px-3">
-                      //     {row.statusEnd}
-                      //   </td>
-                      //   <td className="text-sm py-2 px-3 flex items-center justify-center">
-                      //     <div className="flex flex-row gap-3">
-                      //       <a href={"/detail_service/" + row.idTT}>
-                      //         <IconButton size="md" color="light-blue">
-                      //           <InformationCircleIcon className="w-6 h-6 white" />
-                      //         </IconButton>
-                      //       </a>
-                      //     </div>
-                      //   </td>
-                      // </tr>
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {row.service.idTT}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.service.customer.nama_customer}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {formatDate(row.service.tanggalMasuk)}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {noFakturs.map((down, idx) => (
+                            <span key={idx}>{down.noFaktur}</span>
+                          ))}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.service.keluhan}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {formatDate(row.tanggal)}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.teknisi.nama}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.status}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {row.solusi}
+                        </td>
+                      </tr>
                     );
                   })
                 ) : (
@@ -196,7 +287,7 @@ function LaporanStatusService() {
                     </td>
                   </tr>
                 )}
-              </tbody> */}
+              </tbody>
             </table>
           </div>
         </main>

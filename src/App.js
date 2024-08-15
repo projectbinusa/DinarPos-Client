@@ -1065,7 +1065,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/kunjungan"
+              path="/dealpo"
               component={DealPo}
               isAuthenticated={true}
             />
