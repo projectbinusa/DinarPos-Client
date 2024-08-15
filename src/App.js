@@ -162,6 +162,11 @@ import LaporanService from "./views/services/laporan/LaporanService.js";
 import DataItc from "./views/itc/itc/DataItc.js";
 import AddItc from "./views/itc/itc/AddItc.js";
 import EditItc from "./views/itc/itc/EditItc.js";
+import Home from "./views/itc/home/Home.js";
+import Kunjungan from "./views/itc/kunjungan/Kunjungann.js";
+import DealPo from "./views/itc/dealpo/DealPo.js";
+import DetailKunjungan from "./views/itc/kunjungan/DetailKunjungan.js";
+import KKunjungan from "./views/itc/kunjungan/Kunjungan.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1037,8 +1042,7 @@ function App() {
               component={LaporanService}
               isAuthenticated={true}
             />
-            
-            
+
             {/* ITC */}
             <PrivateRoute
               path="/data_itc"
@@ -1053,6 +1057,26 @@ function App() {
             <PrivateRoute
               path="/edit_itc/:id"
               component={EditItc}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/home"
+              component={Home}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/kunjungan"
+              component={DealPo}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/kunjungan"
+              component={KKunjungan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_kunjungan"
+              component={DetailKunjungan}
               isAuthenticated={true}
             />
           </Switch>
