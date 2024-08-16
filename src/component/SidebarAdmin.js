@@ -47,18 +47,21 @@ function SidebarAdmin() {
   const [level, setlevel] = useState("");
   const [roleToko, setroleToko] = useState("");
 
-  const id = Decrypt()
+  const id = Decrypt();
   useEffect(() => {
-    axios.get(`${API_PENGGUNA}/` + id, {
-      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    }).then((res) => {
-      const response = res.data.data;
-      setlevel(response.levelPengguna)
-      setroleToko(response.roleToko)
-    }).catch((err) => {
-      console.log(err);
-    })
-  }, [id])
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setlevel(response.levelPengguna);
+        setroleToko(response.roleToko);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   return (
     <>
@@ -82,7 +85,7 @@ function SidebarAdmin() {
           open={isDrawerOpen}
           onClose={closeDrawer}
           overlayProps={{
-            className: "fixed inset-0 bg-black opacity-50"
+            className: "fixed inset-0 bg-black opacity-50",
           }}
         >
           <Card
@@ -92,7 +95,11 @@ function SidebarAdmin() {
           >
             <div className="mb-2 flex items-center gap-4 p-2">
               <img src={brand} alt="brand" className="h-8 w-12" />
-              <Typography variant="h5" color="blue-gray" className="font-poppins">
+              <Typography
+                variant="h5"
+                color="blue-gray"
+                className="font-poppins"
+              >
                 EXCELLENT
               </Typography>
             </div>
@@ -113,13 +120,11 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* TRANSAKSI INDENT */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Kasir" ? (
                 <>
-
                   <Accordion
                     open={open === 11}
                     icon={
@@ -190,7 +195,6 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
-
 
               {/* TRANSAKSI PENJUALAN */}
               {level === "Superadmin" ||
@@ -269,7 +273,6 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* TRANSAKSI PEMBELIAN */}
               {level === "Superadmin" ||
                 level === "Admin" ||
@@ -304,7 +307,6 @@ function SidebarAdmin() {
                           roleToko === "Admin" ||
                           roleToko === "excelcom" ? (
                           <>
-
                             <a href="/transaksi_pembelian_excelcom">
                               <ListItem className="uppercase rounded px-3 py-2 text-sm">
                                 <ListItemPrefix>
@@ -346,7 +348,6 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
-
 
               {/* DATA USER */}
               {level === "Superadmin" ||
@@ -464,7 +465,6 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* DATA BARANG */}
               {level === "Superadmin" ||
                 level === "Admin" ||
@@ -554,13 +554,11 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* ACCOUNTING */}
               {level === "Superadmin" ||
                 level === "Admin" ||
                 level === "Accounting" ? (
                 <>
-
                   <Accordion
                     open={open === 12}
                     icon={
@@ -637,7 +635,6 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
-
 
               {/* RETURN EXCELCOM */}
               {level === "Superadmin" ||
@@ -729,7 +726,6 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* RETURN DINARPOS */}
               {level === "Superadmin" ||
                 level === "Admin" ||
@@ -820,11 +816,12 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* LAPORAN EXCELCOM */}
               {level === "Superadmin" ||
                 level === "Admin" ||
-                level === "Kasir" || level === "Gudang" || level === "Accounting" ? (
+                level === "Kasir" ||
+                level === "Gudang" ||
+                level === "Accounting" ? (
                 <>
                   {roleToko === "excelcom" ||
                     roleToko === "Superadmin" ||
@@ -868,7 +865,8 @@ function SidebarAdmin() {
                             </a>
                             {level === "Gudang" ||
                               level === "Superadmin" ||
-                              level === "Admin" || level === "Accounting" ? (
+                              level === "Admin" ||
+                              level === "Accounting" ? (
                               <>
                                 <a href="/laporan_barang_excelcom">
                                   <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -885,7 +883,9 @@ function SidebarAdmin() {
                             ) : (
                               <></>
                             )}
-                            {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
+                            {level === "Superadmin" ||
+                              level === "Admin" ||
+                              level === "Accounting" ? (
                               <>
                                 <a href="/laporan_suplier_excelcom">
                                   <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -915,7 +915,8 @@ function SidebarAdmin() {
                             )}
                             {level === "Gudang" ||
                               level === "Superadmin" ||
-                              level === "Admin" || level === "Accounting" ? (
+                              level === "Admin" ||
+                              level === "Accounting" ? (
                               <>
                                 <a href="/laporan_transaksi_beli_excelcom">
                                   <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -944,17 +945,17 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* LAPORAN DINARPOS */}
               {level === "Superadmin" ||
                 level === "Admin" ||
-                level === "Kasir" || level === "Gudang" || level === "Accounting" ? (
+                level === "Kasir" ||
+                level === "Gudang" ||
+                level === "Accounting" ? (
                 <>
                   {roleToko === "dinarpos" ||
                     roleToko === "Superadmin" ||
                     roleToko === "Admin" ? (
                     <>
-
                       <Accordion
                         open={open === 8}
                         icon={
@@ -993,7 +994,8 @@ function SidebarAdmin() {
                             </a>
                             {level === "Superadmin" ||
                               level === "Admin" ||
-                              level === "Gudang" || level === "Accounting" ? (
+                              level === "Gudang" ||
+                              level === "Accounting" ? (
                               <>
                                 <a href="/laporan_barang_dinarpos">
                                   <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -1010,7 +1012,9 @@ function SidebarAdmin() {
                             ) : (
                               <></>
                             )}
-                            {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
+                            {level === "Superadmin" ||
+                              level === "Admin" ||
+                              level === "Accounting" ? (
                               <>
                                 <a href="/laporan_suplier_dinarpos">
                                   <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -1040,7 +1044,8 @@ function SidebarAdmin() {
                             )}
                             {level === "Superadmin" ||
                               level === "Admin" ||
-                              level === "Gudang" || level === "Accounting" ? (
+                              level === "Gudang" ||
+                              level === "Accounting" ? (
                               <>
                                 <a href="/laporan_transaksi_beli_dinarpos">
                                   <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -1069,7 +1074,6 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* NOTIFIKASI EXCELCOM */}
               {level === "Superadmin" ||
                 level === "Admin" ||
@@ -1079,7 +1083,6 @@ function SidebarAdmin() {
                     roleToko === "Superadmin" ||
                     roleToko === "Admin" ? (
                     <>
-
                       <Accordion
                         open={open === 9}
                         icon={
@@ -1171,7 +1174,6 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
-
 
               {/* NOTIFIKASI DINARPOS */}
               {level === "Superadmin" ||
@@ -1277,7 +1279,6 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* ADMIN SERVICE */}
               {level === "AdminService" ? (
                 <>
@@ -1287,7 +1288,9 @@ function SidebarAdmin() {
                     </ListItem>
                   </a>
                 </>
-              ) : (<></>)}
+              ) : (
+                <></>
+              )}
               {level === "Superadmin" || level === "AdminService" ? (
                 <>
                   <a href="/data_service">
@@ -1345,10 +1348,7 @@ function SidebarAdmin() {
                       />
                     }
                   >
-                    <ListItem
-                      className="p-0 rounded "
-                      selected={open === 11}
-                    >
+                    <ListItem className="p-0 rounded " selected={open === 11}>
                       <AccordionHeader
                         onClick={() => handleOpen(11)}
                         className="border-b-0 px-3 py-2 "
@@ -1404,7 +1404,6 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* PIMPINAN */}
               {level === "Pimpinan" ? (
                 <>
@@ -1438,7 +1437,6 @@ function SidebarAdmin() {
                 <></>
               )}
 
-
               {/* TEKNISI */}
               {level === "Teknisi" ? (
                 <>
@@ -1471,6 +1469,51 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+
+              {/* ADMIN ITC */}
+              {level === "AdminItc" ? (
+                <>
+                  <a href="/home">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      dashboard
+                    </ListItem>
+                  </a>
+                  <a href="/data_itc">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      ITC
+                    </ListItem>
+                  </a>
+                  <a href="/kunjungan">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Kunjungan
+                    </ListItem>
+                  </a>
+                  <a href="/service_teknisi">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Planning
+                    </ListItem>
+                  </a>
+                  <a href="/dealpo">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Deal PO
+                    </ListItem>
+                  </a>
+                  <a href="/history_point">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Deal Finish
+                    </ListItem>
+                  </a>
+                  <a href="/history_point">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan
+                    </ListItem>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
+
+
               <a href="/ubah_password" className="mb-5">
                 <ListItem className="px-3 py-2 text-sm rounded uppercase">
                   ubah password
@@ -1478,7 +1521,10 @@ function SidebarAdmin() {
               </a>
             </List>
             <div className="fixed bottom-0 bg-white w-[17rem] left-0 py-2 px-6">
-              <button onClick={logout} className="uppercase text-sm font-poppins">
+              <button
+                onClick={logout}
+                className="uppercase text-sm font-poppins"
+              >
                 Logout
               </button>
             </div>
@@ -1510,13 +1556,11 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* TRANSAKSI INDENT */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ? (
               <>
-
                 <Accordion
                   open={open === 11}
                   icon={
@@ -1546,7 +1590,6 @@ function SidebarAdmin() {
                         roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                         <>
-
                           <a href="/transaksi_indent_excelcom">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
                               <ListItemPrefix>
@@ -1589,14 +1632,12 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* TRANSAKSI PENJUALAN */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ||
               level === "Gudang" ? (
               <>
-
                 <Accordion
                   open={open === 1}
                   icon={
@@ -1626,7 +1667,6 @@ function SidebarAdmin() {
                         roleToko === "Admin" ||
                         roleToko === "excelcom" ? (
                         <>
-
                           <a href="/transaksi_penjualan_excelcom">
                             <ListItem className="uppercase rounded px-3 py-2 text-sm">
                               <ListItemPrefix>
@@ -1668,7 +1708,6 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-
 
             {/* TRANSAKSI PEMBELIAN */}
             {level === "Superadmin" ||
@@ -1746,14 +1785,12 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* DATA USER */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Gudang" ||
               level === "Kasir" ? (
               <>
-
                 <Accordion
                   open={open === 3}
                   icon={
@@ -1864,7 +1901,6 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* DATA BARANG */}
             {level === "Superadmin" ||
               level === "Admin" ||
@@ -1954,7 +1990,6 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* ACCOUNTING */}
             {level === "Superadmin" ||
               level === "Admin" ||
@@ -2037,7 +2072,6 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* RETURN EXCELCOM */}
             {level === "Superadmin" ||
               level === "Admin" ||
@@ -2047,7 +2081,6 @@ function SidebarAdmin() {
                   roleToko === "Admin" ||
                   roleToko === "excelcom" ? (
                   <>
-
                     <Accordion
                       open={open === 5}
                       icon={
@@ -2129,7 +2162,6 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* RETURN DINARPOS */}
             {level === "Superadmin" ||
               level === "Admin" ||
@@ -2139,7 +2171,6 @@ function SidebarAdmin() {
                   roleToko === "Admin" ||
                   roleToko === "dinarpos" ? (
                   <>
-
                     <Accordion
                       open={open === 6}
                       icon={
@@ -2221,18 +2252,17 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* LAPORAN EXCELCOM */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ||
-              level === "Accounting" || level === "Gudang" ? (
+              level === "Accounting" ||
+              level === "Gudang" ? (
               <>
                 {roleToko === "excelcom" ||
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-
                     <Accordion
                       open={open === 7}
                       icon={
@@ -2271,7 +2301,8 @@ function SidebarAdmin() {
                           </a>
                           {level === "Gudang" ||
                             level === "Superadmin" ||
-                            level === "Admin" || level === "Accounting" ? (
+                            level === "Admin" ||
+                            level === "Accounting" ? (
                             <>
                               <a href="/laporan_barang_excelcom">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2288,7 +2319,9 @@ function SidebarAdmin() {
                           ) : (
                             <></>
                           )}
-                          {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
+                          {level === "Superadmin" ||
+                            level === "Admin" ||
+                            level === "Accounting" ? (
                             <>
                               <a href="/laporan_suplier_excelcom">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2318,7 +2351,8 @@ function SidebarAdmin() {
                           )}
                           {level === "Superadmin" ||
                             level === "Admin" ||
-                            level === "Gudang" || level === "Accounting" ? (
+                            level === "Gudang" ||
+                            level === "Accounting" ? (
                             <>
                               <a href="/laporan_transaksi_beli_excelcom">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2347,18 +2381,17 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* LAPORAN DINARPOS */}
             {level === "Superadmin" ||
               level === "Admin" ||
               level === "Kasir" ||
-              level === "Accounting" || level === "Gudang" ? (
+              level === "Accounting" ||
+              level === "Gudang" ? (
               <>
                 {roleToko === "dinarpos" ||
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-
                     <Accordion
                       open={open === 8}
                       icon={
@@ -2397,7 +2430,8 @@ function SidebarAdmin() {
                           </a>
                           {level === "Gudang" ||
                             level === "Superadmin" ||
-                            level === "Admin" || level === "Accounting" ? (
+                            level === "Admin" ||
+                            level === "Accounting" ? (
                             <>
                               <a href="/laporan_barang_dinarpos">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2414,7 +2448,9 @@ function SidebarAdmin() {
                           ) : (
                             <></>
                           )}
-                          {level === "Superadmin" || level === "Admin" || level === "Accounting" ? (
+                          {level === "Superadmin" ||
+                            level === "Admin" ||
+                            level === "Accounting" ? (
                             <>
                               <a href="/laporan_suplier_dinarpos">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2444,7 +2480,8 @@ function SidebarAdmin() {
                           )}
                           {level === "Gudang" ||
                             level === "Superadmin" ||
-                            level === "Admin" || level === "Accounting" ? (
+                            level === "Admin" ||
+                            level === "Accounting" ? (
                             <>
                               <a href="/laporan_transaksi_beli_dinarpos">
                                 <ListItem className="uppercase rounded px-3 py-2 text-sm ">
@@ -2472,7 +2509,6 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-
 
             {/* NOTIFIKASI EXCELCOM */}
             {level === "Superadmin" ||
@@ -2575,7 +2611,6 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* NOTIFIKASI DINARPOS */}
             {level === "Superadmin" ||
               level === "Admin" ||
@@ -2585,7 +2620,6 @@ function SidebarAdmin() {
                   roleToko === "Superadmin" ||
                   roleToko === "Admin" ? (
                   <>
-
                     <Accordion
                       open={open === 10}
                       icon={
@@ -2678,14 +2712,18 @@ function SidebarAdmin() {
               <></>
             )}
 
-
             {/* ADMIN SERVICE */}
-            {level === "AdminService" ? (<>
-              <a href="/dashboard_service">
-                <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                  Dashboard
-                </ListItem>
-              </a></>) : (<></>)}
+            {level === "AdminService" ? (
+              <>
+                <a href="/dashboard_service">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Dashboard
+                  </ListItem>
+                </a>
+              </>
+            ) : (
+              <></>
+            )}
 
             {level === "Superadmin" || level === "AdminService" ? (
               <>
@@ -2861,11 +2899,49 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-            <a href="/data_itc">
-              <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                ITC
-              </ListItem>
-            </a>
+
+            {level === "AdminItc" ? (
+              <>
+                <a href="/home">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Dashboard
+                  </ListItem>
+                </a>
+                <a href="/data_itc">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    ITC
+                  </ListItem>
+                </a>
+                <a href="/kunjungan">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Kunjungan
+                  </ListItem>
+                </a>
+                <a href="/service_teknisi">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Planning
+                  </ListItem>
+                </a>
+                <a href="/dealpo">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Deal PO
+                  </ListItem>
+                </a>
+                <a href="/history_point">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Deal Finish
+                  </ListItem>
+                </a>
+                <a href="/history_point">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Laporan
+                  </ListItem>
+                </a>
+              </>
+            ) : (
+              <></>
+            )}
+
             <a href="/ubah_password">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 ubah password
