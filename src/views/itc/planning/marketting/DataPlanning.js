@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import SidebarAdmin from "../../../component/SidebarAdmin";
+import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react";
 import $ from "jquery";
 

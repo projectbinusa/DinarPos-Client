@@ -67,7 +67,13 @@ function Login() {
             setTimeout(() => {
               window.location.reload();
             }, 1000);
+          } else if (level === "AdminItc" || level === "Marketting" || level === "Keuangan") {
+            history.push("/home");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
           }
+
 
           // SET LOCAL STORAGE
           localStorage.setItem("token", response.data.token);

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import $ from "jquery";
-import SidebarAdmin from "../../../component/SidebarAdmin";
+import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, IconButton, Input, Typography } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { API_CUSTOMER } from "../../../utils/BaseUrl";
+import { API_CUSTOMER } from "../../../../utils/BaseUrl";
 
 function InputPlanning() {
     const [date, setDate] = useState("");

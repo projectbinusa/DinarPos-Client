@@ -1512,6 +1512,50 @@ function SidebarAdmin() {
               ) : (
                 <></>
               )}
+              
+
+              {/*  */}
+              {level === "Marketting" ? (
+                <>
+                  <a href="/home">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      dashboard
+                    </ListItem>
+                  </a>
+                  <a href="/customer">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Customer
+                    </ListItem>
+                  </a>
+                  <a href="/planning_marketting">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Planning
+                    </ListItem>
+                  </a>
+                  <a href="/kunjungan_marketting">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Daily Report
+                    </ListItem>
+                  </a>
+                  <a href="/dealpo_marketting">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Deal PO
+                    </ListItem>
+                  </a>
+                  <a href="/dealfinish_marketting">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Deal Finish
+                    </ListItem>
+                  </a>
+                  <a href="/ijin">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Ijin
+                    </ListItem>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
 
 
               <a href="/ubah_password" className="mb-5">
