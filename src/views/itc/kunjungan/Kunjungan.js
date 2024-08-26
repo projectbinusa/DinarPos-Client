@@ -2,7 +2,7 @@ import React from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
 
-function KKunjungan() {
+function Kunjungan() {
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -60,4 +60,4 @@ function KKunjungan() {
   );
 }
 
-export default KKunjungan;
+export default Kunjungan;

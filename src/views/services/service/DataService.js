@@ -195,8 +195,8 @@ function DataService() {
                 Tambah
               </Button>
             </a>
-          </div> <br/>
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
+          </div> <br />
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-4 lg:justify-between">
             <div className="w-full">
               <Input
                 type="date"
@@ -239,17 +239,17 @@ function DataService() {
                 <Option value="READY">Ready</Option>
               </Select>
             </div>
-            <div className="w-full lg:w-auto flex justify-start items-center">
-              <Button
-                variant="gradient"
-                color="blue"
-                onClick={filterTangggal}
-                className="font-popins font-medium"
-                size="md"
-              >
-                <MagnifyingGlassIcon className="w-5 h-5" />
-              </Button>
-            </div>
+          </div>
+          <div className="w-full lg:w-auto flex justify-start items-center">
+            <Button
+              variant="gradient"
+              color="blue"
+              onClick={filterTangggal}
+              className="font-popins font-medium"
+              size="md"
+            >
+              <MagnifyingGlassIcon className="w-5 h-5" />
+            </Button>
           </div>
           <div className="rounded mt-10 p-2 w-full overflow-x-auto">
             <table

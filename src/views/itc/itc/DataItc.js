@@ -1,17 +1,109 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, IconButton, Typography } from "@material-tailwind/react";
 import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
+import { API_ITC, API_PENGGUNA } from "../../../utils/BaseUrl";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 function DataItc() {
     const tableRef = useRef(null);
+    const history = useHistory(null);
     const initializeDataTable = () => {
         if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable({});
         }
     };
+
+    const [itcs, setItcs] = useState([]);
+
+    // GET ALL CUSTOMER
+    const getAll = async () => {
+        try {
+            const response = await axios.get(`${API_ITC}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setItcs(response.data.data);
+        } catch (error) {
+            console.log("get all", error);
+        }
+    };
+
+    useEffect(() => {
+        getAll();
+    }, []);
+
+    useEffect(() => {
+        if (itcs && itcs.length > 0) {
+            initializeDataTable();
+        }
+    }, [itcs]);
+
+    // DELETE ITC
+    const deleteItc = async (id) => {
+        Swal.fire({
+            title: "Apakah Anda Ingin Menghapus?",
+            text: "Perubahan data tidak bisa dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Hapus",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .delete(`${API_ITC}/` + id, {
+                        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    })
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Dihapus!",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        setTimeout(() => {
+                            history.push("/data_itc");
+                            window.location.reload();
+                        }, 1500);
+                    });
+            }
+        });
+    };
+
+    const [pengguna, setPengguna] = useState([]);
+
+    const penggunaList = async (nama) => {
+        try {
+            const response = await axios.get(`${API_PENGGUNA}/nama?nama=${nama}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            return response.data.data;
+        } catch (error) {
+            console.log("get all", error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        const fetchPengguna = async () => {
+            const penggunas = await Promise.all(
+                itcs.map(async (penggunaz) => {
+                    const penggunad = await penggunaList(penggunaz.namaSalesman);
+                    return penggunad;
+                })
+            );
+            setPengguna(penggunas);
+        };
+
+        fetchPengguna();
+    }, [itcs]);
 
     return (
         <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -62,6 +154,61 @@ function DataItc() {
                                     <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                {itcs.length > 0 ? (
+                                    itcs.map((itc, index) => {
+                                        const penggunaa = pengguna[index] || [];
+                                        return (
+                                            <tr key={index}>
+                                                <td className="text-sm w-[4%]">{index + 1}</td>
+                                                <td className="text-sm py-2 px-3">
+                                                    {itc.namaSalesman}
+                                                </td>
+                                                <td className="text-sm py-2 px-3">
+                                                    {penggunaa.usernamePengguna}
+                                                </td>
+                                                <td className="text-sm py-2 px-3">
+                                                    {itc.alamatSalesman}
+                                                </td>
+                                                <td className="text-sm py-2 px-3">
+                                                    {itc.noTelpSalesman}
+                                                </td>
+                                                <td className="text-sm py-2 px-3">
+                                                    {itc.target}
+                                                </td>
+                                                <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <div className="flex flex-col lg:flex-row gap-3">
+                                                        <a href={"/edit_itc/" + itc.id}>
+                                                            <IconButton size="md" color="light-blue">
+                                                                <PencilIcon className="w-6 h-6 white" />
+                                                            </IconButton>
+                                                        </a>
+                                                        <IconButton
+                                                            size="md"
+                                                            color="red"
+                                                            type="button"
+                                                            onClick={() =>
+                                                                deleteItc(itc.id)
+                                                            }
+                                                        >
+                                                            <TrashIcon className="w-6 h-6 white" />
+                                                        </IconButton>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                ) : (
+                                    <tr>
+                                        <td
+                                            colSpan="7"
+                                            className="text-sm text-center capitalize py-2 bg-gray-100 "
+                                        >
+                                            Tidak ada data
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
                         </table>
                     </div>
                 </main>

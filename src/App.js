@@ -163,10 +163,12 @@ import DataItc from "./views/itc/itc/DataItc.js";
 import AddItc from "./views/itc/itc/AddItc.js";
 import EditItc from "./views/itc/itc/EditItc.js";
 import Home from "./views/itc/home/Home.js";
-import Kunjungan from "./views/itc/kunjungan/Kunjungann.js";
+import Kunjungan from "./views/itc/kunjungan/Kunjungan.js";
 import DealPo from "./views/itc/dealpo/DealPo.js";
 import DetailKunjungan from "./views/itc/kunjungan/DetailKunjungan.js";
-import KKunjungan from "./views/itc/kunjungan/Kunjungan.js";
+import DataPlanning from "./views/itc/planning/marketting/DataPlanning.js";
+import DetailPlanning from "./views/itc/planning/marketting/DetailPlanning.js";
+import InputPlanning from "./views/itc/planning/marketting/InputPlanning.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1065,18 +1067,33 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/kunjungan"
+              path="/dealpo"
               component={DealPo}
               isAuthenticated={true}
             />
             <PrivateRoute
               path="/kunjungan"
-              component={KKunjungan}
+              component={Kunjungan}
               isAuthenticated={true}
             />
             <PrivateRoute
               path="/detail_kunjungan"
               component={DetailKunjungan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/planning_marketting"
+              component={DataPlanning}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/detail_planning"
+              component={DetailPlanning}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/input_planning"
+              component={InputPlanning}
               isAuthenticated={true}
             />
           </Switch>
