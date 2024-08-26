@@ -104,6 +104,7 @@ function EditItc() {
                                 color="blue"
                                 size="lg"
                                 placeholder="Masukkan Nama ITC"
+                                value={nama}
                                 onChange={(e) => setNama(e.target.value)}
                                 icon={<UserCircleIcon />}
                             />
@@ -114,6 +115,7 @@ function EditItc() {
                                 size="lg"
                                 type="number"
                                 placeholder="Masukkan No Telephone"
+                                value={notelephone}
                                 onChange={(e) => setNotelephone(e.target.value)}
                                 icon={<PhoneIcon />}
                             />
@@ -123,6 +125,7 @@ function EditItc() {
                                 color="blue"
                                 size="lg"
                                 placeholder="Masukkan Alamat"
+                                value={alamat}
                                 onChange={(e) => setAlamat(e.target.value)}
                                 icon={<MapPinIcon />}
                             />
@@ -132,6 +135,7 @@ function EditItc() {
                                 color="blue"
                                 size="lg"
                                 placeholder="Masukkan Target"
+                                value={target}
                                 onChange={(e) => setTarget(e.target.value)}
                                 icon={<ReceiptPercentIcon />}
                             />
