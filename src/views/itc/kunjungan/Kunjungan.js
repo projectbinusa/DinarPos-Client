@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import axios from "axios";
+import { API_KUNJUNGAN } from "../../../utils/BaseUrl";
 
 function Kunjungan() {
+  const [datas, setDatas] = useState([]);
+
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_KUNJUNGAN}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setDatas(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -52,6 +71,58 @@ function Kunjungan() {
                   <th className="text-sm py-2 px-2.5 font-semibold">Detail</th>
                 </tr>
               </thead>
+              <tbody>
+                {datas.length > 0 ? (
+                  datas.map((kunjungan, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {kunjungan.tanggal}
+                        </td>
+                        <td className="text-sm py-2 px-3">{kunjungan.nama}</td>
+                        <td className="text-sm py-2 px-3">
+                          {kunjungan.instansi}
+                        </td>
+                        <td className="text-sm py-2 px-3">{kunjungan.jenis}</td>
+                        <td className="text-sm py-2 px-3">
+                          {kunjungan.daerah}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {kunjungan.tujuan}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {kunjungan.action}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {kunjungan.info_dapat}
+                        </td>
+                        <td className="text-sm py-2 px-3">{kunjungan.cp}</td>
+                        <td className="text-sm py-2 px-3">{kunjungan.visit}</td>
+                        <td className="text-sm py-2 px-3">{kunjungan.tipe}</td>
+                        <td className="text-sm py-2 px-3">
+                          {kunjungan.peluang}
+                        </td>
+                        <td className="text-sm py-2 px-3">{kunjungan.deal}</td>
+                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
+                          {/* <IconButton size="md" color="red">
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton> */}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           </div>
         </main>
