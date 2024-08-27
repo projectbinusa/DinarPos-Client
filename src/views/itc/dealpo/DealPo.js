@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import axios from "axios";
+import { API_DEAL_PO } from "../../../utils/BaseUrl";
 
 function DealPo() {
+  const [datas, setDatas] = useState([]);
+
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_DEAL_PO}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setDatas(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -55,6 +74,50 @@ function DealPo() {
                   </th>
                 </tr>
               </thead>
+              <tbody>
+                {datas.length > 0 ? (
+                  datas.map((dealpo, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-sm w-[4%]">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">
+                          {new Date(dealpo.tgl_input)}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {dealpo.marketing}
+                        </td>
+                        <td className="text-sm py-2 px-3">{dealpo.customer}</td>
+                        <td className="text-sm py-2 px-3">{dealpo.foto}</td>
+                        <td className="text-sm py-2 px-3">
+                          {dealpo.keterangan}
+                        </td>
+                        <td className="text-sm py-2 px-3">{dealpo.file_po}</td>
+                        <td className="text-sm py-2 px-3">{dealpo.status}</td>
+                        <td className="text-sm py-2 px-3">
+                          {dealpo.ket_status}
+                        </td>
+                        <td className="text-sm py-2 px-3">
+                          {dealpo.administrasi}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
+                          {/* <IconButton size="md" color="red">
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton> */}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           </div>
         </main>

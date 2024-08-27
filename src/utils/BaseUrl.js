@@ -126,3 +126,9 @@ export const API_PERSEDIAN_EXPORT = `${url}/persediaan`;
 
 // ITC
 export const API_ITC = `${url}/itc`;
+
+// DATA KUNJUNGAN
+export const API_KUNJUNGAN = `${url}/kunjungan`;
+
+// DATA DEAL PO
+export const API_DEAL_PO = `${url}/deal/po`;
