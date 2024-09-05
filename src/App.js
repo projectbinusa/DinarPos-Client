@@ -172,6 +172,8 @@ import InputPlanning from "./views/itc/planning/marketting/InputPlanning.js";
 import LapKunjungan from "./views/itc/lap_kunjungan/LapKunjungan.js";
 import PrintKunjungan from "./views/itc/printkunjungan/PrinterKunjungan.js";
 import ByMonthKunjungan from "./views/itc/by_month_kunjungan/ByMonthKunjungann.js";
+import DailyRepost from "./views/itc/dailyreport/DailyReport.js";
+import DetailKunjunganHari from "./views/itc/detailkunjunganperhari/DetailKunjunganHari.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1085,6 +1087,11 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/detail_kunjungan_hari"
+              component={DetailKunjunganHari}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/planning_marketting"
               component={DataPlanning}
               isAuthenticated={true}
@@ -1112,6 +1119,11 @@ function App() {
             <PrivateRoute
               path="/print_kunjungan"
               component={PrintKunjungan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/daily_repost"
+              component={DailyRepost}
               isAuthenticated={true}
             />
           </Switch>

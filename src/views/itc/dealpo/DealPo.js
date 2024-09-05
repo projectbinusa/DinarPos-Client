@@ -48,28 +48,20 @@ function DealPo() {
             <table>
               <thead className="bg-blue-500 text-white w-full">
                 <tr>
-                  <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">
-                    No
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
-                    Tgl Input
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
-                    Marketing
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
-                    Customer
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Foto</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
+                  <th className="text-sm py-1 px-2 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Tgl Input</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Marketing</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Customer</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Foto</th>
+                  <th className="text-sm py-1 px-2 font-semibold">
                     Keterangan
                   </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">File_Po</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Status</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
+                  <th className="text-sm py-1 px-2 font-semibold">File_Po</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Status</th>
+                  <th className="text-sm py-1 px-2 font-semibold">
                     Ket_Status
                   </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
+                  <th className="text-sm py-1 px-2 font-semibold">
                     Administrasi
                   </th>
                 </tr>
@@ -110,7 +102,7 @@ function DealPo() {
                 ) : (
                   <tr>
                     <td
-                      colSpan="7"
+                      colSpan="30"
                       className="text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
