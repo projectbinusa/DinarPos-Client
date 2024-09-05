@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import "datatables.net";
 import {
   Breadcrumbs,
   Button,
@@ -9,8 +8,40 @@ import {
   Select,
   Option,
 } from "@material-tailwind/react";
+import axios from "axios";
+import { API_KUNJUNGAN_EXPORT_KUNJUNGAN } from "../../../utils/BaseUrl";
 
 function LapKunjungan() {
+  const [tglAwal, setTglAwal] = useState("");
+  const [tglAkhir, setTglAkhir] = useState("");
+  const [status, setStatus] = useState("");
+
+  // EXPORT KUNJUNGAN
+  const exportDataKunjungan = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        `${API_KUNJUNGAN_EXPORT_KUNJUNGAN}?tglAwal=${tglAwal}&tglAkhir=${tglAkhir}&status=${status}`,
+        {
+          headers: {
+            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+          },
+          responseType: "blob", // penting untuk mendownload file
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "LAPORAN_KUNJUNGAN.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error saat mengunduh file:", error);
+    }
+  };
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -32,9 +63,8 @@ function LapKunjungan() {
             </a>
           </Breadcrumbs>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <form>
-            {/* Wrap the Input fields and Select in a div with the same width */}
+        <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <form onSubmit={exportDataKunjungan}>
             <div className="w-72 lg:w-[50%]">
               <div className="mt-8">
                 <Input
@@ -43,6 +73,8 @@ function LapKunjungan() {
                   type="date"
                   label="Tanggal Awal"
                   required
+                  value={tglAwal}
+                  onChange={(e) => setTglAwal(e.target.value)}
                 />
               </div>
               <div className="mt-8">
@@ -52,6 +84,8 @@ function LapKunjungan() {
                   type="date"
                   label="Tanggal Akhir"
                   required
+                  value={tglAkhir}
+                  onChange={(e) => setTglAkhir(e.target.value)}
                 />
               </div>
               <div className="mt-8">
@@ -61,12 +95,15 @@ function LapKunjungan() {
                   color="blue"
                   variant="outlined"
                   required
-                  className="text-sm"
+                  value={status}
+                  onChange={(value) => setStatus(value)}
                 >
-                  <Option value="">Pilih</Option>
-                  <Option value="New">New</Option>
-                  <Option value="OLD">Old</Option>
-                  <Option value="Done">Done</Option>
+                  <Option value="">Pilih Status</Option>
+                  <Option value="NAMA">Nama</Option>
+                  <Option value="USERNAME">Username</Option>
+                  <Option value="ALAMAT">Alamat</Option>
+                  <Option value="NO TELEFON">No Telefon</Option>
+                  <Option value="TARGET">Target</Option>
                 </Select>
               </div>
             </div>
@@ -75,7 +112,7 @@ function LapKunjungan() {
               color="blue"
               type="submit"
             >
-              Submit
+              Export Kunjungan
             </Button>
           </form>
         </main>

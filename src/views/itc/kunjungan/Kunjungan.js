@@ -48,27 +48,23 @@ function Kunjungan() {
             <table>
               <thead className="bg-blue-500 text-white w-full">
                 <tr>
-                  <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">
-                    No
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tanggal</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
-                    Instansi
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Jenis</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tujuan</th>
-                  <th className="text-sm py-2 px-3.5 font-semibold">Action</th>
-                  <th className="text-sm py-2 px-3.5 font-semibold">
+                  <th className="text-xs py-1 px-2 font-semibold w-[4%]">No</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Tanggal</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Nama</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Instansi</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Jenis</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Daerah</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Tujuan</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Action</th>
+                  <th className="text-xs py-1 px-2 font-semibold">
                     Info didapat
                   </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">CP</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Visit</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tipe</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Peluang</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Deal</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Detail</th>
+                  <th className="text-xs py-1 px-2 font-semibold">CP</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Visit</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Tipe</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Peluang</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Deal</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Detail</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,7 +111,7 @@ function Kunjungan() {
                 ) : (
                   <tr>
                     <td
-                      colSpan="7"
+                      colSpan="30"
                       className="text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

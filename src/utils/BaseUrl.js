@@ -127,8 +127,23 @@ export const API_PERSEDIAN_EXPORT = `${url}/persediaan`;
 // ITC
 export const API_ITC = `${url}/itc`;
 
-// DATA KUNJUNGAN
-export const API_KUNJUNGAN = `${url}/kunjungan`;
+// ITC NAMA
+export const API_ITC_NAMA = `${url}/itc/nama`;
 
 // DATA DEAL PO
 export const API_DEAL_PO = `${url}/deal/po`;
+
+// DATA KUNJUNGAN
+export const API_KUNJUNGAN = `${url}/kunjungan`;
+
+// DATA KUNJUNGAN EXPORT KUNJUNGAN
+export const API_KUNJUNGAN_EXPORT_KUNJUNGAN = `${url}/kunjungan/export/kunjungan`;
+
+// DATA KUNJUNGAN DATE BETWEEN
+export const API_KUNJUNGAN_DATE_BETWEEN = `${url}/kunjungan/date/between`;
+
+// DATA KUNJUNGAN DATE BETWEEN SALESMEN
+export const API_KUNJUNGAN_DATE_BETWEEN_SALESMAN = `${url}/kunjungan/date/between/salesman`;
+
+// DATA KUNJUNGAN DATE BETWEEN SALESMEN
+export const API_PLANNING = `${url}/planning`;

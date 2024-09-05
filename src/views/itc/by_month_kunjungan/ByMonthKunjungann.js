@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import {
-  Breadcrumbs,
-  Typography,
-  Input,
-  Button,
-  Option,
-  Select,
-} from "@material-tailwind/react";
+import { Breadcrumbs, Typography, Button } from "@material-tailwind/react";
+import axios from "axios";
+import { API_KUNJUNGAN } from "../../../utils/BaseUrl";
 
 function ByMonthKunjungan() {
+  const [byMonthKunjungan, setByMonthKunjungan] = useState([]);
+  const [bulan, setBulan] = useState(getCurrentMonth()); // Set bulan default ke bulan saat ini
+
+  // Fungsi untuk mendapatkan bulan saat ini dalam format MM
+  function getCurrentMonth() {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Bulan dimulai dari 0, jadi tambah 1
+    return month;
+  }
+
+  const getAll = async () => {
+    try {
+      const response = await axios.get(`${API_KUNJUNGAN}/bulan`, {
+        params: { bulan }, // Kirim parameter bulan
+        headers: {
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
+      });
+      setByMonthKunjungan(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    getAll(); // Panggil getAll setiap kali bulan berubah
+  }, [bulan]);
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -72,6 +95,36 @@ function ByMonthKunjungan() {
                   <th className="text-sm py-2 px-2.5 font-semibold">Wkt_p</th>
                 </tr>
               </thead>
+              <tbody>
+                {byMonthKunjungan.length > 0 ? (
+                  byMonthKunjungan.map((kunjungan, index) => (
+                    <tr key={index}>
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.tanggal}</td>
+                      <td className="text-sm py-2 px-3">
+                        {kunjungan.instansi}
+                      </td>
+                      <td className="text-sm py-2 px-3">{kunjungan.jenis}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.daerah}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.peluang}</td>
+                      <td className="text-sm py-2 px-3">
+                        {kunjungan.info_dapat}
+                      </td>
+                      <td className="text-sm py-2 px-3">{kunjungan.cp}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.wkt_p}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="30"
+                      className="text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           </div>
         </main>
