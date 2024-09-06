@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { API_KUNJUNGAN } from "../../../utils/BaseUrl";
 
 function DetailKunjunganHari() {
+  // const [noFaktur, setnoFaktur] = useState("");
+  // const [kekurangan, setkekurangan] = useState("");
+  const [kunjunganData, setKunjunganData] = useState([]);
+  const param = useParams();
+  useEffect(() => {
+    if (param.id) {
+      axios
+        .get(`${API_KUNJUNGAN}/${param.id}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        })
+        .then((res) => {
+          const response = res.data.data;
+          setKunjunganData(response.kunjungan);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log("ID parameter is undefined. Check your route setup.");
+    }
+  }, [param.id]);
+
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -53,6 +78,32 @@ function DetailKunjunganHari() {
                   <th className="text-sm py-2 px-2.5 font-semibold">Foto</th>
                 </tr>
               </thead>
+              <tbody>
+                {kunjunganData.map((item, index) => (
+                  <tr key={item.id}>
+                    <td className="text-sm py-2 px-2.5 font-medium">
+                      {index + 1}
+                    </td>
+                    <td className="text-sm py-2 px-2.5">{item.instansi}</td>
+                    <td className="text-sm py-2 px-2.5">{item.jenis}</td>
+                    <td className="text-sm py-2 px-2.5">{item.daerah}</td>
+                    <td className="text-sm py-2 px-2.5">{item.tujuan}</td>
+                    <td className="text-sm py-2 px-2.5">{item.action}</td>
+                    <td className="text-sm py-2 px-2.5">{item.infoDidapat}</td>
+                    <td className="text-sm py-2 px-3.5">{item.cp}</td>
+                    <td className="text-sm py-2 px-3.5">{item.visit}</td>
+                    <td className="text-sm py-2 px-2.5">{item.tipe}</td>
+                    <td className="text-sm py-2 px-2.5">{item.peluang}</td>
+                    <td className="text-sm py-2 px-2.5">{item.deal}</td>
+                    <td className="text-sm py-2 px-2.5">{item.byrPersen}</td>
+                    <td className="text-sm py-2 px-2.5">{item.wktP}</td>
+                    <td className="text-sm py-2 px-2.5">{item.tglD}</td>
+                    <td className="text-sm py-2 px-2.5">
+                      <img src={item.foto} alt="Foto" className="w-10 h-10" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </main>

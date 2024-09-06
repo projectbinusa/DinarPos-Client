@@ -1,4 +1,5 @@
-import React, { useState, useParams, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
 import axios from "axios";
@@ -19,7 +20,7 @@ function DetailKunjungan() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [param.id]);
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -27,7 +28,7 @@ function DetailKunjungan() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Kunjungan
+            Detail Kunjungan
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href="/dashboard" className="opacity-60">
@@ -47,73 +48,53 @@ function DetailKunjungan() {
             <table>
               <thead className="bg-blue-500 text-white w-full">
                 <tr>
-                  <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">
-                    No
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tanggal</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
-                    Instansi
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Jenis</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tujuan</th>
-                  <th className="text-sm py-2 px-3.5 font-semibold">Action</th>
-                  <th className="text-sm py-2 px-3.5 font-semibold">
+                  <th className="text-xs py-1 px-2 font-semibold w-[4%]">No</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Tanggal</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Nama</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Instansi</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Jenis</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Daerah</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Tujuan</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Action</th>
+                  <th className="text-xs py-1 px-2 font-semibold">
                     Info didapat
                   </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">CP</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Visit</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tipe</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Peluang</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Deal</th>
+                  <th className="text-xs py-1 px-2 font-semibold">CP</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Visit</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Tipe</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Peluang</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Deal</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Detail</th>
                 </tr>
               </thead>
               <tbody>
-                {datas.length > 0 ? (
-                  datas.map((kunjungan, index) => {
-                    return (
-                      <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">
-                          {kunjungan.tanggal}
-                        </td>
-                        <td className="text-sm py-2 px-3">{kunjungan.nama}</td>
-                        <td className="text-sm py-2 px-3">
-                          {kunjungan.instansi}
-                        </td>
-                        <td className="text-sm py-2 px-3">{kunjungan.jenis}</td>
-                        <td className="text-sm py-2 px-3">
-                          {kunjungan.daerah}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {kunjungan.tujuan}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {kunjungan.action}
-                        </td>
-                        <td className="text-sm py-2 px-3">
-                          {kunjungan.info_dapat}
-                        </td>
-                        <td className="text-sm py-2 px-3">{kunjungan.cp}</td>
-                        <td className="text-sm py-2 px-3">{kunjungan.visit}</td>
-                        <td className="text-sm py-2 px-3">{kunjungan.tipe}</td>
-                        <td className="text-sm py-2 px-3">
-                          {kunjungan.peluang}
-                        </td>
-                        <td className="text-sm py-2 px-3">{kunjungan.deal}</td>
-                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          {/* <IconButton size="md" color="red">
-                            <TrashIcon className="w-6 h-6 white" />
-                          </IconButton> */}
-                        </td>
-                      </tr>
-                    );
-                  })
+                {datas && datas.length > 0 ? (
+                  datas.map((kunjungan, index) => (
+                    <tr key={index}>
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.tanggal}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.nama}</td>
+                      <td className="text-sm py-2 px-3">
+                        {kunjungan.instansi}
+                      </td>
+                      <td className="text-sm py-2 px-3">{kunjungan.jenis}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.daerah}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.tujuan}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.action}</td>
+                      <td className="text-sm py-2 px-3">
+                        {kunjungan.info_dapat}
+                      </td>
+                      <td className="text-sm py-2 px-3">{kunjungan.cp}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.visit}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.tipe}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.peluang}</td>
+                      <td className="text-sm py-2 px-3">{kunjungan.deal}</td>
+                    </tr>
+                  ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="7"
+                      colSpan="30"
                       className="text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
