@@ -174,6 +174,7 @@ import PrintKunjungan from "./views/itc/printkunjungan/PrinterKunjungan.js";
 import ByMonthKunjungan from "./views/itc/by_month_kunjungan/ByMonthKunjungann.js";
 import DailyRepost from "./views/itc/dailyreport/DailyReport.js";
 import DetailKunjunganHari from "./views/itc/detailkunjunganperhari/DetailKunjunganHari.js";
+import FilterOmzet from "./views/itc/omzet/FilterOmzet"
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1126,7 +1127,28 @@ function App() {
               component={DailyRepost}
               isAuthenticated={true}
             />
+          <PrivateRoute
+              path="/lap_kunjungan"
+              component={LapKunjungan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/by_month_kunjungan"
+              component={ByMonthKunjungan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/print_kunjungan"
+              component={PrintKunjungan}
+              isAuthenticated={true}
+            />
+             <PrivateRoute
+              path="/filter_omzet"
+              component={ FilterOmzet}
+              isAuthenticated={true}
+            />
           </Switch>
+
         </main>
       </BrowserRouter>
     </>
