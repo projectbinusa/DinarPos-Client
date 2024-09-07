@@ -25,7 +25,7 @@ function PlanningPage() {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().clear().destroy();
     }
-    
+
     $(tableRef.current).DataTable({
       data: filteredPlanning,
       columns: [
@@ -69,6 +69,7 @@ function PlanningPage() {
     } catch (error) {
       if (error.response) {
         if (error.response.status === 401) {
+          // Handle unauthorized error if needed
         } else {
           Swal.fire("Error", `Terjadi kesalahan: ${error.response.status}`, "error");
         }

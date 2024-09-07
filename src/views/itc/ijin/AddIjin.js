@@ -12,18 +12,18 @@ function AddIjin() {
   const [created_date, setcreated_date] = useState("");
   const [keterangan, setket] = useState("");
   const [foto, setFoto] = useState(null);
-  const [previewFoto, setPreviewFoto] = useState(null); // State untuk preview foto
+  const [previewFoto, setPreviewFoto] = useState(null);
   const [level, setLevel] = useState("");
   const idPengguna = Decrypt();
 
   useEffect(() => {
-    setLevel(localStorage.getItem("level") || ""); // Mengambil level dari localStorage
+    const levelUser = localStorage.getItem("level") || "";
+    setLevel(levelUser);
   }, []);
 
-  // Menentukan nilai dashboard berdasarkan level
   const dashboard = level === "Superadmin" ? "dashboard" : (level === "AdminService" ? "dashboard_service" : "");
 
-  const AddIjin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
   
     if (!created_date || !keterangan || !foto) {
@@ -45,11 +45,9 @@ function AddIjin() {
       const response = await axios.post(`${API_IJIN}/add`, formData, {
         headers: {
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-          // Jika butuh header tambahan tambahkan di sini
         },
       });
       
-      // Jika berhasil, tampilkan pesan sukses dan arahkan ke halaman lain
       Swal.fire({
         icon: "success",
         title: "Data Berhasil Ditambahkan!",
@@ -59,10 +57,8 @@ function AddIjin() {
       history.push("/ijin");
       
     } catch (error) {
-      console.error("Error status:", error.response.status);
-      console.error("Error data:", error.response.data);
-  
-      
+      console.error("Error:", error);
+
       if (error.response && error.response.status === 405) {
         Swal.fire({
           icon: "error",
@@ -82,29 +78,34 @@ function AddIjin() {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",
-          text: error.response?.data?.data || "Terjadi kesalahan.",
+          text: error.response?.data?.message || "Terjadi kesalahan.",
           showConfirmButton: false,
           timer: 1500,
         });
       }
     }
   };
-  
-    
 
-  // Fungsi untuk menampilkan preview foto
   const handleFotoChange = (e) => {
     const file = e.target.files[0];
-    setFoto(file);
+     
+    if (file && file.type.startsWith("image/")) {
+      setFoto(file);
 
-    if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewFoto(reader.result); // Menyimpan data URL foto
+        setPreviewFoto(reader.result);
       };
-      reader.readAsDataURL(file); // Mengubah file foto menjadi data URL untuk preview
+      reader.readAsDataURL(file);
     } else {
+      Swal.fire({
+        icon: "warning",
+        title: "File harus berupa gambar!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       setPreviewFoto(null);
+      setFoto(null);
     }
   };
 
@@ -129,7 +130,7 @@ function AddIjin() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={AddIjin} encType="multipart/form-data">
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
                 label="Tanggal"
@@ -159,8 +160,11 @@ function AddIjin() {
                 size="lg"
                 type="file"
                 name="foto"
-                onChange={handleFotoChange} // Mengubah handler untuk foto
+                onChange={handleFotoChange}
               />
+              {previewFoto && (
+                <img src={previewFoto} alt="Preview Foto" className="mt-4 w-48 h-48 object-cover" />
+              )}
             </div>
             <div className="mt-10 flex gap-4">
               <Button
@@ -171,15 +175,14 @@ function AddIjin() {
               >
                 <span>Simpan</span>
               </Button>
-              <a href="/ijin">
-                <Button
-                  variant="text"
-                  color="gray"
-                  className="mr-1 font-popins font-medium"
-                >
-                  <span>Kembali</span>
-                </Button>
-              </a>
+              <Button
+                variant="text"
+                color="gray"
+                className="mr-1 font-popins font-medium"
+                onClick={() => history.push("/ijin")}
+              >
+                <span>Kembali</span>
+              </Button>
             </div>
           </form>
         </main>

@@ -16,7 +16,32 @@ function DataFinish() {
       $(tableRef.current).DataTable().destroy();
     }
 
-    $(tableRef.current).DataTable({});
+    $(tableRef.current).DataTable({
+      data: finish, // Ensure data is provided here
+      columns: [
+        { title: "No" },
+        { title: "Marketing" },
+        { title: "Customer" },
+        { title: "Bast" },
+        { title: "Baut" },
+        { title: "Baso" },
+        { title: "Spk" },
+        { title: "Ev_Datang" },
+        { title: "Ev_Proses" },
+        { title: "Ev_Finish" },
+        { title: "Aksi" },
+      ],
+      columnDefs: [
+        { targets: -1, data: null, defaultContent: "<button class='hapus-btn'>Hapus</button>" }
+      ],
+    });
+
+    // Attach event handler for delete buttons
+    $(tableRef.current).on('click', '.hapus-btn', function() {
+      const row = $(this).closest('tr');
+      const rowData = $(tableRef.current).DataTable().row(row).data();
+      hapusFinish(rowData.id);
+    });
   };
 
   const GetAllFinish = async () => {
@@ -26,6 +51,7 @@ function DataFinish() {
       });
       setFinish(response.data.data);
     } catch (error) {
+      Swal.fire("Error", "Gagal mengambil data finish.", "error");
       console.log("get all", error);
     }
   };
@@ -35,7 +61,7 @@ function DataFinish() {
   }, []);
 
   useEffect(() => {
-    if (finish && finish.length > 0) {
+    if (finish.length > 0) {
       initializeDataTable();
     }
   }, [finish]);
@@ -53,7 +79,7 @@ function DataFinish() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${API_FINISH}/delete/` + id, {
+          .delete(`${API_FINISH}/delete/${id}`, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {
@@ -111,7 +137,7 @@ function DataFinish() {
                 </tr>
               </thead>
               <tbody>
-              {finish.length > 0 ? (
+                {finish.length > 0 ? (
                   finish.map((row, index) => (
                     <tr key={row.id}>
                       <td className="text-sm py-2 px-2.5">{index + 1}</td>
@@ -119,7 +145,7 @@ function DataFinish() {
                       <td className="text-sm py-2 px-2.5">{row.customer}</td>
                       <td className="text-sm py-2 px-2.5">{row.bast}</td>
                       <td className="text-sm py-2 px-2.5">{row.baut}</td>
-                      <td className="text-sm py-2 px-2.5">{row.basp}</td>
+                      <td className="text-sm py-2 px-2.5">{row.baso}</td>
                       <td className="text-sm py-2 px-2.5">{row.spk}</td>
                       <td className="text-sm py-2 px-2.5">{row.ev_dtg}</td>
                       <td className="text-sm py-2 px-2.5">{row.ev_pro}</td>

@@ -3,12 +3,7 @@ import $ from "jquery";
 import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import {
-  Button,
-  Breadcrumbs,
-  IconButton,
-  Typography,
-} from "@material-tailwind/react";
+import { Button, Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { API_IJIN } from "../../../utils/BaseUrl";
 import axios from "axios";
@@ -24,13 +19,13 @@ function Ijin() {
       $(tableRef.current).DataTable().destroy();
     }
     $(tableRef.current).DataTable({
-      responsive: true, 
-      autoWidth: false, 
+      responsive: true,
+      autoWidth: false,
       searching: true,
-      paging: true, 
+      paging: true,
       ordering: true,
       lengthChange: true,
-      pageLength: 10, 
+      pageLength: 10,
     });
   };
 
@@ -39,14 +34,14 @@ function Ijin() {
       const response = await axios.get(`${API_IJIN}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setIjin(response.data.data || []); // Pastikan setIjin menerima array
+      setIjin(response.data.data || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const fetchLevel = () => {
-    setLevel(localStorage.getItem("level")); // Example
+    setLevel(localStorage.getItem("level"));
   };
 
   useEffect(() => {
@@ -60,9 +55,7 @@ function Ijin() {
     }
   }, [ijin]);
 
-  // Handle delete action
   const hapusIjin = async (id) => {
-    console.log("Deleting ID:", id); // Tambahkan log ID untuk debug
     Swal.fire({
       title: "Apakah Anda Ingin Menghapus?",
       text: "Perubahan data tidak bisa dikembalikan!",
@@ -75,8 +68,7 @@ function Ijin() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-        .delete(`${API_IJIN}
-          /` + id, {
+          .delete(`${API_IJIN}/${id}`, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {
@@ -86,7 +78,7 @@ function Ijin() {
               showConfirmButton: false,
               timer: 1500,
             });
-            setIjin(ijin.filter((item) => item.id !== id)); // Update state to reflect deletion
+            setIjin(ijin.filter((item) => item.id !== id));
           })
           .catch((err) => {
             Swal.fire({

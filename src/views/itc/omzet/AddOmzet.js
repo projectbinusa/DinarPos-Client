@@ -9,16 +9,16 @@ import {
   Breadcrumbs,
   Option,
 } from "@material-tailwind/react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Perbarui dengan useNavigate
 import Swal from "sweetalert2";
 import axios from "axios";
 
 function AddOmzet() {
-  const history = useHistory();
+  const navigate = useNavigate(); // Ganti useHistory dengan useNavigate
   const [tgl, setTgl] = useState(""); // Perbaiki nama setter
   const [selectedITC, setSelectedITC] = useState("");
-  const [omzet, setomzet] = useState("");
-  const [customer, setcustomer] = useState("");
+  const [omzet, setOmzet] = useState("");
+  const [customer, setCustomer] = useState("");
   const [values, setValues] = useState("");
   const [options, setOptions] = useState([]);
 
@@ -52,7 +52,7 @@ function AddOmzet() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/omzet");
+      navigate("/omzet");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
@@ -61,7 +61,7 @@ function AddOmzet() {
         console.log("Error Response:", error.response);
         if (error.response.status === 401) {
           localStorage.clear();
-          history.push("/");
+          navigate("/");
         } else if (error.response.status === 400) {
           Swal.fire({
             icon: "error",
@@ -97,7 +97,7 @@ function AddOmzet() {
         const response = await axios.get(`${API_OMZET}/taken/N`, {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         });
-        setOptions(response.data.data);
+        setOptions(response.data?.data || []); // Tambahkan handling ketika data undefined
       } catch (error) {
         console.log("Failed to fetch options:", error);
       }
@@ -155,7 +155,7 @@ function AddOmzet() {
                   variant="outlined"
                   label="ITC"
                   value={selectedITC}
-                  onChange={setSelectedITC} // Menggunakan handler yang benar
+                  onChange={(e) => setSelectedITC(e)} // Ganti dengan event handler
                   required
                 >
                   <Option value="">-Pilih-</Option>
@@ -184,7 +184,7 @@ function AddOmzet() {
                   type="number"
                   label="Jumlah Omzet"
                   value={omzet}
-                  onChange={(e) => setomzet(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => setOmzet(e.target.value)} // Gunakan setter yang benar
                   required
                 />
               </div>
@@ -195,7 +195,7 @@ function AddOmzet() {
                   type="text"
                   label="Nama Customer"
                   value={customer}
-                  onChange={(e) => setcustomer(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => setCustomer(e.target.value)} // Gunakan setter yang benar
                   required
                 />
               </div>

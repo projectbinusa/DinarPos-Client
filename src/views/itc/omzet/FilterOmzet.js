@@ -1,5 +1,6 @@
-import React, { useEffect,useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
+import "datatables.net";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, Typography } from "@material-tailwind/react";
 import { API_OMZET } from "../../../utils/BaseUrl";
@@ -7,21 +8,36 @@ import axios from "axios";
 
 function Omzet() {
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [filter, setFilter] = useState([]);
   const tableRef = useRef(null);
-  const [filter, setfilter] = useState([]);
 
-  
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
-    }
+    if (tableRef.current) {
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
 
-    $(tableRef.current).DataTable({
-      paging: true,
-      searching: true,
-      ordering: true,
-      info: true,
-    });
+      $(tableRef.current).DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        data: filter, // Ensure to provide data here
+        columns: [
+          { title: "No" },
+          { title: "Marketing" },
+          { title: "Customer" },
+          { title: "Bast" },
+          { title: "Baut" },
+          { title: "Baso" },
+          { title: "Spk" },
+          { title: "Ev_Datang" },
+          { title: "Ev_Proses" },
+          { title: "Ev_Finish" },
+          { title: "Aksi" },
+        ],
+      });
+    }
   };
 
   const handleMonthChange = (e) => {
@@ -34,12 +50,12 @@ function Omzet() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       console.log("Data fetched:", response.data.data);
-      setfilter(response.data.data);
+      setFilter(response.data.data);
     } catch (error) {
       console.log("get all", error);
     }
   };
-  
+
   useEffect(() => {
     getAllOmzet();
   }, []);
@@ -48,11 +64,10 @@ function Omzet() {
     if (filter.length > 0) {
       initializeDataTable();
     }
-  }, [filter]); 
-  
+  }, [filter]);
 
   const handleGoClick = () => {
-    // Tambahkan logika pencarian di sini
+    // Add logic to filter data based on selectedMonth
     console.log("Pencarian dengan bulan:", selectedMonth);
   };
 
@@ -110,7 +125,7 @@ function Omzet() {
             </Button>
           </div>
 
-          <div className="bg-white shadow-md rounded p-4 max-w-sm mx-auto">
+          <div className="bg-white shadow-md rounded p-4">
             <div className="bg-blue-500 text-white text-center rounded-t p-2">
               Lina Ristiani (Apr 2024)
             </div>

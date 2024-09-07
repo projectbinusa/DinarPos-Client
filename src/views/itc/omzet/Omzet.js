@@ -5,13 +5,15 @@ import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, IconButton, Typography } from "@material-tailwind/react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { API_OMZET } from "../../../utils/BaseUrl"; // Pastikan endpoint sudah benar
+import { API_OMZET } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom"; // Gunakan useHistory
 
 function Omzet() {
   const tableRef = useRef(null);
   const [omzet, setOmzet] = useState([]);
+  const history = useHistory(); // Inisialisasi useHistory
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -28,16 +30,15 @@ function Omzet() {
 
   const getAllOmzet = async () => {
     try {
-       const response = await axios.get(API_OMZET, {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-       });
-       console.log("Data fetched:", response.data.data); // Debugging output
-       setOmzet(response.data.data);
+      const response = await axios.get(API_OMZET, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      console.log("Data fetched:", response.data.data);
+      setOmzet(response.data.data);
     } catch (error) {
-       console.log("get all", error);
+      console.log("get all", error);
     }
- };
- 
+  };
 
   useEffect(() => {
     getAllOmzet();
@@ -71,7 +72,7 @@ function Omzet() {
             showConfirmButton: false,
             timer: 1500,
           });
-          getAllOmzet(); 
+          getAllOmzet();
         } catch (err) {
           Swal.fire({
             icon: "error",
@@ -86,8 +87,10 @@ function Omzet() {
     });
   };
 
+  const navigateToAddOmzet = () => {
+    history.push("/add_omzet");
+  };
 
-  
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -98,11 +101,9 @@ function Omzet() {
           </Typography>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <a href="/add_omzet" className="float-right mb-5">
-            <Button variant="gradient" color="blue" className="font-popins font-medium">
-              Tambah
-            </Button>
-          </a>
+          <Button variant="gradient" color="blue" onClick={navigateToAddOmzet}>
+            Tambah
+          </Button>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table
               id="example_data"
@@ -113,42 +114,44 @@ function Omzet() {
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold">No</th>
                   <th className="text-sm py-2 px-3 font-semibold">ITC</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Tanggal </th>
-                  <th className="text-sm py-2 px-3 font-semibold">omzet </th>
+                  <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
+                  <th className="text-sm py-2 px-3 font-semibold">Omzet</th>
                   <th className="text-sm py-2 px-3 font-semibold">Customer</th>
                   <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                 </tr>
               </thead>
 
-              
               <tbody>
                 {omzet.length > 0 ? (
-                    omzet.map((row, index) => (
-                      <tr key={index}>
-                          <td className="text-sm w-[4%]">{index + 1}</td>
-                          <td className="text-sm py-2 px-3">{row.itc}</td> 
-                          <td className="text-sm py-2 px-3">{row.tgl}</td> 
-                          <td className="text-sm py-2 px-3">{row.omzet}</td> 
-                          <td className="text-sm py-2 px-3">{row.customer}</td>
-                          <td className="text-sm py-2 px-3 flex items-center justify-center">
-                            <div className="flex flex-row gap-3">
-                                <IconButton
-                                  size="md"
-                                  color="red"
-                                  onClick={() => hapusOmzet(row.id)}
-                                >
-                                  <TrashIcon className="w-6 h-6 white" />
-                                </IconButton>
-                            </div>
-                          </td>
-                      </tr>
-                    ))
-                ) : (
-                    <tr>
-                      <td colSpan="6" className="text-sm text-center capitalize py-3 bg-gray-100">
-                          Tidak ada data
+                  omzet.map((row, index) => (
+                    <tr key={index}>
+                      <td className="text-sm w-[4%]">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{row.itc}</td>
+                      <td className="text-sm py-2 px-3">{row.tgl}</td>
+                      <td className="text-sm py-2 px-3">{row.omzet}</td>
+                      <td className="text-sm py-2 px-3">{row.customer}</td>
+                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                        <div className="flex flex-row gap-3">
+                          <IconButton
+                            size="md"
+                            color="red"
+                            onClick={() => hapusOmzet(row.id)}
+                          >
+                            <TrashIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </div>
                       </td>
                     </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="6"
+                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                    >
+                      Tidak ada data
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>
