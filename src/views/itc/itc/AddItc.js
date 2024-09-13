@@ -83,7 +83,7 @@ function AddItc() {
                     </Breadcrumbs>
                 </div>
                 <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-                    <form>
+                    <div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <Input
                                 label="Nama ITC"
@@ -146,7 +146,7 @@ function AddItc() {
                             </Typography>
                         </div>
                         <div className="mt-10 flex gap-4">
-                            <Button variant="gradient" color="blue" type="submit" className="font-poppins font-medium" onClick={addItc}>
+                            <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium" onClick={addItc}>
                                 <span>Simpan</span>
                             </Button>
                             <a href="/data_itc">
@@ -155,7 +155,7 @@ function AddItc() {
                                 </Button>
                             </a>
                         </div>
-                    </form>
+                    </div>
                 </main>
             </div>
         </section>

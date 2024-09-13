@@ -174,6 +174,11 @@ import PrintKunjungan from "./views/itc/printkunjungan/PrinterKunjungan.js";
 import ByMonthKunjungan from "./views/itc/by_month_kunjungan/ByMonthKunjungann.js";
 import DailyRepost from "./views/itc/dailyreport/DailyReport.js";
 import DetailKunjunganHari from "./views/itc/detailkunjunganperhari/DetailKunjunganHari.js";
+import ExportLaporan from "./views/itc/ExportLaporan.js";
+import LapSync from "./views/itc/laporan/LapSync.js";
+import LapDisiplin from "./views/itc/laporan/LapDisiplin.js";
+import Preparation from "./views/itc/laporan/Preparation.js";
+import DetailCustomer from "./views/admin/data_user/customer/DetailCustomer.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1050,6 +1055,12 @@ function App() {
               isAuthenticated={true}
             />
 
+            <PrivateRoute
+              path="/detail_customer/:id"
+              component={DetailCustomer}
+              isAuthenticated={true}
+            />
+            
             {/* ITC */}
             <PrivateRoute
               path="/data_itc"
@@ -1091,13 +1102,13 @@ function App() {
               component={DetailKunjunganHari}
               isAuthenticated={true}
             />
-            <PrivateRoute
+                        <PrivateRoute
               path="/planning_marketting"
               component={DataPlanning}
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/detail_planning"
+              path="/detail_planning/:tgl"
               component={DetailPlanning}
               isAuthenticated={true}
             />
@@ -1124,6 +1135,28 @@ function App() {
             <PrivateRoute
               path="/daily_repost"
               component={DailyRepost}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/export_laporan"
+              component={ExportLaporan}
+              isAuthenticated={true}
+            />
+
+            {/* LAPORAN ITC */}
+            <PrivateRoute
+              path="/laporan_sync"
+              component={LapSync}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_disiplin"
+              component={LapDisiplin}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/preparation"
+              component={Preparation}
               isAuthenticated={true}
             />
           </Switch>
