@@ -48,13 +48,14 @@ function DailyRepost() {
   const handlePrint = async (e) => {
     e.preventDefault();
 
-    // Ambil data sebelum melakukan navigasi
+    // Pastikan data sudah diambil sebelum navigasi
     await getAllDailyRepost();
 
-    // Setelah data diambil, navigasikan ke halaman PrintKunjungan
+    // Navigasi ke halaman PrintKunjungan dengan parameter dinamis
     history.push({
-      pathname: "/print_kunjungan",
-      state: { tglAwal, tglAkhir, dailyRepost },
+      pathname: `/print_kunjungan`,
+      search: `?tgl_awal=${tglAwal}&tgl_akhir=${tglAkhir}`,
+      state: { tglAwal, tglAkhir },
     });
   };
 

@@ -1117,7 +1117,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/print_kunjungan"
+              path="/print_kunjungan?tgl_awal=:tglawal&tgl_akhir=:tglakhir"
               component={PrintKunjungan}
               isAuthenticated={true}
             />

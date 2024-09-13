@@ -45,7 +45,7 @@ function Kunjungan() {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
-            <table>
+            <table className="w-full">
               <thead className="bg-blue-500 text-white w-full">
                 <tr>
                   <th className="text-xs py-1 px-2 font-semibold w-[4%]">No</th>
@@ -100,11 +100,7 @@ function Kunjungan() {
                           {kunjungan.peluang}
                         </td>
                         <td className="text-sm py-2 px-3">{kunjungan.deal}</td>
-                        <td className="text-sm py-2 px-3 flex flex-col gap-2">
-                          {/* <IconButton size="md" color="red">
-                            <TrashIcon className="w-6 h-6 white" />
-                          </IconButton> */}
-                        </td>
+                        <td className="text-sm py-2 px-3 flex flex-col gap-2"></td>
                       </tr>
                     );
                   })
