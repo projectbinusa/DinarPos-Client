@@ -45,7 +45,7 @@ function DealPo() {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
-            <table>
+            <table className="w-full">
               <thead className="bg-blue-500 text-white w-full">
                 <tr>
                   <th className="text-sm py-1 px-2 font-semibold w-[4%]">No</th>
@@ -104,6 +104,7 @@ function DealPo() {
                     <td
                       colSpan="30"
                       className="text-center capitalize py-3 bg-gray-100"
+                      x
                     >
                       Tidak ada data
                     </td>
