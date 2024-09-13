@@ -9,118 +9,98 @@ import {
   Breadcrumbs,
   Option,
 } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom"; // Perbarui dengan useNavigate
+import { useHistory } from "react-router-dom"; // Menggunakan useHistory
 import Swal from "sweetalert2";
 import axios from "axios";
 
 function AddOmzet() {
-  const navigate = useNavigate(); // Ganti useHistory dengan useNavigate
-  const [tgl, setTgl] = useState(""); // Perbaiki nama setter
+  const history = useHistory(); // Inisialisasi dengan useHistory
+  const [tgl, settgl] = useState(""); // Setter untuk tanggal
   const [selectedITC, setSelectedITC] = useState("");
-  const [omzet, setOmzet] = useState("");
-  const [customer, setCustomer] = useState("");
-  const [values, setValues] = useState("");
-  const [options, setOptions] = useState([]);
+  const [omzet, setomzet] = useState("");
+  const [customer, setcustomer] = useState("");
+  const [level, setLevel] = useState("");
 
-  const addOmzet = async (e) => {
+  useEffect(() => {
+    const levelUser = localStorage.getItem("level") || "";
+    setLevel(levelUser);
+  }, []);
+
+  const dashboard = level === "Superadmin" ? "dashboard" : (level === "AdminService" ? "dashboard_service" : "");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!omzet || !customer || !tgl || !selectedITC) {
+    
+    if (!tgl || !selectedITC || !omzet || !customer) {
       Swal.fire({
         icon: "warning",
-        title: "Semua field harus diisi!",
+        title: "Semua kolom harus diisi!",
         showConfirmButton: false,
         timer: 1500,
       });
       return;
     }
 
-    const request = {
-      omzet,
-      customer,
-      tgl,
-      itc: selectedITC,
-    };
+    const formData = new FormData();
+    formData.append("tgl", tgl);
+    formData.append("selectedITC", selectedITC);
+    formData.append("omzet", omzet);
+    formData.append("customer", customer);
+  
+    // Debug: log the FormData
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
 
     try {
-      await axios.post(`${API_OMZET}/add`, request, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      const response = await axios.post(`${API_OMZET}/add`, formData, {
+        headers: {
+          // Hapus content-type karena axios akan otomatis menentukannya saat menggunakan FormData
+          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+        },
       });
+      
       Swal.fire({
         icon: "success",
-        title: "Data Berhasil Ditambahkan",
+        title: "Data Berhasil Ditambahkan!",
         showConfirmButton: false,
         timer: 1500,
       });
-      navigate("/omzet");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      history.push("/omzet");
     } catch (error) {
-      if (error.response) {
-        console.log("Error Response:", error.response);
-        if (error.response.status === 401) {
-          localStorage.clear();
-          navigate("/");
-        } else if (error.response.status === 400) {
-          Swal.fire({
-            icon: "error",
-            title: "Data Sudah Ada!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Tambah Data Gagal!",
-            text: error.response.data?.data || "Terjadi kesalahan",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      } else {
-        console.log("Error:", error.message);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Tidak dapat terhubung ke server",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
+      console.error("Error:", error);
+      handleAxiosError(error);
+    }
+};
+
+
+  const handleAxiosError = (error) => {
+    if (error.response && error.response.status === 405) {
+      Swal.fire({
+        icon: "error",
+        title: "Metode Tidak Diizinkan!",
+        text: "Silakan cek metode HTTP yang digunakan atau kontak admin.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (error.response && error.response.status === 400) {
+      Swal.fire({
+        icon: "error",
+        title: "Data Sudah Ada!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Tambah Data Gagal!",
+        text: error.response?.data?.message || "Terjadi kesalahan.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
-
-  const fetchOptions = async () => {
-    if (values.trim() !== "") {
-      try {
-        const response = await axios.get(`${API_OMZET}/taken/N`, {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        });
-        setOptions(response.data?.data || []); // Tambahkan handling ketika data undefined
-      } catch (error) {
-        console.log("Failed to fetch options:", error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchOptions();
-  }, [values]);
-
-  const handleChange = (event) => {
-    setValues(event.target.value);
-  };
-
-  const [level, setLevel] = useState("");
-  let dashboard = "";
-
-  if (level === "Superadmin") {
-    dashboard = "dashboard";
-  } else if (level === "AdminService") {
-    dashboard = "dashboard_service";
-  }
-
+  
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -148,23 +128,9 @@ function AddOmzet() {
         </div>
 
         <div className="bg-white shadow-lg p-6 rounded-lg">
-          <form onSubmit={addOmzet} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4"> {/* Ganti addOmzet dengan handleSubmit */}
             <div className="space-y-4">
               <div className="w-full lg:w-[50%]">
-                <Select
-                  variant="outlined"
-                  label="ITC"
-                  value={selectedITC}
-                  onChange={(e) => setSelectedITC(e)} // Ganti dengan event handler
-                  required
-                >
-                  <Option value="">-Pilih-</Option>
-                  {options.map((option, index) => (
-                    <Option key={index} value={option.value}>
-                      {option.label}
-                    </Option>
-                  ))}
-                </Select>
               </div>
               <div className="w-full lg:w-[50%]">
                 <Input
@@ -173,7 +139,7 @@ function AddOmzet() {
                   type="date"
                   label="Tanggal"
                   value={tgl}
-                  onChange={(e) => setTgl(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => settgl(e.target.value)} // Gunakan setter yang benar
                   required
                 />
               </div>
@@ -184,7 +150,7 @@ function AddOmzet() {
                   type="number"
                   label="Jumlah Omzet"
                   value={omzet}
-                  onChange={(e) => setOmzet(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => setomzet(e.target.value)} // Gunakan setter yang benar
                   required
                 />
               </div>
@@ -195,9 +161,23 @@ function AddOmzet() {
                   type="text"
                   label="Nama Customer"
                   value={customer}
-                  onChange={(e) => setCustomer(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => setcustomer(e.target.value)} // Gunakan setter yang benar
                   required
                 />
+              </div>
+              <div className="w-full lg:w-[50%]">
+                <Select
+                  variant="static"
+                  label="ITC"
+                  value={selectedITC}
+                  onChange={(value) => setSelectedITC(value)} // Ubah e.target.value menjadi value langsung
+                  required
+                >
+                  <Option value="">ALL</Option>
+                  <Option value="ITC1">ITC1</Option>
+                  <Option value="ITC2">ITC2</Option>
+                  <Option value="ITC3">ITC3</Option>
+                </Select>
               </div>
               <div className="flex items-end">
                 <Button type="submit" color="blue" className="w-full lg:w-auto">

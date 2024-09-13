@@ -8,12 +8,13 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { API_OMZET } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom"; // Gunakan useHistory
+import { useHistory } from "react-router-dom";
 
 function Omzet() {
   const tableRef = useRef(null);
   const [omzet, setOmzet] = useState([]);
-  const history = useHistory(); // Inisialisasi useHistory
+  const history = useHistory();
+  const [level, setLevel] = useState("");
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -30,18 +31,24 @@ function Omzet() {
 
   const getAllOmzet = async () => {
     try {
-      const response = await axios.get(API_OMZET, {
+      const response = await axios.get(`${API_OMZET}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      console.log("Data fetched:", response.data.data);
-      setOmzet(response.data.data);
+      console.log("Data Omzet:", response.data.data);
+      setOmzet(response.data.data || []);
     } catch (error) {
-      console.log("get all", error);
+      console.error("Error fetching data:", error);
     }
   };
 
+  const fetchLevel = () => {
+    setLevel(localStorage.getItem("level"));
+  };
+  
+
   useEffect(() => {
     getAllOmzet();
+    fetchLevel();
   }, []);
 
   useEffect(() => {
@@ -63,7 +70,7 @@ function Omzet() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${API_OMZET}/delete/${id}`, {
+          await axios.delete(`${API_OMZET}/${id}`, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           });
           Swal.fire({
@@ -72,7 +79,9 @@ function Omzet() {
             showConfirmButton: false,
             timer: 1500,
           });
-          getAllOmzet();
+
+          setOmzet((omzet) => omzet.filter((item) => item.id !== id));
+
         } catch (err) {
           Swal.fire({
             icon: "error",
@@ -101,9 +110,11 @@ function Omzet() {
           </Typography>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+        <a href="/add_omzet" className="float-right mb-5">
           <Button variant="gradient" color="blue" onClick={navigateToAddOmzet}>
             Tambah
           </Button>
+          </a>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table
               id="example_data"
@@ -124,7 +135,7 @@ function Omzet() {
               <tbody>
                 {omzet.length > 0 ? (
                   omzet.map((row, index) => (
-                    <tr key={index}>
+                    <tr key={row.id}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
                       <td className="text-sm py-2 px-3">{row.itc}</td>
                       <td className="text-sm py-2 px-3">{row.tgl}</td>

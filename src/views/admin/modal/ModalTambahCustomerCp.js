@@ -23,9 +23,6 @@ import {
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function ModalTambahCustomerCp({ handleOpen }) {
-  const [customers, setCustomer] = useState([]);
-  const [salesmans, setsalesmans] = useState([]);
-
   const [salesmanId, setsalesmanId] = useState(0);
   const [customerId, setcustomerId] = useState(0);
   const [namaCp, setnamaCp] = useState("");
@@ -34,36 +31,6 @@ function ModalTambahCustomerCp({ handleOpen }) {
   const [noTelp, setnoTelp] = useState("");
 
   const history = useHistory();
-
-  // GET ALL CUSTOMER
-  const getAll = async () => {
-    try {
-      const response = await axios.get(`${API_CUSTOMER}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setCustomer(response.data.data);
-    } catch (error) {
-      console.log("get all", error);
-    }
-  };
-
-  // GET ALL SALESMAN
-  const allSalesman = async () => {
-    try {
-      const response = await axios.get(`${API_SALESMAN}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsalesmans(response.data.data);
-      console.log(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAll();
-    allSalesman();
-  }, []);
 
   // ADD CUSTOMER CP
   const addCustomerCp = async (e) => {
@@ -77,6 +44,8 @@ function ModalTambahCustomerCp({ handleOpen }) {
       nama_cp: namaCp,
       no_telp: noTelp,
     };
+
+    console.log(request)
 
     try {
       await axios.post(`${API_CUSTOMER_CP}/add`, request, {
@@ -114,37 +83,6 @@ function ModalTambahCustomerCp({ handleOpen }) {
         console.log(error);
       }
     }
-  };
-
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      background: "transparent",
-      borderBottom: "1px solid #ccc",
-      border: "none",
-      outline: "none",
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "14px",
-      "&:hover": {
-        outline: "none",
-        boxShadow: "none",
-      },
-      "&:focus": {
-        outline: "none",
-        boxShadow: "none",
-      },
-    }),
   };
 
   // ALL CUSTOMER
@@ -213,7 +151,6 @@ function ModalTambahCustomerCp({ handleOpen }) {
 
   return (
     <div>
-      
       <DialogHeader>Tambah Customer CP</DialogHeader>
       <form onSubmit={addCustomerCp}>
         <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -235,7 +172,7 @@ function ModalTambahCustomerCp({ handleOpen }) {
               {optionsSalesmanModalCP.length > 0 && (
                 <>
                   {optionsSalesmanModalCP.map((option2) => (
-                    <option value={option2.id}>
+                    <option value={option2.id} key={option2.id}>
                       {option2.namaSalesman}
                     </option>
                   ))}
@@ -282,7 +219,7 @@ function ModalTambahCustomerCp({ handleOpen }) {
               {optionsCustomerModalCP.length > 0 && (
                 <>
                   {optionsCustomerModalCP.map((option2) => (
-                    <option value={option2.id}>{option2.nama_customer}</option>
+                    <option value={option2.id} key={option2.id}>{option2.nama_customer}</option>
                   ))}
                 </>
               )}

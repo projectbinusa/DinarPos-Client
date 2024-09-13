@@ -67,7 +67,7 @@ function Login() {
             setTimeout(() => {
               window.location.reload();
             }, 1000);
-          } else if (level === "AdminItc" || level === "Marketting" || level === "Keuangan") {
+          } else if (level === "AdminItc" || level === "Marketting" || level === "Keuangan" || level === "GudangItc" || level === "PimpinanItc") {
             history.push("/home");
             setTimeout(() => {
               window.location.reload();

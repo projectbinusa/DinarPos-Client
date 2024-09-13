@@ -2985,24 +2985,34 @@ function SidebarAdmin() {
                     Kunjungan
                   </ListItem>
                 </a>
-                <a href="/service_teknisi">
+                <a href="/deal_finish">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    Planning
+                    Data Finish
                   </ListItem>
                 </a>
-                <a href="/dealpo">
+                <a href="/data_finish">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    Deal PO
+                    Laporan
                   </ListItem>
                 </a>
-                <a href="/history_point">
+                <a href="/planning_page">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                    Deal Finish
+                    Planning Page
+                  </ListItem>
+                </a>
+                <a href="/laporan_planning">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Laporan Planning
                   </ListItem>
                 </a>
                 <a href="/ijin">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Ijin
+                  </ListItem>
+                </a>
+                <a href="/omzet">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    Omzet
                   </ListItem>
                 </a>
                 <a href="/daily_repost">

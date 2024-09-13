@@ -147,8 +147,8 @@ function PlanningPage() {
                 />
               </div>
               <div className="w-full lg:w-1/3">
-                <Select
-                  variant="outlined"
+              <Select
+                  variant="static"
                   label="Filter"
                   value={filterOption}
                   onChange={(e) => setFilterOption(e.target.value)}

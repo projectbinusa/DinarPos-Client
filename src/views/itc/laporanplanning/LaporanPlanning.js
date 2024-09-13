@@ -10,8 +10,8 @@ import {
 } from "@material-tailwind/react";
 
 function LaporanPlanning() {
-  const [tglAwal, settglAwal] = useState("");
-  const [tglAkhir, settglAkhir] = useState("");
+  const [created_date, setcreated_date] = useState("");
+  const [tgl, settgl] = useState("");
   const [selectedITC, setSelectedITC] = useState("");
   const [planning, setPlanning] = useState([]);
  
@@ -36,15 +36,15 @@ function LaporanPlanning() {
     e.preventDefault();
 
     // Validasi tanggal
-    if (new Date(tglAwal) > new Date(tglAkhir)) {
+    if (new Date(created_date) > new Date(tgl)) {
       alert("Tanggal akhir harus setelah tanggal awal.");
       return;
     }
 
     // Contoh data yang akan dikirim
     const formData = {
-      tanggalAwal: tglAwal,
-      tanggalAkhir: tglAkhir,
+      tanggalAwal: created_date,
+      tanggalAkhir: tgl,
       itc: selectedITC,
     };
 
@@ -69,28 +69,28 @@ function LaporanPlanning() {
                   color="blue"
                   type="date"
                   label="Tanggal Awal"
-                  value={tglAwal}
-                  onChange={(e) => settglAwal(e.target.value)}
+                  value={created_date}
+                  onChange={(e) => setcreated_date(e.target.value)}
                   required
                 />
               </div>
               <div className="w-full lg:w-[50%]">
-                <Input
+              <Input
                   variant="outlined"
                   color="blue"
                   type="date"
                   label="Tanggal Akhir"
-                  value={tglAkhir}
-                  onChange={(e) => settglAkhir(e.target.value)}
+                  value={tgl} // Ubah value dari settgl menjadi tgl
+                  onChange={(e) => settgl(e.target.value)}
                   required
                 />
               </div>
               <div className="w-full lg:w-[50%]">
-                <Select
-                  variant="outlined"
+              <Select
+                  variant="static"
                   label="ITC"
                   value={selectedITC}
-                  onChange={(e) => setSelectedITC(e.target.value)} // Menggunakan e.target.value
+                  onChange={(value) => setSelectedITC(value)} // Ubah e.target.value menjadi value langsung
                   required
                 >
                   <Option value="">ALL</Option>

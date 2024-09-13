@@ -25,7 +25,7 @@ function AddIjin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     if (!created_date || !keterangan || !foto) {
       Swal.fire({
         icon: "warning",
@@ -35,11 +35,16 @@ function AddIjin() {
       });
       return;
     }
-  
+    
     const formData = new FormData();
     formData.append("created_date", created_date);
     formData.append("ket", keterangan);
     formData.append("foto", foto);
+  
+    // Debug: log the FormData
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
   
     try {
       const response = await axios.post(`${API_IJIN}/add`, formData, {
@@ -55,36 +60,39 @@ function AddIjin() {
         timer: 1500,
       });
       history.push("/ijin");
-      
     } catch (error) {
       console.error("Error:", error);
-
-      if (error.response && error.response.status === 405) {
-        Swal.fire({
-          icon: "error",
-          title: "Metode Tidak Diizinkan!",
-          text: "Silakan cek metode HTTP yang digunakan atau kontak admin.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } else if (error.response && error.response.status === 400) {
-        Swal.fire({
-          icon: "error",
-          title: "Data Sudah Ada!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Tambah Data Gagal!",
-          text: error.response?.data?.message || "Terjadi kesalahan.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
+      handleAxiosError(error);
     }
   };
+  
+  const handleAxiosError = (error) => {
+    if (error.response && error.response.status === 405) {
+      Swal.fire({
+        icon: "error",
+        title: "Metode Tidak Diizinkan!",
+        text: "Silakan cek metode HTTP yang digunakan atau kontak admin.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (error.response && error.response.status === 400) {
+      Swal.fire({
+        icon: "error",
+        title: "Data Sudah Ada!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Tambah Data Gagal!",
+        text: error.response?.data?.message || "Terjadi kesalahan.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+  
 
   const handleFotoChange = (e) => {
     const file = e.target.files[0];
@@ -130,19 +138,35 @@ function AddIjin() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <Input
-                label="Tanggal"
-                variant="static"
-                color="blue"
-                size="lg"
-                placeholder="Masukkan Tanggal"
-                type="date"
-                name="tanggal"
-                onChange={(e) => setcreated_date(e.target.value)}
-              />
-              <div className="lg:col-span-2">
+          <form onSubmit={handleSubmit} encType="multipart/form-data">          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <Input
+                  label="Tanggal"
+                  variant="static"
+                  color="blue"
+                  size="lg"
+                  placeholder="Masukkan Tanggal"
+                  type="date"
+                  name="tanggal"
+                  onChange={(e) => setcreated_date(e.target.value)}
+                />
+              </div>
+              <div>
+                <Input
+                  label="Foto"
+                  variant="static"
+                  color="blue"
+                  size="lg"
+                  type="file"
+                  name="foto"
+                  onChange={handleFotoChange}
+                />
+                {previewFoto && (
+                  <img src={previewFoto} alt="Preview Foto" className="mt-4 w-48 h-48 object-cover" />
+                )}
+              </div>
+              <div className="w-full lg:w-[50%]">
                 <Textarea
                   label="Keterangan"
                   size="lg"
@@ -153,18 +177,6 @@ function AddIjin() {
                   onChange={(e) => setket(e.target.value)}
                 />
               </div>
-              <Input
-                label="Foto"
-                variant="static"
-                color="blue"
-                size="lg"
-                type="file"
-                name="foto"
-                onChange={handleFotoChange}
-              />
-              {previewFoto && (
-                <img src={previewFoto} alt="Preview Foto" className="mt-4 w-48 h-48 object-cover" />
-              )}
             </div>
             <div className="mt-10 flex gap-4">
               <Button

@@ -1,7 +1,12 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import $ from "jquery";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import Decrypt from "../../../../component/Decrypt";
+import axios from "axios";
+import { API_ITC, API_PENGGUNA, API_PLANNING } from "../../../../utils/BaseUrl";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 function DetailPlanning() {
     const tableRef = useRef(null);
@@ -10,6 +15,71 @@ function DetailPlanning() {
             $(tableRef.current).DataTable({});
         }
     };
+
+    const param = useParams();
+    const [salesmanId, setsalesmanId] = useState(0);
+    const [planning, setplanning] = useState([]);
+
+    const formatDate = (value) => {
+        const date = new Date(value);
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = String(date.getDate()).padStart(2, "0");
+        const months = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+
+        const formattedDate = `${day} ${months[month]} ${year}`;
+        return formattedDate;
+    };
+
+    const id = Decrypt();
+    useEffect(() => {
+        axios
+            .get(`${API_PENGGUNA}/` + id, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            })
+            .then((res) => {
+                const response = res.data.data.namaPengguna;
+                try {
+                    axios.get(`${API_ITC}/nama?nama=` + response, {
+                        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    }).then((ress) => {
+                        setsalesmanId(ress.data.data.id);
+                    })
+                } catch (err) {
+                    console.log(err);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [id]);
+
+    // ALL PLANNING
+    const getAll = async () => {
+        try {
+            const response = await axios.get(`${API_PLANNING}/salesman/date?id_salesman=${salesmanId}&tanggal=${param.tgl}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setplanning(response.data.data);
+        } catch (error) {
+            console.log("get all", error);
+        }
+    };
+
+    useEffect(() => {
+        getAll()
+    }, [])
+
+    useEffect(() => {
+        if (planning && planning.length > 0) {
+            initializeDataTable();
+        }
+    }, [planning]);
+
 
     return (
         <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -38,7 +108,7 @@ function DetailPlanning() {
                 </div>
                 <main className="bg-white shadow-lg p-5 my-5 rounded">
                     <Typography variant="lead" className="capitalize">
-                        Detail Planning 25 Mei 2024
+                        Detail Planning {formatDate(param.tgl)}
                     </Typography>
                     <hr />
                     <div className="rounded mt-10 p-2 w-full overflow-x-auto">
@@ -63,6 +133,42 @@ function DetailPlanning() {
                                     <th className="text-sm py-2 px-3 font-semibold">Tujuan</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                {planning.length > 0 ? (
+                                    planning.map((row, idx) => (
+                                        <tr key={idx}>
+                                            <td className="text-sm w-[4%]">{idx + 1}</td>
+                                            <td className="text-sm py-2 px-3">{row.customer.nama_customer}</td>
+                                            <td className="text-sm py-2 px-3">{row.customer.jenis}</td>
+                                            <td className="text-sm py-2 px-3">{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                            <td className="text-sm py-2 px-3">{row.customer.jenis}</td>
+                                            <td className="text-sm py-2 px-3">{row.customer.printer}</td>
+                                            <td className="text-sm py-2 px-3">{row.customer.proyektor}</td>
+                                            {row.customer.jenis === "Sekolah" ? (<>
+                                                <td className="text-sm py-2 px-3">{row.customer.jml} / {row.customer.kls3}</td>
+                                                <td className="text-sm py-2 px-3">{row.customer.pc}</td>
+                                                <td className="text-sm py-2 px-3">{row.customer.unbk === "Y" ? (<>
+                                                    <span><CheckIcon className="w-6 h-6 black" /></span>
+                                                </>) : (<>
+                                                    <span><XMarkIcon className="w-6 h-6 black" /></span>
+                                                </>)}</td>
+                                                <td className="text-sm py-2 px-3">{row.customer.jurusan}</td>
+                                            </>) : (<>
+                                                <td className="text-sm py-2 px-3">-</td>
+                                                <td className="text-sm py-2 px-3">-</td>
+                                                <td className="text-sm py-2 px-3">-</td>
+                                                <td className="text-sm py-2 px-3">-</td>
+                                            </>)}
+                                            <td className="text-sm py-2 px-3">{row.bertemu}</td>
+                                            <td className="text-sm py-2 px-3">{row.ket}</td>
+                                        </tr>
+                                    ))
+                                ) : (<tr>
+                                    <td colSpan="12" className="text-center capitalize py-3 bg-gray-100">
+                                        Tidak ada data
+                                    </td>
+                                </tr>)}
+                            </tbody>
                         </table>
                     </div>
                 </main>

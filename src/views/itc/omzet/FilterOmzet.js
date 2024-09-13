@@ -2,13 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import "datatables.net";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, Typography, Card, Select, Option } from "@material-tailwind/react";
 import { API_OMZET } from "../../../utils/BaseUrl";
 import axios from "axios";
 
 function Omzet() {
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedITC, setSelectedITC] = useState(""); // State untuk ITC
   const [filter, setFilter] = useState([]);
+  const [omzetData, setOmzetData] = useState({
+  });
   const tableRef = useRef(null);
 
   const initializeDataTable = () => {
@@ -22,7 +25,7 @@ function Omzet() {
         searching: true,
         ordering: true,
         info: true,
-        data: filter, // Ensure to provide data here
+        data: filter,
         columns: [
           { title: "No" },
           { title: "Marketing" },
@@ -67,11 +70,9 @@ function Omzet() {
   }, [filter]);
 
   const handleGoClick = () => {
-    // Add logic to filter data based on selectedMonth
-    console.log("Pencarian dengan bulan:", selectedMonth);
+    console.log("Pencarian dengan bulan:", selectedMonth, "dan ITC:", selectedITC);
   };
 
-  // Array bulan dan tahun
   const monthOptions = [
     "Januari 2024",
     "Februari 2024",
@@ -91,22 +92,20 @@ function Omzet() {
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
-        <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+        {/* Header */}
+        <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between mb-6">
+          <Typography variant="lead" className="uppercase font-semibold text-gray-800">
             Data Omzet
           </Typography>
         </div>
-        <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <a href="/add_omzet" className="float-right mb-5">
-            <Button variant="gradient" color="blue" className="font-popins font-medium">
-              Tambah
-            </Button>
-          </a>
-          <div className="flex items-center gap-4 my-4">
+     
+        <main className="bg-white shadow-md rounded-lg p-6">
+        <div className="flex flex-col lg:flex-row items-center gap-4 mb-6">
+          <div className="w-full lg:w-auto max-w-xs">
             <select
               value={selectedMonth}
               onChange={handleMonthChange}
-              className="border rounded p-2"
+              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             >
               <option value="">Pilih Bulan Tahun</option>
               {monthOptions.map((month) => (
@@ -115,25 +114,51 @@ function Omzet() {
                 </option>
               ))}
             </select>
-            <Button
-              variant="gradient"
-              color="blue"
-              className="font-popins font-medium"
-              onClick={handleGoClick}
-            >
-              GO
-            </Button>
           </div>
 
-          <div className="bg-white shadow-md rounded p-4">
-            <div className="bg-blue-500 text-white text-center rounded-t p-2">
-              Lina Ristiani (Apr 2024)
-            </div>
-            <div className="text-center p-4">
-              <h2 className="text-2xl font-bold">Rp. 46,089,000</h2>
-              <p>12 % dari target</p>
-            </div>
+          <div className="w-full lg:w-auto max-w-xs">
+            <Select
+              variant="outlined"
+              label="Pilih ITC"
+              value={selectedITC}
+              onChange={(value) => setSelectedITC(value)}
+              className="focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <Option value="">ALL</Option>
+              <Option value="ITC1">ITC1</Option>
+              <Option value="ITC2">ITC2</Option>
+              <Option value="ITC3">ITC3</Option>
+            </Select>
           </div>
+
+          {/* Button GO */}
+          <Button
+            variant="gradient"
+            color="blue"
+            className="font-poppins font-medium w-full lg:w-auto"
+            onClick={handleGoClick}
+          >
+            GO
+          </Button>
+          </div>
+
+          {/* Omzet Card */}
+          <Card className="w-full max-w-md mx-auto p-4 shadow-lg rounded-lg">
+            <Typography
+              variant="h6"
+              className="text-center bg-blue-600 text-white py-2 rounded-t-md font-bold"
+            >
+              {omzetData.name} ({omzetData.month})
+            </Typography>
+            <div className="flex flex-col items-center py-6 space-y-2">
+              <Typography variant="h5" className="font-bold text-gray-700">
+                Rp. {omzetData.amount}
+              </Typography>
+              <Typography variant="small" className="text-gray-500">
+                {omzetData.percentage} dari target
+              </Typography>
+            </div>
+          </Card>
         </main>
       </div>
     </section>

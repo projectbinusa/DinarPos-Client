@@ -56,43 +56,48 @@ function Ijin() {
   }, [ijin]);
 
   const hapusIjin = async (id) => {
-    Swal.fire({
-      title: "Apakah Anda Ingin Menghapus?",
-      text: "Perubahan data tidak bisa dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Hapus",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`${API_IJIN}/${id}`, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-          })
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Dihapus!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            setIjin(ijin.filter((item) => item.id !== id));
-          })
-          .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              title: "Gagal!",
-              text: "Hapus Ijin Gagal!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            console.log(err);
-          });
-      }
-    });
-  };
+  const result = await Swal.fire({
+    title: "Apakah Anda Ingin Menghapus?",
+    text: "Perubahan data tidak bisa dikembalikan!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Hapus",
+    cancelButtonText: "Batal",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      // Mengirim request penghapusan ke server
+      await axios.delete(`${API_IJIN}/${id}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+
+      // Menampilkan pesan sukses
+      Swal.fire({
+        icon: "success",
+        title: "Dihapus!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      // Mengupdate state ijin dengan menghapus data yang sudah dihapus
+      setIjin((ijin) => ijin.filter((item) => item.id !== id));
+
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Hapus Ijin Gagal!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  }
+};
+
 
   let dashboard = "";
   if (level === "Superadmin") {

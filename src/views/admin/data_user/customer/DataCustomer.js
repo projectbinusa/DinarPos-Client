@@ -13,12 +13,14 @@ import "datatables.net";
 import "./../../../../assets/styles/datatables.css";
 import {
   API_CUSTOMER,
+  API_PENGGUNA,
 } from "../../../../utils/BaseUrl";
 import axios from "axios";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import ModalTambahCustomerCp from "../../modal/ModalTambahCustomerCp";
+import Decrypt from "../../../../component/Decrypt";
 
 function DataCustomer() {
   const [open, setOpen] = useState(false);
@@ -27,6 +29,7 @@ function DataCustomer() {
   const tableRef = useRef(null);
 
   const [customers, setCustomer] = useState([]);
+  const [level, setLevel] = useState();
 
   const history = useHistory();
 
@@ -93,6 +96,23 @@ function DataCustomer() {
       }
     });
   };
+
+  // NAMA PENGGUNA
+  const id = Decrypt();
+  useEffect(() => {
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data.levelPengguna;
+        setLevel(response)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -173,6 +193,13 @@ function DataCustomer() {
                               <PencilIcon className="w-6 h-6 white" />
                             </IconButton>
                           </a>
+                          {level === "Marketting" || level === "PimpinanItc" ? (<>
+                            <a href={"/detail_customer/" + customer.id}>
+                              <IconButton size="md" color="green">
+                                <InformationCircleIcon className="w-6 h-6 white" />
+                              </IconButton>
+                            </a>
+                          </>) : (<></>)}
                           <IconButton
                             size="md"
                             color="red"

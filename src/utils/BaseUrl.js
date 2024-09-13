@@ -147,3 +147,12 @@ export const API_KUNJUNGAN_DATE_BETWEEN_SALESMAN = `${url}/kunjungan/date/betwee
 
 // DATA KUNJUNGAN DATE BETWEEN SALESMEN
 export const API_PLANNING = `${url}/planning`;
+
+// FINISH
+export const API_FINISH = `${url}/deal/finish`;
+
+// IJIN 
+export const API_IJIN = `${url}/ijin`;
+
+// OMZET
+export const API_OMZET = `${url}/omzet`;

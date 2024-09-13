@@ -4,19 +4,27 @@ import {
   Breadcrumbs,
   Button,
   Input,
+  Radio,
+  Textarea,
   Typography,
 } from "@material-tailwind/react";
 import {
   AtSymbolIcon,
+  CheckIcon,
+  Cog6ToothIcon,
+  ComputerDesktopIcon,
   MapPinIcon,
   PhoneIcon,
   UserCircleIcon,
+  UsersIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { API_CUSTOMER, API_SALESMAN } from "../../../../utils/BaseUrl";
+import { API_CUSTOMER, API_KABKOT, API_PENGGUNA, API_PROV, API_SALESMAN } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import ReactSelect from "react-select";
+import Decrypt from "../../../../component/Decrypt";
 
 function AddCustomer() {
   const [alamat, setalamat] = useState("");
@@ -25,41 +33,81 @@ function AddCustomer() {
   const [namaCustomer, setnamaCustomer] = useState("");
   const [noTelp, setnoTelp] = useState("");
   const [salesmanId, setsalesmanId] = useState(0);
+  const [provId, setprovId] = useState(0);
+  const [kabkotId, setkabkotId] = useState(0);
+  const [kecId, setkecId] = useState(0);
+  const [internet, setinternet] = useState("");
+  const [jmlPrinter, setjmlPrinter] = useState(0);
+  const [proyektor, setproyektor] = useState(0);
+  const [web, setweb] = useState("");
+  const [pc, setpc] = useState("");
+  const [jurusan, setjurusan] = useState("");
+  const [unbk, setunbk] = useState("");
+  const [kls3, setkls3] = useState(0);
+  const [murid, setmurid] = useState(0);
+  const [level, setlevel] = useState("");
 
-  const [salesman, setsalesman] = useState([]);
   const history = useHistory();
 
-  // GET ALL SALESMAN
-  const allSalesman = async () => {
-    try {
-      const response = await axios.get(`${API_SALESMAN}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setsalesman(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  // PENGGUNA
+  const id = Decrypt();
   useEffect(() => {
-    allSalesman();
-  }, []);
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data.levelPengguna;
+        setlevel(response)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   // ADD CUSTOMER
   const addCustomer = async (e) => {
     e.preventDefault();
 
-    const request = {
-      alamat: alamat,
-      email: email,
-      id_salesman: salesmanId,
-      jenis: jenis,
-      nama_customer: namaCustomer,
-      not_telp: noTelp,
-    };
+    var request;
+
+    if (level === "Marketting" || level === "PimpinanItc") {
+      request = {
+        alamat: alamat,
+        email: email,
+        id_salesman: salesmanId,
+        jenis: jenis,
+        nama_customer: namaCustomer,
+        not_telp: noTelp,
+        id_kabkot: kabkotId,
+        id_prov: provId,
+        id_kec: kecId,
+        internet: internet,
+        jml_printer: jmlPrinter,
+        jurusan: jurusan,
+        kls3: kls3,
+        murid: murid,
+        pc: pc,
+        proyektor: proyektor,
+        unbk: unbk,
+        web: web
+      };
+    } else {
+      request = {
+        alamat: alamat,
+        email: email,
+        id_salesman: salesmanId,
+        jenis: jenis,
+        nama_customer: namaCustomer,
+        not_telp: noTelp,
+        id_kabkot: kabkotId,
+        id_prov: provId,
+        id_kec: kecId,
+      };
+    }
 
     try {
-      await axios.post(`${API_CUSTOMER}/add`, request, {
+      await axios.post(`${API_CUSTOMER}/itc`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       Swal.fire({
@@ -157,6 +205,68 @@ function AddCustomer() {
   };
   // END ALL SALESMAN
 
+  // ALL PROV
+  const [valuesProv, setvaluesProv] = useState("");
+  const [optionsProv, setoptionsProv] = useState([]);
+  const [currentPageProv, setCurrentPageProv] = useState(1);
+
+  const handleProv = async () => {
+    if (valuesProv.trim() !== "") {
+      const response = await fetch(
+        `${API_PROV}/pagination?limit=10&page=${currentPageProv}&search=${valuesProv}&sort=namaProv`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsProv(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleProv();
+  }, [currentPageProv, valuesProv]);
+
+  const handleChangeProv = (event) => {
+    setvaluesProv(event.target.value);
+    setCurrentPageProv(1);
+    setprovId(event.target.value);
+  };
+  // END ALL PROV
+
+  // ALL KABKOT
+  const [valuesKab, setvaluesKab] = useState("");
+  const [optionsKab, setoptionsKab] = useState([]);
+  const [currentPageKab, setCurrentPageKab] = useState(1);
+
+  const handleKab = async () => {
+    if (valuesKab.trim() !== "") {
+      const response = await fetch(
+        `${API_KABKOT}/pagination?limit=10&page=${currentPageKab}&search=${valuesKab}&sort=nama_kabkot`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsKab(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleKab();
+  }, [currentPageKab, valuesKab]);
+
+  const handleChangeKab = (event) => {
+    setvaluesKab(event.target.value);
+    setCurrentPageKab(1);
+    setkabkotId(event.target.value);
+  };
+  // END ALL KABKOT
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -183,7 +293,7 @@ function AddCustomer() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={addCustomer}>
+          <div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="flex gap-2 items-end">
                 <Input
@@ -280,7 +390,103 @@ function AddCustomer() {
                 />
                 <hr className="mt-1 bg-gray-400 h-[0.1em]" />
               </div>
-              <div className="lg:mt-5">
+              <div className="flex gap-2 items-end">
+                <Input
+                  label="Provinsi"
+                  variant="static"
+                  color="blue"
+                  list="provinsi-list"
+                  id="provinsi"
+                  name="provinsi"
+                  onChange={(event) => {
+                    handleChangeProv(event);
+                  }}
+                  placeholder="Pilih Provinsi"
+                />
+                <datalist id="provinsi-list">
+                  {optionsProv.length > 0 && (
+                    <>
+                      {optionsProv.map((option) => (
+                        <option value={option.idProv} key={option.idProv}>
+                          {option.namaProv}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </datalist>
+
+                <div className="flex gap-2">
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPageProv(currentPageProv - 1)}
+                    disabled={currentPageProv === 1}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPageProv(currentPageProv + 1)}
+                    disabled={!optionsProv.length}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+              <div className="flex gap-2 items-end">
+                <Input
+                  label="Kab / Kota"
+                  variant="static"
+                  color="blue"
+                  list="kab-list"
+                  id="kab"
+                  name="kab"
+                  onChange={(event) => {
+                    handleChangeKab(event);
+                  }}
+                  placeholder="Pilih Kab / Kota"
+                />
+                <datalist id="kab-list">
+                  {optionsKab.length > 0 && (
+                    <>
+                      {optionsKab.map((option) => (
+                        <option value={option.id} key={option.id}>
+                          {option.nama_kabkot}
+                        </option>
+                      ))}
+                    </>
+                  )}
+                </datalist>
+
+                <div className="flex gap-2">
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPageKab(currentPageKab - 1)}
+                    disabled={currentPageKab === 1}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="text-sm bg-gray-400 px-1"
+                    onClick={() => setCurrentPageKab(currentPageKab + 1)}
+                    disabled={!optionsKab.length}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+              <div className="lg:mt-5 ">
+                <Input
+                  label="Kecamatan"
+                  variant="static"
+                  color="blue"
+                  size="lg"
+                  type="number"
+                  placeholder="Masukkan Kecamatan"
+                  onChange={(e) => setkecId(e.target.value)}
+                  icon={<MapPinIcon />}
+                />
+              </div>
+              <div className="lg:mt-5 lg:col-span-2">
                 <Input
                   label="Alamat Customer"
                   variant="static"
@@ -315,9 +521,188 @@ function AddCustomer() {
                   icon={<PhoneIcon />}
                 />
               </div>
+              {level === "Marketting" || level === "PimpinanItc" ? (<>
+                <div className="lg:mt-5">
+                  <Input
+                    label="Provinsi"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="number"
+                    placeholder="Masukkan Provinsi"
+                    onChange={(e) => setprovId(e.target.value)}
+                    icon={<MapPinIcon />}
+                  />
+                </div>
+                <div className="lg:mt-5">
+                  <Input
+                    label="Kab / Kot"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="number"
+                    placeholder="Masukkan Kab / Kot"
+                    onChange={(e) => setkabkotId(e.target.value)}
+                    icon={<MapPinIcon />}
+                  />
+                </div>
+                <div className="lg:mt-5 lg:col-span-2">
+                  <Input
+                    label="Kecamatan"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="number"
+                    placeholder="Masukkan Kecamatan"
+                    onChange={(e) => setkecId(e.target.value)}
+                    icon={<MapPinIcon />}
+                  />
+                </div>
+                <div className="lg:mt-5">
+                  <Input
+                    label="Printer"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="number"
+                    placeholder="Masukkan Jumlah Printer"
+                    onChange={(e) => setjmlPrinter(e.target.value)}
+                    icon={<Cog6ToothIcon />}
+                  />
+                </div>
+                <div className="lg:mt-5">
+                  <Input
+                    label="Proyektor"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="number"
+                    placeholder="Masukkan Jumlah Proyektor"
+                    onChange={(e) => setproyektor(e.target.value)}
+                    icon={<Cog6ToothIcon />}
+                  />
+                </div>
+                <div>
+                  <Typography className="font-poppins font-normal text-gray-600" variant="paragraph">Internet</Typography>
+                  <div className="flex gap-8 pt-5">
+                    <div className="flex justify-center">
+                      <input
+                        type="radio"
+                        id="yes"
+                        value="U"
+                        onChange={(e) => setinternet(e.target.value)}
+                      />
+                      <label htmlFor="yes" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
+                    </div>
+                    <div className="flex justify-center">
+                      <input
+                        type="radio"
+                        id="validasi_I"
+                        value="I"
+                        onChange={(e) => setinternet(e.target.value)}
+                      />
+                      <label htmlFor="validasi_I" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Typography className="font-poppins font-normal text-gray-600" variant="paragraph">Web</Typography>
+                  <div className="flex gap-8 pt-5">
+                    <div className="flex justify-center">
+                      <input
+                        type="radio"
+                        id="yes"
+                        value="U"
+                        onChange={(e) => setweb(e.target.value)}
+                      />
+                      <label htmlFor="yes" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
+                    </div>
+                    <div className="flex justify-center">
+                      <input
+                        type="radio"
+                        id="validasi_I"
+                        value="I"
+                        onChange={(e) => setweb(e.target.value)}
+                      />
+                      <label htmlFor="validasi_I" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
+                    </div>
+                  </div>
+                </div>
+                {jenis === "Sekolah" ? (<>
+                  <div className="lg:mt-5">
+                    <Input
+                      label="Jumlah Murid"
+                      variant="static"
+                      color="blue"
+                      size="lg"
+                      type="number"
+                      placeholder="Masukkan Jumlah Murid"
+                      // onChange={(e) => setproyektor(e.target.value)}
+                      icon={<UsersIcon />}
+                    />
+                  </div>
+                  <div className="lg:mt-5">
+                    <Input
+                      label="Jumlah Kelas 3"
+                      variant="static"
+                      color="blue"
+                      size="lg"
+                      type="number"
+                      placeholder="Masukkan Jumlah Kelas 3"
+                      // onChange={(e) => setproyektor(e.target.value)}
+                      icon={<UsersIcon />}
+                    />
+                  </div>
+                  <div className="lg:mt-5">
+                    <Input
+                      label="PC"
+                      variant="static"
+                      color="blue"
+                      size="lg"
+                      type="number"
+                      placeholder="Masukkan Jumlah PC"
+                      onChange={(e) => setproyektor(e.target.value)}
+                      icon={<ComputerDesktopIcon />}
+                    />
+                  </div>
+                  <div>
+                    <Typography className="font-poppins font-normal text-gray-600" variant="paragraph">UNBK</Typography>
+                    <div className="flex gap-8 pt-5">
+                      <div className="flex justify-center">
+                        <input
+                          type="radio"
+                          id="yes"
+                          value="Sudah"
+                          onChange={(e) => setinternet(e.target.value)}
+                        />
+                        <label htmlFor="yes" className="ml-1">Sudah</label>
+                      </div>
+                      <div className="flex justify-center">
+                        <input
+                          type="radio"
+                          id="validasi_I"
+                          value="I"
+                          onChange={(e) => setinternet(e.target.value)}
+                        />
+                        <label htmlFor="validasi_I" className="ml-1">Belum</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="lg:mt-5 lg:col-span-2">
+                    <Textarea
+                      color="blue"
+                      variant="static"
+                      label="Jurusan"
+                      placeholder="List jurusan apa saja"
+                      // onChange={(e) => setaction(e.target.value)} 
+                      required
+                    />
+                  </div>
+                </>) : (<></>)}
+              </>) : (<></>)}
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit" className="font-poppins font-medium">
+              <Button variant="gradient" color="blue" type="button" onClick={addCustomer} className="font-poppins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/data_customer">
@@ -326,7 +711,7 @@ function AddCustomer() {
                 </Button>
               </a>
             </div>
-          </form>
+          </div>
         </main>
       </div>
     </section>

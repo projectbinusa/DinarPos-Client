@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react";
 import $ from "jquery";
+import axios from "axios";
+import { API_ITC, API_PENGGUNA, API_PLANNING } from "../../../../utils/BaseUrl";
+import Decrypt from "../../../../component/Decrypt";
 
 function DataPlanning() {
     const tableRef = useRef(null);
@@ -11,8 +14,67 @@ function DataPlanning() {
         }
     };
 
+    const formatDate = (value) => {
+        const date = new Date(value);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const formattedDate = `${day}-${month}-${year}`;
+
+        return formattedDate;
+    };
+
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [salesmanId, setsalesmanId] = useState(0);
+
+    const id = Decrypt();
+    useEffect(() => {
+        axios
+            .get(`${API_PENGGUNA}/` + id, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            })
+            .then((res) => {
+                const response = res.data.data.namaPengguna;
+                try {
+                    axios.get(`${API_ITC}/nama?nama=` + response, {
+                        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    }).then((ress) => {
+                        setsalesmanId(ress.data.data.id);
+                    })
+                } catch (err) {
+                    console.log(err);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [id]);
+
+    const exportPlanning = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.get(
+                `${API_PLANNING}/export/excel/salesman?id_salesman=${salesmanId}&tglAkhir=${endDate}&tglAwal=${startDate}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Planning Periode ${formatDate(startDate)} s.d ${formatDate(endDate)}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        } catch (error) {
+            console.error("Error saat mengunduh file:", error);
+        }
+    }
 
     return (
         <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -40,13 +102,13 @@ function DataPlanning() {
                 </div>
                 <main className="bg-white shadow-lg p-5 my-5 rounded">
                     <div className="flex justify-end">
-                        <a href="/add_planning" className="mb-5">
+                        <a href="/input_planning" className="mb-5">
                             <Button variant="gradient" color="blue" className="font-popins font-medium">
                                 Input
                             </Button>
                         </a>
                     </div> <br />
-                    <div className="flex flex-col lg:flex-row gap-4 items-center justify-end mb-6 lg:justify-between">
+                    <div className="flex flex-col lg:flex-row gap-4 items-center justify-end lg:justify-between">
                         <div className="w-full">
                             <Input
                                 type="date"
@@ -75,7 +137,7 @@ function DataPlanning() {
                             <Button
                                 variant="gradient"
                                 color="blue"
-                                // onClick={filterTangggal}
+                                onClick={exportPlanning}
                                 className="font-popins font-medium"
                                 size="md"
                             >export

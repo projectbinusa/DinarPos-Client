@@ -11,18 +11,29 @@ function DataFinish() {
   const tableRef = useRef(null);
   const [finish, setFinish] = useState([]);
 
+  // Fungsi inisialisasi DataTables
   const initializeDataTable = () => {
+    // Hancurkan tabel jika sudah diinisialisasi sebelumnya
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
     }
 
+    // Inisialisasi ulang DataTables dengan data terbaru
     $(tableRef.current).DataTable({
-      data: finish, // Ensure data is provided here
+      data: finish.map((row, index) => [
+        index + 1,
+        row.bast,
+        row.baut,
+        row.baso,
+        row.spk,
+        row.ev_dtg,
+        row.ev_pro,
+        row.ev_fin,
+        null, // Ini untuk kolom aksi (hapus)
+      ]),
       columns: [
         { title: "No" },
-        { title: "Marketing" },
-        { title: "Customer" },
-        { title: "Bast" },
+         { title: "Bast" },
         { title: "Baut" },
         { title: "Baso" },
         { title: "Spk" },
@@ -32,15 +43,20 @@ function DataFinish() {
         { title: "Aksi" },
       ],
       columnDefs: [
-        { targets: -1, data: null, defaultContent: "<button class='hapus-btn'>Hapus</button>" }
+        {
+          targets: -1,
+          data: null,
+          defaultContent:
+            "<button class='hapus-btn text-red-500 hover:text-red-700'>Hapus</button>",
+        },
       ],
     });
 
-    // Attach event handler for delete buttons
-    $(tableRef.current).on('click', '.hapus-btn', function() {
-      const row = $(this).closest('tr');
+    // Event listener untuk tombol hapus
+    $(tableRef.current).on("click", ".hapus-btn", function () {
+      const row = $(this).closest("tr");
       const rowData = $(tableRef.current).DataTable().row(row).data();
-      hapusFinish(rowData.id);
+      hapusFinish(rowData[0]); // Menggunakan ID dari data row
     });
   };
 
@@ -49,23 +65,27 @@ function DataFinish() {
       const response = await axios.get(`${API_FINISH}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setFinish(response.data.data);
+      if (response.status === 200) {
+        setFinish(response.data.data || []); // Pastikan response.data.data ada
+      } else {
+        console.error("Error fetching data:", response);
+      }
     } catch (error) {
-      Swal.fire("Error", "Gagal mengambil data finish.", "error");
-      console.log("get all", error);
+      console.error("Error fetching data:", error);
     }
   };
-
+  
   useEffect(() => {
     GetAllFinish();
   }, []);
 
-  useEffect(() => {
-    if (finish.length > 0) {
-      initializeDataTable();
-    }
-  }, [finish]);
+ useEffect(() => {
+  if (finish.length > 0) {
+    initializeDataTable(); 
+  }
+}, [finish]);
 
+  // Fungsi hapus data
   const hapusFinish = async (id) => {
     Swal.fire({
       title: "Apakah Anda Ingin Menghapus?",
@@ -80,7 +100,7 @@ function DataFinish() {
       if (result.isConfirmed) {
         axios
           .delete(`${API_FINISH}/delete/${id}`, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` }
           })
           .then(() => {
             Swal.fire({
@@ -89,10 +109,10 @@ function DataFinish() {
               showConfirmButton: false,
               timer: 1500,
             });
-
-            // Update state instead of reload
-            setFinish(finish.filter(item => item.id !== id));
-          }).catch((err) => {
+            // Update state setelah menghapus data
+            setFinish(finish.filter((item) => item.id !== id));
+          })
+          .catch((err) => {
             Swal.fire({
               icon: "error",
               title: "Gagal!",
@@ -124,12 +144,9 @@ function DataFinish() {
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-3 px-4 font-semibold">No</th>
-                  <th className="text-sm py-3 px-4 font-semibold">Marketing</th>
-                  <th className="text-sm py-3 px-4 font-semibold">Customer</th>
-                  <th className="text-sm py-3 px-4 font-semibold">Bast</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Basp</th>
                   <th className="text-sm py-3 px-4 font-semibold">Baut</th>
-                  <th className="text-sm py-3 px-4 font-semibold">Baso</th>
-                  <th className="text-sm py-3 px-4 font-semibold">Spk</th>
+                 <th className="text-sm py-3 px-4 font-semibold">Spk</th>
                   <th className="text-sm py-3 px-4 font-semibold">Ev_Datang</th>
                   <th className="text-sm py-3 px-4 font-semibold">Ev_Proses</th>
                   <th className="text-sm py-3 px-4 font-semibold">Ev_Finish</th>
@@ -141,17 +158,19 @@ function DataFinish() {
                   finish.map((row, index) => (
                     <tr key={row.id}>
                       <td className="text-sm py-2 px-2.5">{index + 1}</td>
-                      <td className="text-sm py-2 px-2.5">{row.marketing}</td>
-                      <td className="text-sm py-2 px-2.5">{row.customer}</td>
-                      <td className="text-sm py-2 px-2.5">{row.bast}</td>
+                      <td className="text-sm py-2 px-2.5">{row.basp}</td>
                       <td className="text-sm py-2 px-2.5">{row.baut}</td>
-                      <td className="text-sm py-2 px-2.5">{row.baso}</td>
-                      <td className="text-sm py-2 px-2.5">{row.spk}</td>
+                      <td className="text-sm py-2 px-2.5">{row.file_spk}</td>
                       <td className="text-sm py-2 px-2.5">{row.ev_dtg}</td>
                       <td className="text-sm py-2 px-2.5">{row.ev_pro}</td>
                       <td className="text-sm py-2 px-2.5">{row.ev_fin}</td>
                       <td className="text-sm py-2 px-2.5">
-                        <button onClick={() => hapusFinish(row.id)} className="text-red-500 hover:text-red-700">Hapus</button>
+                        <button
+                          onClick={() => hapusFinish(row.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          Hapus
+                        </button>
                       </td>
                     </tr>
                   ))

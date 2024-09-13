@@ -91,26 +91,26 @@ function DetailPembelianReturnDinarpos() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <Typography variant="small">Nama Barang</Typography>
+          <Typography variant="small" className="font-poppins font-normal">Nama Barang</Typography>
           <p className="mt-2">
             {barang.map((row, idx) => (
               <span key={idx}>{row.namaBarang} || </span>
             ))}
           </p>
           <hr /> <br />
-          <Typography variant="small">Total Bayar Barang</Typography>
+          <Typography variant="small" className="font-poppins font-normal">Total Bayar Barang</Typography>
           <p className="mt-2">{formatRupiah(ttlBayarBrg)}</p>
           <hr /> <br />
-          <Typography variant="small">Pembayaran</Typography>
+          <Typography variant="small" className="font-poppins font-normal">Pembayaran</Typography>
           <p className="mt-2">{formatRupiah(pembayaran)}</p>
           <hr /> <br />
-          <Typography variant="small">Potongan</Typography>
+          <Typography variant="small" className="font-poppins font-normal">Potongan</Typography>
           <p className="mt-2">{formatRupiah(potongan)}</p>
           <hr /> <br />
-          <Typography variant="small">Total Belanja</Typography>
+          <Typography variant="small" className="font-poppins font-normal">Total Belanja</Typography>
           <p className="mt-2">{formatRupiah(ttlBelanja)}</p>
           <hr /> <br />
-          <Typography variant="small">Kembalian</Typography>
+          <Typography variant="small" className="font-poppins font-normal">Kembalian</Typography>
           <p className="mt-2">{formatRupiah(kembalian)}</p>
           <hr /> <br />
           <a href="/pembelian_return_dinarpos">
