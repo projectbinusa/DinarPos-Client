@@ -171,14 +171,6 @@ import PrintKunjungan from "./views/itc/printkunjungan/PrinterKunjungan.js";
 import ByMonthKunjungan from "./views/itc/by_month_kunjungan/ByMonthKunjungann.js";
 import DailyRepost from "./views/itc/dailyreport/DailyReport.js";
 import DetailKunjunganHari from "./views/itc/detailkunjunganperhari/DetailKunjunganHari.js";
-import FilterOmzet from "./views/itc/omzet/FilterOmzet"
-import PlanningPage from "./views/itc/planning/PlanningPage.js";
-import DealFinish from "./views/itc/dealfinish/DealFinish.js";
-import LaporanPlanning from "./views/itc/laporanplanning/LaporanPlanning.js";
-import Ijin from "./views/itc/ijin/ijin.js";
-import AddIjin from "./views/itc/ijin/AddIjin.js";
-import Omzet from "./views/itc/omzet/Omzet.js";
-import AddOmzet from "./views/itc/omzet/AddOmzet.js"
 
 
 function App() {
@@ -1130,50 +1122,6 @@ function App() {
             <PrivateRoute
               path="/print_kunjungan"
               component={PrintKunjungan}
-              isAuthenticated={true}
-            />
-             {/* PLANNING */}
-             <PrivateRoute
-              path="/planning_page"
-              component={PlanningPage}
-              isAuthenticated={true}
-            />
-             <PrivateRoute
-              path="/laporan_planning"
-              component={LaporanPlanning}
-              isAuthenticated={true}
-            />
-            {/* DATAFINISH */}
-            <PrivateRoute
-              path="/deal_finish"
-              component={ DealFinish}
-              isAuthenticated={true}
-            />
-             {/* IJIN */}
-             <PrivateRoute
-              path="/ijin"
-              component={Ijin}
-              isAuthenticated={true}
-            />
-            <PrivateRoute
-              path="/add_ijin"
-              component={AddIjin}
-              isAuthenticated={true}
-            />
-              {/* OMZET */}
-              <PrivateRoute
-              path="/omzet"
-              component={ Omzet}
-              isAuthenticated={true}
-            />
-             <PrivateRoute
-              path="/add_omzet"
-              component={ AddOmzet}
-              isAuthenticated={true}
-            />
-             <PrivateRoute
-              path="/filter_omzet"
-              component={ FilterOmzet}
               isAuthenticated={true}
             />
           </Switch>

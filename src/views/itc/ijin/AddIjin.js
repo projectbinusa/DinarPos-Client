@@ -179,22 +179,14 @@ function AddIjin() {
               </div>
             </div>
             <div className="mt-10 flex gap-4">
-              <Button
-                variant="gradient"
-                color="blue"
-                type="submit"
-                className="font-popins font-medium"
-              >
+              <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
                 <span>Simpan</span>
               </Button>
-              <Button
-                variant="text"
-                color="gray"
-                className="mr-1 font-popins font-medium"
-                onClick={() => history.push("/ijin")}
-              >
-                <span>Kembali</span>
-              </Button>
+              <a href="/ijin">
+                <Button variant="text" color="gray" className="mr-1 font-popins font-medium">
+                  <span>Kembali</span>
+                </Button>
+              </a>
             </div>
           </form>
         </main>

@@ -4,7 +4,7 @@ import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {  TrashIcon } from "@heroicons/react/24/outline";
 import { API_IJIN } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";

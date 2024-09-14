@@ -9,13 +9,13 @@ import {
   Breadcrumbs,
   Option,
 } from "@material-tailwind/react";
-import { useHistory } from "react-router-dom"; // Menggunakan useHistory
+import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 
 function AddOmzet() {
-  const history = useHistory(); // Inisialisasi dengan useHistory
-  const [tgl, settgl] = useState(""); // Setter untuk tanggal
+  const history = useHistory();
+  const [tgl, settgl] = useState("");
   const [selectedITC, setSelectedITC] = useState("");
   const [omzet, setomzet] = useState("");
   const [customer, setcustomer] = useState("");
@@ -30,7 +30,8 @@ function AddOmzet() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    // Validasi form
     if (!tgl || !selectedITC || !omzet || !customer) {
       Swal.fire({
         icon: "warning",
@@ -46,20 +47,14 @@ function AddOmzet() {
     formData.append("selectedITC", selectedITC);
     formData.append("omzet", omzet);
     formData.append("customer", customer);
-  
-    // Debug: log the FormData
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
 
     try {
       const response = await axios.post(`${API_OMZET}/add`, formData, {
         headers: {
-          // Hapus content-type karena axios akan otomatis menentukannya saat menggunakan FormData
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
         },
       });
-      
+
       Swal.fire({
         icon: "success",
         title: "Data Berhasil Ditambahkan!",
@@ -71,36 +66,45 @@ function AddOmzet() {
       console.error("Error:", error);
       handleAxiosError(error);
     }
-};
-
+  };
 
   const handleAxiosError = (error) => {
-    if (error.response && error.response.status === 405) {
-      Swal.fire({
-        icon: "error",
-        title: "Metode Tidak Diizinkan!",
-        text: "Silakan cek metode HTTP yang digunakan atau kontak admin.",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } else if (error.response && error.response.status === 400) {
-      Swal.fire({
-        icon: "error",
-        title: "Data Sudah Ada!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+    if (error.response) {
+      if (error.response.status === 405) {
+        Swal.fire({
+          icon: "error",
+          title: "Metode Tidak Diizinkan!",
+          text: "Silakan cek metode HTTP yang digunakan atau kontak admin.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else if (error.response.status === 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Data Sudah Ada!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Tambah Data Gagal!",
+          text: error.response.data.message || "Terjadi kesalahan.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     } else {
       Swal.fire({
         icon: "error",
-        title: "Tambah Data Gagal!",
-        text: error.response?.data?.message || "Terjadi kesalahan.",
+        title: "Network Error!",
+        text: "Gagal terhubung ke server.",
         showConfirmButton: false,
         timer: 1500,
       });
     }
   };
-  
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -128,10 +132,8 @@ function AddOmzet() {
         </div>
 
         <div className="bg-white shadow-lg p-6 rounded-lg">
-          <form onSubmit={handleSubmit} className="space-y-4"> {/* Ganti addOmzet dengan handleSubmit */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-4">
-              <div className="w-full lg:w-[50%]">
-              </div>
               <div className="w-full lg:w-[50%]">
                 <Input
                   variant="outlined"
@@ -139,7 +141,7 @@ function AddOmzet() {
                   type="date"
                   label="Tanggal"
                   value={tgl}
-                  onChange={(e) => settgl(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => settgl(e.target.value)}
                   required
                 />
               </div>
@@ -150,7 +152,7 @@ function AddOmzet() {
                   type="number"
                   label="Jumlah Omzet"
                   value={omzet}
-                  onChange={(e) => setomzet(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => setomzet(e.target.value)}
                   required
                 />
               </div>
@@ -161,7 +163,7 @@ function AddOmzet() {
                   type="text"
                   label="Nama Customer"
                   value={customer}
-                  onChange={(e) => setcustomer(e.target.value)} // Gunakan setter yang benar
+                  onChange={(e) => setcustomer(e.target.value)}
                   required
                 />
               </div>
@@ -170,7 +172,7 @@ function AddOmzet() {
                   variant="static"
                   label="ITC"
                   value={selectedITC}
-                  onChange={(value) => setSelectedITC(value)} // Ubah e.target.value menjadi value langsung
+                  onChange={(value) => setSelectedITC(value)}
                   required
                 >
                   <Option value="">ALL</Option>
@@ -179,11 +181,16 @@ function AddOmzet() {
                   <Option value="ITC3">ITC3</Option>
                 </Select>
               </div>
-              <div className="flex items-end">
-                <Button type="submit" color="blue" className="w-full lg:w-auto">
-                  Tambah
+              <div className="mt-10 flex gap-4">
+                  <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
+                    <span>Simpan</span>
+                  </Button>
+                  <a href="/omzet">
+                <Button variant="text" color="gray" className="mr-1 font-popins font-medium">
+                  <span>Kembali</span>
                 </Button>
-              </div>
+              </a>
+            </div>
             </div>
           </form>
         </div>

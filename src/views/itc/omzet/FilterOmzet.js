@@ -11,6 +11,10 @@ function Omzet() {
   const [selectedITC, setSelectedITC] = useState(""); // State untuk ITC
   const [filter, setFilter] = useState([]);
   const [omzetData, setOmzetData] = useState({
+    name: "",
+    month: "",
+    amount: 0,
+    percentage: "0%",
   });
   const tableRef = useRef(null);
 
@@ -53,7 +57,19 @@ function Omzet() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       console.log("Data fetched:", response.data.data);
+
+      // Set data ke state filter dan omzetData
       setFilter(response.data.data);
+
+      // Asumsi response punya data omzet spesifik, misalnya di index pertama
+      if (response.data.data.length > 0) {
+        setOmzetData({
+          name: response.data.data[0].name,
+          month: response.data.data[0].month,
+          amount: response.data.data[0].amount,
+          percentage: response.data.data[0].percentage,
+        });
+      }
     } catch (error) {
       console.log("get all", error);
     }
@@ -98,48 +114,48 @@ function Omzet() {
             Data Omzet
           </Typography>
         </div>
-     
+
         <main className="bg-white shadow-md rounded-lg p-6">
-        <div className="flex flex-col lg:flex-row items-center gap-4 mb-6">
-          <div className="w-full lg:w-auto max-w-xs">
-            <select
-              value={selectedMonth}
-              onChange={handleMonthChange}
-              className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-            >
-              <option value="">Pilih Bulan Tahun</option>
-              {monthOptions.map((month) => (
-                <option key={month} value={month}>
-                  {month}
-                </option>
-              ))}
-            </select>
-          </div>
+          <div className="flex flex-col lg:flex-row items-center gap-4 mb-6">
+            <div className="w-full lg:w-auto max-w-xs">
+              <select
+                value={selectedMonth}
+                onChange={handleMonthChange}
+                className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              >
+                <option value="">Pilih Bulan Tahun</option>
+                {monthOptions.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="w-full lg:w-auto max-w-xs">
-            <Select
-              variant="outlined"
-              label="Pilih ITC"
-              value={selectedITC}
-              onChange={(value) => setSelectedITC(value)}
-              className="focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <Option value="">ALL</Option>
-              <Option value="ITC1">ITC1</Option>
-              <Option value="ITC2">ITC2</Option>
-              <Option value="ITC3">ITC3</Option>
-            </Select>
-          </div>
+            <div className="w-full lg:w-auto max-w-xs">
+              <Select
+                variant="outlined"
+                label="Pilih ITC"
+                value={selectedITC}
+                onChange={(e) => setSelectedITC(e.target.value)} // Perbaikan onChange
+                className="focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <Option value="">ALL</Option>
+                <Option value="ITC1">ITC1</Option>
+                <Option value="ITC2">ITC2</Option>
+                <Option value="ITC3">ITC3</Option>
+              </Select>
+            </div>
 
-          {/* Button GO */}
-          <Button
-            variant="gradient"
-            color="blue"
-            className="font-poppins font-medium w-full lg:w-auto"
-            onClick={handleGoClick}
-          >
-            GO
-          </Button>
+            {/* Button GO */}
+            <Button
+              variant="gradient"
+              color="blue"
+              className="font-poppins font-medium w-full lg:w-auto"
+              onClick={handleGoClick}
+            >
+              GO
+            </Button>
           </div>
 
           {/* Omzet Card */}

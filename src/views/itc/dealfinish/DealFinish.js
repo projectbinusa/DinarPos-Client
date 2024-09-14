@@ -9,85 +9,52 @@ import Swal from "sweetalert2";
 
 function DataFinish() {
   const tableRef = useRef(null);
-  const [finish, setFinish] = useState([]);
+  const [finish, setfinish] = useState([]);
+  const [level, setLevel] = useState("");
 
-  // Fungsi inisialisasi DataTables
   const initializeDataTable = () => {
-    // Hancurkan tabel jika sudah diinisialisasi sebelumnya
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+    if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
     }
-
-    // Inisialisasi ulang DataTables dengan data terbaru
     $(tableRef.current).DataTable({
-      data: finish.map((row, index) => [
-        index + 1,
-        row.bast,
-        row.baut,
-        row.baso,
-        row.spk,
-        row.ev_dtg,
-        row.ev_pro,
-        row.ev_fin,
-        null, // Ini untuk kolom aksi (hapus)
-      ]),
-      columns: [
-        { title: "No" },
-         { title: "Bast" },
-        { title: "Baut" },
-        { title: "Baso" },
-        { title: "Spk" },
-        { title: "Ev_Datang" },
-        { title: "Ev_Proses" },
-        { title: "Ev_Finish" },
-        { title: "Aksi" },
-      ],
-      columnDefs: [
-        {
-          targets: -1,
-          data: null,
-          defaultContent:
-            "<button class='hapus-btn text-red-500 hover:text-red-700'>Hapus</button>",
-        },
-      ],
-    });
-
-    // Event listener untuk tombol hapus
-    $(tableRef.current).on("click", ".hapus-btn", function () {
-      const row = $(this).closest("tr");
-      const rowData = $(tableRef.current).DataTable().row(row).data();
-      hapusFinish(rowData[0]); // Menggunakan ID dari data row
+      responsive: true,
+      autoWidth: false,
+      searching: true,
+      paging: true,
+      ordering: true,
+      lengthChange: true,
+      pageLength: 10,
     });
   };
 
-  const GetAllFinish = async () => {
+  const getAllFinish = async () => {
     try {
       const response = await axios.get(`${API_FINISH}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      if (response.status === 200) {
-        setFinish(response.data.data || []); // Pastikan response.data.data ada
-      } else {
-        console.error("Error fetching data:", response);
-      }
+      setfinish(response.data.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.log("get all", error);
     }
   };
-  
+
+  const fetchLevel = () => {
+    setLevel(localStorage.getItem("level"));
+  };
+
   useEffect(() => {
-    GetAllFinish();
+    getAllFinish();
+    fetchLevel();
   }, []);
 
- useEffect(() => {
-  if (finish.length > 0) {
-    initializeDataTable(); 
-  }
-}, [finish]);
+  useEffect(() => {
+    if (finish.length > 0) {
+      initializeDataTable();
+    }
+  }, [finish]);
 
-  // Fungsi hapus data
   const hapusFinish = async (id) => {
-    Swal.fire({
+    const result = await Swal.fire({
       title: "Apakah Anda Ingin Menghapus?",
       text: "Perubahan data tidak bisa dikembalikan!",
       icon: "warning",
@@ -96,35 +63,45 @@ function DataFinish() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Hapus",
       cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`${API_FINISH}/delete/${id}`, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` }
-          })
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Dihapus!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            // Update state setelah menghapus data
-            setFinish(finish.filter((item) => item.id !== id));
-          })
-          .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              title: "Gagal!",
-              text: "Hapus Data Finish Gagal!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            console.log(err);
-          });
-      }
     });
+  
+    if (result.isConfirmed) {
+      try {
+        // Mengirim request penghapusan ke server
+        await axios.delete(`${API_FINISH}/${id}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+  
+        // Menampilkan pesan sukses
+        Swal.fire({
+          icon: "success",
+          title: "Dihapus!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+  
+        // Mengupdate state ijin dengan menghapus data yang sudah dihapus
+        setfinish((ijin) => ijin.filter((item) => item.id !== id));
+  
+      } catch (err) {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Hapus Ijin Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    }
   };
+
+  let dashboard = "";
+  if (level === "Superadmin") {
+    dashboard = "dashboard";
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service";
+  }
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">

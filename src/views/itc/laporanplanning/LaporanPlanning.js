@@ -79,7 +79,7 @@ function LaporanPlanning() {
                   variant="outlined"
                   color="blue"
                   type="date"
-                  label="Tanggal Akhir"
+                  label="Tanggal Akhirr"
                   value={tgl} // Ubah value dari settgl menjadi tgl
                   onChange={(e) => settgl(e.target.value)}
                   required

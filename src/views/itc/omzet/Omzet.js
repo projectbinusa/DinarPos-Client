@@ -75,7 +75,7 @@ function Omzet() {
           });
           Swal.fire({
             icon: "success",
-            title: "Dihapus!",
+            title: "Dihapus!!",
             showConfirmButton: false,
             timer: 1500,
           });
