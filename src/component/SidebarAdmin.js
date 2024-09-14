@@ -1531,7 +1531,7 @@ function SidebarAdmin() {
                       Planning
                     </ListItem>
                   </a>
-                  <a href="/kunjungan_marketting">
+                  <a href="/daily_report">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       Daily Report
                     </ListItem>
@@ -3176,7 +3176,7 @@ function SidebarAdmin() {
                     Planning
                   </ListItem>
                 </a>
-                <a href="/kunjungan_marketting">
+                <a href="/daily_report">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Daily Report
                   </ListItem>
@@ -3237,11 +3237,6 @@ function SidebarAdmin() {
               <></>
             )}
 
-            <a href="/daily_report">
-              <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                Daily Repost
-              </ListItem>
-            </a>
             <a href="/lap_kunjungan">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 Lap Kunjungan
@@ -3252,7 +3247,6 @@ function SidebarAdmin() {
                 By Month Kunjungan
               </ListItem>
             </a>
-
             <a href="/ubah_password">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 ubah password

@@ -179,6 +179,7 @@ import LapSync from "./views/itc/laporan/LapSync.js";
 import LapDisiplin from "./views/itc/laporan/LapDisiplin.js";
 import Preparation from "./views/itc/laporan/Preparation.js";
 import DetailCustomer from "./views/admin/data_user/customer/DetailCustomer.js";
+import InputKunjungan from "./views/itc/kunjungan/InputKunjungan.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1060,7 +1061,7 @@ function App() {
               component={DetailCustomer}
               isAuthenticated={true}
             />
-            
+
             {/* ITC */}
             <PrivateRoute
               path="/data_itc"
@@ -1102,7 +1103,7 @@ function App() {
               component={DetailKunjunganHari}
               isAuthenticated={true}
             />
-                        <PrivateRoute
+            <PrivateRoute
               path="/planning_marketting"
               component={DataPlanning}
               isAuthenticated={true}
@@ -1115,6 +1116,11 @@ function App() {
             <PrivateRoute
               path="/input_planning"
               component={InputPlanning}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/input_kunjungan"
+              component={InputKunjungan}
               isAuthenticated={true}
             />
             <PrivateRoute
@@ -1133,7 +1139,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/daily_repost"
+              path="/daily_report"
               component={DailyRepost}
               isAuthenticated={true}
             />

@@ -2,7 +2,7 @@ import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../component/SidebarAdmin";
 import $ from "jquery";
-import { API_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../utils/BaseUrl";
+import { API_CUSTOMER, API_IZIN, API_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -300,9 +300,103 @@ function ExportLaporan() {
     const [startIzin, setstartIzin] = useState("");
     const [endIzin, setendIzin] = useState("");
 
+    const exportIzin = async (e) => {
+        if (startIzin === "" || endIzin === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Masukkan tanggal!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_IZIN}/export?tglAkhir=${endIzin}&tglAwal=${startIzin}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Rekap Izin Periode ${formatDate(startIzin)} s.d ${formatDate(endIzin)}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+
     // EXPORT LAP SALESMAN CUSTOMER
     const [startSalesmanC, setstartSalesmanC] = useState("");
     const [endSalesmanC, setendSalesmanC] = useState("");
+
+    const exportSalesmanC = async (e) => {
+        if (startSalesmanC === "" || endSalesmanC === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Masukkan tanggal!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_CUSTOMER}/export/excel?tglAkhir=${endSalesmanC}&tglAwal=${startSalesmanC}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Rekap Salesman Customer Periode ${formatDate(startSalesmanC)} s.d ${formatDate(endSalesmanC)}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
 
     // EXPORT LAP SALESMAN CUSTOMER CP
     const [startSalesmanCP, setstartSalesmanCP] = useState("");
@@ -669,7 +763,7 @@ function ExportLaporan() {
                                     type="date"
                                     onChange={(e) => setendIzin(e.target.value)}
                                 /> <br />
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium" onClick={exportIzin}>Submit</Button>
                             </div>
                         </div>
 
@@ -694,7 +788,7 @@ function ExportLaporan() {
                                     type="date"
                                     onChange={(e) => setendSalesmanC(e.target.value)}
                                 /> <br />
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium" onClick={exportSalesmanC}>Submit</Button>
                             </div>
                         </div>
 

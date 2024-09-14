@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, Dialog, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { API_CUSTOMER } from "../../../../utils/BaseUrl";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import $ from "jquery";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import ModalTambahCustomerCp from "../../modal/ModalTambahCustomerCp";
 
 function DetailCustomer() {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(!open);
+
     const tableRef = useRef();
     const initializeDataTable = () => {
         if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
@@ -47,7 +52,7 @@ function DetailCustomer() {
                 jurusan: res.jurusan
             })
             console.log(response.data.data);
-            
+
         } catch (error) {
             console.log("get all", error);
         }
@@ -127,7 +132,12 @@ function DetailCustomer() {
                         </div>
                         <div>
                             <Typography variant="small" className="font-poppins font-normal">Internet / Web</Typography>
-                            <p className="mt-2">{customer.internet} / {customer.web}</p>
+                            <div className="mt-2 flex gap-2">
+                                <p>{customer.internet === "Y" ? (<span><CheckIcon className="w-6 h-6 black" /></span>)
+                                    : customer.internet === "T" ? (<span><XMarkIcon className="w-6 h-6 black" /></span>) : (<span>-</span>)
+                                }</p> / <p>{customer.web === "Y" ? (<span><CheckIcon className="w-6 h-6 black" /></span>)
+                                    : customer.web === "T" ? (<span><XMarkIcon className="w-6 h-6 black" /></span>) : (<span>-</span>)}</p>
+                            </div>
                             <hr /> <br />
                         </div>
                         <div>
@@ -142,7 +152,7 @@ function DetailCustomer() {
                         </div>
                         <div>
                             <Typography variant="small" className="font-poppins font-normal">UNBK</Typography>
-                            <p className="mt-2">{customer.unbk}</p>
+                            <p className="mt-2">{customer.unbk === "Y" ? (<>Sudah</>) : customer.unbk === "T" ? (<>Belum</>) : (<>-</>)}</p>
                             <hr /> <br />
                         </div>
                         <div>
@@ -155,7 +165,7 @@ function DetailCustomer() {
                         <Typography variant="paragraph" className="uppercase font-poppins font-normal">
                             Data CUSTOMER CP
                         </Typography>
-                        <Button variant="gradient" color="blue" className="font-poppins font-medium">Tambah customer CP</Button>
+                        <Button variant="gradient" color="blue" className="font-poppins font-medium" onClick={handleOpen}>Tambah customer CP</Button>
                     </div>  <br />
                     <div className="rounded my-5 p-2 w-full overflow-auto">
                         <table
@@ -177,6 +187,11 @@ function DetailCustomer() {
                         </table></div>
                 </main>
             </div>
+            {/* MODAL TAMBAH CUSTOMER CP */}
+            <Dialog open={open} handler={handleOpen} size="lg">
+                <ModalTambahCustomerCp handleOpen={handleOpen} />
+            </Dialog>
+            {/* END MODAL TAMBAH CUSTOMER CP */}
         </section>
     )
 }

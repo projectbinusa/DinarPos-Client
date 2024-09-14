@@ -17,7 +17,21 @@ function UbahPassword() {
   const [newPass, setnewPass] = useState("");
   const [konfirmNewPass, setkonfirmNewPass] = useState("");
 
-  const id = localStorage.getItem("id");
+  const [level, setlevel] = useState("");
+  const [id, setid] = useState(0);
+
+  const idPengguna = Decrypt();
+  useEffect(() => {
+    axios.get(`${API_PENGGUNA}/` + idPengguna, {
+      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+    }).then((res) => {
+      const response = res.data.data;
+      setlevel(response.levelPengguna);
+      setid(response.idPengguna);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [idPengguna])
 
   const history = useHistory();
 
@@ -84,21 +98,6 @@ function UbahPassword() {
         }
       });
   };
-
-
-  const [level, setlevel] = useState("");
-
-  const idPengguna = Decrypt()
-  useEffect(() => {
-    axios.get(`${API_PENGGUNA}/` + idPengguna, {
-      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    }).then((res) => {
-      const response = res.data.data;
-      setlevel(response.levelPengguna)
-    }).catch((err) => {
-      console.log(err);
-    })
-  }, [idPengguna])
 
   let dashboard = "";
 
