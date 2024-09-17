@@ -149,6 +149,7 @@ export const API_KUNJUNGAN_DATE_BETWEEN_SALESMAN = `${url}/kunjungan/date/betwee
 export const API_PLANNING = `${url}/planning`;
 // IJIN
 export const API_IZIN = `${url}/ijin`;
+export const API_OMZET = `${url}/omzet`;
 
 // ALAMAT
 export const API_PROV = `${url}/prov`;

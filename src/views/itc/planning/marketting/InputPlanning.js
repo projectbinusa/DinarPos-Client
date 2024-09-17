@@ -35,11 +35,12 @@ function InputPlanning() {
         pihak: "",
         ket: "",
         idCustomer: "",
-        idPlan: ""
+        idPlan: "",
+        namaSalesman: ""
     });
 
-    const dataToEditPlanning = (terakhir_update, nama, jenis, kab, kec, pihak, ket, idCustomer, idPlan) => {
-        setdataToEdit({ terakhir_update: terakhir_update, nama: nama, jenis: jenis, kab: kab, kec: kec, pihak: pihak, ket: ket, idCustomer: idCustomer, idPlan: idPlan })
+    const dataToEditPlanning = (terakhir_update, nama, jenis, kab, kec, pihak, ket, idCustomer, idPlan, namaSalesman) => {
+        setdataToEdit({ terakhir_update: terakhir_update, nama: nama, jenis: jenis, kab: kab, kec: kec, pihak: pihak, ket: ket, idCustomer: idCustomer, idPlan: idPlan, namaSalesman: namaSalesman })
     }
 
     // ADD PLANNING
@@ -166,6 +167,9 @@ function InputPlanning() {
     // ALL PLANNING
     const getAll = async () => {
         try {
+            // const response = await axios.get(`${API_PLANNING}`, {
+            //     headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            // });
             const response = await axios.get(`${API_PLANNING}/salesman/date?id_salesman=${salesmanId}&tanggal=${date}`, {
                 headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
             });
@@ -522,7 +526,7 @@ function InputPlanning() {
                                                                     <div className="flex flex-col lg:flex-row gap-3">
                                                                         <IconButton size="md" color="light-blue" onClick={() => {
                                                                             handleOpen();
-                                                                            dataToEditPlanning(res.updated_date, res.customer.nama_customer, res.customer.jenis, res.customer.kabKot.nama_kabkot, res.customer.kec.nama_kec, res.bertemu, res.ket, res.customer.id, res.idPlan);
+                                                                            dataToEditPlanning(res.updated_date, res.customer.nama_customer, res.customer.jenis, res.customer.kabKot.nama_kabkot, res.customer.kec.nama_kec, res.bertemu, res.ket, res.customer.id, res.idPlan, res.salesman.namaSalesman);
                                                                         }}
                                                                         >
                                                                             <PencilIcon className="w-6 h-6 white" />
@@ -545,7 +549,7 @@ function InputPlanning() {
                 </main>
             </div>
             <Dialog open={open} handler={handleOpen} size="lg">
-                <ModalEditPlanning handleOpen={handleOpen} terakhirUpdate={dataToEdit.terakhir_update} nama={dataToEdit.nama} jenis={dataToEdit.jenis} kab={dataToEdit.kab} kec={dataToEdit.kec} pihak={dataToEdit.pihak} ket={dataToEdit.ket} idCustomer={dataToEdit.idCustomer} idPlan={dataToEdit.idPlan}/>
+                <ModalEditPlanning handleOpen={handleOpen} terakhirUpdate={dataToEdit.terakhir_update} nama={dataToEdit.nama} jenis={dataToEdit.jenis} kab={dataToEdit.kab} kec={dataToEdit.kec} pihak={dataToEdit.pihak} ket={dataToEdit.ket} idCustomer={dataToEdit.idCustomer} idPlan={dataToEdit.idPlan} namaSalesman={dataToEdit.namaSalesman}/>
             </Dialog>
         </section>
     )

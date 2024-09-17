@@ -1,16 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Dialog, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, Dialog, IconButton, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { API_CUSTOMER } from "../../../../utils/BaseUrl";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API_CUSTOMER, API_CUSTOMER_CP } from "../../../../utils/BaseUrl";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import $ from "jquery";
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import ModalTambahCustomerCp from "../../modal/ModalTambahCustomerCp";
+import Swal from "sweetalert2";
 
 function DetailCustomer() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open);
+
+    const history = useHistory();
 
     const tableRef = useRef();
     const initializeDataTable = () => {
@@ -64,6 +67,39 @@ function DetailCustomer() {
         }
     }, [param.id]);
 
+    // DELETE CUSTOMER CP
+    const deleteCustomerCp = async (id) => {
+        Swal.fire({
+            title: "Apakah Anda Ingin Menghapus?",
+            text: "Perubahan data tidak bisa dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Hapus",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .delete(`${API_CUSTOMER_CP}/` + id, {
+                        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    })
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Dihapus!",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        setTimeout(() => {
+                            history.push("/data_customer_cp");
+                            window.location.reload();
+                        }, 1500);
+                    });
+            }
+        });
+    };
 
     return (
         <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -184,7 +220,30 @@ function DetailCustomer() {
                                     <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                                 </tr>
                             </thead>
-                        </table></div>
+                            {/* <tbody>
+                                <tr>
+                                    <td className="text-sm py-2 px-3">{down.no_hp}</td>
+                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                        <div className="flex flex-col lg:flex-row gap-3">
+                                            <a href={"/edit_customer_cp/" + down.id}>
+                                                <IconButton size="md" color="light-blue">
+                                                    <PencilIcon className="w-6 h-6 white" />
+                                                </IconButton>
+                                            </a>
+                                            <IconButton
+                                                size="md"
+                                                color="red"
+                                                type="button"
+                                                onClick={() => deleteCustomerCp(down.id)}
+                                            >
+                                                <TrashIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody> */}
+                        </table>
+                    </div>
                 </main>
             </div>
             {/* MODAL TAMBAH CUSTOMER CP */}

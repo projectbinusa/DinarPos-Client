@@ -1503,7 +1503,7 @@ function SidebarAdmin() {
                       Deal Finish
                     </ListItem>
                   </a>
-                  <a href="/laporan_itc">
+                  <a href="/laporan_admin_itc">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       Laporan
                     </ListItem>
@@ -3080,7 +3080,7 @@ function SidebarAdmin() {
                     Deal Finish
                   </ListItem>
                 </a>
-                <a href="/laporan_itc">
+                <a href="/laporan_admin_itc">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Laporan
                   </ListItem>
@@ -3236,12 +3236,6 @@ function SidebarAdmin() {
             ) : (
               <></>
             )}
-
-            <a href="/lap_kunjungan">
-              <ListItem className="px-3 py-2 text-sm rounded uppercase">
-                Lap Kunjungan
-              </ListItem>
-            </a>
             <a href="/by_month_kunjungan">
               <ListItem className="px-3 py-2 text-sm rounded uppercase">
                 By Month Kunjungan

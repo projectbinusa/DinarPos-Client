@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, IconButton, Input, Option, Select, Textarea, Typography } from "@material-tailwind/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { API_CUSTOMER, API_CUSTOMER_CP, API_ITC, API_KUNJUNGAN, API_PENGGUNA, API_PLANNING } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Decrypt from "../../../component/Decrypt";
@@ -32,7 +32,7 @@ function InputKunjungan() {
     const [cp, setcp] = useState("");
     const [tujuan, settujuan] = useState("");
     const [infoDpt, setinfoDpt] = useState("");
-    const [idPlan, setidPlan] = useState("");
+    const [idPlan, setidPlan] = useState(0);
     const [foto, setfoto] = useState(0);
     const [tglDeal, settglDeal] = useState("");
     const [lokasiLat, setlokasiLat] = useState("");
@@ -189,9 +189,9 @@ function InputKunjungan() {
     };
 
     // DATA CUSTOMER
-    const getCustomer = async () => {
+    const getCustomer = async (value) => {
         try {
-            const response = await axios.get(`${API_CUSTOMER}/${customerId2}`, {
+            const response = await axios.get(`${API_CUSTOMER}/${value}`, {
                 headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
             });
             const res = response.data.data;
@@ -207,16 +207,37 @@ function InputKunjungan() {
         }
     };
 
+    const getCustomerByPlan = async (value) => {
+        try {
+            const response = await axios.get(`${API_PLANNING}/${value}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data.customer;
+            setcustomerId2(res.id);
+            setcustomer({
+                terakhir_update: formatDate(res.updated_date),
+                jenis: res.jenis,
+                kab: res.kabKot.nama_kabkot,
+                kec: res.kec.nama_kec,
+                nama: res.nama_customer
+            })
+        } catch (error) {
+            console.log("get all", error);
+        }
+    };
+
     useEffect(() => {
         if (customerId2 !== 0) {
-            getCustomer();
+            getCustomer(customerId2);
+        } else if (idPlan !== 0) {
+            getCustomerByPlan(idPlan)
         }
-    }, [customerId2]);
+    }, [customerId2, idPlan]);
 
     // ALL PLANNING
     const getAll = async () => {
         try {
-            const response = await axios.get(`${API_PLANNING}/salesman/date?id_salesman=${salesmanId}&tanggal=${date}`, {
+            const response = await axios.get(`${API_PLANNING}/notinkunjungan?id_salesman=${salesmanId}&tanggal=${date}`, {
                 headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
             });
             setplanning(response.data.data);
@@ -226,10 +247,27 @@ function InputKunjungan() {
     };
 
     useEffect(() => {
-        if (date !== "") {
+        if (date !== "" && kategori === "Plan") {
             getAll();
         }
-    }, [date]);
+    }, [date, kategori]);
+
+    const getAllKunjungan = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/date/salesman?id_salesman=${salesmanId}&tanggal=${date}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setkunjungan(response.data.data);
+        } catch (error) {
+            console.log("get all", error);
+        }
+    };
+
+    useEffect(() => {
+        if (date !== "") {
+            getAllKunjungan()
+        }
+    }, [date])
 
     // ADD KUNJUNGAN 
     const addKunjungan = async (e) => {
@@ -240,7 +278,21 @@ function InputKunjungan() {
         formData.append("deal", deal);
         formData.append("id_salesman", salesmanId);
         formData.append("waktuPengadaan", waktu);
-        formData.append("waktuPengadaan", waktu);
+        formData.append("id_customer", customerId2);
+        formData.append("peluang", peluang);
+        formData.append("tujuan", tujuan);
+        formData.append("cp", cp);
+        formData.append("infoDpt", infoDpt);
+        formData.append("id_plan", idPlan);
+        formData.append("foto", foto);
+        formData.append("tanggal_deal", tglDeal);
+        formData.append("lokasiLat", lokasiLat);
+        formData.append("tgl", tgl);
+        formData.append("serviceTt", serviceTt);
+        formData.append("action", action);
+        formData.append("visit", visit);
+        formData.append("lokasiLon", lokasiLon);
+        formData.append("nVisit", nVisit);
 
         Swal.fire({
             title: "Yakin sudah input dengan benar?",
@@ -253,13 +305,16 @@ function InputKunjungan() {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios
-                    .delete(`${API_KUNJUNGAN}/add/` + formData, {
-                        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    .post(`${API_KUNJUNGAN}/add`, formData, {
+                        headers: {
+                            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+                            "content-type": "multipart/form-data"
+                        },
                     })
                     .then(() => {
                         Swal.fire({
                             icon: "success",
-                            title: "Dihapus!",
+                            title: "Data Berhasil Ditambahkan!",
                             showConfirmButton: false,
                             timer: 1500,
                         });
@@ -270,7 +325,7 @@ function InputKunjungan() {
                     }).catch((err) => {
                         Swal.fire({
                             icon: "error",
-                            title: "Hapus Data Gagal!",
+                            title: "Tambah Data Gagal!",
                             showConfirmButton: false,
                             timer: 1500,
                         });
@@ -383,6 +438,9 @@ function InputKunjungan() {
                                         <Option value="Non Plan">Non Plan</Option>
                                     </Select>
                                     <br />
+                                </div>
+
+                                {kategori === "Non Plan" ? (<>
                                     <div>
                                         <p className="font-medium">Pilih Customer</p>
                                         <div>
@@ -432,25 +490,25 @@ function InputKunjungan() {
                                             </Button>
                                         </div>
                                     </div>
-                                </div>
-                                {customerId2 !== 0 ? (<>
+                                </>) : kategori === "Plan" ? (<>
+                                    <div className="w-full my-5">
+                                        <Select
+                                            label="Plan"
+                                            variant="static"
+                                            color="blue"
+                                            size="lg"
+                                            onChange={(selectedOption) => setidPlan(selectedOption)}
+                                            required>
+                                            <Option value="" disabled>Pilih</Option>
+                                            {planning.map((res) => (
+                                                <Option value={res.idPlan.toString()} key={res.idPlan}>{res.customer.nama_customer}</Option>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                </>) : (<></>)}
+
+                                {customerId2 !== 0 || idPlan !== 0 ? (<>
                                     <br /> <br />
-                                    {kategori === "Plan" ? (
-                                        <div className="w-full mb-8">
-                                            <p className="font-medium">Pilih</p>
-                                            <Select
-                                                variant="static"
-                                                color="blue"
-                                                size="lg"
-                                                onChange={(selectedOption) => setidPlan(selectedOption)}
-                                                required
-                                            >
-                                                <Option value="" disabled>Pilih</Option>
-                                                <Option value="Plan">Plan</Option>
-                                                <Option value="Non Plan">Non Plan</Option>
-                                            </Select>
-                                        </div>
-                                    ) : (<></>)}
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                         <Input variant="static"
                                             color="blue"
@@ -588,7 +646,7 @@ function InputKunjungan() {
                                             } />
                                     </div>
                                     <br />
-                                    <Button variant="gradient" color="blue" type="button" className="font-popins font-medium">
+                                    <Button variant="gradient" color="blue" type="button" onClick={addKunjungan} className="font-popins font-medium">
                                         Tambah
                                     </Button>
                                 </>) : (<></>)}
@@ -617,20 +675,52 @@ function InputKunjungan() {
                                                     <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                                                 </tr>
                                             </thead>
-                                            {/* <tbody>
-                                                {kunjungan.map((res, idx) => (
-                                                    <tr key={idx}>
-
-                                                    </tr>
-                                                ))}
-                                            </tbody> */}
+                                            <tbody>
+                                                {kunjungan.length > 0 ? (
+                                                    kunjungan.map((res, idx) => (
+                                                        <tr key={idx}>
+                                                            <td className="text-sm w-[4%]">{idx + 1}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.nama_customer}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.jenis}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.kabKot.nama_kabkot} / {res.customer.kec.nama_kec}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.tujuan}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.action}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.infoDpt}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.cp}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.nVisit}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.visit}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.peluang}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.deal}</td>
+                                                            <td className="text-sm py-2 px-3">{res.customer.deal}</td>
+                                                            <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                                {formatDate(res.timestamp) === formattedDate ? (<>
+                                                                    <div className="flex flex-col lg:flex-row gap-3">
+                                                                        <IconButton size="md" color="green">
+                                                                            <InformationCircleIcon className="w-6 h-6 white" />
+                                                                        </IconButton>
+                                                                        <IconButton size="md" color="red">
+                                                                            <TrashIcon className="w-6 h-6 white" />
+                                                                        </IconButton>
+                                                                    </div>
+                                                                </>) : (<></>)}</td>
+                                                        </tr>
+                                                    ))) : (<>
+                                                        <tr>
+                                                            <td
+                                                                colSpan="13"
+                                                                className="text-center capitalize py-3 bg-gray-100"
+                                                            >
+                                                                Tidak ada data
+                                                            </td>
+                                                        </tr></>)}
+                                            </tbody>
                                         </table></div>
                                 </>) : (<></>)}
                             </>)}
                     </div>
                 </main>
-            </div>
-        </section>
+            </div >
+        </section >
     )
 }
 

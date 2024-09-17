@@ -2,7 +2,7 @@ import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../component/SidebarAdmin";
 import $ from "jquery";
-import { API_CUSTOMER, API_IZIN, API_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../utils/BaseUrl";
+import { API_CUSTOMER, API_IZIN, API_KUNJUNGAN, API_OMZET, API_PLANNING, API_SALESMAN } from "../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -280,7 +280,7 @@ function ExportLaporan() {
             }
         }
     }
-    // EXPORT LAP REPORT
+    // AND EXPORT LAP REPORT
 
     // EXPORT LAP SYNC
     const [startSync, setstartSync] = useState("");
@@ -291,6 +291,86 @@ function ExportLaporan() {
     const [startOmzet, setstartOmzet] = useState("");
     const [endOmzet, setendOmzet] = useState("");
     const [itcOmzet, setitcOmzet] = useState(0);
+
+    // ALL ITC
+    const [valuesOmzet, setvaluesOmzet] = useState("");
+    const [optionsOmzet, setoptionsOmzet] = useState([]);
+    const [currentPageOmzet, setCurrentPageOmzet] = useState(1);
+
+    const handleOmzet = async () => {
+        if (valuesOmzet.trim() !== "") {
+            const response = await fetch(
+                `${API_SALESMAN}/pagination?limit=10&page=${currentPageOmzet}&search=${valuesOmzet}&sort=1`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                }
+            );
+            const data = await response.json();
+            setoptionsOmzet(data.data);
+        } else {
+            return;
+        }
+    };
+
+    useEffect(() => {
+        handleOmzet();
+    }, [currentPageOmzet, valuesOmzet]);
+
+    const handleChangeOmzet = (event) => {
+        setvaluesOmzet(event.target.value);
+        setCurrentPageOmzet(1);
+    };
+    // END ALL ITC
+
+    const exportOmzet = async (e) => {
+        if (startOmzet === "" || endOmzet === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Masukkan tanggal!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_OMZET}/export/pimpinan?id_salesman=${itcOmzet}&tglAkhir=${endOmzet}&tglAwal=${startOmzet}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Laporan Omzet ${namaSalesman(itcReport)} Periode ${formatDate(startReport)} s.d ${formatDate(endReport)}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+
+
+    // AND EXPORT LAP OMZET
 
     // EXPORT LAP REVIEW
     const [startReview, setstartReview] = useState("");
@@ -674,14 +754,50 @@ function ExportLaporan() {
                                     type="date"
                                     onChange={(e) => setendSync(e.target.value)}
                                 /> <br />
-                                <Input
-                                    label="ITC"
-                                    variant="static"
-                                    color="blue"
-                                    size="lg"
-                                    type="date"
-                                /> <br />
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <div className="flex gap-2 items-end">
+                                    <Input
+                                        label="ITC"
+                                        variant="static"
+                                        color="blue"
+                                        list="salesmano-list"
+                                        id="salesmano"
+                                        name="salesmano"
+                                        onChange={(event) => {
+                                            handleChangeOmzet(event);
+                                            setitcOmzet(event.target.value);
+                                        }}
+                                        placeholder="Pilih ITC"
+                                    />
+                                    <datalist id="salesmano-list">
+                                        {optionsOmzet.length > 0 && (
+                                            <>
+                                                {optionsOmzet.map((option) => (
+                                                    <option value={option.id} key={option.id}>
+                                                        {option.namaSalesman}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        )}
+                                    </datalist>
+
+                                    <div className="flex gap-2">
+                                        <button
+                                            className="text-sm bg-gray-400 px-1"
+                                            onClick={() => setCurrentPageOmzet(currentPageOmzet - 1)}
+                                            disabled={currentPageOmzet === 1}
+                                        >
+                                            Prev
+                                        </button>
+                                        <button
+                                            className="text-sm bg-gray-400 px-1"
+                                            onClick={() => setCurrentPageOmzet(currentPageOmzet + 1)}
+                                            disabled={!optionsOmzet.length}
+                                        >
+                                            Next
+                                        </button>
+                                    </div>
+                                </div> <br />
+                                <Button variant="gradient" color="blue" type="button" onClick={exportOmzet} className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>
 

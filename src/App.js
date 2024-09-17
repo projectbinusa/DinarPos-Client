@@ -169,7 +169,6 @@ import DetailKunjungan from "./views/itc/kunjungan/DetailKunjungan.js";
 import DataPlanning from "./views/itc/planning/marketting/DataPlanning.js";
 import DetailPlanning from "./views/itc/planning/marketting/DetailPlanning.js";
 import InputPlanning from "./views/itc/planning/marketting/InputPlanning.js";
-import LapKunjungan from "./views/itc/lap_kunjungan/LapKunjungan.js";
 import PrintKunjungan from "./views/itc/printkunjungan/PrinterKunjungan.js";
 import ByMonthKunjungan from "./views/itc/by_month_kunjungan/ByMonthKunjungann.js";
 import DailyRepost from "./views/itc/dailyreport/DailyReport.js";
@@ -180,6 +179,9 @@ import LapDisiplin from "./views/itc/laporan/LapDisiplin.js";
 import Preparation from "./views/itc/laporan/Preparation.js";
 import DetailCustomer from "./views/admin/data_user/customer/DetailCustomer.js";
 import InputKunjungan from "./views/itc/kunjungan/InputKunjungan.js";
+import DetailSync from "./views/itc/laporan/DetailSync.js";
+import LapAdminItc from "./views/itc/laporan/LapAdminItc.js";
+import LapKunjungan from "./views/itc/laporan/LapKunjungan.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1124,8 +1126,8 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/lap_kunjungan"
-              component={LapKunjungan}
+              path="/laporan_admin_itc"
+              component={LapAdminItc}
               isAuthenticated={true}
             />
             <PrivateRoute
@@ -1156,8 +1158,18 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/detail_sync/:id"
+              component={DetailSync}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/laporan_disiplin"
               component={LapDisiplin}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/laporan_kunjungan"
+              component={LapKunjungan}
               isAuthenticated={true}
             />
             <PrivateRoute

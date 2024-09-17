@@ -107,7 +107,7 @@ function Kunjungan() {
                 ) : (
                   <tr>
                     <td
-                      colSpan="30"
+                      colSpan="15"
                       className="text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

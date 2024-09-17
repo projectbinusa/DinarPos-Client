@@ -13,7 +13,6 @@ import {
   DialogHeader,
   Input,
 } from "@material-tailwind/react";
-import ReactSelect from "react-select";
 import {
   AcademicCapIcon,
   AtSymbolIcon,
