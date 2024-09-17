@@ -113,7 +113,6 @@ function DataCustomer() {
       });
   }, [id]);
 
-
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />

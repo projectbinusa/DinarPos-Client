@@ -43,6 +43,37 @@ function InputKunjungan() {
     const [lokasiLon, setlokasiLon] = useState("");
     const [nVisit, setnVisit] = useState("");
 
+    useEffect(() => {
+        let watchId;
+
+        async function requestPermissions() {
+            watchId = navigator.geolocation.watchPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setlokasiLat(latitude);
+                    setlokasiLon(longitude);
+                },
+                (error) => {
+                    console.error("Error:", error);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 1000,
+                }
+            );
+        }
+
+        requestPermissions();
+
+        return () => {
+            // Bersihkan watchPosition saat komponen dilepas.
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+            }
+        };
+    }, []);
+
     const tableRef = useRef();
     const initializeDataTable = () => {
         if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
@@ -205,7 +236,11 @@ function InputKunjungan() {
         e.persist();
         e.preventDefault();
         const formData = new FormData();
-        // formData.append("file", pictureBefore);
+        formData.append("pembayaran", pembayaran);
+        formData.append("deal", deal);
+        formData.append("id_salesman", salesmanId);
+        formData.append("waktuPengadaan", waktu);
+        formData.append("waktuPengadaan", waktu);
 
         Swal.fire({
             title: "Yakin sudah input dengan benar?",

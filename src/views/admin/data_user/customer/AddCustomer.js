@@ -4,7 +4,6 @@ import {
   Breadcrumbs,
   Button,
   Input,
-  Radio,
   Textarea,
   Typography,
 } from "@material-tailwind/react";
@@ -20,7 +19,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { API_CUSTOMER, API_KABKOT, API_PENGGUNA, API_PROV, API_SALESMAN } from "../../../../utils/BaseUrl";
+import { API_CUSTOMER, API_KABKOT, API_KEC, API_PENGGUNA, API_PROV, API_SALESMAN } from "../../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import ReactSelect from "react-select";
@@ -78,7 +77,7 @@ function AddCustomer() {
         id_salesman: salesmanId,
         jenis: jenis,
         nama_customer: namaCustomer,
-        not_telp: noTelp,
+        no_tlp: noTelp,
         id_kabkot: kabkotId,
         id_prov: provId,
         id_kec: kecId,
@@ -99,12 +98,14 @@ function AddCustomer() {
         id_salesman: salesmanId,
         jenis: jenis,
         nama_customer: namaCustomer,
-        not_telp: noTelp,
+        no_tlp: noTelp,
         id_kabkot: kabkotId,
         id_prov: provId,
         id_kec: kecId,
       };
     }
+
+    // console.log(request);
 
     try {
       await axios.post(`${API_CUSTOMER}/itc`, request, {
@@ -204,68 +205,77 @@ function AddCustomer() {
     setCurrentPage(1);
   };
   // END ALL SALESMAN
-
-  // ALL PROV
-  const [valuesProv, setvaluesProv] = useState("");
-  const [optionsProv, setoptionsProv] = useState([]);
-  const [currentPageProv, setCurrentPageProv] = useState(1);
-
-  const handleProv = async () => {
-    if (valuesProv.trim() !== "") {
-      const response = await fetch(
-        `${API_PROV}/pagination?limit=10&page=${currentPageProv}&search=${valuesProv}&sort=namaProv`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      const data = await response.json();
-      setoptionsProv(data.data);
-    } else {
-      return;
-    }
-  };
+  const [prov, setProv] = useState([]);
 
   useEffect(() => {
-    handleProv();
-  }, [currentPageProv, valuesProv]);
-
-  const handleChangeProv = (event) => {
-    setvaluesProv(event.target.value);
-    setCurrentPageProv(1);
-    setprovId(event.target.value);
-  };
-  // END ALL PROV
+    axios
+      .get(`${API_PROV}/all`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      }).then((res) => {
+        setProv(res.data.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+  }, [])
 
   // ALL KABKOT
-  const [valuesKab, setvaluesKab] = useState("");
   const [optionsKab, setoptionsKab] = useState([]);
   const [currentPageKab, setCurrentPageKab] = useState(1);
 
   const handleKab = async () => {
-    if (valuesKab.trim() !== "") {
+    if (provId) {
       const response = await fetch(
-        `${API_KABKOT}/pagination?limit=10&page=${currentPageKab}&search=${valuesKab}&sort=nama_kabkot`,
+        `${API_KABKOT}/pagination?limit=10&page=${currentPageKab}&id_prov=${provId}&sort=id`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
       const data = await response.json();
+      console.log(data);
       setoptionsKab(data.data);
-    } else {
-      return;
     }
   };
 
   useEffect(() => {
-    handleKab();
-  }, [currentPageKab, valuesKab]);
+    if (provId) {
+      handleKab();
+    }
+  }, [provId, currentPageKab]);
 
   const handleChangeKab = (event) => {
-    setvaluesKab(event.target.value);
+    setkabkotId(event.value);
     setCurrentPageKab(1);
-    setkabkotId(event.target.value);
   };
   // END ALL KABKOT
+
+  // ALL KEC
+  const [optionsKec, setoptionsKec] = useState([]);
+  const [currentPageKec, setCurrentPageKec] = useState(1);
+
+  const handleKec = async () => {
+    if (kabkotId) {
+      const response = await fetch(
+        `${API_KEC}/pagination?limit=10&page=${currentPageKec}&id_kabkot=${kabkotId}&sort=id`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsKec(data.data);
+    }
+  };
+
+  useEffect(() => {
+    if (kabkotId) {
+      handleKec();
+    }
+  }, [kabkotId, currentPageKec]);
+
+  const handleChangeKec = (event) => {
+    setkecId(event.value);
+    setCurrentPageKec(1);
+  };
+  // END ALL KEC
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -386,105 +396,105 @@ function AddCustomer() {
                   ]}
                   placeholder="Pilih Jenis"
                   styles={customStyles}
+                  className="w-full"
                   onChange={(selectedOption) => setjenis(selectedOption.value)}
                 />
                 <hr className="mt-1 bg-gray-400 h-[0.1em]" />
               </div>
-              <div className="flex gap-2 items-end">
-                <Input
-                  label="Provinsi"
-                  variant="static"
-                  color="blue"
-                  list="provinsi-list"
-                  id="provinsi"
-                  name="provinsi"
-                  onChange={(event) => {
-                    handleChangeProv(event);
-                  }}
-                  placeholder="Pilih Provinsi"
+              <div>
+                <label
+                  htmlFor="prov"
+                  className="text-[14px] text-blue-gray-400"
+                >
+                  Provinsi
+                </label>
+                <ReactSelect
+                  id="prov"
+                  options={prov.map(option => ({
+                    value: option.idProv,
+                    label: option.namaProv
+                  }))} placeholder="Pilih Provinsi"
+                  styles={customStyles}
+                  className="w-full"
+                  onChange={(selectedOption) => setprovId(selectedOption.value)}
                 />
-                <datalist id="provinsi-list">
-                  {optionsProv.length > 0 && (
-                    <>
-                      {optionsProv.map((option) => (
-                        <option value={option.idProv} key={option.idProv}>
-                          {option.namaProv}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </datalist>
-
-                <div className="flex gap-2">
-                  <button
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPageProv(currentPageProv - 1)}
-                    disabled={currentPageProv === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPageProv(currentPageProv + 1)}
-                    disabled={!optionsProv.length}
-                  >
-                    Next
-                  </button>
+                <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+              </div>
+              <div>
+                <label
+                  htmlFor="kab"
+                  className="text-[14px] text-blue-gray-400"
+                >
+                  Kab / Kot
+                </label>
+                <div className="flex gap-2 items-end">
+                  <div className="w-full">
+                    <ReactSelect
+                      id="kab"
+                      placeholder="Pilih Kab / Kot"
+                      options={optionsKab.map(option => ({
+                        value: option.id,
+                        label: option.nama_kabkot
+                      }))}
+                      styles={customStyles}
+                      onChange={handleChangeKab} />
+                    <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPageKab(currentPageKab - 1)}
+                      disabled={currentPageKab === 1}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPageKab(currentPageKab + 1)}
+                      disabled={!optionsKab.length}
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-2 items-end">
-                <Input
-                  label="Kab / Kota"
-                  variant="static"
-                  color="blue"
-                  list="kab-list"
-                  id="kab"
-                  name="kab"
-                  onChange={(event) => {
-                    handleChangeKab(event);
-                  }}
-                  placeholder="Pilih Kab / Kota"
-                />
-                <datalist id="kab-list">
-                  {optionsKab.length > 0 && (
-                    <>
-                      {optionsKab.map((option) => (
-                        <option value={option.id} key={option.id}>
-                          {option.nama_kabkot}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </datalist>
-
-                <div className="flex gap-2">
-                  <button
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPageKab(currentPageKab - 1)}
-                    disabled={currentPageKab === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    className="text-sm bg-gray-400 px-1"
-                    onClick={() => setCurrentPageKab(currentPageKab + 1)}
-                    disabled={!optionsKab.length}
-                  >
-                    Next
-                  </button>
+              <div>
+                <label
+                  htmlFor="kec"
+                  className="text-[14px] text-blue-gray-400"
+                >
+                  Kecamatan
+                </label>
+                <div className="flex gap-2 items-end">
+                  <div className="w-full">
+                    <ReactSelect
+                      id="kec"
+                      placeholder="Pilih Kecamatan"
+                      options={optionsKec.map(option => ({
+                        value: option.id,
+                        label: option.nama_kec
+                      }))}
+                      styles={customStyles}
+                      onChange={handleChangeKec} />
+                    <hr className="mt-1 bg-gray-400 h-[0.1em]" />
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPageKec(currentPageKec - 1)}
+                      disabled={currentPageKec === 1}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPageKec(currentPageKec + 1)}
+                      disabled={!optionsKec.length}
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="lg:mt-5 ">
-                <Input
-                  label="Kecamatan"
-                  variant="static"
-                  color="blue"
-                  size="lg"
-                  type="number"
-                  placeholder="Masukkan Kecamatan"
-                  onChange={(e) => setkecId(e.target.value)}
-                  icon={<MapPinIcon />}
-                />
               </div>
               <div className="lg:mt-5 lg:col-span-2">
                 <Input
@@ -524,42 +534,6 @@ function AddCustomer() {
               {level === "Marketting" || level === "PimpinanItc" ? (<>
                 <div className="lg:mt-5">
                   <Input
-                    label="Provinsi"
-                    variant="static"
-                    color="blue"
-                    size="lg"
-                    type="number"
-                    placeholder="Masukkan Provinsi"
-                    onChange={(e) => setprovId(e.target.value)}
-                    icon={<MapPinIcon />}
-                  />
-                </div>
-                <div className="lg:mt-5">
-                  <Input
-                    label="Kab / Kot"
-                    variant="static"
-                    color="blue"
-                    size="lg"
-                    type="number"
-                    placeholder="Masukkan Kab / Kot"
-                    onChange={(e) => setkabkotId(e.target.value)}
-                    icon={<MapPinIcon />}
-                  />
-                </div>
-                <div className="lg:mt-5 lg:col-span-2">
-                  <Input
-                    label="Kecamatan"
-                    variant="static"
-                    color="blue"
-                    size="lg"
-                    type="number"
-                    placeholder="Masukkan Kecamatan"
-                    onChange={(e) => setkecId(e.target.value)}
-                    icon={<MapPinIcon />}
-                  />
-                </div>
-                <div className="lg:mt-5">
-                  <Input
                     label="Printer"
                     variant="static"
                     color="blue"
@@ -588,20 +562,20 @@ function AddCustomer() {
                     <div className="flex justify-center">
                       <input
                         type="radio"
-                        id="yes"
-                        value="U"
+                        id="YInternet"
+                        value="Y"
                         onChange={(e) => setinternet(e.target.value)}
                       />
-                      <label htmlFor="yes" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
+                      <label htmlFor="YInternet" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
                     </div>
                     <div className="flex justify-center">
                       <input
                         type="radio"
-                        id="validasi_I"
-                        value="I"
+                        id="TInternet"
+                        value="T"
                         onChange={(e) => setinternet(e.target.value)}
                       />
-                      <label htmlFor="validasi_I" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
+                      <label htmlFor="TInternet" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
                     </div>
                   </div>
                 </div>
@@ -611,20 +585,20 @@ function AddCustomer() {
                     <div className="flex justify-center">
                       <input
                         type="radio"
-                        id="yes"
-                        value="U"
+                        id="YWeb"
+                        value="Y"
                         onChange={(e) => setweb(e.target.value)}
                       />
-                      <label htmlFor="yes" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
+                      <label htmlFor="YWeb" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
                     </div>
                     <div className="flex justify-center">
                       <input
                         type="radio"
-                        id="validasi_I"
-                        value="I"
+                        id="TWeb"
+                        value="T"
                         onChange={(e) => setweb(e.target.value)}
                       />
-                      <label htmlFor="validasi_I" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
+                      <label htmlFor="TWeb" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
                     </div>
                   </div>
                 </div>
@@ -637,7 +611,7 @@ function AddCustomer() {
                       size="lg"
                       type="number"
                       placeholder="Masukkan Jumlah Murid"
-                      // onChange={(e) => setproyektor(e.target.value)}
+                      onChange={(e) => setmurid(e.target.value)}
                       icon={<UsersIcon />}
                     />
                   </div>
@@ -649,7 +623,7 @@ function AddCustomer() {
                       size="lg"
                       type="number"
                       placeholder="Masukkan Jumlah Kelas 3"
-                      // onChange={(e) => setproyektor(e.target.value)}
+                      onChange={(e) => setkls3(e.target.value)}
                       icon={<UsersIcon />}
                     />
                   </div>
@@ -661,7 +635,7 @@ function AddCustomer() {
                       size="lg"
                       type="number"
                       placeholder="Masukkan Jumlah PC"
-                      onChange={(e) => setproyektor(e.target.value)}
+                      onChange={(e) => setpc(e.target.value)}
                       icon={<ComputerDesktopIcon />}
                     />
                   </div>
@@ -671,20 +645,20 @@ function AddCustomer() {
                       <div className="flex justify-center">
                         <input
                           type="radio"
-                          id="yes"
-                          value="Sudah"
-                          onChange={(e) => setinternet(e.target.value)}
+                          id="YUNBK"
+                          value="Y"
+                          onChange={(e) => setunbk(e.target.value)}
                         />
-                        <label htmlFor="yes" className="ml-1">Sudah</label>
+                        <label htmlFor="YUNBK" className="ml-1">Sudah</label>
                       </div>
                       <div className="flex justify-center">
                         <input
                           type="radio"
-                          id="validasi_I"
-                          value="I"
-                          onChange={(e) => setinternet(e.target.value)}
+                          id="TUNBK"
+                          value="T"
+                          onChange={(e) => setunbk(e.target.value)}
                         />
-                        <label htmlFor="validasi_I" className="ml-1">Belum</label>
+                        <label htmlFor="TUNBK" className="ml-1">Belum</label>
                       </div>
                     </div>
                   </div>
@@ -694,7 +668,7 @@ function AddCustomer() {
                       variant="static"
                       label="Jurusan"
                       placeholder="List jurusan apa saja"
-                      // onChange={(e) => setaction(e.target.value)} 
+                      onChange={(e) => setjurusan(e.target.value)}
                       required
                     />
                   </div>

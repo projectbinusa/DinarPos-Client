@@ -17,8 +17,8 @@ function DailyRepost() {
   const [tglAkhir, setTglAkhir] = useState("");
   const [dailyRepost, setDailyRepost] = useState([]);
   const [status, setStatus] = useState("");
-  const [idSalesman, setIdSalesman] = useState(""); // Add state for id_salesman
-  const history = useHistory(); // Use useHistory
+  const [idSalesman, setIdSalesman] = useState("");
+  const history = useHistory();
 
   const getAllDailyRepost = async () => {
     if (!tglAwal || !tglAkhir || !idSalesman) {
@@ -48,10 +48,8 @@ function DailyRepost() {
   const handlePrint = async (e) => {
     e.preventDefault();
 
-    // Pastikan data sudah diambil sebelum navigasi
     await getAllDailyRepost();
 
-    // Navigasi ke halaman PrintKunjungan dengan parameter dinamis
     history.push({
       pathname: `/print_kunjungan`,
       search: `?tgl_awal=${tglAwal}&tgl_akhir=${tglAkhir}`,
@@ -85,7 +83,7 @@ function DailyRepost() {
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
           <div className="flex justify-end">
-            <a href="/add_daily">
+            <a href="/input_kunjungan">
               <Button
                 color="blue"
                 type="submit"
@@ -96,7 +94,7 @@ function DailyRepost() {
             </a>
           </div>
           <form onSubmit={handlePrint}>
-            <div className="mt-1 w-72 lg:w-[50%]">
+            <div className="w-72 lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -107,7 +105,7 @@ function DailyRepost() {
                 required
               />
             </div>
-            <div className="mt-3 w-72 lg:w-[50%]">
+            <div className="mt-8 w-72 lg:w-[50%]">
               <Input
                 variant="static"
                 color="blue"
@@ -118,19 +116,19 @@ function DailyRepost() {
                 required
               />
             </div>
-            <div className="w-full lg:w-1/4 mt-4">
-              <Button
-                className="mt-5 font-poppins font-medium mb-4"
-                color="blue"
-                type="submit"
-              >
-                Print
-              </Button>
+            <Button
+              className="mt-5 font-poppins font-medium mb-4"
+              color="blue"
+              type="submit"
+            >
+              Print
+            </Button>
+            <div className="w-full lg:w-1/2 mt-4">
               <Select
                 id="pilih"
                 label="Waktu Pengadaan"
                 color="blue"
-                variant="outlined"
+                variant="static"
                 value={status}
                 onChange={(value) => setStatus(value)}
                 className="w-full text-sm"
