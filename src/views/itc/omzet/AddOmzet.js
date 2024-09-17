@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { API_OMZET } from "../../../utils/BaseUrl";
-import {
-  Button,
-  Input,
-  Typography,
-  Select,
-  Breadcrumbs,
-  Option,
-} from "@material-tailwind/react";
+import { Button, Input, Typography, Select, Breadcrumbs, Option } from "@material-tailwind/react";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 
 function AddOmzet() {
   const history = useHistory();
-  const [tgl, settgl] = useState("");
+  const [tgl, setTgl] = useState("");
   const [selectedITC, setSelectedITC] = useState("");
-  const [omzet, setomzet] = useState("");
-  const [customer, setcustomer] = useState("");
+  const [omzet, setOmzet] = useState("");
+  const [customer, setCustomer] = useState("");
   const [level, setLevel] = useState("");
 
   useEffect(() => {
@@ -26,7 +19,12 @@ function AddOmzet() {
     setLevel(levelUser);
   }, []);
 
-  const dashboard = level === "Superadmin" ? "dashboard" : (level === "AdminService" ? "dashboard_service" : "");
+  const dashboard =
+    level === "Superadmin"
+      ? "dashboard"
+      : level === "AdminService"
+      ? "dashboard_service"
+      : "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,11 +40,12 @@ function AddOmzet() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("tgl", tgl);
-    formData.append("selectedITC", selectedITC);
-    formData.append("omzet", omzet);
-    formData.append("customer", customer);
+    const formData = {
+      tgl,
+      itc: selectedITC, // Pastikan ini sesuai dengan field yang diharapkan di backend
+      omzet,
+      customer,
+    };
 
     try {
       const response = await axios.post(`${API_OMZET}/add`, formData, {
@@ -141,7 +140,7 @@ function AddOmzet() {
                   type="date"
                   label="Tanggal"
                   value={tgl}
-                  onChange={(e) => settgl(e.target.value)}
+                  onChange={(e) => setTgl(e.target.value)}
                   required
                 />
               </div>
@@ -152,7 +151,7 @@ function AddOmzet() {
                   type="number"
                   label="Jumlah Omzet"
                   value={omzet}
-                  onChange={(e) => setomzet(e.target.value)}
+                  onChange={(e) => setOmzet(e.target.value)}
                   required
                 />
               </div>
@@ -163,7 +162,7 @@ function AddOmzet() {
                   type="text"
                   label="Nama Customer"
                   value={customer}
-                  onChange={(e) => setcustomer(e.target.value)}
+                  onChange={(e) => setCustomer(e.target.value)}
                   required
                 />
               </div>
@@ -182,15 +181,24 @@ function AddOmzet() {
                 </Select>
               </div>
               <div className="mt-10 flex gap-4">
-                  <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
-                    <span>Simpan</span>
-                  </Button>
-                  <a href="/omzet">
-                <Button variant="text" color="gray" className="mr-1 font-popins font-medium">
-                  <span>Kembali</span>
+                <Button
+                  variant="gradient"
+                  color="blue"
+                  type="submit"
+                  className="font-popins font-medium"
+                >
+                  <span>Simpan</span>
                 </Button>
-              </a>
-            </div>
+                <a href="/omzet">
+                  <Button
+                    variant="text"
+                    color="gray"
+                    className="mr-1 font-popins font-medium"
+                  >
+                    <span>Kembali</span>
+                  </Button>
+                </a>
+              </div>
             </div>
           </form>
         </div>

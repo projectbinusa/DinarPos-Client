@@ -4,7 +4,7 @@ import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
-import {  TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { API_IJIN } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -13,6 +13,7 @@ function Ijin() {
   const tableRef = useRef(null);
   const [ijin, setIjin] = useState([]);
   const [level, setLevel] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const initializeDataTable = () => {
     if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
@@ -30,6 +31,7 @@ function Ijin() {
   };
 
   const getAllIjin = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${API_IJIN}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
@@ -37,6 +39,15 @@ function Ijin() {
       setIjin(response.data.data || []);
     } catch (error) {
       console.error("Error fetching data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Gagal memuat data ijin!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,6 +58,12 @@ function Ijin() {
   useEffect(() => {
     getAllIjin();
     fetchLevel();
+
+    return () => {
+      if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -56,48 +73,46 @@ function Ijin() {
   }, [ijin]);
 
   const hapusIjin = async (id) => {
-  const result = await Swal.fire({
-    title: "Apakah Anda Ingin Menghapus?",
-    text: "Perubahan data tidak bisa dikembalikan!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Hapus",
-    cancelButtonText: "Batal",
-  });
+    const result = await Swal.fire({
+      title: "Apakah Anda Ingin Menghapus?",
+      text: "Perubahan data tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hapus",
+      cancelButtonText: "Batal",
+    });
 
-  if (result.isConfirmed) {
-    try {
-      // Mengirim request penghapusan ke server
-      await axios.delete(`${API_IJIN}/${id}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+    if (result.isConfirmed) {
+      try {
+        // Mengirim request penghapusan ke server
+        await axios.delete(`${API_IJIN}/${id}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
 
-      // Menampilkan pesan sukses
-      Swal.fire({
-        icon: "success",
-        title: "Dihapus!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+        // Menampilkan pesan sukses
+        Swal.fire({
+          icon: "success",
+          title: "Dihapus!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
 
-      // Mengupdate state ijin dengan menghapus data yang sudah dihapus
-      setIjin((ijin) => ijin.filter((item) => item.id !== id));
-
-    } catch (err) {
-      console.error(err);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal!",
-        text: "Hapus Ijin Gagal!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+        // Mengupdate state ijin dengan menghapus data yang sudah dihapus
+        setIjin((ijin) => ijin.filter((item) => item.id !== id));
+      } catch (err) {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: "Hapus Ijin Gagal!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     }
-  }
-};
-
+  };
 
   let dashboard = "";
   if (level === "Superadmin") {
@@ -152,7 +167,13 @@ function Ijin() {
                 </tr>
               </thead>
               <tbody>
-                {ijin.length > 0 ? (
+                {loading ? (
+                  <tr>
+                    <td colSpan="5" className="text-sm text-center capitalize py-3 bg-gray-100">
+                      Loading data...
+                    </td>
+                  </tr>
+                ) : ijin.length > 0 ? (
                   ijin.map((row, index) => (
                     <tr key={row.id}>
                       <td className="text-sm w-[4%]">{index + 1}</td>
@@ -174,7 +195,7 @@ function Ijin() {
                             color="red"
                             onClick={() => hapusIjin(row.id)}
                           >
-                            <TrashIcon className="w-6 h-6 white" />
+                            <TrashIcon className="w-6 h-6 text-white" />
                           </IconButton>
                         </div>
                       </td>
@@ -182,7 +203,7 @@ function Ijin() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="text-sm text-center capitalize py-3 bg-gray-100">
+                    <td colSpan="5" className="text-sm text-center capitalize py-3 bg-gray-100">
                       Tidak ada data
                     </td>
                   </tr>

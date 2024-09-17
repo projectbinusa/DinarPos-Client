@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Input, Textarea, Typography } from "@material-tailwind/react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Updated to useNavigate
 import { API_IJIN } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Decrypt from "../../../component/Decrypt";
 
 function AddIjin() {
-  const history = useHistory();
-  const [created_date, setcreated_date] = useState("");
-  const [keterangan, setket] = useState("");
+  const navigate = useNavigate(); // Changed useHistory to useNavigate
+  const [createdDate, setCreatedDate] = useState(""); // Updated variable name
+  const [keterangan, setKeterangan] = useState("");
   const [foto, setFoto] = useState(null);
   const [previewFoto, setPreviewFoto] = useState(null);
   const [level, setLevel] = useState("");
@@ -26,7 +26,7 @@ function AddIjin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!created_date || !keterangan || !foto) {
+    if (!createdDate || !keterangan || !foto) {
       Swal.fire({
         icon: "warning",
         title: "Semua kolom harus diisi!",
@@ -37,14 +37,9 @@ function AddIjin() {
     }
     
     const formData = new FormData();
-    formData.append("created_date", created_date);
+    formData.append("created_date", createdDate);
     formData.append("ket", keterangan);
     formData.append("foto", foto);
-  
-    // Debug: log the FormData
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
   
     try {
       const response = await axios.post(`${API_IJIN}/add`, formData, {
@@ -59,13 +54,13 @@ function AddIjin() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/ijin");
+      navigate("/ijin"); // Updated to use navigate instead of history.push
     } catch (error) {
       console.error("Error:", error);
       handleAxiosError(error);
     }
   };
-  
+
   const handleAxiosError = (error) => {
     if (error.response && error.response.status === 405) {
       Swal.fire({
@@ -92,7 +87,6 @@ function AddIjin() {
       });
     }
   };
-  
 
   const handleFotoChange = (e) => {
     const file = e.target.files[0];
@@ -138,8 +132,8 @@ function AddIjin() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={handleSubmit} encType="multipart/form-data">          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit}>          
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <Input
                   label="Tanggal"
@@ -149,7 +143,7 @@ function AddIjin() {
                   placeholder="Masukkan Tanggal"
                   type="date"
                   name="tanggal"
-                  onChange={(e) => setcreated_date(e.target.value)}
+                  onChange={(e) => setCreatedDate(e.target.value)} // Updated to setCreatedDate
                 />
               </div>
               <div>
@@ -174,7 +168,7 @@ function AddIjin() {
                   variant="static"
                   color="blue"
                   name="keterangan"
-                  onChange={(e) => setket(e.target.value)}
+                  onChange={(e) => setKeterangan(e.target.value)}
                 />
               </div>
             </div>
@@ -182,11 +176,9 @@ function AddIjin() {
               <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
                 <span>Simpan</span>
               </Button>
-              <a href="/ijin">
-                <Button variant="text" color="gray" className="mr-1 font-popins font-medium">
-                  <span>Kembali</span>
-                </Button>
-              </a>
+              <Button variant="text" color="gray" className="mr-1 font-popins font-medium" onClick={() => navigate("/ijin")}>
+                <span>Kembali</span>
+              </Button>
             </div>
           </form>
         </main>

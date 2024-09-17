@@ -70,32 +70,37 @@ function Omzet() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          // Lakukan request DELETE ke API dengan ID
           await axios.delete(`${API_OMZET}/${id}`, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           });
+  
+          // Tampilkan pesan sukses
           Swal.fire({
             icon: "success",
-            title: "Dihapus!!",
+            title: "Data Berhasil Dihapus!",
             showConfirmButton: false,
             timer: 1500,
           });
-
+  
+          // Hapus item dari state omzet
           setOmzet((omzet) => omzet.filter((item) => item.id !== id));
-
+  
         } catch (err) {
+          // Tampilkan pesan error
           Swal.fire({
             icon: "error",
-            title: "Gagal!",
+            title: "Gagal Menghapus!",
             text: "Hapus Omzet Gagal!",
             showConfirmButton: false,
             timer: 1500,
           });
-          console.log(err);
+          console.error(err);
         }
       }
     });
   };
-
+  
   const navigateToAddOmzet = () => {
     history.push("/add_omzet");
   };

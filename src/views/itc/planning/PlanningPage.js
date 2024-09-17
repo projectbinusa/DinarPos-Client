@@ -18,14 +18,13 @@ import {
 function PlanningPage() {
   const tableRef = useRef(null);
   const [planning, setPlanning] = useState([]);
-  const [level, setLevel] = useState("");
   const [filteredPlanning, setFilteredPlanning] = useState([]);
   const [tglAwal, settglAwal] = useState("");
   const [tglAkhir, settglAkhir] = useState("");
   const [filterOption, setFilterOption] = useState("All");
 
   // Inisialisasi DataTable
-  const initializeDataTable = () => {
+  const initializeDataTable = useCallback(() => {
     if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
     }
@@ -38,7 +37,7 @@ function PlanningPage() {
       lengthChange: true,
       pageLength: 10,
     });
-  };
+  }, []);
 
   // Mengambil data dari API
   const getAllIjin = async () => {
@@ -53,21 +52,15 @@ function PlanningPage() {
     }
   };
 
-  // Mengambil level user dari localStorage
-  const fetchLevel = () => {
-    setLevel(localStorage.getItem("level"));
-  };
-
   useEffect(() => {
     getAllIjin();
-    fetchLevel();
   }, []);
 
   useEffect(() => {
-    if (planning.length > 0) {
+    if (filteredPlanning.length > 0) {
       initializeDataTable();
     }
-  }, [planning]);
+  }, [filteredPlanning, initializeDataTable]);
 
   // Fungsi untuk menghapus data
   const hapusPlanning = async (id) => {
@@ -114,6 +107,26 @@ function PlanningPage() {
     }
   };
 
+  // Filter data berdasarkan tanggal dan opsi filter
+  const handleFilter = (e) => {
+    e.preventDefault();
+    
+    let filtered = planning;
+
+    if (tglAwal && tglAkhir) {
+      filtered = filtered.filter(item => 
+        new Date(item.tanggal) >= new Date(tglAwal) &&
+        new Date(item.tanggal) <= new Date(tglAkhir)
+      );
+    }
+
+    if (filterOption !== "All") {
+      filtered = filtered.filter(item => item.filterOption === filterOption);
+    }
+
+    setFilteredPlanning(filtered);
+  };
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">
       <SidebarAdmin />
@@ -123,7 +136,7 @@ function PlanningPage() {
         </Typography>
 
         <div className="bg-white shadow-lg p-6 rounded-lg">
-          <form className="space-y-4">
+          <form onSubmit={handleFilter} className="space-y-4">
             <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
               <div className="w-full lg:w-[45%]">
                 <Input
@@ -152,7 +165,7 @@ function PlanningPage() {
                   variant="static"
                   label="Filter"
                   value={filterOption}
-                  onChange={(e) => setFilterOption(e.target.value)}
+                  onChange={(value) => setFilterOption(value)}
                 >
                   <Option value="All">All</Option>
                   <Option value="Option1">Option1</Option>

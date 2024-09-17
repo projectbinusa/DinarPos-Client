@@ -14,7 +14,7 @@ function LaporanPlanning() {
   const [tgl, settgl] = useState("");
   const [selectedITC, setSelectedITC] = useState("");
   const [planning, setPlanning] = useState([]);
- 
+
   useEffect(() => {
     const fetchPlanningData = async () => {
       try {
@@ -36,6 +36,11 @@ function LaporanPlanning() {
     e.preventDefault();
 
     // Validasi tanggal
+    if (!created_date || !tgl) {
+      alert("Tanggal awal dan akhir harus diisi.");
+      return;
+    }
+
     if (new Date(created_date) > new Date(tgl)) {
       alert("Tanggal akhir harus setelah tanggal awal.");
       return;
@@ -75,22 +80,22 @@ function LaporanPlanning() {
                 />
               </div>
               <div className="w-full lg:w-[50%]">
-              <Input
+                <Input
                   variant="outlined"
                   color="blue"
                   type="date"
-                  label="Tanggal Akhirr"
-                  value={tgl} // Ubah value dari settgl menjadi tgl
+                  label="Tanggal Akhir"
+                  value={tgl} 
                   onChange={(e) => settgl(e.target.value)}
                   required
                 />
               </div>
               <div className="w-full lg:w-[50%]">
-              <Select
+                <Select
                   variant="static"
                   label="ITC"
                   value={selectedITC}
-                  onChange={(value) => setSelectedITC(value)} // Ubah e.target.value menjadi value langsung
+                  onChange={(value) => setSelectedITC(value)}
                   required
                 >
                   <Option value="">ALL</Option>

@@ -21,7 +21,7 @@ function Omzet() {
   const initializeDataTable = () => {
     if (tableRef.current) {
       if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
+        $(tableRef.current).DataTable().destroy(); // Musnahkan DataTable yang ada
       }
 
       $(tableRef.current).DataTable({
@@ -54,7 +54,7 @@ function Omzet() {
   const getAllOmzet = async () => {
     try {
       const response = await axios.get(API_OMZET, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }, // Gunakan standar Bearer token
       });
       console.log("Data fetched:", response.data.data);
 
@@ -137,7 +137,7 @@ function Omzet() {
                 variant="outlined"
                 label="Pilih ITC"
                 value={selectedITC}
-                onChange={(e) => setSelectedITC(e.target.value)} // Perbaikan onChange
+                onChange={(value) => setSelectedITC(value)} // Perbaikan onChange dengan argumen value langsung
                 className="focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <Option value="">ALL</Option>

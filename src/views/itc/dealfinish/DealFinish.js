@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 function DataFinish() {
   const tableRef = useRef(null);
-  const [finish, setfinish] = useState([]);
+  const [finish, setFinish] = useState([]); // perbaikan nama state
   const [level, setLevel] = useState("");
 
   const initializeDataTable = () => {
@@ -29,12 +29,12 @@ function DataFinish() {
 
   const getAllFinish = async () => {
     try {
-      const response = await axios.get(`${API_FINISH}`, {
+      const { data } = await axios.get(`${API_FINISH}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setfinish(response.data.data);
+      setFinish(data.data); // sesuai dengan state yang diinisialisasi
     } catch (error) {
-      console.log("get all", error);
+      console.error("Gagal mengambil data finish:", error);
     }
   };
 
@@ -64,14 +64,14 @@ function DataFinish() {
       confirmButtonText: "Hapus",
       cancelButtonText: "Batal",
     });
-  
+
     if (result.isConfirmed) {
       try {
         // Mengirim request penghapusan ke server
         await axios.delete(`${API_FINISH}/${id}`, {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         });
-  
+
         // Menampilkan pesan sukses
         Swal.fire({
           icon: "success",
@@ -79,16 +79,15 @@ function DataFinish() {
           showConfirmButton: false,
           timer: 1500,
         });
-  
-        // Mengupdate state ijin dengan menghapus data yang sudah dihapus
-        setfinish((ijin) => ijin.filter((item) => item.id !== id));
-  
+
+        // Mengupdate state finish dengan menghapus data yang sudah dihapus
+        setFinish((prevFinish) => prevFinish.filter((item) => item.id !== id));
       } catch (err) {
         console.error(err);
         Swal.fire({
           icon: "error",
           title: "Gagal!",
-          text: "Hapus Ijin Gagal!",
+          text: "Hapus Data Gagal!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -123,7 +122,7 @@ function DataFinish() {
                   <th className="text-sm py-3 px-4 font-semibold">No</th>
                   <th className="text-sm py-3 px-4 font-semibold">Basp</th>
                   <th className="text-sm py-3 px-4 font-semibold">Baut</th>
-                 <th className="text-sm py-3 px-4 font-semibold">Spk</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Spk</th>
                   <th className="text-sm py-3 px-4 font-semibold">Ev_Datang</th>
                   <th className="text-sm py-3 px-4 font-semibold">Ev_Proses</th>
                   <th className="text-sm py-3 px-4 font-semibold">Ev_Finish</th>
@@ -154,7 +153,7 @@ function DataFinish() {
                 ) : (
                   <tr>
                     <td
-                      colSpan="11"
+                      colSpan="8"
                       className="text-center capitalize py-3 bg-gray-200"
                     >
                       Tidak ada data
@@ -171,3 +170,4 @@ function DataFinish() {
 }
 
 export default DataFinish;
+
