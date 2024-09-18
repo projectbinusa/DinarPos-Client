@@ -40,7 +40,7 @@ function PlanningPage() {
   }, []);
 
   // Mengambil data dari API
-  const getAllIjin = async () => {
+  const getAllPlanning = async () => {
     try {
       const response = await axios.get(`${API_PLANNING}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
@@ -53,7 +53,7 @@ function PlanningPage() {
   };
 
   useEffect(() => {
-    getAllIjin();
+    getAllPlanning();
   }, []);
 
   useEffect(() => {
@@ -62,50 +62,6 @@ function PlanningPage() {
     }
   }, [filteredPlanning, initializeDataTable]);
 
-  // Fungsi untuk menghapus data
-  const hapusPlanning = async (id) => {
-    const result = await Swal.fire({
-      title: "Apakah Anda Ingin Menghapus?",
-      text: "Perubahan data tidak bisa dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Hapus",
-      cancelButtonText: "Batal",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        // Mengirim request penghapusan ke server
-        await axios.delete(`${API_PLANNING}/${id}`, {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        });
-
-        // Menampilkan pesan sukses
-        Swal.fire({
-          icon: "success",
-          title: "Dihapus!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        // Mengupdate state dengan menghapus data yang dihapus
-        setPlanning((prev) => prev.filter((item) => item.id !== id));
-        setFilteredPlanning((prev) => prev.filter((item) => item.id !== id));
-
-      } catch (err) {
-        console.error(err);
-        Swal.fire({
-          icon: "error",
-          title: "Gagal!",
-          text: "Hapus Ijin Gagal!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    }
-  };
 
   // Filter data berdasarkan tanggal dan opsi filter
   const handleFilter = (e) => {
@@ -132,7 +88,7 @@ function PlanningPage() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <Typography variant="lead" className="uppercase text-gray-700 mb-4">
-          Planning
+        Data Planning
         </Typography>
 
         <div className="bg-white shadow-lg p-6 rounded-lg">
@@ -172,11 +128,6 @@ function PlanningPage() {
                   <Option value="Option2">Option2</Option>
                 </Select>
               </div>
-              <div className="flex items-end">
-                <Button type="submit" color="blue" className="w-full lg:w-auto">
-                  Cari
-                </Button>
-              </div>
             </div>
           </form>
 
@@ -190,7 +141,6 @@ function PlanningPage() {
                   <th className="text-sm py-2 px-2.5 font-semibold">No</th>
                   <th className="text-sm py-2 px-2.5 font-semibold">Tgl</th>
                   <th className="text-sm py-2 px-2.5 font-semibold">Nama ITC</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Nama Salesman</th>
                   <th className="text-sm py-2 px-2.5 font-semibold">Nama Customer</th>
                   <th className="text-sm py-2 px-2.5 font-semibold">Jenis</th>
                   <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
@@ -201,7 +151,6 @@ function PlanningPage() {
                   <th className="text-sm py-2 px-2.5 font-semibold">Jurusan</th>
                   <th className="text-sm py-2 px-2.5 font-semibold">Pihak Dituju</th>
                   <th className="text-sm py-2 px-2.5 font-semibold">Tujuan</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -211,7 +160,6 @@ function PlanningPage() {
                       <td className="text-sm py-2 px-2.5">{index + 1}</td>
                       <td className="text-sm py-2 px-2.5">{row.tanggal}</td>
                       <td className="text-sm py-2 px-2.5">{row.namaITC}</td>
-                      <td className="text-sm py-2 px-2.5">{row.namaSalesman}</td>
                       <td className="text-sm py-2 px-2.5">{row.namaCustomer}</td>
                       <td className="text-sm py-2 px-2.5">{row.jenis}</td>
                       <td className="text-sm py-2 px-2.5">{row.daerah}</td>
@@ -223,14 +171,6 @@ function PlanningPage() {
                       <td className="text-sm py-2 px-2.5">{row.pihakDituju}</td>
                       <td className="text-sm py-2 px-2.5">{row.tujuan}</td>
                       <td className="text-sm py-2 px-2.5">
-                        <IconButton
-                          size="sm"
-                          color="red"
-                          variant="outlined"
-                          onClick={() => hapusPlanning(row.id)}
-                        >
-                          <TrashIcon className="h-4" />
-                        </IconButton>
                       </td>
                     </tr>
                   ))

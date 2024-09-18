@@ -155,3 +155,14 @@ export const API_PROV = `${url}/prov`;
 export const API_KABKOT = `${url}/kab_kot`;
 export const API_KEC = `${url}/kec`;
 
+// FINISH
+export const API_FINISH = `${url}/deal/finish`;
+
+// IJIN 
+export const API_IJIN = `${url}/ijin`;
+
+// OMZET
+export const API_OMZET = `${url}/omzet`;
+
+// PLANNING EXCEL
+export const API_PLANNING_EXPORT_EXCEL = `${url}/planning/export/excel`;

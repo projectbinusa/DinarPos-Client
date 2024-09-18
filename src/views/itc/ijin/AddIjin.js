@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Input, Textarea, Typography } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom"; // Updated to useNavigate
 import { API_IJIN } from "../../../utils/BaseUrl";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Decrypt from "../../../component/Decrypt";
 
 function AddIjin() {
-  const navigate = useNavigate(); // Changed useHistory to useNavigate
-  const [createdDate, setCreatedDate] = useState(""); // Updated variable name
+  const history = useHistory();
+   const [createdDate, setCreatedDate] = useState(""); // Updated variable name
   const [keterangan, setKeterangan] = useState("");
   const [foto, setFoto] = useState(null);
   const [previewFoto, setPreviewFoto] = useState(null);
@@ -54,12 +54,13 @@ function AddIjin() {
         showConfirmButton: false,
         timer: 1500,
       });
-      navigate("/ijin"); // Updated to use navigate instead of history.push
+      history.push("/ijin");
     } catch (error) {
       console.error("Error:", error);
       handleAxiosError(error);
     }
   };
+
 
   const handleAxiosError = (error) => {
     if (error.response && error.response.status === 405) {
@@ -156,9 +157,6 @@ function AddIjin() {
                   name="foto"
                   onChange={handleFotoChange}
                 />
-                {previewFoto && (
-                  <img src={previewFoto} alt="Preview Foto" className="mt-4 w-48 h-48 object-cover" />
-                )}
               </div>
               <div className="w-full lg:w-[50%]">
                 <Textarea
@@ -173,13 +171,24 @@ function AddIjin() {
               </div>
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
-                <span>Simpan</span>
-              </Button>
-              <Button variant="text" color="gray" className="mr-1 font-popins font-medium" onClick={() => navigate("/ijin")}>
-                <span>Kembali</span>
-              </Button>
-            </div>
+                <Button
+                  variant="gradient"
+                  color="blue"
+                  type="submit"
+                  className="font-popins font-medium"
+                >
+                  <span>Simpan</span>
+                </Button>
+                <a href="/ijin">
+                  <Button
+                    variant="text"
+                    color="gray"
+                    className="mr-1 font-popins font-medium"
+                  >
+                    <span>Kembali</span>
+                  </Button>
+                </a>
+              </div>
           </form>
         </main>
       </div>

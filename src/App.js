@@ -177,6 +177,14 @@ import LapDisiplin from "./views/itc/laporan/LapDisiplin.js";
 import Preparation from "./views/itc/laporan/Preparation.js";
 import DetailCustomer from "./views/admin/data_user/customer/DetailCustomer.js";
 import InputKunjungan from "./views/itc/kunjungan/InputKunjungan.js";
+ import PlanningPage from "./views/itc/planning/PlanningPage.js";
+import DealFinish from "./views/itc/dealfinish/DealFinish.js";
+import LaporanPlanning from "./views/itc/laporanplanning/LaporanPlanning.js";
+import Ijin from "./views/itc/ijin/ijin.js";
+import AddIjin from "./views/itc/ijin/AddIjin.js";
+import Omzet from "./views/itc/omzet/Omzet.js";
+import AddOmzet from "./views/itc/omzet/AddOmzet.js"
+
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1092,6 +1100,45 @@ function App() {
             <PrivateRoute
               path="/detail_kunjungan"
               component={DetailKunjungan}
+              isAuthenticated={true}
+            />
+            {/* PLANNING */}
+            <PrivateRoute
+              path="/planning"
+              component={PlanningPage}
+              isAuthenticated={true}
+            />
+             <PrivateRoute
+              path="/lap_planning"
+              component={LaporanPlanning}
+              isAuthenticated={true}
+            />
+            {/* DATAFINISH */}
+            <PrivateRoute
+              path="/dealfinish"
+              component={ DealFinish}
+              isAuthenticated={true}
+            />
+             {/* IJIN */}
+             <PrivateRoute
+              path="/ijin"
+              component={Ijin}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_ijin"
+              component={AddIjin}
+              isAuthenticated={true}
+            />
+              {/* OMZET */}
+              <PrivateRoute
+              path="/omzet"
+              component={ Omzet}
+              isAuthenticated={true}
+            />
+             <PrivateRoute
+              path="/add_omzet"
+              component={ AddOmzet}
               isAuthenticated={true}
             />
             {/* <PrivateRoute

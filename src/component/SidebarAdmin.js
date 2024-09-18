@@ -2990,6 +2990,11 @@ function SidebarAdmin() {
                     Daily Repost
                   </ListItem>
                 </a>
+                <a href="/planning">
+                  <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                    planning
+                  </ListItem>
+                </a>
                 <a href="/lap_kunjungan">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Lap Kunjungan
@@ -3028,7 +3033,7 @@ function SidebarAdmin() {
                     Customer
                   </ListItem>
                 </a>
-                <a href="/planning">
+                <a href="/lap_planning">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Laporan Planning
                   </ListItem>

@@ -8,10 +8,10 @@ import axios from "axios";
 
 function AddOmzet() {
   const history = useHistory();
-  const [tgl, setTgl] = useState("");
-  const [selectedITC, setSelectedITC] = useState("");
-  const [omzet, setOmzet] = useState("");
-  const [customer, setCustomer] = useState("");
+  const [created_date, setcreated_date] = useState("");
+  const [status, setStatus] = useState("");
+  const [omzet, setomzet] = useState("");
+  const [customer, setcustomer] = useState("");
   const [level, setLevel] = useState("");
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function AddOmzet() {
     e.preventDefault();
 
     // Validasi form
-    if (!tgl || !selectedITC || !omzet || !customer) {
+    if (!created_date || !omzet || !customer) {
       Swal.fire({
         icon: "warning",
         title: "Semua kolom harus diisi!",
@@ -41,8 +41,7 @@ function AddOmzet() {
     }
 
     const formData = {
-      tgl,
-      itc: selectedITC, // Pastikan ini sesuai dengan field yang diharapkan di backend
+      created_date,
       omzet,
       customer,
     };
@@ -139,8 +138,8 @@ function AddOmzet() {
                   color="blue"
                   type="date"
                   label="Tanggal"
-                  value={tgl}
-                  onChange={(e) => setTgl(e.target.value)}
+                  value={created_date}
+                  onChange={(e) => setcreated_date(e.target.value)}
                   required
                 />
               </div>
@@ -151,7 +150,7 @@ function AddOmzet() {
                   type="number"
                   label="Jumlah Omzet"
                   value={omzet}
-                  onChange={(e) => setOmzet(e.target.value)}
+                  onChange={(e) => setomzet(e.target.value)}
                   required
                 />
               </div>
@@ -162,24 +161,28 @@ function AddOmzet() {
                   type="text"
                   label="Nama Customer"
                   value={customer}
-                  onChange={(e) => setCustomer(e.target.value)}
+                  onChange={(e) => setcustomer(e.target.value)}
                   required
                 />
               </div>
-              <div className="w-full lg:w-[50%]">
-                <Select
-                  variant="static"
-                  label="ITC"
-                  value={selectedITC}
-                  onChange={(value) => setSelectedITC(value)}
-                  required
-                >
-                  <Option value="">ALL</Option>
-                  <Option value="ITC1">ITC1</Option>
-                  <Option value="ITC2">ITC2</Option>
-                  <Option value="ITC3">ITC3</Option>
-                </Select>
-              </div>
+              <div className="mt-8">
+              <Select
+                id="pilih"
+                label="Status"
+                color="blue"
+                variant="outlined"
+                required
+                value={status}
+                onChange={(value) => setStatus(value)}
+              >
+                <Option value="">Pilih Status</Option>
+                <Option value="NAMA">Nama</Option>
+                <Option value="USERNAME">Username</Option>
+                <Option value="ALAMAT">Alamat</Option>
+                <Option value="NO TELEFON">No Telefon</Option>
+                <Option value="TARGET">Target</Option>
+              </Select>
+            </div>
               <div className="mt-10 flex gap-4">
                 <Button
                   variant="gradient"
