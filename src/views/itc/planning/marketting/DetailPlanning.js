@@ -71,8 +71,10 @@ function DetailPlanning() {
     };
 
     useEffect(() => {
-        getAll()
-    }, [])
+        if (salesmanId) {
+            getAll()
+        }
+    }, [salesmanId])
 
     useEffect(() => {
         if (planning && planning.length > 0) {
@@ -123,8 +125,7 @@ function DetailPlanning() {
                                     <th className="text-sm py-2 px-3 font-semibold">Nama Customer</th>
                                     <th className="text-sm py-2 px-3 font-semibold">Jenis</th>
                                     <th className="text-sm py-2 px-3 font-semibold">Daerah</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Printer</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Projector</th>
+                                    <th className="text-sm py-2 px-3 font-semibold">Printer / Projector</th>
                                     <th className="text-sm py-2 px-3 font-semibold">Murid / KLS 3</th>
                                     <th className="text-sm py-2 px-3 font-semibold">PC</th>
                                     <th className="text-sm py-2 px-3 font-semibold">UNBK</th>
@@ -141,9 +142,7 @@ function DetailPlanning() {
                                             <td className="text-sm py-2 px-3">{row.customer.nama_customer}</td>
                                             <td className="text-sm py-2 px-3">{row.customer.jenis}</td>
                                             <td className="text-sm py-2 px-3">{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
-                                            <td className="text-sm py-2 px-3">{row.customer.jenis}</td>
-                                            <td className="text-sm py-2 px-3">{row.customer.printer}</td>
-                                            <td className="text-sm py-2 px-3">{row.customer.proyektor}</td>
+                                            <td className="text-sm py-2 px-3">{row.customer.printer} / {row.customer.proyektor}</td>
                                             {row.customer.jenis === "Sekolah" ? (<>
                                                 <td className="text-sm py-2 px-3">{row.customer.jml} / {row.customer.kls3}</td>
                                                 <td className="text-sm py-2 px-3">{row.customer.pc}</td>

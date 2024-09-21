@@ -1158,7 +1158,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/detail_sync/:id"
+              path="/detail_sync/:idSalesman/:tgl"
               component={DetailSync}
               isAuthenticated={true}
             />

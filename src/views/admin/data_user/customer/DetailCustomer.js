@@ -61,11 +61,32 @@ function DetailCustomer() {
         }
     };
 
+    const [cp, setCp] = useState([]);
+
+    const getAllCp = async () => {
+        try {
+            const response = await axios.get(`${API_CUSTOMER_CP}/by-customer/${param.id}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setCp(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     useEffect(() => {
         if (param.id) {
             getCustomer();
+            getAllCp();
         }
     }, [param.id]);
+
+    useEffect(() => {
+        if (cp && cp.length > 0) {
+            initializeDataTable();
+        }
+    }, [cp]);
 
     // DELETE CUSTOMER CP
     const deleteCustomerCp = async (id) => {
@@ -220,28 +241,46 @@ function DetailCustomer() {
                                     <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                                 </tr>
                             </thead>
-                            {/* <tbody>
-                                <tr>
-                                    <td className="text-sm py-2 px-3">{down.no_hp}</td>
-                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
-                                        <div className="flex flex-col lg:flex-row gap-3">
-                                            <a href={"/edit_customer_cp/" + down.id}>
-                                                <IconButton size="md" color="light-blue">
-                                                    <PencilIcon className="w-6 h-6 white" />
-                                                </IconButton>
-                                            </a>
-                                            <IconButton
-                                                size="md"
-                                                color="red"
-                                                type="button"
-                                                onClick={() => deleteCustomerCp(down.id)}
-                                            >
-                                                <TrashIcon className="w-6 h-6 white" />
-                                            </IconButton>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody> */}
+                            <tbody>
+                                {cp.length > 0 ? (
+                                    cp.map((down, idx) => (
+                                        <tr key={idx}>
+                                            <td className="text-sm w-[4%]">{idx + 1}</td>
+                                            <td className="text-sm py-2 px-3">{down.nama_cp}</td>
+                                            <td className="text-sm py-2 px-3">{down.salesman.namaSalesman}</td>
+                                            <td className="text-sm py-2 px-3">{down.jabatan}</td>
+                                            <td className="text-sm py-2 px-3">{down.no_hp}</td>
+                                            <td className="text-sm py-2 px-3">{down.email}</td>
+                                            <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                <div className="flex flex-col lg:flex-row gap-3">
+                                                    <a href={"/edit_customer_cp/" + down.id}>
+                                                        <IconButton size="md" color="light-blue">
+                                                            <PencilIcon className="w-6 h-6 white" />
+                                                        </IconButton>
+                                                    </a>
+                                                    <IconButton
+                                                        size="md"
+                                                        color="red"
+                                                        type="button"
+                                                        onClick={() => deleteCustomerCp(down.id)}
+                                                    >
+                                                        <TrashIcon className="w-6 h-6 white" />
+                                                    </IconButton>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td
+                                            colSpan="7"
+                                            className="text-center capitalize py-3 bg-gray-100"
+                                        >
+                                            Tidak ada data
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
                         </table>
                     </div>
                 </main>
