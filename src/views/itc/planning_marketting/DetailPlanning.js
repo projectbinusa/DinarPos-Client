@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import SidebarAdmin from "../../../../component/SidebarAdmin";
+import SidebarAdmin from "../../../component/SidebarAdmin";
 import $ from "jquery";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
-import Decrypt from "../../../../component/Decrypt";
+import Decrypt from "../../../component/Decrypt";
 import axios from "axios";
-import { API_ITC, API_PENGGUNA, API_PLANNING } from "../../../../utils/BaseUrl";
+import { API_ITC, API_PENGGUNA, API_PLANNING } from "../../../utils/BaseUrl";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 

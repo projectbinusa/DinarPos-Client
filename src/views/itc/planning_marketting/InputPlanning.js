@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
-import SidebarAdmin from "../../../../component/SidebarAdmin";
+import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Dialog, IconButton, Input, Textarea, Typography } from "@material-tailwind/react";
 import { CheckIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { API_CUSTOMER, API_CUSTOMER_CP, API_ITC, API_PENGGUNA, API_PLANNING } from "../../../../utils/BaseUrl";
-import Decrypt from "../../../../component/Decrypt";
+import { API_CUSTOMER, API_CUSTOMER_CP, API_ITC, API_PENGGUNA, API_PLANNING } from "../../../utils/BaseUrl";
+import Decrypt from "../../../component/Decrypt";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";

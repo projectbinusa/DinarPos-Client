@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, IconButton, Input, Typography } from "@material-tailwind/react";
-import $, { get } from "jquery";
 import axios from "axios";
-import { API_ITC, API_PENGGUNA, API_PLANNING } from "../../../../utils/BaseUrl";
-import Decrypt from "../../../../component/Decrypt";
+import React, { useEffect, useRef, useState } from "react";
+import { API_ITC, API_PENGGUNA, API_PLANNING } from "../../../utils/BaseUrl";
+import SidebarAdmin from "../../../component/SidebarAdmin";
+import { Breadcrumbs, Button, IconButton, Input, Typography } from "@material-tailwind/react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import $ from "jquery"
+import Decrypt from "../../../component/Decrypt";
 
 function DataPlanning() {
     const tableRef = useRef(null);

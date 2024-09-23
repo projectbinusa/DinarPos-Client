@@ -310,7 +310,9 @@ function LapAdminItc() {
                     </button>
                   </div>
                 </div> <br />
-                <Button variant="gradient" color="blue" onClick={exportPlanning} className="font-poppins font-medium" type="button">Submit</Button>
+                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
+                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography> <br />
+                <Button variant="gradient" color="blue" onClick={exportPlanning} className="font-poppins font-medium" type="button">Export Planning</Button>
               </div>
             </div>
             <div id="kunjungan" hidden>

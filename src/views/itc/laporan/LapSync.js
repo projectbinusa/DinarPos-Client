@@ -5,6 +5,7 @@ import $ from "jquery";
 import { API_SALESMAN, API_SYNC_KUNJUNGAN, API_SYNC_PLANNING } from "../../../utils/BaseUrl";
 import axios from "axios";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
 
 function LapSync() {
     const tableRef = useRef(null);
@@ -12,14 +13,13 @@ function LapSync() {
     const [tglAwal, settglAwal] = useState("");
     const [tglAkhir, settglAkhir] = useState("");
     const [itcId, setitcId] = useState(0);
+    const [validasi, setvalidasi] = useState(false);
 
     const initializeDataTable = () => {
-        if ($.fn.DataTable.isDataTable(tableRef.current)) {
-            $(tableRef.current).DataTable().destroy();
+        if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable();
         }
-
-        $(tableRef.current).DataTable({});
-    };
+    }
 
     // ALL ITC
     const [values, setvalues] = useState("");
@@ -51,6 +51,7 @@ function LapSync() {
     };
     // END ALL ITC    
 
+    // ALL SYNC
     const getKunjunganSync = async () => {
         try {
             const response = await axios.get(`${API_SYNC_KUNJUNGAN}`, {
@@ -66,6 +67,35 @@ function LapSync() {
     useEffect(() => {
         getKunjunganSync()
     }, [])
+
+    // ALL SYNC BETWEEN
+    const getKunjunganSyncBetweenTanggal = async () => {
+        try {
+            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setLaporan(res);
+            setvalidasi(false)
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // ALL SYNC BETWEEN TGL & ID SALESMAN
+    const getKunjunganSyncBetweenTanggalSalesman = async () => {
+        try {
+            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal_beetwen/salesman?id_salesman=${itcId}&tgl_akhir=${tglAkhir}&tgl_awal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setLaporan(res);
+            setvalidasi(false)
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
 
     const [totalsK, setTotalsK] = useState([]);
     const [totalsP, setTotalsP] = useState([]);
@@ -117,6 +147,29 @@ function LapSync() {
         }
     }, [laporans])
 
+    useEffect(() => {
+        if (validasi || tglAkhir !== "" || tglAwal !== "") {
+            getKunjunganSyncBetweenTanggal();
+        }
+        if (validasi || tglAkhir !== "" || tglAwal !== "" || itcId !== 0) {
+            getKunjunganSyncBetweenTanggalSalesman();
+        }
+    }, [validasi]);
+
+    const filterTangggal = async () => {
+        if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
+            Swal.fire({
+                icon: "warning",
+                title: "Isi Form Terlebih Dahulu!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        setvalidasi(true);
+    };
+
     return (
         <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
             <SidebarAdmin />
@@ -139,7 +192,7 @@ function LapSync() {
                     </Breadcrumbs>
                 </div>
                 <main className="bg-white shadow-lg p-5 my-5 rounded">
-                    <form>
+                    <div>
                         <div className="w-72 lg:w-[50%]">
                             <div className="mt-8">
                                 <Input
@@ -208,11 +261,11 @@ function LapSync() {
                         <Button
                             className="mt-5 font-poppins font-medium"
                             color="blue"
-                            type="submit"
+                            onClick={filterTangggal}
                         >
                             Cari
                         </Button>
-                    </form> <br />
+                    </div> <br />
                     <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
                         <table
                             id="example_data"

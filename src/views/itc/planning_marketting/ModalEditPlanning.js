@@ -1,6 +1,6 @@
 import { Button, DialogBody, DialogFooter, DialogHeader, Input, Textarea } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { API_CUSTOMER, API_PLANNING } from "../../../../utils/BaseUrl";
+import { API_CUSTOMER, API_PLANNING } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";

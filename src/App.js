@@ -166,10 +166,6 @@ import Home from "./views/itc/home/Home.js";
 import Kunjungan from "./views/itc/kunjungan/Kunjungan.js";
 import DealPo from "./views/itc/dealpo/DealPo.js";
 import DetailKunjungan from "./views/itc/kunjungan/DetailKunjungan.js";
-
-import DataPlanning from "./views/itc/planning/marketting/DataPlanning.js";
-import DetailPlanning from "./views/itc/planning/marketting/DetailPlanning.js";
-import InputPlanning from "./views/itc/planning/marketting/InputPlanning.js";
 import PrintKunjungan from "./views/itc/printkunjungan/PrinterKunjungan.js";
 import ByMonthKunjungan from "./views/itc/by_month_kunjungan/ByMonthKunjungann.js";
 import DailyRepost from "./views/itc/dailyreport/DailyReport.js";
@@ -190,6 +186,9 @@ import AddOmzet from "./views/itc/omzet/AddOmzet.js"
 import DetailSync from "./views/itc/laporan/DetailSync.js";
 import LapAdminItc from "./views/itc/laporan/LapAdminItc.js";
 import LapKunjungan from "./views/itc/laporan/LapKunjungan.js";
+import InputPlanning from "./views/itc/planning_marketting/InputPlanning.js";
+import DetailPlanning from "./views/itc/planning_marketting/DetailPlanning.js";
+import DataPlanning from "./views/itc/planning_marketting/DataPlanning.js";
 
 
 function App() {
@@ -1144,10 +1143,10 @@ function App() {
             />
              <PrivateRoute
               path="/add_omzet"
-              component={ AddOmzet}
+              component={AddOmzet}
               isAuthenticated={true}
             />
-            {/* <PrivateRoute
+            <PrivateRoute
               path="/detail_kunjungan_hari"
               component={DetailKunjunganHari}
               isAuthenticated={true}
@@ -1166,7 +1165,7 @@ function App() {
               path="/input_planning"
               component={InputPlanning}
               isAuthenticated={true}
-            /> */}
+            />
             <PrivateRoute
               path="/input_kunjungan"
               component={InputKunjungan}
@@ -1228,8 +1227,17 @@ function App() {
               component={Preparation}
               isAuthenticated={true}
             />
+            <PrivateRoute
+              path="/laporan_sync"
+              component={LapSync}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/export_laporan"
+              component={ExportLaporan}
+              isAuthenticated={true}
+            />
           </Switch>
-
         </main>
       </BrowserRouter>
     </>

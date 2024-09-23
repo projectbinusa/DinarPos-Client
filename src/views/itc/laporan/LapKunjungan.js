@@ -187,7 +187,8 @@ function LapKunjungan() {
                                     <th className="text-sm py-2 px-2.5 font-semibold">Tipe</th>
                                     <th className="text-sm py-2 px-2.5 font-semibold">Deal</th>
                                     <th className="text-sm py-2 px-2.5 font-semibold">Detail</th>
-                                </tr> </thead> </table> </div>
+                                </tr>
+                            </thead> </table> </div>
                 </main>
             </div>
         </section>
