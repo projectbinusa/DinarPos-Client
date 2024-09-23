@@ -166,7 +166,7 @@ function Omzet() {
               ) : (
                 <tr>
                   <td colSpan="5" className="text-sm text-center capitalize py-3 bg-gray-100">
-                    Tidak ada data
+                    Tidak ada  data
                   </td>
                 </tr>
               )}

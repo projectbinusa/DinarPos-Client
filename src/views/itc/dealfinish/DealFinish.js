@@ -73,7 +73,7 @@ function DataFinish() {
               ) : (
                 <tr>
                   <td colSpan="7" className="text-center py-3 bg-gray-200 border">
-                    Tidak ada data
+                    Tidak ada dataa
                   </td>
                 </tr>
               )}

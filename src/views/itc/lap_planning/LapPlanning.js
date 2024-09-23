@@ -55,7 +55,7 @@ function LapPlanning() {
         console.error("Gagal mendapatkan file dari server.");
       }
     } catch (error) {
-      console.error("Error saat mengunduh file:", error);
+      console.error("Error  saat mengunduh file:", error);
     }
   };
 

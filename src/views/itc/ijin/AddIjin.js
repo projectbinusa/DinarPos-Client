@@ -162,7 +162,7 @@ function AddIjin() {
                   color="gray"
                   className="mr-1 font-popins font-medium"
                 >
-                  <span>Kembali</span>
+                  <span>Kembalii</span>
                 </Button>
               </a>
             </div>
