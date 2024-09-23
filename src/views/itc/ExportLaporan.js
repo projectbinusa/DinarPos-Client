@@ -2,7 +2,7 @@ import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../component/SidebarAdmin";
 import $ from "jquery";
-import { API_CUSTOMER, API_IZIN, API_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../utils/BaseUrl";
+import { API_CUSTOMER, API_CUSTOMER_CP, API_IZIN, API_KUNJUNGAN, API_OMZET, API_PLANNING, API_SALESMAN } from "../../utils/BaseUrl";
 import Swal from "sweetalert2";
 import axios from "axios";
 
@@ -280,17 +280,125 @@ function ExportLaporan() {
             }
         }
     }
-    // EXPORT LAP REPORT
+    // AND EXPORT LAP REPORT
 
     // EXPORT LAP SYNC
     const [startSync, setstartSync] = useState("");
     const [endSync, setendSync] = useState("");
     const [itcSync, setitcSync] = useState(0);
 
+    // ALL ITC
+    const [valuesSync, setvaluesSync] = useState("");
+    const [optionsSync, setoptionsSync] = useState([]);
+    const [currentPageSync, setCurrentPageSync] = useState(1);
+
+    const handleSync = async () => {
+        if (valuesSync.trim() !== "") {
+            const response = await fetch(
+                `${API_SALESMAN}/pagination?limit=10&page=${currentPageSync}&search=${valuesSync}&sort=1`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                }
+            );
+            const data = await response.json();
+            setoptionsSync(data.data);
+        } else {
+            return;
+        }
+    };
+
+    useEffect(() => {
+        handleSync();
+    }, [currentPageSync, valuesSync]);
+
+    const handleChangeSync = (event) => {
+        setvaluesSync(event.target.value);
+        setCurrentPageSync(1);
+    };
+    // END ALL ITC    
+
     // EXPORT LAP OMZET
     const [startOmzet, setstartOmzet] = useState("");
     const [endOmzet, setendOmzet] = useState("");
     const [itcOmzet, setitcOmzet] = useState(0);
+
+    // ALL ITC
+    const [valuesOmzet, setvaluesOmzet] = useState("");
+    const [optionsOmzet, setoptionsOmzet] = useState([]);
+    const [currentPageOmzet, setCurrentPageOmzet] = useState(1);
+
+    const handleOmzet = async () => {
+        if (valuesOmzet.trim() !== "") {
+            const response = await fetch(
+                `${API_SALESMAN}/pagination?limit=10&page=${currentPageOmzet}&search=${valuesOmzet}&sort=1`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                }
+            );
+            const data = await response.json();
+            setoptionsOmzet(data.data);
+        } else {
+            return;
+        }
+    };
+
+    useEffect(() => {
+        handleOmzet();
+    }, [currentPageOmzet, valuesOmzet]);
+
+    const handleChangeOmzet = (event) => {
+        setvaluesOmzet(event.target.value);
+        setCurrentPageOmzet(1);
+    };
+    // END ALL ITC
+
+    const exportOmzet = async (e) => {
+        if (startOmzet === "" || endOmzet === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Masukkan tanggal!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_OMZET}/export/pimpinan?id_salesman=${itcOmzet}&tglAkhir=${endOmzet}&tglAwal=${startOmzet}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Laporan Omzet ${namaSalesman(itcReport)} Periode ${formatDate(startReport)} s.d ${formatDate(endReport)}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+    // END EXPORT LAP OMZET
 
     // EXPORT LAP REVIEW
     const [startReview, setstartReview] = useState("");
@@ -401,6 +509,129 @@ function ExportLaporan() {
     // EXPORT LAP SALESMAN CUSTOMER CP
     const [startSalesmanCP, setstartSalesmanCP] = useState("");
     const [endSalesmanCP, setendSalesmanCP] = useState("");
+
+    const exportSalesmanCP = async (e) => {
+        if (startSalesmanCP === "" || endSalesmanCP === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Masukkan tanggal!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_CUSTOMER_CP}/export/excel?tglAkhir=${endSalesmanCP}&tglAwal=${startSalesmanCP}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Report Customer CP.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+
+    // EXPORT GOOGLE CUSTOMER
+    const exportGoogleCustomer = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_CUSTOMER}/export/customer/google`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Report Google Contact Customer.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+
+    // EXPORT GOOGLE CUSTOMER CP
+    const exportGoogleCustomerCP = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_CUSTOMER}/export/customer_cp/google`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Report Google Contact Customer CP.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
 
     return (
         <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -674,13 +905,49 @@ function ExportLaporan() {
                                     type="date"
                                     onChange={(e) => setendSync(e.target.value)}
                                 /> <br />
-                                <Input
-                                    label="ITC"
-                                    variant="static"
-                                    color="blue"
-                                    size="lg"
-                                    type="date"
-                                /> <br />
+                                <div className="flex gap-2 items-end">
+                                    <Input
+                                        label="ITC"
+                                        variant="static"
+                                        color="blue"
+                                        list="salesmansync-list"
+                                        id="salesmansync"
+                                        name="salesmansync"
+                                        onChange={(event) => {
+                                            handleChangeSync(event);
+                                            setitcSync(event.target.value);
+                                        }}
+                                        placeholder="Pilih ITC"
+                                    />
+                                    <datalist id="salesmansync-list">
+                                        {optionsSync.length > 0 && (
+                                            <>
+                                                {optionsSync.map((option) => (
+                                                    <option value={option.id} key={option.id}>
+                                                        {option.namaSalesman}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        )}
+                                    </datalist>
+
+                                    <div className="flex gap-2">
+                                        <button
+                                            className="text-sm bg-gray-400 px-1"
+                                            onClick={() => setCurrentPageSync(currentPageSync - 1)}
+                                            disabled={currentPageSync === 1}
+                                        >
+                                            Prev
+                                        </button>
+                                        <button
+                                            className="text-sm bg-gray-400 px-1"
+                                            onClick={() => setCurrentPageSync(currentPageSync + 1)}
+                                            disabled={!optionsSync.length}
+                                        >
+                                            Next
+                                        </button>
+                                    </div>
+                                </div> <br />
                                 <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>
@@ -706,14 +973,50 @@ function ExportLaporan() {
                                     type="date"
                                     onChange={(e) => setendOmzet(e.target.value)}
                                 /> <br />
-                                <Input
-                                    label="ITC"
-                                    variant="static"
-                                    color="blue"
-                                    size="lg"
-                                    type="date"
-                                /> <br />
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <div className="flex gap-2 items-end">
+                                    <Input
+                                        label="ITC"
+                                        variant="static"
+                                        color="blue"
+                                        list="salesmano-list"
+                                        id="salesmano"
+                                        name="salesmano"
+                                        onChange={(event) => {
+                                            handleChangeOmzet(event);
+                                            setitcOmzet(event.target.value);
+                                        }}
+                                        placeholder="Pilih ITC"
+                                    />
+                                    <datalist id="salesmano-list">
+                                        {optionsOmzet.length > 0 && (
+                                            <>
+                                                {optionsOmzet.map((option) => (
+                                                    <option value={option.id} key={option.id}>
+                                                        {option.namaSalesman}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        )}
+                                    </datalist>
+
+                                    <div className="flex gap-2">
+                                        <button
+                                            className="text-sm bg-gray-400 px-1"
+                                            onClick={() => setCurrentPageOmzet(currentPageOmzet - 1)}
+                                            disabled={currentPageOmzet === 1}
+                                        >
+                                            Prev
+                                        </button>
+                                        <button
+                                            className="text-sm bg-gray-400 px-1"
+                                            onClick={() => setCurrentPageOmzet(currentPageOmzet + 1)}
+                                            disabled={!optionsOmzet.length}
+                                        >
+                                            Next
+                                        </button>
+                                    </div>
+                                </div> <br />
+                                <Button variant="gradient" color="blue" type="button" onClick={exportOmzet} className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>
 
@@ -811,9 +1114,9 @@ function ExportLaporan() {
                                     color="blue"
                                     size="lg"
                                     type="date"
-                                    onChange={(e) => setstartSalesmanCP(e.target.value)}
+                                    onChange={(e) => setendSalesmanCP(e.target.value)}
                                 /> <br />
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <Button variant="gradient" color="blue" type="button" onClick={exportSalesmanCP} className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>
 
@@ -822,7 +1125,7 @@ function ExportLaporan() {
                             <Typography variant="lead" className="capitalize font-medium font-poppins">Google Contact Customer</Typography>
                             <hr /> <br /> <br />
                             <div>
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <Button variant="gradient" color="blue" type="button" onClick={exportGoogleCustomer} className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>
 
@@ -831,7 +1134,7 @@ function ExportLaporan() {
                             <Typography variant="lead" className="capitalize font-medium font-poppins">Google Contact Customer CP</Typography>
                             <hr /> <br /> <br />
                             <div>
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <Button variant="gradient" color="blue" type="button" onClick={exportGoogleCustomerCP} className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>
                     </div>

@@ -54,7 +54,7 @@ function Omzet() {
   const getAllOmzet = async () => {
     try {
       const response = await axios.get(API_OMZET, {
-        headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }, // Gunakan standar Bearer token
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }, // Gunakan standar Bearer token
       });
       console.log("Data fetched:", response.data.data);
 

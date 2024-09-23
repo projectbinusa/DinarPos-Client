@@ -155,6 +155,10 @@ export const API_PROV = `${url}/prov`;
 export const API_KABKOT = `${url}/kab_kot`;
 export const API_KEC = `${url}/kec`;
 
+// SYNC
+export const API_SYNC_KUNJUNGAN = `${url}/kunjungan/sync`;
+export const API_SYNC_PLANNING = `${url}/planning/sync`;
+
 // FINISH
 export const API_FINISH = `${url}/deal/finish`;
 

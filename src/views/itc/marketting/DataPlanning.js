@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react";
-import $ from "jquery";
+import { Breadcrumbs, Button, IconButton, Input, Typography } from "@material-tailwind/react";
+import $, { get } from "jquery";
 import axios from "axios";
 import { API_ITC, API_PENGGUNA, API_PLANNING } from "../../../../utils/BaseUrl";
 import Decrypt from "../../../../component/Decrypt";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 function DataPlanning() {
     const tableRef = useRef(null);
@@ -28,6 +29,7 @@ function DataPlanning() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [salesmanId, setsalesmanId] = useState(0);
+    const [plannings, setplannings] = useState([]);
 
     const id = Decrypt();
     useEffect(() => {
@@ -76,6 +78,55 @@ function DataPlanning() {
         }
     }
 
+    const getAll = async () => {
+        try {
+            const response = await axios.get(`${API_PLANNING}/by-date/salesman?id_salesman=${salesmanId}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setplannings(response.data.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const [totals, setTotals] = useState([]);
+
+    const totalPlanning = async (tgl, idx) => {
+        try {
+            const response = await axios.get(`${API_PLANNING}/salesman/date?id_salesman=${salesmanId}&tanggal=${tgl}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data.length;
+            setTotals(prevTotals => {
+                const newTotals = [...prevTotals];
+                newTotals[idx] = res;
+                return newTotals;
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    useEffect(() => {
+        if (plannings.length > 0) {
+            plannings.forEach((row, idx) => {
+                totalPlanning(row.tgl, idx);
+            });
+        }
+    }, [plannings]);
+
+    useEffect(() => {
+        if (salesmanId) {
+            getAll();
+        }
+    }, [salesmanId])
+
+    useEffect(() => {
+        if (plannings && plannings.length > 0) {
+            initializeDataTable();
+        }
+    }, [plannings])
+
     return (
         <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
             <SidebarAdmin />
@@ -115,7 +166,7 @@ function DataPlanning() {
                                 id="startDate"
                                 label="Tanggal Awal"
                                 color="blue"
-                                variant="outlined"
+                                variant="static"
                                 required
                                 onChange={(e) => setStartDate(e.target.value)}
                                 className="w-full"
@@ -127,7 +178,7 @@ function DataPlanning() {
                                 id="endDate"
                                 label="Tanggal Akhir"
                                 color="blue"
-                                variant="outlined"
+                                variant="static"
                                 required
                                 onChange={(e) => setEndDate(e.target.value)}
                                 className="w-full"
@@ -158,6 +209,35 @@ function DataPlanning() {
                                     <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                {plannings.length > 0 ? (
+                                    plannings.map((row, idx) => {
+                                        return (
+                                            <tr key={idx}>
+                                                <td className="text-sm w-[4%]">{idx + 1}</td>
+                                                <td className="text-sm py-2 px-3">{row.tgl}</td>
+                                                <td className="text-sm py-2 px-3">{totals[idx] !== undefined ? totals[idx] : 'Loading...'}</td>
+                                                <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <a href={"/detail_planning/" + row.tgl}>
+                                                        <IconButton size="md" color="green">
+                                                            <InformationCircleIcon className="w-6 h-6 white" />
+                                                        </IconButton>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                ) : (
+                                    <tr>
+                                        <td
+                                            colSpan="4"
+                                            className="text-sm text-center capitalize py-2 bg-gray-100 "
+                                        >
+                                            Tidak ada data
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
                         </table>
                     </div>
                 </main>

@@ -71,7 +71,7 @@ function Ijin() {
       initializeDataTable();
     }
   }, [ijin]);
-  
+
   const hapusIjin = async (id) => {
     Swal.fire({
       title: "Apakah Anda Ingin Menghapus?",
@@ -85,7 +85,6 @@ function Ijin() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          // Mengirim request penghapusan ke server
           .delete(`${API_IJIN}/${id}`, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
@@ -96,7 +95,7 @@ function Ijin() {
               showConfirmButton: false,
               timer: 1500,
             });
-  
+
             setTimeout(() => {
               window.location.reload();
             }, 1500);
@@ -114,7 +113,7 @@ function Ijin() {
       }
     });
   };
-  
+
   let dashboard = "";
   if (level === "Superadmin") {
     dashboard = "dashboard";
@@ -153,60 +152,48 @@ function Ijin() {
             </Button>
           </a>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
-            <table
-              id="example_data"
-              ref={tableRef}
-              className="rounded-sm table-auto w-full"
-            >
+            <table id="example_data" ref={tableRef} className="table-auto w-full border-collapse rounded-sm">
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Keterangan</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Foto</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">No</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Tanggal</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Keterangan</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Foto</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="5" className="text-sm text-center capitalize py-3 bg-gray-100">
-                      Loading data...
-                    </td>
+                    <td colSpan="5" className="text-sm text-center py-3 bg-gray-100">Loading data...</td>
                   </tr>
                 ) : ijin.length > 0 ? (
                   ijin.map((row, index) => (
-                    <tr key={row.id}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{row.created_date}</td>
-                      <td className="text-sm py-2 px-3">{row.ket}</td>
-                      <td className="text-sm py-2 px-3">
-                        {row.foto && (
+                    <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                      <td className="text-sm py-3 px-4">{index + 1}</td>
+                      <td className="text-sm py-3 px-4">{row.created_date}</td>
+                      <td className="text-sm py-3 px-4">{row.ket}</td>
+                      <td className="text-sm py-3 px-4">
+                        {row.foto ? (
                           <img
-                            src={row.foto}
+                            src={`${API_IJIN}/images/${row.foto}`} // Adjust the path according to your API structure
                             alt="foto"
                             className="w-16 h-16 object-cover"
                           />
+                        ) : (
+                          <span>Tidak ada foto</span>
                         )}
                       </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <IconButton
-                            size="md"
-                            color="red"
-                            onClick={() => hapusIjin(row.id)}
-                          >
-                            <TrashIcon className="w-6 h-6 text-white" />
-                          </IconButton>
-                        </div>
+                      <td className="text-sm py-3 px-4 flex items-center justify-center">
+                        <IconButton size="md" color="red" onClick={() => hapusIjin(row.id)}>
+                          <TrashIcon className="w-6 h-6 text-white" />
+                        </IconButton>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-sm text-center capitalize py-3 bg-gray-100">
-                      Tidak ada data
-                    </td>
+                    <td colSpan="5" className="text-sm text-center py-3 bg-gray-100">Tidak ada data</td>
                   </tr>
                 )}
               </tbody>

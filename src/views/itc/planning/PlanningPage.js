@@ -1,10 +1,6 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import $ from "jquery";
-import "datatables.net";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { TrashIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { API_PLANNING } from "../../../utils/BaseUrl";
 import {
   Button,
@@ -12,32 +8,14 @@ import {
   Typography,
   Select,
   Option,
-  IconButton,
 } from "@material-tailwind/react";
 
 function PlanningPage() {
-  const tableRef = useRef(null);
   const [planning, setPlanning] = useState([]);
   const [filteredPlanning, setFilteredPlanning] = useState([]);
   const [tglAwal, settglAwal] = useState("");
   const [tglAkhir, settglAkhir] = useState("");
   const [filterOption, setFilterOption] = useState("All");
-
-  // Inisialisasi DataTable
-  const initializeDataTable = useCallback(() => {
-    if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      autoWidth: false,
-      searching: true,
-      paging: true,
-      ordering: true,
-      lengthChange: true,
-      pageLength: 10,
-    });
-  }, []);
 
   // Mengambil data dari API
   const getAllPlanning = async () => {
@@ -56,45 +34,39 @@ function PlanningPage() {
     getAllPlanning();
   }, []);
 
-  useEffect(() => {
-    if (filteredPlanning.length > 0) {
-      initializeDataTable();
-    }
-  }, [filteredPlanning, initializeDataTable]);
-
-
   // Filter data berdasarkan tanggal dan opsi filter
   const handleFilter = (e) => {
     e.preventDefault();
-    
+
     let filtered = planning;
 
     if (tglAwal && tglAkhir) {
-      filtered = filtered.filter(item => 
-        new Date(item.tanggal) >= new Date(tglAwal) &&
-        new Date(item.tanggal) <= new Date(tglAkhir)
+      filtered = filtered.filter(
+        (item) =>
+          new Date(item.tanggal) >= new Date(tglAwal) &&
+          new Date(item.tanggal) <= new Date(tglAkhir)
       );
     }
 
     if (filterOption !== "All") {
-      filtered = filtered.filter(item => item.filterOption === filterOption);
+      filtered = filtered.filter((item) => item.filterOption === filterOption);
     }
 
     setFilteredPlanning(filtered);
   };
 
   return (
-    <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">
+    <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <Typography variant="lead" className="uppercase text-gray-700 mb-4">
-        Data Planning
+          Data Planning
         </Typography>
 
         <div className="bg-white shadow-lg p-6 rounded-lg">
           <form onSubmit={handleFilter} className="space-y-4">
             <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
-              <div className="w-full lg:w-[45%]">
+              <div className="w-full lg:w-[30%]">
                 <Input
                   variant="static"
                   color="blue"
@@ -105,7 +77,7 @@ function PlanningPage() {
                   onChange={(e) => settglAwal(e.target.value)}
                 />
               </div>
-              <div className="w-full lg:w-[45%]">
+              <div className="w-full lg:w-[30%]">
                 <Input
                   variant="static"
                   color="blue"
@@ -116,7 +88,7 @@ function PlanningPage() {
                   onChange={(e) => settglAkhir(e.target.value)}
                 />
               </div>
-              <div className="w-full lg:w-1/3">
+              <div className="w-full lg:w-[30%]">
                 <Select
                   variant="static"
                   label="Filter"
@@ -128,55 +100,60 @@ function PlanningPage() {
                   <Option value="Option2">Option2</Option>
                 </Select>
               </div>
+              <div className="w-full lg:w-[10%] flex items-end">
+                <Button
+                  type="submit"
+                  variant="gradient"
+                  color="blue"
+                  className="w-full"
+                >
+                  Cari
+                </Button>
+              </div>
             </div>
           </form>
 
-          <div className="mt-8 overflow-x-auto">
-            <table
-              ref={tableRef}
-              className="min-w-full bg-white border border-gray-300 rounded-lg"
-            >
-              <thead className="bg-blue-500 text-white">
+          <div className="overflow-x-auto mt-6">
+            <table className="w-full table-auto border-collapse">
+              <thead className="bg-blue-600 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-2.5 font-semibold">No</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tgl</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Nama ITC</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Nama Customer</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Jenis</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Printer</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Jumlah Murid</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">PC</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">UNBK</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Jurusan</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Pihak Dituju</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tujuan</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">No</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Tanggal</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Nama ITC</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Nama Customer</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Jenis</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Daerah</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Printer</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Jumlah Murid</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">PC</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">UNBK</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Jurusan</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Pihak Dituju</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">Tujuan</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredPlanning.length > 0 ? (
                   filteredPlanning.map((row, index) => (
                     <tr key={row.id} className="border-t hover:bg-gray-50 transition">
-                      <td className="text-sm py-2 px-2.5">{index + 1}</td>
-                      <td className="text-sm py-2 px-2.5">{row.tanggal}</td>
-                      <td className="text-sm py-2 px-2.5">{row.namaITC}</td>
-                      <td className="text-sm py-2 px-2.5">{row.namaCustomer}</td>
-                      <td className="text-sm py-2 px-2.5">{row.jenis}</td>
-                      <td className="text-sm py-2 px-2.5">{row.daerah}</td>
-                      <td className="text-sm py-2 px-2.5">{row.printer}</td>
-                      <td className="text-sm py-2 px-2.5">{row.jumlahMurid}</td>
-                      <td className="text-sm py-2 px-2.5">{row.pc}</td>
-                      <td className="text-sm py-2 px-2.5">{row.unbk}</td>
-                      <td className="text-sm py-2 px-2.5">{row.jurusan}</td>
-                      <td className="text-sm py-2 px-2.5">{row.pihakDituju}</td>
-                      <td className="text-sm py-2 px-2.5">{row.tujuan}</td>
-                      <td className="text-sm py-2 px-2.5">
-                      </td>
+                      <td className="text-sm py-2 px-3">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{row.created_date}</td>
+                      <td className="text-sm py-2 px-3">{row.namaITC}</td>
+                      <td className="text-sm py-2 px-3">{row.namaCustomer}</td>
+                      <td className="text-sm py-2 px-3">{row.jenis}</td>
+                      <td className="text-sm py-2 px-3">{row.daerah}</td>
+                      <td className="text-sm py-2 px-3">{row.printer}</td>
+                      <td className="text-sm py-2 px-3">{row.jumlahMurid}</td>
+                      <td className="text-sm py-2 px-3">{row.pc}</td>
+                      <td className="text-sm py-2 px-3">{row.unbk}</td>
+                      <td className="text-sm py-2 px-3">{row.jurusan}</td>
+                      <td className="text-sm py-2 px-3">{row.pihakDituju}</td>
+                      <td className="text-sm py-2 px-3">{row.tujuan}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="15" className="text-center py-4">
+                    <td colSpan="13" className="text-center py-4 text-sm text-gray-600">
                       Data tidak ditemukan
                     </td>
                   </tr>

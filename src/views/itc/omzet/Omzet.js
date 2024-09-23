@@ -4,16 +4,14 @@ import "datatables.net";
 import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, IconButton, Breadcrumbs, Typography } from "@material-tailwind/react";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { API_OMZET } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
 
 function Omzet() {
   const tableRef = useRef(null);
   const [omzet, setOmzet] = useState([]);
-  const history = useHistory();
   const [level, setLevel] = useState("");
 
   const initializeDataTable = () => {
@@ -34,7 +32,6 @@ function Omzet() {
       const response = await axios.get(`${API_OMZET}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      console.log("Data Omzet:", response.data.data);
       setOmzet(response.data.data || []);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -44,7 +41,6 @@ function Omzet() {
   const fetchLevel = () => {
     setLevel(localStorage.getItem("level"));
   };
-  
 
   useEffect(() => {
     getAllOmzet();
@@ -99,7 +95,6 @@ function Omzet() {
       }
     });
   };
-  
 
   let dashboard = "";
   if (level === "Superadmin") {
@@ -127,8 +122,8 @@ function Omzet() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/ijin">
-              <span>Ijin</span>
+            <a href="/omzet">
+              <span>Omzet</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -139,55 +134,45 @@ function Omzet() {
             </Button>
           </a>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
-            <table
-              id="example_data"
-              ref={tableRef}
-              className="rounded-sm table-auto w-full"
-            >
-              <thead className="bg-blue-500 text-white">
-                <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Omzet</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Customer</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {omzet.length > 0 ? (
-                  omzet.map((row, index) => (
-                    <tr key={row.id}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{row.created_date}</td>
-                      <td className="text-sm py-2 px-3">{row.omzet}</td>
-                      <td className="text-sm py-2 px-3">{row.customer}</td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <div className="flex flex-row gap-3">
-                          <IconButton
-                            size="md"
-                            color="red"
-                            onClick={() => hapusOmzet(row.id)}
-                          >
-                            <TrashIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="6"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
-                    >
-                      Tidak ada data
+          <table id="example_data" ref={tableRef} className="rounded-sm table-auto w-full">
+            <thead className="bg-blue-500 text-white">
+              <tr>
+                <th className="text-sm py-2 px-3 font-semibold">No</th>
+                <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
+                <th className="text-sm py-2 px-3 font-semibold">Omzet</th>
+                <th className="text-sm py-2 px-3 font-semibold">Salesman</th>
+                <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {omzet.length > 0 ? (
+                omzet.map((row, index) => (
+                  <tr key={row.id}>
+                    <td className="text-sm py-2 px-3">{index + 1}</td>
+                    <td className="text-sm py-2 px-3">
+                      {new Date(row.created_date).toLocaleDateString()}
+                    </td>
+                    <td className="text-sm py-2 px-3">{row.omzet}</td>
+                    {/* Akses property nama dari objek salesman */}
+                    <td className="text-sm py-2 px-3">{row.salesman.namaSalesman}</td>
+                    {/* Kolom aksi untuk tombol hapus */}
+                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                      <IconButton size="md" color="red" onClick={() => hapusOmzet(row.id)}>
+                        <TrashIcon className="w-6 h-6 text-white" />
+                      </IconButton>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-sm text-center capitalize py-3 bg-gray-100">
+                    Tidak ada data
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
         </main>
       </div>
     </section>
