@@ -154,7 +154,7 @@ function PlanningPage() {
                 ) : (
                   <tr>
                     <td colSpan="13" className="text-center py-4 text-sm text-gray-600">
-                      Data tidak  ditemukan
+                      Data tidak ditemukan
                     </td>
                   </tr>
                 )}

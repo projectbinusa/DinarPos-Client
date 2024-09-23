@@ -193,7 +193,7 @@ function Ijin() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-sm text-center py-3 bg-gray-100">Tidak ada dataa</td>
+                    <td colSpan="5" className="text-sm text-center py-3 bg-gray-100">Tidak ada data</td>
                   </tr>
                 )}
               </tbody>

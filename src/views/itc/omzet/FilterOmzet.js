@@ -171,7 +171,7 @@ function Omzet() {
                 Rp. {omzetData.amount}
               </Typography>
               <Typography variant="small" className="text-gray-500">
-                {omzetData.percentage}  dari targett
+                {omzetData.percentage}  dari target
               </Typography>
             </div>
           </Card>
