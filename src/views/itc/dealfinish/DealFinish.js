@@ -2,22 +2,32 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Typography } from "@material-tailwind/react";
-import { API_FINISH } from "../../../utils/BaseUrl";
+import { API_FINISH, API_FINISH_MARKETTING } from "../../../utils/BaseUrl";
 
 function DataFinish() {
-  const [finish, setFinish] = useState([]); // perbaikan nama state
+  const [finish, setFinish] = useState([]); 
   const [level, setLevel] = useState("");
+  const role = localStorage.getItem("role");
 
   const getAllFinish = async () => {
     try {
-      const { data } = await axios.get(`${API_FINISH}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setFinish(data.data); // sesuai dengan state yang diinisialisasi
+      let response;
+      if (role === "USER") {
+        response = await axios.get(`${API_FINISH_MARKETTING}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+      } else {
+        response = await axios.get(`${API_FINISH}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+      }
+
+      setFinish(response.data.data);
     } catch (error) {
       console.error("Gagal mengambil data finish:", error);
     }
   };
+
 
   const fetchLevel = () => {
     setLevel(localStorage.getItem("level"));

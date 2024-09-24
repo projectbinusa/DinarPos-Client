@@ -19,7 +19,14 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { API_CUSTOMER, API_KABKOT, API_KEC, API_PENGGUNA, API_PROV, API_SALESMAN } from "../../../../utils/BaseUrl";
+import {
+  API_CUSTOMER,
+  API_KABKOT,
+  API_KEC,
+  API_PENGGUNA,
+  API_PROV,
+  API_SALESMAN,
+} from "../../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import ReactSelect from "react-select";
@@ -57,7 +64,7 @@ function AddCustomer() {
       })
       .then((res) => {
         const response = res.data.data.levelPengguna;
-        setlevel(response)
+        setlevel(response);
       })
       .catch((err) => {
         console.log(err);
@@ -89,7 +96,7 @@ function AddCustomer() {
         pc: pc,
         proyektor: proyektor,
         unbk: unbk,
-        web: web
+        web: web,
       };
     } else {
       request = {
@@ -211,12 +218,14 @@ function AddCustomer() {
     axios
       .get(`${API_PROV}/all`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      }).then((res) => {
-        setProv(res.data.data);
-      }).catch((err) => {
-        console.log(err);
       })
-  }, [])
+      .then((res) => {
+        setProv(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   // ALL KABKOT
   const [optionsKab, setoptionsKab] = useState([]);
@@ -291,8 +300,7 @@ function AddCustomer() {
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
                 viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+                fill="currentColor">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
@@ -335,15 +343,13 @@ function AddCustomer() {
                   <button
                     className="text-sm bg-gray-400 px-1"
                     onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
+                    disabled={currentPage === 1}>
                     Prev
                   </button>
                   <button
                     className="text-sm bg-gray-400 px-1"
                     onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={!options.length}
-                  >
+                    disabled={!options.length}>
                     Next
                   </button>
                 </div>
@@ -362,8 +368,7 @@ function AddCustomer() {
               <div>
                 <label
                   htmlFor="jenis"
-                  className="text-[14px] text-blue-gray-400"
-                >
+                  className="text-[14px] text-blue-gray-400">
                   Jenis
                 </label>
                 <ReactSelect
@@ -404,16 +409,16 @@ function AddCustomer() {
               <div>
                 <label
                   htmlFor="prov"
-                  className="text-[14px] text-blue-gray-400"
-                >
+                  className="text-[14px] text-blue-gray-400">
                   Provinsi
                 </label>
                 <ReactSelect
                   id="prov"
-                  options={prov.map(option => ({
+                  options={prov.map((option) => ({
                     value: option.idProv,
-                    label: option.namaProv
-                  }))} placeholder="Pilih Provinsi"
+                    label: option.namaProv,
+                  }))}
+                  placeholder="Pilih Provinsi"
                   styles={customStyles}
                   className="w-full"
                   onChange={(selectedOption) => setprovId(selectedOption.value)}
@@ -421,10 +426,7 @@ function AddCustomer() {
                 <hr className="mt-1 bg-gray-400 h-[0.1em]" />
               </div>
               <div>
-                <label
-                  htmlFor="kab"
-                  className="text-[14px] text-blue-gray-400"
-                >
+                <label htmlFor="kab" className="text-[14px] text-blue-gray-400">
                   Kab / Kot
                 </label>
                 <div className="flex gap-2 items-end">
@@ -432,37 +434,33 @@ function AddCustomer() {
                     <ReactSelect
                       id="kab"
                       placeholder="Pilih Kab / Kot"
-                      options={optionsKab.map(option => ({
+                      options={optionsKab.map((option) => ({
                         value: option.id,
-                        label: option.nama_kabkot
+                        label: option.nama_kabkot,
                       }))}
                       styles={customStyles}
-                      onChange={handleChangeKab} />
+                      onChange={handleChangeKab}
+                    />
                     <hr className="mt-1 bg-gray-400 h-[0.1em]" />
                   </div>
                   <div className="flex gap-2">
                     <button
                       className="text-sm bg-gray-400 px-1"
                       onClick={() => setCurrentPageKab(currentPageKab - 1)}
-                      disabled={currentPageKab === 1}
-                    >
+                      disabled={currentPageKab === 1}>
                       Prev
                     </button>
                     <button
                       className="text-sm bg-gray-400 px-1"
                       onClick={() => setCurrentPageKab(currentPageKab + 1)}
-                      disabled={!optionsKab.length}
-                    >
+                      disabled={!optionsKab.length}>
                       Next
                     </button>
                   </div>
                 </div>
               </div>
               <div>
-                <label
-                  htmlFor="kec"
-                  className="text-[14px] text-blue-gray-400"
-                >
+                <label htmlFor="kec" className="text-[14px] text-blue-gray-400">
                   Kecamatan
                 </label>
                 <div className="flex gap-2 items-end">
@@ -470,27 +468,26 @@ function AddCustomer() {
                     <ReactSelect
                       id="kec"
                       placeholder="Pilih Kecamatan"
-                      options={optionsKec.map(option => ({
+                      options={optionsKec.map((option) => ({
                         value: option.id,
-                        label: option.nama_kec
+                        label: option.nama_kec,
                       }))}
                       styles={customStyles}
-                      onChange={handleChangeKec} />
+                      onChange={handleChangeKec}
+                    />
                     <hr className="mt-1 bg-gray-400 h-[0.1em]" />
                   </div>
                   <div className="flex gap-2">
                     <button
                       className="text-sm bg-gray-400 px-1"
                       onClick={() => setCurrentPageKec(currentPageKec - 1)}
-                      disabled={currentPageKec === 1}
-                    >
+                      disabled={currentPageKec === 1}>
                       Prev
                     </button>
                     <button
                       className="text-sm bg-gray-400 px-1"
                       onClick={() => setCurrentPageKec(currentPageKec + 1)}
-                      disabled={!optionsKec.length}
-                    >
+                      disabled={!optionsKec.length}>
                       Next
                     </button>
                   </div>
@@ -531,156 +528,207 @@ function AddCustomer() {
                   icon={<PhoneIcon />}
                 />
               </div>
-              {level === "Marketting" || level === "PimpinanItc" ? (<>
-                <div className="lg:mt-5">
-                  <Input
-                    label="Printer"
-                    variant="static"
-                    color="blue"
-                    size="lg"
-                    type="number"
-                    placeholder="Masukkan Jumlah Printer"
-                    onChange={(e) => setjmlPrinter(e.target.value)}
-                    icon={<Cog6ToothIcon />}
-                  />
-                </div>
-                <div className="lg:mt-5">
-                  <Input
-                    label="Proyektor"
-                    variant="static"
-                    color="blue"
-                    size="lg"
-                    type="number"
-                    placeholder="Masukkan Jumlah Proyektor"
-                    onChange={(e) => setproyektor(e.target.value)}
-                    icon={<Cog6ToothIcon />}
-                  />
-                </div>
-                <div>
-                  <Typography className="font-poppins font-normal text-gray-600" variant="paragraph">Internet</Typography>
-                  <div className="flex gap-8 pt-5">
-                    <div className="flex justify-center">
-                      <input
-                        type="radio"
-                        id="YInternet"
-                        value="Y"
-                        onChange={(e) => setinternet(e.target.value)}
-                      />
-                      <label htmlFor="YInternet" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
-                    </div>
-                    <div className="flex justify-center">
-                      <input
-                        type="radio"
-                        id="TInternet"
-                        value="T"
-                        onChange={(e) => setinternet(e.target.value)}
-                      />
-                      <label htmlFor="TInternet" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <Typography className="font-poppins font-normal text-gray-600" variant="paragraph">Web</Typography>
-                  <div className="flex gap-8 pt-5">
-                    <div className="flex justify-center">
-                      <input
-                        type="radio"
-                        id="YWeb"
-                        value="Y"
-                        onChange={(e) => setweb(e.target.value)}
-                      />
-                      <label htmlFor="YWeb" className="ml-1"><CheckIcon className="w-6 h-6 black" /></label>
-                    </div>
-                    <div className="flex justify-center">
-                      <input
-                        type="radio"
-                        id="TWeb"
-                        value="T"
-                        onChange={(e) => setweb(e.target.value)}
-                      />
-                      <label htmlFor="TWeb" className="ml-1"><XMarkIcon className="w-6 h-6 black" /></label>
-                    </div>
-                  </div>
-                </div>
-                {jenis === "Sekolah" ? (<>
+              {level === "Marketting" || level === "PimpinanItc" ? (
+                <>
                   <div className="lg:mt-5">
                     <Input
-                      label="Jumlah Murid"
+                      label="Printer"
                       variant="static"
                       color="blue"
                       size="lg"
                       type="number"
-                      placeholder="Masukkan Jumlah Murid"
-                      onChange={(e) => setmurid(e.target.value)}
-                      icon={<UsersIcon />}
+                      placeholder="Masukkan Jumlah Printer"
+                      onChange={(e) => setjmlPrinter(e.target.value)}
+                      icon={<Cog6ToothIcon />}
                     />
                   </div>
                   <div className="lg:mt-5">
                     <Input
-                      label="Jumlah Kelas 3"
+                      label="Proyektor"
                       variant="static"
                       color="blue"
                       size="lg"
                       type="number"
-                      placeholder="Masukkan Jumlah Kelas 3"
-                      onChange={(e) => setkls3(e.target.value)}
-                      icon={<UsersIcon />}
-                    />
-                  </div>
-                  <div className="lg:mt-5">
-                    <Input
-                      label="PC"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      type="number"
-                      placeholder="Masukkan Jumlah PC"
-                      onChange={(e) => setpc(e.target.value)}
-                      icon={<ComputerDesktopIcon />}
+                      placeholder="Masukkan Jumlah Proyektor"
+                      onChange={(e) => setproyektor(e.target.value)}
+                      icon={<Cog6ToothIcon />}
                     />
                   </div>
                   <div>
-                    <Typography className="font-poppins font-normal text-gray-600" variant="paragraph">UNBK</Typography>
+                    <Typography
+                      className="font-poppins font-normal text-gray-600"
+                      variant="paragraph">
+                      Internet
+                    </Typography>
                     <div className="flex gap-8 pt-5">
                       <div className="flex justify-center">
                         <input
                           type="radio"
-                          id="YUNBK"
+                          id="YInternet"
                           value="Y"
-                          onChange={(e) => setunbk(e.target.value)}
+                          name="internetOption"
+                          onChange={(e) => setinternet(e.target.value)}
                         />
-                        <label htmlFor="YUNBK" className="ml-1">Sudah</label>
+                        <label htmlFor="YInternet" className="ml-1">
+                          <CheckIcon className="w-6 h-6 black" />
+                        </label>
                       </div>
                       <div className="flex justify-center">
                         <input
                           type="radio"
-                          id="TUNBK"
+                          id="TInternet"
                           value="T"
-                          onChange={(e) => setunbk(e.target.value)}
+                          name="internetOption"
+                          onChange={(e) => setinternet(e.target.value)}
                         />
-                        <label htmlFor="TUNBK" className="ml-1">Belum</label>
+                        <label htmlFor="TInternet" className="ml-1">
+                          <XMarkIcon className="w-6 h-6 black" />
+                        </label>
                       </div>
                     </div>
                   </div>
-                  <div className="lg:mt-5 lg:col-span-2">
-                    <Textarea
-                      color="blue"
-                      variant="static"
-                      label="Jurusan"
-                      placeholder="List jurusan apa saja"
-                      onChange={(e) => setjurusan(e.target.value)}
-                      required
-                    />
+                  <div>
+                    <Typography
+                      className="font-poppins font-normal text-gray-600"
+                      variant="paragraph">
+                      Web
+                    </Typography>
+                    <div className="flex gap-8 pt-5">
+                      <div className="flex justify-center">
+                        <input
+                          type="radio"
+                          id="YWeb"
+                          value="Y"
+                          name="webOption"
+                          onChange={(e) => setweb(e.target.value)}
+                        />
+                        {/* <input
+                          type="radio"
+                          id="YWeb"
+                          value="Y"
+                          name="yWebOption"
+                          onChange={(e) => setweb(e.target.value)}
+                        /> */}
+                        <label htmlFor="YWeb" className="ml-1">
+                          <CheckIcon className="w-6 h-6 black" />
+                        </label>
+                      </div>
+                      <div className="flex justify-center">
+                        <input
+                          type="radio"
+                          id="TWeb"
+                          value="T"
+                          name="webOption"
+                          onChange={(e) => setweb(e.target.value)}
+                        />
+                        <label htmlFor="TWeb" className="ml-1">
+                          <XMarkIcon className="w-6 h-6 black" />
+                        </label>
+                      </div>
+                    </div>
                   </div>
-                </>) : (<></>)}
-              </>) : (<></>)}
+                  {jenis === "Sekolah" ? (
+                    <>
+                      <div className="lg:mt-5">
+                        <Input
+                          label="Jumlah Murid"
+                          variant="static"
+                          color="blue"
+                          size="lg"
+                          type="number"
+                          placeholder="Masukkan Jumlah Murid"
+                          onChange={(e) => setmurid(e.target.value)}
+                          icon={<UsersIcon />}
+                        />
+                      </div>
+                      <div className="lg:mt-5">
+                        <Input
+                          label="Jumlah Kelas 3"
+                          variant="static"
+                          color="blue"
+                          size="lg"
+                          type="number"
+                          placeholder="Masukkan Jumlah Kelas 3"
+                          onChange={(e) => setkls3(e.target.value)}
+                          icon={<UsersIcon />}
+                        />
+                      </div>
+                      <div className="lg:mt-5">
+                        <Input
+                          label="PC"
+                          variant="static"
+                          color="blue"
+                          size="lg"
+                          type="number"
+                          placeholder="Masukkan Jumlah PC"
+                          onChange={(e) => setpc(e.target.value)}
+                          icon={<ComputerDesktopIcon />}
+                        />
+                      </div>
+                      <div>
+                        <Typography
+                          className="font-poppins font-normal text-gray-600"
+                          variant="paragraph">
+                          UNBK
+                        </Typography>
+                        <div className="flex gap-8 pt-5">
+                          <div className="flex justify-center">
+                            <input
+                              type="radio"
+                              id="YUNBK"
+                              value="Y"
+                              onChange={(e) => setunbk(e.target.value)}
+                            />
+                            <label htmlFor="YUNBK" className="ml-1">
+                              Sudah
+                            </label>
+                          </div>
+                          <div className="flex justify-center">
+                            <input
+                              type="radio"
+                              id="TUNBK"
+                              value="T"
+                              onChange={(e) => setunbk(e.target.value)}
+                            />
+                            <label htmlFor="TUNBK" className="ml-1">
+                              Belum
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="lg:mt-5 lg:col-span-2">
+                        <Textarea
+                          color="blue"
+                          variant="static"
+                          label="Jurusan"
+                          placeholder="List jurusan apa saja"
+                          onChange={(e) => setjurusan(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="mt-10 flex gap-4">
-              <Button variant="gradient" color="blue" type="button" onClick={addCustomer} className="font-poppins font-medium">
+              <Button
+                variant="gradient"
+                color="blue"
+                type="button"
+                onClick={addCustomer}
+                className="font-poppins font-medium">
                 <span>Simpan</span>
               </Button>
               <a href="/data_customer">
-                <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
+                <Button
+                  variant="text"
+                  color="gray"
+                  className="mr-1 font-poppins font-medium">
                   <span>Kembali</span>
                 </Button>
               </a>

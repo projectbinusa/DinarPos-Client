@@ -189,6 +189,7 @@ import LapKunjungan from "./views/itc/laporan/LapKunjungan.js";
 import InputPlanning from "./views/itc/planning_marketting/InputPlanning.js";
 import DetailPlanning from "./views/itc/planning_marketting/DetailPlanning.js";
 import DataPlanning from "./views/itc/planning_marketting/DataPlanning.js";
+import DealFinishMarketting from "./views/itc/deal_finish_marketting/DealFinishMarketting.js";
 
 
 function App() {
@@ -1130,6 +1131,12 @@ function App() {
               component={Ijin}
               isAuthenticated={true}
             />
+            {/* DEAL MARKETTING */}
+            <PrivateRoute
+              path="/dealfinish_marketting"
+              component={DealFinishMarketting}
+              isAuthenticated={true}
+            />
             <PrivateRoute
               path="/add_ijin"
               component={AddIjin}
@@ -1209,7 +1216,7 @@ function App() {
             <PrivateRoute
               path="/print_kunjungan"
               component={PrintKunjungan}
-            
+
               isAuthenticated={true}
             />
             <PrivateRoute

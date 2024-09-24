@@ -161,8 +161,9 @@ export const API_SYNC_PLANNING = `${url}/planning/sync`;
 
 // FINISH
 export const API_FINISH = `${url}/deal/finish`;
+export const API_FINISH_MARKETTING = `${url}/deal/finish`;
 
-// IJIN 
+// IJIN
 export const API_IJIN = `${url}/ijin`;
 
 // OMZET
