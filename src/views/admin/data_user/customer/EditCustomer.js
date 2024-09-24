@@ -4,13 +4,16 @@ import {
   Breadcrumbs,
   Button,
   Input,
+  Textarea,
   Typography,
 } from "@material-tailwind/react";
 import {
   AtSymbolIcon,
+  ComputerDesktopIcon,
   MapPinIcon,
   PhoneIcon,
   UserCircleIcon,
+  UsersIcon,
 } from "@heroicons/react/24/outline";
 import {
   useHistory,
@@ -30,6 +33,11 @@ function EditCustomer() {
 
   const history = useHistory();
   const param = useParams();
+  const [jurusan, setjurusan] = useState("");
+  const [unbk, setunbk] = useState("");
+  const [kls3, setkls3] = useState(0);
+  const [murid, setmurid] = useState(0);
+  const [pc, setpc] = useState("");
 
   useEffect(() => {
     axios
@@ -174,8 +182,7 @@ function EditCustomer() {
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
                 viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+                fill="currentColor">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
@@ -207,8 +214,7 @@ function EditCustomer() {
                 <div>
                   <label
                     htmlFor="jenis"
-                    className="text-[14px] text-blue-gray-400"
-                  >
+                    className="text-[14px] text-blue-gray-400">
                     Jenis
                   </label>
                   <ReactSelect
@@ -275,13 +281,95 @@ function EditCustomer() {
                   onChange={(e) => setemail(e.target.value)}
                   icon={<AtSymbolIcon />}
                 />
+                {jenis === "Sekolah" ? (
+                  <>
+                    <div className="lg:mt-5">
+                      <Input
+                        label="Jumlah Murid"
+                        variant="static"
+                        color="blue"
+                        size="lg"
+                        type="number"
+                        placeholder="Masukkan Jumlah Murid"
+                        onChange={(e) => setmurid(e.target.value)}
+                        icon={<UsersIcon />}
+                      />
+                    </div>
+                    <div className="lg:mt-5">
+                      <Input
+                        label="Jumlah Kelas 3"
+                        variant="static"
+                        color="blue"
+                        size="lg"
+                        type="number"
+                        placeholder="Masukkan Jumlah Kelas 3"
+                        onChange={(e) => setkls3(e.target.value)}
+                        icon={<UsersIcon />}
+                      />
+                    </div>
+                    <div className="lg:mt-5">
+                      <Input
+                        label="PC"
+                        variant="static"
+                        color="blue"
+                        size="lg"
+                        type="number"
+                        placeholder="Masukkan Jumlah PC"
+                        onChange={(e) => setpc(e.target.value)}
+                        icon={<ComputerDesktopIcon />}
+                      />
+                    </div>
+                    <div>
+                      <Typography
+                        className="font-poppins font-normal text-gray-600"
+                        variant="paragraph">
+                        UNBK
+                      </Typography>
+                      <div className="flex gap-8 pt-5">
+                        <div className="flex justify-center">
+                          <input
+                            type="radio"
+                            id="YUNBK"
+                            value="Y"
+                            onChange={(e) => setunbk(e.target.value)}
+                          />
+                          <label htmlFor="YUNBK" className="ml-1">
+                            Sudah
+                          </label>
+                        </div>
+                        <div className="flex justify-center">
+                          <input
+                            type="radio"
+                            id="TUNBK"
+                            value="T"
+                            onChange={(e) => setunbk(e.target.value)}
+                          />
+                          <label htmlFor="TUNBK" className="ml-1">
+                            Belum
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="lg:mt-5 lg:col-span-2">
+                      <Textarea
+                        color="blue"
+                        variant="static"
+                        label="Jurusan"
+                        placeholder="List jurusan apa saja"
+                        onChange={(e) => setjurusan(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
               <Button
                 variant="gradient"
                 color="blue"
                 type="submit"
-                className="mt-5 font-poppins font-medium"
-              >
+                className="mt-5 font-poppins font-medium">
                 <span>Simpan</span>
               </Button>
             </form>
@@ -308,11 +396,18 @@ function EditCustomer() {
                 />
               </div>
               <div className="mt-10 flex gap-4">
-                <Button variant="gradient" color="blue" type="submit" className="font-poppins font-medium">
+                <Button
+                  variant="gradient"
+                  color="blue"
+                  type="submit"
+                  className="font-poppins font-medium">
                   <span>Simpan</span>
                 </Button>
                 <a href="/data_customer">
-                  <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
+                  <Button
+                    variant="text"
+                    color="gray"
+                    className="mr-1 font-poppins font-medium">
                     <span>Kembali</span>
                   </Button>
                 </a>

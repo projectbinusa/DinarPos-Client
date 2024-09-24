@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { API_FINISH } from "../../../utils/BaseUrl";
+import { Link, NavLink } from "react-router-dom/cjs/react-router-dom.min";
 
 function DealFinishMarketting() {
   const [finish, setFinish] = useState([]); // perbaikan nama state
@@ -78,7 +79,16 @@ function DealFinishMarketting() {
                       key={row.id}
                       className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                       <td className="text-sm py-2 px-4 border">{index + 1}</td>
-                      <td className="text-sm py-2 px-4 border">{row.basp}</td>
+                      <td className="text-sm py-2 px-4 border">
+                        {/* <NavLink to={row.basp, "_blck"}> */}
+                          <Button
+                            // onClick={() => window.open(row.basp, "_blank")}
+                            className="bg-blue-500 text-white">
+                            View
+                          </Button>
+                        {/* </NavLink> */}
+                      </td>
+                      {/* <td className="text-sm py-2 px-4 border">{row.basp}</td> */}
                       <td className="text-sm py-2 px-4 border">{row.baut}</td>
                       <td className="text-sm py-2 px-4 border">
                         {row.file_spk}

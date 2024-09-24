@@ -33,7 +33,7 @@ function TakeOver() {
       if (error.response.data.code === 404) {
         Swal.fire({
           icon: "info",
-          title: "Data Tidak Ada!",
+          title: "Tidak ada data!",
           showConfirmButton: false,
           timer: 1500,
         });

@@ -5,9 +5,10 @@ import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { API_IJIN } from "../../../utils/BaseUrl";
+import { API_IJIN, API_PENGGUNA } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Decrypt from "../../../component/Decrypt";
 
 function Ijin() {
   const tableRef = useRef(null);
@@ -51,13 +52,8 @@ function Ijin() {
     }
   };
 
-  const fetchLevel = () => {
-    setLevel(localStorage.getItem("level"));
-  };
-
   useEffect(() => {
     getAllIjin();
-    fetchLevel();
 
     return () => {
       if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
@@ -114,12 +110,20 @@ function Ijin() {
     });
   };
 
-  let dashboard = "";
-  if (level === "Superadmin") {
-    dashboard = "dashboard";
-  } else if (level === "AdminService") {
-    dashboard = "dashboard_service";
-  }
+  const id = Decrypt();
+  useEffect(() => {
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setLevel(response.levelPengguna);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -130,7 +134,7 @@ function Ijin() {
             Ijin
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href={"/" + dashboard} className="opacity-60">
+            <a href={"/home"} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -140,17 +144,16 @@ function Ijin() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/ijin">
-              <span>Ijin</span>
-            </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <a href="/add_ijin" className="float-right mb-5">
-            <Button variant="gradient" color="blue" className="font-popins font-medium">
-              Tambah
-            </Button>
-          </a>
+          {level === 'Marketting' ?
+            <a href="/add_ijin" className="float-right mb-5">
+              <Button variant="gradient" color="blue" className="font-popins font-medium">
+                Tambah
+              </Button>
+            </a>
+            : <></>}
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table id="example_data" ref={tableRef} className="table-auto w-full border-collapse rounded-sm">
               <thead className="bg-blue-500 text-white">
@@ -159,43 +162,35 @@ function Ijin() {
                   <th className="text-sm py-3 px-4 font-semibold text-left">Tanggal</th>
                   <th className="text-sm py-3 px-4 font-semibold text-left">Keterangan</th>
                   <th className="text-sm py-3 px-4 font-semibold text-left">Foto</th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">Aksi</th>
+                  {level === 'Marketting' ?
+                    <th className="text-sm py-3 px-4 font-semibold text-left">Aksi</th> : <></>}
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan="5" className="text-sm text-center py-3 bg-gray-100">Loading data...</td>
-                  </tr>
-                ) : ijin.length > 0 ? (
-                  ijin.map((row, index) => (
-                    <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                      <td className="text-sm py-3 px-4">{index + 1}</td>
-                      <td className="text-sm py-3 px-4">{row.created_date}</td>
-                      <td className="text-sm py-3 px-4">{row.ket}</td>
-                      <td className="text-sm py-3 px-4">
-                        {row.foto ? (
-                          <img
-                            src={`${API_IJIN}/images/${row.foto}`} // Adjust the path according to your API structure
-                            alt="foto"
-                            className="w-16 h-16 object-cover"
-                          />
-                        ) : (
-                          <span>Tidak ada foto</span>
-                        )}
-                      </td>
+                {ijin.map((row, index) => (
+                  <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                    <td className="text-sm py-3 px-4">{index + 1}</td>
+                    <td className="text-sm py-3 px-4">{row.created_date}</td>
+                    <td className="text-sm py-3 px-4">{row.ket}</td>
+                    <td className="text-sm py-3 px-4">
+                      {row.foto ? (
+                        <img
+                          src={`${API_IJIN}/images/${row.foto}`} // Adjust the path according to your API structure
+                          alt="foto"
+                          className="w-16 h-16 object-cover"
+                        />
+                      ) : (
+                        <span>Tidak ada foto</span>
+                      )}
+                    </td>
+                    {level === 'Marketting' ?
                       <td className="text-sm py-3 px-4 flex items-center justify-center">
                         <IconButton size="md" color="red" onClick={() => hapusIjin(row.id)}>
                           <TrashIcon className="w-6 h-6 text-white" />
                         </IconButton>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="text-sm text-center py-3 bg-gray-100">Tidak ada data</td>
+                      </td> : <></>}
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>

@@ -5,7 +5,7 @@ import { Typography } from "@material-tailwind/react";
 import { API_FINISH, API_FINISH_MARKETTING } from "../../../utils/BaseUrl";
 
 function DataFinish() {
-  const [finish, setFinish] = useState([]); 
+  const [finish, setFinish] = useState([]);
   const [level, setLevel] = useState("");
   const role = localStorage.getItem("role");
 

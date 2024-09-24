@@ -1,160 +1,264 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import axios from "axios";
-import { API_PLANNING } from "../../../utils/BaseUrl";
+import { API_PLANNING, API_SALESMAN } from "../../../utils/BaseUrl";
 import {
   Button,
   Input,
   Typography,
   Select,
   Option,
+  Breadcrumbs,
 } from "@material-tailwind/react";
+import $ from "jquery"
+import Swal from "sweetalert2";
 
 function PlanningPage() {
   const [planning, setPlanning] = useState([]);
-  const [filteredPlanning, setFilteredPlanning] = useState([]);
-  const [tglAwal, settglAwal] = useState("");
-  const [tglAkhir, settglAkhir] = useState("");
-  const [filterOption, setFilterOption] = useState("All");
+  const [tglAwal, setTglAwal] = useState("");
+  const [tglAkhir, setTglAkhir] = useState("");
+  const [idItc, setIdItc] = useState(0);
 
-  // Mengambil data dari API
+  const tableRef = useRef(null);
+  const [validasi, setvalidasi] = useState(false);
+
+  const initializeDataTable = () => {
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable();
+    }
+  }
+
+  // GET ALL
   const getAllPlanning = async () => {
     try {
       const response = await axios.get(`${API_PLANNING}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setPlanning(response.data.data || []);
-      setFilteredPlanning(response.data.data || []); // Set juga untuk filteredPlanning
+      setPlanning(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  // BETWEEN TGL
+  const getBetweenTanggal = async () => {
+    try {
+      const response = await axios.get(`${API_PLANNING}/date?tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      const res = response.data.data;
+      setPlanning(res);
+      setvalidasi(false)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const filterTangggal = async () => {
+    if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    setvalidasi(true);
+  };
+
+  useEffect(() => {
+    if (planning && planning.length > 0) {
+      initializeDataTable();
+    }
+  }, [planning])
+
   useEffect(() => {
     getAllPlanning();
   }, []);
 
-  // Filter data berdasarkan tanggal dan opsi filter
-  const handleFilter = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (validasi || tglAkhir !== "" || tglAwal !== "") {
+      getBetweenTanggal();
+    }
+  }, [validasi]);
 
-    let filtered = planning;
+  // ALL ITC
+  const [values, setvalues] = useState("");
+  const [options, setoptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-    if (tglAwal && tglAkhir) {
-      filtered = filtered.filter(
-        (item) =>
-          new Date(item.tanggal) >= new Date(tglAwal) &&
-          new Date(item.tanggal) <= new Date(tglAkhir)
+  const handle = async () => {
+    if (values.trim() !== "") {
+      const response = await fetch(
+        `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
       );
+      const data = await response.json();
+      setoptions(data.data);
+    } else {
+      return;
     }
-
-    if (filterOption !== "All") {
-      filtered = filtered.filter((item) => item.filterOption === filterOption);
-    }
-
-    setFilteredPlanning(filtered);
   };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setvalues(event.target.value);
+    setCurrentPage(1);
+  };
+  // END ALL ITC  
+  console.log(planning);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
-      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
-        <Typography variant="lead" className="uppercase text-gray-700 mb-4">
-          Data Planning
-        </Typography>
+      <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
+        <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
+          <Typography variant="lead" className="uppercase">
+            Planning
+          </Typography>
+          <Breadcrumbs className="bg-transparent">
+            <a href="/home" className="opacity-60">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </a>
+          </Breadcrumbs>
+        </div>
+        <div className="bg-white shadow-lg p-5 my-5 rounded ">
+          <div>
+            <div className="w-72 lg:w-[50%]">
+              <Input
+                variant="static"
+                color="blue"
+                type="date"
+                label="Tanggal Awal"
+                required
+                value={tglAwal}
+                onChange={(e) => setTglAwal(e.target.value)}
+              />
+            </div>
+            <div className="mt-8 w-72 lg:w-[50%]">
+              <Input
+                variant="static"
+                color="blue"
+                type="date"
+                label="Tanggal Akhir"
+                required
+                value={tglAkhir}
+                onChange={(e) => setTglAkhir(e.target.value)}
+              />
+            </div>
+            <div className="flex gap-2 items-end mt-8 w-72 lg:w-[50%]">
+              <Input
+                label="ITC"
+                variant="static"
+                color="blue"
+                list="salesman-list"
+                id="salesman"
+                name="salesman"
+                onChange={(event) => {
+                  handleChange(event);
+                  setIdItc(event.target.value);
+                }}
+                placeholder="Pilih ITC"
+              />
+              <datalist id="salesman-list">
+                {options.length > 0 && (
+                  <>
+                    {options.map((option) => (
+                      <option value={option.id} key={option.id}>
+                        {option.namaSalesman}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </datalist>
 
-        <div className="bg-white shadow-lg p-6 rounded-lg">
-          <form onSubmit={handleFilter} className="space-y-4">
-            <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
-              <div className="w-full lg:w-[30%]">
-                <Input
-                  variant="static"
-                  color="blue"
-                  type="date"
-                  label="Tanggal Awal"
-                  required
-                  value={tglAwal}
-                  onChange={(e) => settglAwal(e.target.value)}
-                />
-              </div>
-              <div className="w-full lg:w-[30%]">
-                <Input
-                  variant="static"
-                  color="blue"
-                  type="date"
-                  label="Tanggal Akhir"
-                  required
-                  value={tglAkhir}
-                  onChange={(e) => settglAkhir(e.target.value)}
-                />
-              </div>
-              <div className="w-full lg:w-[30%]">
-                <Select
-                  variant="static"
-                  label="Filter"
-                  value={filterOption}
-                  onChange={(value) => setFilterOption(value)}
+              <div className="flex gap-2">
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
                 >
-                  <Option value="All">All</Option>
-                  <Option value="Option1">Option1</Option>
-                  <Option value="Option2">Option2</Option>
-                </Select>
-              </div>
-              <div className="w-full lg:w-[10%] flex items-end">
-                <Button
-                  type="submit"
-                  variant="gradient"
-                  color="blue"
-                  className="w-full"
+                  Prev
+                </button>
+                <button
+                  className="text-sm bg-gray-400 px-1"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={!options.length}
                 >
-                  Cari
-                </Button>
+                  Next
+                </button>
               </div>
             </div>
-          </form>
+            <Button
+              type="submit"
+              variant="gradient"
+              color="blue"
+              className="mt-5 font-poppins font-medium mb-4"
+              onClick={filterTangggal}
+            >
+              Cari
+            </Button>
+          </div>
 
-          <div className="overflow-x-auto mt-6">
-            <table className="w-full table-auto border-collapse">
+          <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
+            <table id="example_data"
+              ref={tableRef}
+              className="rounded-sm table-auto w-full overflow-x-auto"
+            >
               <thead className="bg-blue-600 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Tanggal</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Nama ITC</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Nama Customer</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Jenis</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Daerah</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Printer</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Jumlah Murid</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">PC</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">UNBK</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Jurusan</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Pihak Dituju</th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">Tujuan</th>
+                  <th className="text-sm py-2 px-3">No</th>
+                  <th className="text-sm py-2 px-3">Tanggal</th>
+                  <th className="text-sm py-2 px-3">Nama ITC</th>
+                  <th className="text-sm py-2 px-3">Nama Customer</th>
+                  <th className="text-sm py-2 px-3">Jenis</th>
+                  <th className="text-sm py-2 px-3">Daerah</th>
+                  <th className="text-sm py-2 px-3">Printer</th>
+                  <th className="text-sm py-2 px-3">Jumlah Murid</th>
+                  <th className="text-sm py-2 px-3">PC</th>
+                  <th className="text-sm py-2 px-3">UNBK</th>
+                  <th className="text-sm py-2 px-3">Jurusan</th>
+                  <th className="text-sm py-2 px-3">Pihak Dituju</th>
+                  <th className="text-sm py-2 px-3">Tujuan</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPlanning.length > 0 ? (
-                  filteredPlanning.map((row, index) => (
+                {planning.length > 0 ? (
+                  planning.map((row, index) => (
                     <tr key={row.id} className="border-t hover:bg-gray-50 transition">
                       <td className="text-sm py-2 px-3">{index + 1}</td>
                       <td className="text-sm py-2 px-3">{row.created_date}</td>
-                      <td className="text-sm py-2 px-3">{row.namaITC}</td>
-                      <td className="text-sm py-2 px-3">{row.namaCustomer}</td>
-                      <td className="text-sm py-2 px-3">{row.jenis}</td>
-                      <td className="text-sm py-2 px-3">{row.daerah}</td>
-                      <td className="text-sm py-2 px-3">{row.printer}</td>
-                      <td className="text-sm py-2 px-3">{row.jumlahMurid}</td>
-                      <td className="text-sm py-2 px-3">{row.pc}</td>
-                      <td className="text-sm py-2 px-3">{row.unbk}</td>
-                      <td className="text-sm py-2 px-3">{row.jurusan}</td>
-                      <td className="text-sm py-2 px-3">{row.pihakDituju}</td>
-                      <td className="text-sm py-2 px-3">{row.tujuan}</td>
+                      <td className="text-sm py-2 px-3">{row.salesman.namaSalesman}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.nama_customer}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.jenis}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.printer}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.jml}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.pc}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.unbk}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.jurusan}</td>
+                      <td className="text-sm py-2 px-3">{row.bertemu}</td>
+                      <td className="text-sm py-2 px-3">{row.ket}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td colSpan="13" className="text-center py-4 text-sm text-gray-600">
-                      Data tidak ditemukan
+                      Tidak ada data
                     </td>
                   </tr>
                 )}

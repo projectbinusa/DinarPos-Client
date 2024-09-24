@@ -61,7 +61,7 @@ function EditData() {
       if (error.response.data.code === 404) {
         Swal.fire({
           icon: "info",
-          title: "Data Tidak Ada!",
+          title: "Tidak ada data!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -146,7 +146,7 @@ function EditData() {
       if (error.response.code === 404) {
         Swal.fire({
           icon: "info",
-          title: "Data Tidak Ada!",
+          title: "Tidak ada data!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -208,7 +208,7 @@ function EditData() {
       if (error.response.data.code === 404) {
         Swal.fire({
           icon: "info",
-          title: "Data Tidak Ada!",
+          title: "Tidak ada data!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -273,7 +273,7 @@ function EditData() {
       if (error.response.data.code === 404) {
         Swal.fire({
           icon: "info",
-          title: "Data Tidak Ada!",
+          title: "Tidak ada data!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -340,7 +340,7 @@ function EditData() {
       if (error.response.data.code === 404) {
         Swal.fire({
           icon: "info",
-          title: "Data Tidak Ada!",
+          title: "Tidak ada data!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -618,7 +618,7 @@ function EditData() {
                 ) : (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
-                      <h1 className="font-semibold text-lg">Data Tidak Ada!</h1>
+                      <h1 className="font-semibold text-lg">Tidak ada data!</h1>
                     </div>
                   </>
                 )}
@@ -699,7 +699,7 @@ function EditData() {
                 ) : (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
-                      <h1 className="font-semibold text-lg">Data Tidak Ada!</h1>
+                      <h1 className="font-semibold text-lg">Tidak ada data!</h1>
                     </div>
                   </>
                 )}
@@ -785,7 +785,7 @@ function EditData() {
                 ) : (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
-                      <h1 className="font-semibold text-lg">Data Tidak Ada!</h1>
+                      <h1 className="font-semibold text-lg">Tidak ada data!</h1>
                     </div>
                   </>
                 )}
@@ -877,7 +877,7 @@ function EditData() {
                 ) : (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
-                      <h1 className="font-semibold text-lg">Data Tidak Ada!</h1>
+                      <h1 className="font-semibold text-lg">Tidak ada data!</h1>
                     </div>
                   </>
                 )}
@@ -972,7 +972,7 @@ function EditData() {
                 ) : (
                   <>
                     <div className="border border-gray-300 py-4 px-3 rounded">
-                      <h1 className="font-semibold text-lg">Data Tidak Ada!</h1>
+                      <h1 className="font-semibold text-lg">Tidak ada data!</h1>
                     </div>
                   </>
                 )}
