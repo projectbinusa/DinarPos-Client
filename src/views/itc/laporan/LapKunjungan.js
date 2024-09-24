@@ -1,9 +1,11 @@
 import { Breadcrumbs, Button, IconButton, Input, Option, Select, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { API_SALESMAN } from "../../../utils/BaseUrl";
-import { ChevronLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { API_KUNJUNGAN, API_SALESMAN } from "../../../utils/BaseUrl";
+import { ChevronLeftIcon, InformationCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import $ from "jquery";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 function LapKunjungan() {
     const [tglAwal, setTglAwal] = useState("");
@@ -12,6 +14,7 @@ function LapKunjungan() {
 
     const tableRef = useRef(null);
     const [laporans, setLaporan] = useState([]);
+    const [validasi, setvalidasi] = useState(false);
 
     const initializeDataTable = () => {
         if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -20,6 +23,75 @@ function LapKunjungan() {
 
         $(tableRef.current).DataTable({});
     };
+
+    // GET ALL
+    const getAllKunjungan = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setLaporan(response.data.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    // GET ALL TANGGAL BETWEEN
+    const getAllTanggal = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/date/between?tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setLaporan(response.data.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    // GET ALL TGL SALESMAN
+    const getAllTanggalSalesman = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/date/between/salesman?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setLaporan(response.data.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    const filterTangggal = async () => {
+        if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
+            Swal.fire({
+                icon: "warning",
+                title: "Isi Form Terlebih Dahulu!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        setvalidasi(true);
+    };
+
+    useEffect(() => {
+        if (laporans && laporans.length > 0) {
+            initializeDataTable();
+        }
+    }, [laporans])
+
+    useEffect(() => {
+        getAllKunjungan();
+    }, []);
+
+    useEffect(() => {
+        if (validasi || tglAkhir !== "" || tglAwal !== "") {
+            getAllTanggal();
+        }
+        if (validasi || tglAkhir !== "" || tglAwal !== "" || salesmanId !== 0) {
+            getAllTanggalSalesman();
+        }
+    }, [validasi, tglAkhir, tglAwal]);
 
     // ALL ITC
     const [values, setvalues] = useState("");
@@ -58,7 +130,7 @@ function LapKunjungan() {
             <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
                 <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
                     <Typography variant="lead" className="uppercase font-poppins">
-                        Laporan Report
+                        Report
                     </Typography>
                     <Breadcrumbs className="bg-transparent">
                         <a href="/home" className="opacity-60">
@@ -142,7 +214,7 @@ function LapKunjungan() {
                         <Button
                             className="mt-5 font-poppins font-medium"
                             color="blue"
-                            type="submit"
+                            type="button" onClick={filterTangggal}
                         >
                             Cari
                         </Button>
@@ -174,21 +246,57 @@ function LapKunjungan() {
                         >
                             <thead className="bg-blue-500 text-white w-full">
                                 <tr>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Tgl</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Timestamp</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Nama</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Instansi</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Tujuan</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Action</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Info didapat</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Peluang</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Visit</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Tipe</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Deal</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Detail</th>
+                                    <th className="text-sm py-2 px-2.5">Tgl</th>
+                                    <th className="text-sm py-2 px-2.5">Timestamp</th>
+                                    <th className="text-sm py-2 px-2.5">Nama</th>
+                                    <th className="text-sm py-2 px-2.5">Instansi</th>
+                                    <th className="text-sm py-2 px-2.5">Daerah</th>
+                                    <th className="text-sm py-2 px-2.5">Tujuan</th>
+                                    <th className="text-sm py-2 px-2.5">Action</th>
+                                    <th className="text-sm py-2 px-2.5">Info didapat</th>
+                                    <th className="text-sm py-2 px-2.5">Peluang</th>
+                                    <th className="text-sm py-2 px-2.5">Visit</th>
+                                    <th className="text-sm py-2 px-2.5">Tipe</th>
+                                    <th className="text-sm py-2 px-2.5">Deal</th>
+                                    <th className="text-sm py-2 px-2.5">Detail</th>
                                 </tr>
-                            </thead> </table> </div>
+                            </thead>
+                            <tbody>
+                                {laporans.length > 0 ? (
+                                    laporans.map((row, idx) => (
+                                        <tr key={idx}>
+                                            <td>{row.tanggalDeal}</td>
+                                            <td>{row.timestamp}</td>
+                                            <td>{row.salesman.namaSalesman}</td>
+                                            <td>{row.customer.nama_customer}</td>
+                                            <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                            <td>{row.tujuan}</td>
+                                            <td>{row.action}</td>
+                                            <td>{row.infoDpt}</td>
+                                            <td>{row.peluang}</td>
+                                            <td>{row.nVisit}</td>
+                                            <td>{row.visit}</td>
+                                            <td>{row.deal}</td>
+                                            <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                <div className="flex flex-col lg:flex-row gap-3">
+                                                    <a href={"/edit_customer/" + row.idReport}>
+                                                        <IconButton size="md" color="green">
+                                                            <InformationCircleIcon className="w-6 h-6 white" />
+                                                        </IconButton>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="13" className="text-center py-4 text-sm text-gray-600">
+                                            Tidak ada data
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table> </div>
                 </main>
             </div>
         </section>

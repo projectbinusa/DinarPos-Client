@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Typography } from "@material-tailwind/react";
 import { API_FINISH } from "../../../utils/BaseUrl";
 
 function DataFinish() {
@@ -39,46 +39,60 @@ function DataFinish() {
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen overflow-x-auto">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
-        <Typography variant="lead" className="uppercase text-gray-700 mb-4">
-          Data Finish
-        </Typography>
+        <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
+          <Typography variant="lead" className="uppercase font-poppins">
+            Deal Finish
+          </Typography>
+          <Breadcrumbs className="bg-transparent">
+            <a href="/home" className="opacity-60">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </a>
+          </Breadcrumbs>
+        </div>
 
         <div className="bg-white shadow-lg p-6 rounded-lg">
           <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse">
-            <thead className="bg-blue-500 text-white">
-              <tr>
-                <th className="text-sm py-3 px-4 font-semibold text-left">No</th>
-                <th className="text-sm py-3 px-4 font-semibold text-left">Basp</th>
-                <th className="text-sm py-3 px-4 font-semibold text-left">Baut</th>
-                <th className="text-sm py-3 px-4 font-semibold text-left">Spk</th>
-                <th className="text-sm py-3 px-4 font-semibold text-left">Ev_Datang</th>
-                <th className="text-sm py-3 px-4 font-semibold text-left">Ev_Proses</th>
-                <th className="text-sm py-3 px-4 font-semibold text-left">Ev_Finish</th>
-              </tr>
-            </thead>
-            <tbody>
-              {finish.length > 0 ? (
-                finish.map((row, index) => (
-                  <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                    <td className="text-sm py-2 px-4 border">{index + 1}</td>
-                    <td className="text-sm py-2 px-4 border">{row.basp}</td>
-                    <td className="text-sm py-2 px-4 border">{row.baut}</td>
-                    <td className="text-sm py-2 px-4 border">{row.file_spk}</td>
-                    <td className="text-sm py-2 px-4 border">{row.ev_dtg}</td>
-                    <td className="text-sm py-2 px-4 border">{row.ev_pro}</td>
-                    <td className="text-sm py-2 px-4 border">{row.ev_fin}</td>
-                  </tr>
-                ))
-              ) : (
+            <table className="w-full table-auto border-collapse">
+              <thead className="bg-blue-500 text-white">
                 <tr>
-                  <td colSpan="7" className="text-center py-3 bg-gray-200 border">
-                    Tidak ada data
-                  </td>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">No</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Basp</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Baut</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Spk</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Ev_Datang</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Ev_Proses</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Ev_Finish</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {finish.length > 0 ? (
+                  finish.map((row, index) => (
+                    <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                      <td className="text-sm py-2 px-4 border">{index + 1}</td>
+                      <td className="text-sm py-2 px-4 border">{row.basp}</td>
+                      <td className="text-sm py-2 px-4 border">{row.baut}</td>
+                      <td className="text-sm py-2 px-4 border">{row.file_spk}</td>
+                      <td className="text-sm py-2 px-4 border">{row.ev_dtg}</td>
+                      <td className="text-sm py-2 px-4 border">{row.ev_pro}</td>
+                      <td className="text-sm py-2 px-4 border">{row.ev_fin}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-center py-3 bg-gray-200 border">
+                      Tidak ada data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

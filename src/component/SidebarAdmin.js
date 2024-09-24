@@ -1513,7 +1513,7 @@ function SidebarAdmin() {
                 <></>
               )}
 
-              {/*  */}
+              {/* MARKETTING */}
               {level === "Marketting" ? (
                 <>
                   <a href="/home">
@@ -1549,6 +1549,111 @@ function SidebarAdmin() {
                   <a href="/ijin">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       Ijin
+                    </ListItem>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
+
+              {/* PIMPINAN ITC */}
+              {level === "PimpinanItc" ? (
+                <>
+                  <a href="/home">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      dashboard
+                    </ListItem>
+                  </a>
+                  <a href="/data_itc">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      ITC
+                    </ListItem>
+                  </a>
+                  <a href="/data_customer">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Customer
+                    </ListItem>
+                  </a>
+                  <a href="/planning">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Planning
+                    </ListItem>
+                  </a>
+                  <a href="/laporan_kunjungan">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Report
+                    </ListItem>
+                  </a>
+                  <a href="/dealpo">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Deal PO
+                    </ListItem>
+                  </a>
+                  <a href="/dealfinish">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Deal Finish
+                    </ListItem>
+                  </a>
+                  <a href="/ijin">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Ijin
+                    </ListItem>
+                  </a>
+                  <a href="/laporan_sync">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Sync
+                    </ListItem>
+                  </a>
+                  <a href="/laporan_disiplin">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Disiplin
+                    </ListItem>
+                  </a>
+                  <a href="/preparation">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Laporan Preparation
+                    </ListItem>
+                  </a>
+                  <a href="/export_laporan">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Export Laporan
+                    </ListItem>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
+
+              {/* KEUANGAN ITC */}
+              {level === "Keuangan" ? (
+                <>
+                  <a href="/home">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Dashboard
+                    </ListItem>
+                  </a>
+                  <a href="/omzet">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Omzet
+                    </ListItem>
+                  </a>
+                </>
+              ) : (
+                <></>
+              )}
+
+
+              {/* GUDANG ITC */}
+              {level === "GudangItc" ? (
+                <>
+                  <a href="/home">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Dashboard
+                    </ListItem>
+                  </a>
+                  <a href="/dealpo">
+                    <ListItem className="px-3 py-2 text-sm rounded uppercase">
+                      Deal PO
                     </ListItem>
                   </a>
                 </>
@@ -3002,12 +3107,12 @@ function SidebarAdmin() {
                     Customer
                   </ListItem>
                 </a>
-                <a href="/lap_planning">
+                <a href="/planning">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Laporan Planning
                   </ListItem>
                 </a>
-                <a href="/planning">
+                <a href="/laporan_kunjungan">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Laporan Report
                   </ListItem>
@@ -3022,7 +3127,7 @@ function SidebarAdmin() {
                     Laporan Deal Finish
                   </ListItem>
                 </a>
-                <a href="/laporan_itc">
+                <a href="/ijin  ">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Laporan Ijin
                   </ListItem>
