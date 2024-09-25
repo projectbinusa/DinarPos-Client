@@ -5,7 +5,7 @@ import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { API_IJIN, API_PENGGUNA } from "../../../utils/BaseUrl";
+import { API_IJIN, API_ITC, API_PENGGUNA } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Decrypt from "../../../component/Decrypt";
@@ -14,6 +14,7 @@ function Ijin() {
   const tableRef = useRef(null);
   const [ijin, setIjin] = useState([]);
   const [level, setLevel] = useState("");
+  const [salesmanId, setsalesmanId] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const initializeDataTable = () => {
@@ -52,21 +53,27 @@ function Ijin() {
     }
   };
 
-  useEffect(() => {
-    getAllIjin();
-
-    return () => {
-      if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (ijin.length > 0) {
-      initializeDataTable();
+  // BY ID SALESMAN
+  const getAllIjinSalesman = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API_IJIN}/salesman/${salesmanId}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setIjin(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Gagal memuat data ijin!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [ijin]);
+  };
 
   const hapusIjin = async (id) => {
     Swal.fire({
@@ -119,11 +126,41 @@ function Ijin() {
       .then((res) => {
         const response = res.data.data;
         setLevel(response.levelPengguna);
+        const nama = response.namaPengguna;
+        try {
+          axios.get(`${API_ITC}/nama?nama=` + nama, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }).then((ress) => {
+            setsalesmanId(ress.data.data.id);
+          })
+        } catch (err) {
+          console.log(err);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (level === 'Marketting') {
+      getAllIjinSalesman()
+    } else {
+      getAllIjin();
+    }
+
+    return () => {
+      if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+    };
+  }, [salesmanId, level]);
+
+  useEffect(() => {
+    if (ijin.length > 0) {
+      initializeDataTable();
+    }
+  }, [ijin]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">

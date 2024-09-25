@@ -1,6 +1,6 @@
 import { Button, DialogBody, DialogFooter, DialogHeader, Input, Textarea } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { API_CUSTOMER, API_PLANNING } from "../../../utils/BaseUrl";
+import { API_CUSTOMER, API_CUSTOMER_CP, API_PLANNING } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -15,7 +15,7 @@ function ModalEditPlanning({ handleOpen, terakhirUpdate, nama, jenis, kab, kec, 
     const handle = async () => {
         if (values.trim() !== "") {
             const response = await fetch(
-                `${API_CUSTOMER}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+                `${API_CUSTOMER_CP}/pagination?id_customer=${idCustomer}&limit=10&page=${currentPage}&search=${values}&sort=1`,
                 {
                     headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
                 }
@@ -48,11 +48,9 @@ function ModalEditPlanning({ handleOpen, terakhirUpdate, nama, jenis, kab, kec, 
 
     // PUT PLANNING
     const [keterangan, setketerangan] = useState("" || ket);
-    const [bertemu, setbertemu] = useState("" || pihak);
+    const [bertemu, setbertemu] = useState("");
 
-    const putPlanning = async (e) => {
-        // e.preventDefault();
-
+    const putPlanning = async () => {
         const data = {
             bertemu: bertemu,
             id_customer: idCustomer,
@@ -120,13 +118,13 @@ function ModalEditPlanning({ handleOpen, terakhirUpdate, nama, jenis, kab, kec, 
                             onChange={(event) => {
                                 handleChange(event);
                             }}
-                            placeholder="Pilih Customer"
+                            placeholder="Pilih Customer CP"
                         />
                         <datalist id="customer-list">
                             {options.length > 0 && (
                                 <>
                                     {options.map((option) => (
-                                        <option value={option.id} key={option.id}>{option.nama_customer}</option>
+                                        <option value={`${option.nama_cp} / ${option.no_hp}`} key={option.id}>{option.nama_cp} ( {option.no_hp} )</option>
                                     ))}
                                 </>
                             )}

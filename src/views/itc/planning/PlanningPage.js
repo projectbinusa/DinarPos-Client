@@ -6,8 +6,6 @@ import {
   Button,
   Input,
   Typography,
-  Select,
-  Option,
   Breadcrumbs,
 } from "@material-tailwind/react";
 import $ from "jquery"
@@ -54,6 +52,20 @@ function PlanningPage() {
     }
   }
 
+  // BETWEEN TGL SALESMAN
+  const getBetweenTanggalSalesman = async () => {
+    try {
+      const response = await axios.get(`${API_PLANNING}/tgl_between/salesman?id_salesman=${idItc}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      const res = response.data.data;
+      setPlanning(res);
+      setvalidasi(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const filterTangggal = async () => {
     if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
       Swal.fire({
@@ -81,6 +93,9 @@ function PlanningPage() {
   useEffect(() => {
     if (validasi || tglAkhir !== "" || tglAwal !== "") {
       getBetweenTanggal();
+    }
+    if (validasi || tglAkhir !== "" || tglAwal !== "" && idItc !== 0) {
+      getBetweenTanggalSalesman()
     }
   }, [validasi]);
 

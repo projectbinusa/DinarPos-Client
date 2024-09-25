@@ -1,8 +1,38 @@
 import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
+import { API_SALESMAN } from "../../../utils/BaseUrl";
 
 function Preparation() {
+    // ALL ITC
+    const [values, setvalues] = useState("");
+    const [options, setoptions] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handle = async () => {
+        if (values.trim() !== "") {
+            const response = await fetch(
+                `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                }
+            );
+            const data = await response.json();
+            setoptions(data.data);
+        } else {
+            return;
+        }
+    };
+
+    useEffect(() => {
+        handle();
+    }, [currentPage, values]);
+
+    const handleChange = (event) => {
+        setvalues(event.target.value);
+        setCurrentPage(1);
+    };
+    // END ALL ITC    
     return (
         <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
             <SidebarAdmin />
@@ -25,7 +55,7 @@ function Preparation() {
                     </Breadcrumbs>
                 </div>
                 <main className="bg-white shadow-lg p-5 my-5 rounded">
-                    <form>
+                    <div>
                         <div className="w-72 lg:w-[50%]">
                             <div className="mt-8">
                                 <Input
@@ -38,15 +68,57 @@ function Preparation() {
                                 // onChange={(e) => setTglAwal(e.target.value)}
                                 />
                             </div>
+                            <div className="flex gap-2 items-end mt-8">
+                                <Input
+                                    label="ITC"
+                                    variant="static"
+                                    color="blue"
+                                    list="salesman-list"
+                                    id="salesman"
+                                    name="salesman"
+                                    onChange={(event) => {
+                                        handleChange(event);
+                                    }}
+                                    placeholder="Pilih ITC"
+                                />
+                                <datalist id="salesman-list">
+                                    {options.length > 0 && (
+                                        <>
+                                            {options.map((option) => (
+                                                <option value={option.id} key={option.id}>
+                                                    {option.namaSalesman}
+                                                </option>
+                                            ))}
+                                        </>
+                                    )}
+                                </datalist>
+
+                                <div className="flex gap-2">
+                                    <button
+                                        className="text-sm bg-gray-400 px-1"
+                                        onClick={() => setCurrentPage(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                    >
+                                        Prev
+                                    </button>
+                                    <button
+                                        className="text-sm bg-gray-400 px-1"
+                                        onClick={() => setCurrentPage(currentPage + 1)}
+                                        disabled={!options.length}
+                                    >
+                                        Next    
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <Button
                             className="mt-5 font-poppins font-medium"
                             color="blue"
-                            type="submit"
+                            type="button"
                         >
                             Cari
                         </Button>
-                    </form> <br />
+                    </div> <br />
                 </main>
             </div>
         </section>
