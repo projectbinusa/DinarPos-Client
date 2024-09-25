@@ -132,6 +132,7 @@ export const API_ITC_NAMA = `${url}/itc/nama`;
 
 // DATA DEAL PO
 export const API_DEAL_PO = `${url}/deal/po`;
+export const API_DEAL_PO_MARKETTING = `${url}/deal/po/salesman`;
 
 // DATA KUNJUNGAN
 export const API_KUNJUNGAN = `${url}/kunjungan`;
@@ -161,8 +162,9 @@ export const API_SYNC_PLANNING = `${url}/planning/sync`;
 
 // FINISH
 export const API_FINISH = `${url}/deal/finish`;
+export const API_FINISH_MARKETTING = `${url}/deal/finish/salesman`;
 
-// IJIN 
+// IJIN
 export const API_IJIN = `${url}/ijin`;
 
 // OMZET

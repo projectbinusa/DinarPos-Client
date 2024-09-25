@@ -1,18 +1,63 @@
 import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { API_DEAL_PO } from "../../../utils/BaseUrl";
+import {
+  API_DEAL_PO,
+  API_DEAL_PO_MARKETTING,
+  API_ITC,
+  API_PENGGUNA,
+} from "../../../utils/BaseUrl";
+import Decrypt from "../../../component/Decrypt";
 
 function DealPo() {
   const [datas, setDatas] = useState([]);
+  const role = localStorage.getItem("role");
+  const [salesmanId, setSalesmanId] = useState(0);
+  const id = Decrypt();
+
+  useEffect(() => {
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data.namaPengguna;
+        try {
+          axios
+            .get(`${API_ITC}/nama?nama=` + response, {
+              headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            })
+            .then((ress) => {
+              setSalesmanId(ress.data.data.id);
+              console.log("id: ", ress.data.data.id);
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id, salesmanId]);
 
   const getAll = async () => {
     try {
-      const response = await axios.get(`${API_DEAL_PO}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
+      let response;
+      if (role === "USER") {
+        response = await axios.get(
+          `${API_DEAL_PO_MARKETTING}?id_salesman=${salesmanId}`,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        );
+      } else {
+        response = await axios.get(`${API_DEAL_PO}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+      }
       setDatas(response.data.data);
+      console.log("data", response.data.data);
     } catch (error) {
       console.log("get all", error);
     }
@@ -36,8 +81,7 @@ function DealPo() {
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
                 viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+                fill="currentColor">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
@@ -50,7 +94,13 @@ function DealPo() {
                 <tr>
                   <th className="text-sm py-1 px-2 font-semibold w-[4%]">No</th>
                   <th className="text-sm py-1 px-2 font-semibold">Tgl Input</th>
-                  <th className="text-sm py-1 px-2 font-semibold">Marketing</th>
+                  {role != "USER" ? (
+                    <th className="text-sm py-1 px-2 font-semibold">
+                      Marketing
+                    </th>
+                  ) : (
+                    <></>
+                  )}
                   <th className="text-sm py-1 px-2 font-semibold">Customer</th>
                   <th className="text-sm py-1 px-2 font-semibold">Foto</th>
                   <th className="text-sm py-1 px-2 font-semibold">
@@ -75,15 +125,33 @@ function DealPo() {
                         <td className="text-sm py-2 px-3">
                           {new Date(dealpo.tgl_input)}
                         </td>
-                        <td className="text-sm py-2 px-3">
-                          {dealpo.marketing}
-                        </td>
+                        {role != "USER" ? (
+                          <td className="text-sm py-2 px-3">
+                            {dealpo.marketing}
+                          </td>
+                        ) : (
+                          <></>
+                        )}
                         <td className="text-sm py-2 px-3">{dealpo.customer}</td>
-                        <td className="text-sm py-2 px-3">{dealpo.foto}</td>
+                        <td className="text-sm py-2 px-3">
+                          <Button
+                            onClick={() => window.open(dealpo.foto, "_blank")}
+                            className="bg-blue-500 text-white">
+                            View
+                          </Button>
+                        </td>
                         <td className="text-sm py-2 px-3">
                           {dealpo.keterangan}
                         </td>
-                        <td className="text-sm py-2 px-3">{dealpo.file_po}</td>
+                        <td className="text-sm py-2 px-3">
+                          <Button
+                            onClick={() =>
+                              window.open(dealpo.file_po, "_blank")
+                            }
+                            className="bg-blue-500 text-white">
+                            View
+                          </Button>
+                        </td>
                         <td className="text-sm py-2 px-3">{dealpo.status}</td>
                         <td className="text-sm py-2 px-3">
                           {dealpo.ket_status}
@@ -104,8 +172,7 @@ function DealPo() {
                     <td
                       colSpan="30"
                       className="text-center capitalize py-3 bg-gray-100"
-                      x
-                    >
+                      x>
                       Tidak ada data
                     </td>
                   </tr>
