@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Input, Textarea, Typography } from "@material-tailwind/react";
-import { API_IJIN } from "../../../utils/BaseUrl";
+import {
+  Breadcrumbs,
+  Button,
+  Input,
+  Option,
+  Select,
+  Typography,
+} from "@material-tailwind/react";
+import { API_IZIN } from "../../../utils/BaseUrl";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -11,21 +18,22 @@ function AddIjin() {
   const [created_date, setCreatedDate] = useState("");
   const [ket, setKet] = useState("");
   const [foto, setFoto] = useState(null);
-  const [previewFoto, setPreviewFoto] = useState(""); // Tambahkan state untuk preview foto
+  const [previewFoto, setPreviewFoto] = useState("");
+  const [status, setStatus] = useState("");
 
   const addIjin = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('created_date', created_date);
-    formData.append('ket', ket);
-    formData.append('foto', foto);
+    formData.append("created_date", created_date);
+    formData.append("ket", ket);
+    formData.append("foto", foto);
 
     try {
-      await axios.post(`${API_IJIN}/add`, formData, {
-        headers: { 
+      await axios.post(`${API_IZIN}/add`, formData, {
+        headers: {
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-          'Content-Type': 'multipart/form-data' // Set header Content-Type untuk form-data
+          "Content-Type": "multipart/form-data",
         },
       });
       Swal.fire({
@@ -34,11 +42,11 @@ function AddIjin() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history("/ijin"); // Ganti history.push dengan navigate
+      history.push("/ijin");
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
-        history("/"); // Ganti history.push dengan navigate
+        history.push("/");
       } else if (error.response && error.response.status === 400) {
         Swal.fire({
           icon: "error",
@@ -80,7 +88,7 @@ function AddIjin() {
     }
   };
 
-  const level = localStorage.getItem("userLevel"); // Pastikan level didefinisikan dengan benar
+  const level = localStorage.getItem("userLevel");
   let dashboard = "";
 
   if (level === "Superadmin") {
@@ -112,13 +120,25 @@ function AddIjin() {
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addIjin}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="mt-8">
+                <Select
+                  label="Status"
+                  color="blue"
+                  variant="outlined"
+                  required
+                  value={status}
+                  onChange={(e) => setStatus(e)}
+                >
+                  <Option value="1 HARI">1 Hari</Option>
+                  <Option value="1 HARI LEBIH">1 Hari Lebih</Option>
+                </Select>
+              </div>
               <div>
                 <Input
                   label="Tanggal"
                   variant="static"
                   color="blue"
                   size="lg"
-                  placeholder="Masukkan Tanggal"
                   type="date"
                   name="tanggal"
                   onChange={(e) => setCreatedDate(e.target.value)}
@@ -135,8 +155,8 @@ function AddIjin() {
                   onChange={handleFotoChange}
                 />
               </div>
-              <div className="w-full lg:w-[50%]">
-                <Textarea
+              <div>
+                <Input
                   label="Keterangan"
                   size="lg"
                   placeholder="Masukkan Keterangan"

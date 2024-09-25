@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { API_OMZET } from "../../../utils/BaseUrl";
+import { API_OMZET,API_SALESMAN  } from "../../../utils/BaseUrl";
 import {
    Button,
    Input,
@@ -15,7 +15,7 @@ function AddOmzet() {
   const history = useHistory();
   const [created_date, setCreatedDate] = useState("");
   const [omzet, setOmzet] = useState("");
-  const [salesman, setSalesman] = useState("");
+  const [salesmanId, setsalesmanId] = useState(0);
 
   const addOmzet = async (e) => {
     e.preventDefault();
@@ -37,7 +37,7 @@ function AddOmzet() {
     const request = {
       created_date: created_date, // Pastikan format tanggal sesuai
       omzet: omzet,
-      salesman: salesman,
+      id_salesman: salesmanId,
     };
 
     try {
@@ -87,6 +87,45 @@ function AddOmzet() {
     }
   };
 
+   // ALL SALESMAN
+   const [values, setvalues] = useState("");
+   const [options, setoptions] = useState([]);
+   const [currentPage, setCurrentPage] = useState(1);
+ 
+   const handle = async () => {
+     if (values.trim() !== "") {
+       const response = await fetch(
+         `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+         {
+           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+         }
+       );
+       const data = await response.json();
+       setoptions(data.data);
+     } else {
+       return;
+     }
+   };
+ 
+   useEffect(() => {
+     handle();
+   }, [currentPage, values]);
+ 
+   const handleChange = (event) => {
+     setvalues(event.target.value);
+     setCurrentPage(1);
+   };
+
+  const level = localStorage.getItem("userLevel"); // Pastikan level didefinisikan dengan benar
+  let dashboard = "";
+
+  if (level === "Superadmin") {
+    dashboard = "dashboard";
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service";
+  }
+
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -96,70 +135,112 @@ function AddOmzet() {
             Tambah Omzet
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/omzet" className="opacity-60">Omzet</a>
+            <a href="/dashboard" className="opacity-60">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </a>
+            <a href="/data_customer">
+              <span>Customer</span>
+            </a>
             <span className="cursor-default capitalize">Tambah Omzet</span>
           </Breadcrumbs>
         </div>
+        <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
+          <div> 
+           <form onSubmit={addOmzet}>
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+               <div className="flex gap-2 items-end">
+                  <Input
+                      label="Tanggal"
+                      variant="static"
+                      color="blue"
+                      size="lg"
+                      placeholder="Masukkan Tanggal"
+                      type="date"
+                      name="tanggal"
+                      value={created_date}
+                      onChange={(e) => setCreatedDate(e.target.value)}
+                      required
+                    />
+                </div>
+                <div>
+                  <Input
+                    label="Omzet"
+                    size="lg"
+                    placeholder="Masukan Omzet"
+                    variant="static"
+                    color="blue"
+                    name="Omzet"
+                    value={omzet}
+                    onChange={(e) => setOmzet(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <Input
+                      label="Salesman"
+                      variant="static"
+                      color="blue"
+                      list="salesman-list"
+                      id="salesman"
+                      name="salesman"
+                      onChange={(event) => {
+                        handleChange(event);
+                        setsalesmanId(event.target.value);
+                      }}
+                      placeholder="Pilih Salesman"
+                    />
+                    <datalist id="salesman-list">
+                      {options.length > 0 && (
+                        <>
+                          {options.map((option) => (
+                            <option value={option.id} key={option.id}>
+                              {option.namaSalesman}
+                            </option>
+                          ))}
+                        </>
+                      )}
+                    </datalist>
 
-        <div className="bg-white shadow-lg p-6 rounded-lg">
-          <form onSubmit={addOmzet} className="space-y-4">
-            <div className="space-y-4">
-              <div className="w-full lg:w-[50%]">
-                <Input
-                  variant="outlined"
-                  color="blue"
-                  type="date"
-                  label="Tanggal"
-                  value={created_date}
-                  onChange={(e) => setCreatedDate(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="w-full lg:w-[50%]">
-                <Input
-                  variant="outlined"
-                  color="blue"
-                  type="number"
-                  label="Jumlah Omzet"
-                  value={omzet}
-                  onChange={(e) => setOmzet(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="w-full lg:w-[50%]">
-                <Input
-                  variant="outlined"
-                  color="blue"
-                  type="text"
-                  label="Nama Salesman"
-                  value={salesman}
-                  onChange={(e) => setSalesman(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="mt-10 flex gap-4">
-                <Button
-                  variant="gradient"
-                  color="blue"
-                  type="submit"
-                  className="font-popins font-medium"
-                >
-                  <span>Simpan</span>
-                </Button>
-                <a href="/omzet">
-                  <Button
-                    variant="text"
-                    color="gray"
-                    className="mr-1 font-popins font-medium"
-                  >
-                    <span>Kembali  </span>
+                  {/* <div className="flex gap-2">
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={!options.length}
+                    >
+                      Next
+                    </button>
+                  </div> */}
+
+                <div className="mt-10 flex gap-4">
+                  <Button variant="gradient" color="blue" type="button" onClick={addOmzet} className="font-poppins font-medium">
+                    <span>Simpan</span>
                   </Button>
-                </a>
-              </div>
+                  <a href="/omzet">
+                    <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
+                      <span>Kembali</span>
+                    </Button>
+                 </a>
+               </div>
+               </div>
+               </div>
+            </form>
             </div>
-          </form>
+          </main>
         </div>
-      </div>
     </section>
   );
 }
