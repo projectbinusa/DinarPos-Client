@@ -38,12 +38,13 @@ function ExportLaporan() {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }).then((res) => {
             const nama = res.data.data.namaSalesman;
+            console.log(nama);
             return nama;
         }).catch((err) => {
             console.log(err);
             return "";
         })
-    };
+    };    
 
     // EXPORT LAP PLANNING
     const [startPlanning, setstartPlanning] = useState("");
@@ -315,7 +316,56 @@ function ExportLaporan() {
         setvaluesSync(event.target.value);
         setCurrentPageSync(1);
     };
-    // END ALL ITC    
+    // END ALL ITC 
+
+    const exportSync = async (e) => {
+        if (startSync === "" || endSync === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Masukkan tanggal!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        e.preventDefault();
+
+
+        try {
+            const response = await axios.get(
+                `${API_KUNJUNGAN}/export/laporan/sync?id_selesman=${itcSync}&tglAkhir=${endSync}&tglAwal=${startSync}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Laporan Sync Report ${namaSalesman(itcSync)} Periode ${formatDate(startSync)} s.d ${formatDate(endSync)}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+    // END EXPORT LAP SYNC
 
     // EXPORT LAP OMZET
     const [startOmzet, setstartOmzet] = useState("");
@@ -945,7 +995,7 @@ function ExportLaporan() {
                                         </button>
                                     </div>
                                 </div> <br />
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium" onClick={exportSync}>Submit</Button>
                             </div>
                         </div>
 

@@ -131,6 +131,7 @@ export const API_ITC = `${url}/itc`;
 export const API_ITC_NAMA = `${url}/itc/nama`;
 
 // DATA DEAL PO
+export const API_DEAL = `${url}/deal`;
 export const API_DEAL_PO = `${url}/deal/po`;
 export const API_DEAL_PO_MARKETTING = `${url}/deal/po/salesman`;
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Card, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { API_KUNJUNGAN, API_PLANNING } from "../../../utils/BaseUrl";
+import { API_KUNJUNGAN, API_OMZET, API_PLANNING } from "../../../utils/BaseUrl";
 
 function Home() {
   const [planning, setPlanning] = useState([]);
@@ -11,7 +11,7 @@ function Home() {
   // GET ALL PLANNING
   const allPlanning = async () => {
     try {
-      const response = await axios.get(`${API_PLANNING}`, {
+      const response = await axios.get(`${API_PLANNING}/group/salesman`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setPlanning(response.data.data);
@@ -23,7 +23,7 @@ function Home() {
   // GET ALL KUNJUNGAN
   const allKunjungan = async () => {
     try {
-      const response = await axios.get(`${API_KUNJUNGAN}`, {
+      const response = await axios.get(`${API_KUNJUNGAN}/group/salesman`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setKunjungan(response.data.data);
@@ -37,6 +37,21 @@ function Home() {
     allKunjungan();
   }, []);
 
+  const date = new Date();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  const omzet = async (itc) => {
+    try {
+      const response = await axios.get(`${API_OMZET}/bulan_tahun/salesman?bulan=${month}&id_salesman=${itc}&tahun=${year}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -44,7 +59,7 @@ function Home() {
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 lg:mr-4 mx-5 lg:mx-0">
           {/* Report Card */}
           <Card className="p-2 order-1 lg:order-2">
-            <Typography variant="h4" color="blue-gray" className="font-poppins">
+            <Typography variant="h4" color="blue-gray" className="font-poppins uppercase">
               Report
             </Typography>
             <br />
@@ -75,7 +90,7 @@ function Home() {
 
           {/* Planning Card */}
           <Card className="p-2 order-1 lg:order-2">
-            <Typography variant="h4" color="blue-gray" className="font-poppins">
+            <Typography variant="h4" color="blue-gray" className="font-poppins uppercase">
               Planning
             </Typography>
             <br />

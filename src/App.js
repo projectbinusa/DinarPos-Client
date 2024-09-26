@@ -182,15 +182,14 @@ import LaporanPlanning from "./views/itc/laporanplanning/LaporanPlanning.js";
 import Ijin from "./views/itc/ijin/ijin.js";
 import AddIjin from "./views/itc/ijin/AddIjin.js";
 import Omzet from "./views/itc/omzet/Omzet.js";
-import AddOmzet from "./views/itc/omzet/AddOmzet.js"
+import AddOmzet from "./views/itc/omzet/AddOmzet.js";
 import DetailSync from "./views/itc/laporan/DetailSync.js";
 import LapAdminItc from "./views/itc/laporan/LapAdminItc.js";
 import LapKunjungan from "./views/itc/laporan/LapKunjungan.js";
 import InputPlanning from "./views/itc/planning_marketting/InputPlanning.js";
 import DetailPlanning from "./views/itc/planning_marketting/DetailPlanning.js";
 import DataPlanning from "./views/itc/planning_marketting/DataPlanning.js";
-import DealFinishMarketting from "./views/itc/deal_finish_marketting/DealFinishMarketting.js";
-
+import Model from "./views/itc/dealpo/EditDealPo.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1114,7 +1113,7 @@ function App() {
               component={PlanningPage}
               isAuthenticated={true}
             />
-             <PrivateRoute
+            <PrivateRoute
               path="/lap_planning"
               component={LaporanPlanning}
               isAuthenticated={true}
@@ -1122,33 +1121,28 @@ function App() {
             {/* DATAFINISH */}
             <PrivateRoute
               path="/dealfinish"
-              component={ DealFinish}
+              component={DealFinish}
               isAuthenticated={true}
             />
-             {/* IJIN */}
-             <PrivateRoute
+            {/* IJIN */}
+            <PrivateRoute
               path="/ijin"
               component={Ijin}
               isAuthenticated={true}
             />
             {/* DEAL MARKETTING */}
             <PrivateRoute
-              path="/dealfinish_marketting"
-              component={DealFinishMarketting}
-              isAuthenticated={true}
-            />
-            <PrivateRoute
               path="/add_ijin"
               component={AddIjin}
               isAuthenticated={true}
             />
-              {/* OMZET */}
-              <PrivateRoute
+            {/* OMZET */}
+            <PrivateRoute
               path="/omzet"
-              component={ Omzet}
+              component={Omzet}
               isAuthenticated={true}
             />
-             <PrivateRoute
+            <PrivateRoute
               path="/add_omzet"
               component={AddOmzet}
               isAuthenticated={true}
@@ -1198,7 +1192,7 @@ function App() {
               component={DailyRepost}
               isAuthenticated={true}
             />
-          <PrivateRoute
+            <PrivateRoute
               path="/lap_kunjungan"
               component={LapKunjungan}
               isAuthenticated={true}
@@ -1208,15 +1202,14 @@ function App() {
               component={ByMonthKunjungan}
               isAuthenticated={true}
             />
-             <PrivateRoute
-               path="/detail_sync/:idSalesman/:tgl"
-               component={DetailSync}
+            <PrivateRoute
+              path="/detail_sync/:idSalesman/:tgl"
+              component={DetailSync}
               isAuthenticated={true}
             />
             <PrivateRoute
               path="/print_kunjungan"
               component={PrintKunjungan}
-
               isAuthenticated={true}
             />
             <PrivateRoute
@@ -1242,6 +1235,11 @@ function App() {
             <PrivateRoute
               path="/export_laporan"
               component={ExportLaporan}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/edit_dealpo/:id"
+              component={Model}
               isAuthenticated={true}
             />
           </Switch>

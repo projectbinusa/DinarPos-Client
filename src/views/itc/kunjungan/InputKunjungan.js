@@ -25,7 +25,7 @@ import {
 } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Decrypt from "../../../component/Decrypt";
-import $ from "jquery";
+import $, { isEmptyObject } from "jquery";
 import Swal from "sweetalert2";
 
 function InputKunjungan() {
@@ -61,7 +61,7 @@ function InputKunjungan() {
   const [serviceTt, setserviceTt] = useState("");
   const [visit, setvisit] = useState("");
   const [lokasiLon, setlokasiLon] = useState("");
-  const [nVisit, setnVisit] = useState("");
+  const [nVisit, setnVisit] = useState(0);
 
   useEffect(() => {
     let watchId;
@@ -297,6 +297,38 @@ function InputKunjungan() {
       getAllKunjungan();
     }
   }, [date]);
+
+  useEffect(() => {
+    if (customerId2 !== 0) {
+      axios.get(`${API_KUNJUNGAN}/max-visit?idCustomer=${customerId2}&idSalesman=${salesmanId}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      }).then((res) => {
+        const data2 = res.data.data || [];
+        let jml = 0;
+        if (Array.isArray(data2)) {
+          const validItems = data2.filter(item => item && Object.keys(item).length > 0);
+          jml = validItems.length;
+        }
+
+        let n = 0;
+        if (jml > 0) {
+          const maxVisit = Math.max(...data2.map(item => item.n_visit));
+          if (visit === 'V') {
+            n = maxVisit + 1;
+          }
+        } else {
+          if (visit === 'V') {
+            n = 1;
+          }
+        }
+
+        setnVisit(n);
+        console.log(`nVisit: ${n}`);
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  })
 
   // ADD KUNJUNGAN
   const addKunjungan = async (e) => {

@@ -12,52 +12,63 @@ import {
 import axios from "axios";
 
 function LapPlanning() {
-  const [tglAwal, setTglAwal] = useState("");
-  const [tglAkhir, setTglAkhir] = useState("");
+  const [tglAwal, settglAwal ] = useState("");
+  const [tglAkhir, settglAkhir ] = useState("");
   const [status, setStatus] = useState("");
 
   const exportDataPlanning = async (e) => {
     e.preventDefault();
 
     if (!tglAwal || !tglAkhir || !status) {
-      console.error("Semua field harus diisi");
-      return;
+        console.error("Semua field harus diisi");
+        return;
     }
 
+    
     try {
-      const response = await axios.get(
-      `${API_PLANNING_EXPORT_EXCEL}=${tglAwal}&tglAkhir=${tglAkhir}&status=${status}`,
-        {
-          headers: {
-            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-          },
-          responseType: "blob", // penting untuk mendownload file
+        const response = await axios.get(
+            `${API_PLANNING_EXPORT_EXCEL}?tglAwal=${tglAwal}&tglAkhir=${tglAkhir}&status=${status}`,
+            {
+                headers: {
+                    "auth-tgh": `jwt ${localStorage.getItem("token")}`,
+                },
+                responseType: "blob", 
+            }
+        );
+
+        if (response.status === 200) {
+            const fileName =
+                response.headers["content-disposition"]?.split("filename=")[1]?.replace(/['"]/g, "") ||
+                "LAPORAN_PLANNING.xlsx";
+
+            // Membuat objek Blob dari response data
+            const blob = new Blob([response.data], {
+                type: response.headers["content-type"],
+            });
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", fileName); 
+            document.body.appendChild(link);
+            link.click(); // Mengunduh file
+            document.body.removeChild(link); // Menghapus elemen link dari DOM
+            window.URL.revokeObjectURL(url); // Menghapus URL yang telah dibuat
+        } else {
+            console.error("Gagal mendapatkan file dari server. Status:", response.status);
         }
-      );
-
-      if (response.status === 200) {
-        const fileName =
-          response.headers["content-disposition"]?.split("filename=")[1] ||
-          "LAPORAN_PLANNING.xlsx";
-        const blob = new Blob([response.data], {
-          type: response.headers["content-type"],
-        });
-        const url = window.URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", fileName.replace(/['"]/g, "")); // Hapus tanda kutip dari nama file
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      } else {
-        console.error("Gagal mendapatkan file dari server.");
-      }
     } catch (error) {
-      console.error("Error  saat mengunduh file:", error);
+        // Menangani error dengan lebih baik
+        if (error.response) {
+            console.error("Kesalahan dari server:", error.response.data);
+        } else if (error.request) {
+            console.error("Permintaan tidak mendapatkan respons:", error.request);
+        } else {
+            console.error("Error saat mengatur permintaan:", error.message);
+        }
     }
-  };
+};
+
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -91,7 +102,7 @@ function LapPlanning() {
                   label="Tanggal Awal"
                   required
                   value={tglAwal}
-                  onChange={(e) => setTglAwal(e.target.value)}
+                  onChange={(e) => settglAwal(e.target.value)}
                 />
               </div>
               <div className="mt-8">
@@ -102,7 +113,7 @@ function LapPlanning() {
                   label="Tanggal Akhir"
                   required
                   value={tglAkhir}
-                  onChange={(e) => setTglAkhir(e.target.value)}
+                  onChange={(e) => settglAkhir(e.target.value)}
                 />
               </div>
               <div className="mt-8">
@@ -113,7 +124,7 @@ function LapPlanning() {
                   variant="outlined"
                   required
                   value={status}
-                  onChange={(e) => setStatus(e.target.value)}
+                  onChange={(value) => setStatus(value)} // Perbaiki onChange
                 >
                   <Option value="">Pilih Status</Option>
                   <Option value="NAMA">Nama</Option>
@@ -129,13 +140,12 @@ function LapPlanning() {
               color="blue"
               type="submit"
             >
-              Export  Planning
+              Export Planning
             </Button>
           </form>
         </main>
       </div>
     </section>
-    
   );
 }
 

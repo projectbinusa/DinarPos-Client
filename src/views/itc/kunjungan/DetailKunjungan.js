@@ -6,27 +6,30 @@ import axios from "axios";
 import { API_KUNJUNGAN } from "../../../utils/BaseUrl";
 
 function DetailKunjungan() {
-  const [datas, setdatas] = useState(null);
+  const [datas, setDatas] = useState(null);
   const param = useParams();
 
   useEffect(() => {
-    axios
-      .get(`${API_KUNJUNGAN}/` + param.id, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      })
-      .then((res) => {
-        setdatas(res.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (param.id) {
+      axios
+        .get(`${API_KUNJUNGAN}/${param.id}`, {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        })
+        .then((res) => {
+          setDatas(res.data.data);
+          console.log(res.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, [param.id]);
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
-        <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4">
           <Typography variant="lead" className="uppercase">
             Detail Kunjungan
           </Typography>
@@ -44,65 +47,98 @@ function DetailKunjungan() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
-            <table>
-              <thead className="bg-blue-500 text-white w-full">
-                <tr>
-                  <th className="text-xs py-1 px-2 font-semibold w-[4%]">No</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Tanggal</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Nama</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Instansi</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Jenis</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Daerah</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Tujuan</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Action</th>
-                  <th className="text-xs py-1 px-2 font-semibold">
-                    Info didapat
-                  </th>
-                  <th className="text-xs py-1 px-2 font-semibold">CP</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Visit</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Tipe</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Peluang</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Deal</th>
-                  <th className="text-xs py-1 px-2 font-semibold">Detail</th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas && datas.length > 0 ? (
-                  datas.map((kunjungan, index) => (
-                    <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.tanggal}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.nama}</td>
-                      <td className="text-sm py-2 px-3">
-                        {kunjungan.instansi}
-                      </td>
-                      <td className="text-sm py-2 px-3">{kunjungan.jenis}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.daerah}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.tujuan}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.action}</td>
-                      <td className="text-sm py-2 px-3">
-                        {kunjungan.info_dapat}
-                      </td>
-                      <td className="text-sm py-2 px-3">{kunjungan.cp}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.visit}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.tipe}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.peluang}</td>
-                      <td className="text-sm py-2 px-3">{kunjungan.deal}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="30"
-                      className="text-center capitalize py-3 bg-gray-100"
-                    >
-                      Tidak ada data
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Column 1 */}
+            <div>
+              <div className="mb-4">
+                <span className="font-bold">Tanggal: </span>
+                <span>{datas?.tanggal}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Jenis Instansi: </span>
+                <span>{datas?.jenis_instansi}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Daerah: </span>
+                <span>{datas?.daerah}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Action: </span>
+                <span>{datas?.action}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">CP: </span>
+                <span>{datas?.cp}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Deal: </span>
+                <span>{datas?.deal}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Waktu Pengadaan: </span>
+                <span>{datas?.waktu_pengadaan}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Tanggal Deal: </span>
+                <span>{datas?.tanggal_deal}</span>
+              </div>
+            </div>
+
+            {/* Column 2 */}
+            <div>
+              <div className="mb-4">
+                <span className="font-bold">Instansi: </span>
+                <span>{datas?.instansi}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Tujuan: </span>
+                <span>{datas?.tujuan}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Peluang: </span>
+                <span>{datas?.peluang}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Info yang didapat: </span>
+                <span>{datas?.info_didapat}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Kunjungan Ke-: </span>
+                <span>{datas?.kunjungan_ke}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Pembayaran: </span>
+                <span>{datas?.pembayaran}</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-bold">Tipe: </span>
+                <span>{datas?.tipe}</span>
+              </div>
+
+              {/* Lokasi Reporting */}
+              <div className="mb-4">
+                <span className="font-bold">Lokasi Reporting: </span>
+                <div>
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${datas?.lokasi_lat},${datas?.lokasi_lng}&z=15&output=embed`}
+                    width="300"
+                    height="200"
+                    allowFullScreen=""
+                    loading="lazy"
+                  ></iframe>
+                </div>
+              </div>
+
+              {/* Foto Section */}
+              <div className="mb-4">
+                <span className="font-bold">Foto: </span>
+                <img
+                  src={datas?.foto}
+                  alt="Foto Lokasi"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
           </div>
         </main>
       </div>

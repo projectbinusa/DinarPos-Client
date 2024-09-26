@@ -120,7 +120,7 @@ function AddIjin() {
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addIjin}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="mt-8">
+              <div className="mt-2">
                 <Select
                   label="Status"
                   color="blue"
