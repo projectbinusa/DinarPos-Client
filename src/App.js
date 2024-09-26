@@ -179,7 +179,7 @@ import InputKunjungan from "./views/itc/kunjungan/InputKunjungan.js";
 import PlanningPage from "./views/itc/planning/PlanningPage.js";
 import DealFinish from "./views/itc/dealfinish/DealFinish.js";
 import LaporanPlanning from "./views/itc/laporanplanning/LaporanPlanning.js";
-import Ijin from "./views/itc/ijin/Ijin.js";
+import Ijin from "./views/itc/ijin/ijin";
 import AddIjin from "./views/itc/ijin/AddIjin.js";
 import Omzet from "./views/itc/omzet/Omzet.js";
 import AddOmzet from "./views/itc/omzet/AddOmzet.js"
@@ -1114,7 +1114,7 @@ function App() {
               component={PlanningPage}
               isAuthenticated={true}
             />
-             <PrivateRoute
+            <PrivateRoute
               path="/lap_planning"
               component={LaporanPlanning}
               isAuthenticated={true}
@@ -1122,11 +1122,11 @@ function App() {
             {/* DATAFINISH */}
             <PrivateRoute
               path="/dealfinish"
-              component={ DealFinish}
+              component={DealFinish}
               isAuthenticated={true}
             />
-             {/* IJIN */}
-             <PrivateRoute
+            {/* IJIN */}
+            <PrivateRoute
               path="/ijin"
               component={Ijin}
               isAuthenticated={true}
@@ -1142,13 +1142,13 @@ function App() {
               component={AddIjin}
               isAuthenticated={true}
             />
-              {/* OMZET */}
-              <PrivateRoute
+            {/* OMZET */}
+            <PrivateRoute
               path="/omzet"
-              component={ Omzet}
+              component={Omzet}
               isAuthenticated={true}
             />
-             <PrivateRoute
+            <PrivateRoute
               path="/add_omzet"
               component={AddOmzet}
               isAuthenticated={true}
@@ -1198,7 +1198,7 @@ function App() {
               component={DailyRepost}
               isAuthenticated={true}
             />
-          <PrivateRoute
+            <PrivateRoute
               path="/lap_kunjungan"
               component={LapKunjungan}
               isAuthenticated={true}
@@ -1208,9 +1208,9 @@ function App() {
               component={ByMonthKunjungan}
               isAuthenticated={true}
             />
-             <PrivateRoute
-               path="/detail_sync/:idSalesman/:tgl"
-               component={DetailSync}
+            <PrivateRoute
+              path="/detail_sync/:idSalesman/:tgl"
+              component={DetailSync}
               isAuthenticated={true}
             />
             <PrivateRoute
