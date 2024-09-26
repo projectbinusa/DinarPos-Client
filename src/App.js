@@ -179,7 +179,7 @@ import InputKunjungan from "./views/itc/kunjungan/InputKunjungan.js";
 import PlanningPage from "./views/itc/planning/PlanningPage.js";
 import DealFinish from "./views/itc/dealfinish/DealFinish.js";
 import LaporanPlanning from "./views/itc/laporanplanning/LaporanPlanning.js";
-import Ijin from "./views/itc/ijin/Ijin.js";
+import Ijin from "./views/itc/ijin/ijin";
 import AddIjin from "./views/itc/ijin/AddIjin.js";
 import Omzet from "./views/itc/omzet/Omzet.js";
 import AddOmzet from "./views/itc/omzet/AddOmzet.js";
