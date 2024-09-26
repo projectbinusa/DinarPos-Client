@@ -17,6 +17,34 @@ function Ijin() {
   const [salesmanId, setsalesmanId] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const id = Decrypt();
+  useEffect(() => {
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setLevel(response.levelPengguna);
+
+        if (level === "Marketting") {
+          const nama = response.namaPengguna;
+          try {
+            axios.get(`${API_ITC}/nama?nama=` + nama, {
+              headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            }).then((ress) => {
+              setsalesmanId(ress.data.data.id || 0);
+            })
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
   const initializeDataTable = () => {
     if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
@@ -116,31 +144,6 @@ function Ijin() {
       }
     });
   };
-
-  const id = Decrypt();
-  useEffect(() => {
-    axios
-      .get(`${API_PENGGUNA}/` + id, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      })
-      .then((res) => {
-        const response = res.data.data;
-        setLevel(response.levelPengguna);
-        const nama = response.namaPengguna;
-        try {
-          axios.get(`${API_ITC}/nama?nama=` + nama, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-          }).then((ress) => {
-            setsalesmanId(ress.data.data.id);
-          })
-        } catch (err) {
-          console.log(err);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id]);
 
   useEffect(() => {
     if (level === 'Marketting') {

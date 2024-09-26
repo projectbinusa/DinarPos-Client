@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 function LapKunjungan() {
     const [tglAwal, setTglAwal] = useState("");
     const [tglAkhir, setTglAkhir] = useState("");
+    const [deal, setDeal] = useState("");
     const [salesmanId, setSalesmanId] = useState(0);
 
     const tableRef = useRef(null);
@@ -60,11 +61,61 @@ function LapKunjungan() {
         }
     };
 
+    // < 50
+    const getAllKurang50 = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/between0and50`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setLaporan(response.data.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    // < 80
+    const getAllKurang80 = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/deal_po`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setLaporan(response.data.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    // < 100
+    const getAllKurang100 = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/between51and80`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setLaporan(response.data.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
     const filterTangggal = async () => {
         if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
             Swal.fire({
                 icon: "warning",
                 title: "Isi Form Terlebih Dahulu!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        setvalidasi(true);
+    };
+
+    const filterDeal = async () => {
+        if (deal === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Pilih Deal!",
                 showConfirmButton: false,
                 timer: 1500,
             });
@@ -92,6 +143,20 @@ function LapKunjungan() {
             getAllTanggalSalesman();
         }
     }, [validasi, tglAkhir, tglAwal]);
+
+    useEffect(() => {
+        if (validasi && deal === "50") {
+            getAllKurang50();
+        }
+        if (validasi && deal === "80") {
+            getAllKurang80();
+        }
+        if (validasi && deal === "100") {
+            getAllKurang100();
+        }
+    }, [validasi, deal]);
+
+
 
     // ALL ITC
     const [values, setvalues] = useState("");
@@ -224,18 +289,19 @@ function LapKunjungan() {
                             variant="static"
                             color="blue"
                             size="lg"
-                            // onChange={(selectedOption) => setShift(selectedOption)}
+                            onChange={(selectedOption) => setDeal(selectedOption)}
                             required
                         >
                             <Option value="">Pilih</Option>
-                            <Option value="< 50" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 50</Option>
-                            <Option value="< 80" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 80</Option>
-                            <Option value="< 100" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 100</Option>
+                            <Option value="50" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 50</Option>
+                            <Option value="80" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 80</Option>
+                            <Option value="100" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 100</Option>
                         </Select>
                         <IconButton
                             color="blue"
                             size="lg"
                             type="button"
+                            onClick={filterDeal}
                         ><MagnifyingGlassIcon className="w-5 h-5 text-white" /></IconButton>
                     </div> <br /> <br />
                     <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">

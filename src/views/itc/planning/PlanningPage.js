@@ -6,33 +6,35 @@ import {
   Button,
   Input,
   Typography,
+  Select,
+  Option,
   Breadcrumbs,
 } from "@material-tailwind/react";
-import $ from "jquery"
 import Swal from "sweetalert2";
+import $ from "jquery"
 
 function PlanningPage() {
   const [planning, setPlanning] = useState([]);
-  const [tglAwal, setTglAwal] = useState("");
-  const [tglAkhir, setTglAkhir] = useState("");
+  const [tglAwal, settglAwal] = useState("");
+  const [tglAkhir, settglAkhir] = useState("");
   const [idItc, setIdItc] = useState(0);
 
-  const tableRef = useRef(null);
   const [validasi, setvalidasi] = useState(false);
 
+  const tableRef = useRef(null);
   const initializeDataTable = () => {
     if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable();
     }
   }
 
-  // GET ALL
+  // Mengambil data dari API
   const getAllPlanning = async () => {
     try {
       const response = await axios.get(`${API_PLANNING}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setPlanning(response.data.data);
+      setPlanning(response.data.data || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -47,20 +49,6 @@ function PlanningPage() {
       const res = response.data.data;
       setPlanning(res);
       setvalidasi(false)
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  // BETWEEN TGL SALESMAN
-  const getBetweenTanggalSalesman = async () => {
-    try {
-      const response = await axios.get(`${API_PLANNING}/tgl_between/salesman?id_salesman=${idItc}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      const res = response.data.data;
-      setPlanning(res);
-      setvalidasi(false);
     } catch (err) {
       console.log(err);
     }
@@ -94,9 +82,6 @@ function PlanningPage() {
     if (validasi || tglAkhir !== "" || tglAwal !== "") {
       getBetweenTanggal();
     }
-    if (validasi || tglAkhir !== "" || tglAwal !== "" && idItc !== 0) {
-      getBetweenTanggalSalesman()
-    }
   }, [validasi]);
 
   // ALL ITC
@@ -128,7 +113,6 @@ function PlanningPage() {
     setCurrentPage(1);
   };
   // END ALL ITC  
-  console.log(planning);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -161,7 +145,7 @@ function PlanningPage() {
                 label="Tanggal Awal"
                 required
                 value={tglAwal}
-                onChange={(e) => setTglAwal(e.target.value)}
+                onChange={(e) => settglAwal(e.target.value)}
               />
             </div>
             <div className="mt-8 w-72 lg:w-[50%]">
@@ -172,7 +156,7 @@ function PlanningPage() {
                 label="Tanggal Akhir"
                 required
                 value={tglAkhir}
-                onChange={(e) => setTglAkhir(e.target.value)}
+                onChange={(e) => settglAkhir(e.target.value)}
               />
             </div>
             <div className="flex gap-2 items-end mt-8 w-72 lg:w-[50%]">
@@ -229,51 +213,77 @@ function PlanningPage() {
             </Button>
           </div>
 
-          <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
+          <div className="overflow-x-auto mt-6">
             <table id="example_data"
-              ref={tableRef}
-              className="rounded-sm table-auto w-full overflow-x-auto"
-            >
+              ref={tableRef} className="w-full table-auto border-collapse  overflow-x-auto">
               <thead className="bg-blue-600 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3">No</th>
-                  <th className="text-sm py-2 px-3">Tanggal</th>
-                  <th className="text-sm py-2 px-3">Nama ITC</th>
-                  <th className="text-sm py-2 px-3">Nama Customer</th>
-                  <th className="text-sm py-2 px-3">Jenis</th>
-                  <th className="text-sm py-2 px-3">Daerah</th>
-                  <th className="text-sm py-2 px-3">Printer</th>
-                  <th className="text-sm py-2 px-3">Jumlah Murid</th>
-                  <th className="text-sm py-2 px-3">PC</th>
-                  <th className="text-sm py-2 px-3">UNBK</th>
-                  <th className="text-sm py-2 px-3">Jurusan</th>
-                  <th className="text-sm py-2 px-3">Pihak Dituju</th>
-                  <th className="text-sm py-2 px-3">Tujuan</th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    No
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    Tanggal
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    Nama Customer
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    Jenis
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    kecamatan
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    Printer
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    Jumlah Murid
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    PC
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold text-left">
+                    UNBK
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {planning.length > 0 ? (
                   planning.map((row, index) => (
                     <tr key={row.id} className="border-t hover:bg-gray-50 transition">
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{row.created_date}</td>
-                      <td className="text-sm py-2 px-3">{row.salesman.namaSalesman}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.nama_customer}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.jenis}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.printer}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.jml}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.pc}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.unbk}</td>
-                      <td className="text-sm py-2 px-3">{row.customer.jurusan}</td>
-                      <td className="text-sm py-2 px-3">{row.bertemu}</td>
-                      <td className="text-sm py-2 px-3">{row.ket}</td>
+                      <td className="text-sm py-2 px-3">
+                        {index + 1}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.created_date}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.nama_customer}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.jenis}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.kec.nama_kec}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.printer}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.jml}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.pc}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.unbk}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td colSpan="13" className="text-center py-4 text-sm text-gray-600">
-                      Tidak ada data
+                      Data tidak ditemukan
                     </td>
                   </tr>
                 )}

@@ -137,25 +137,39 @@ function Omzet() {
           <table id="example_data" ref={tableRef} className="rounded-sm table-auto w-full">
             <thead className="bg-blue-500 text-white">
               <tr>
-                <th className="text-sm py-2 px-3 font-semibold">No</th>
-                <th className="text-sm py-2 px-3 font-semibold">Tanggal</th>
-                <th className="text-sm py-2 px-3 font-semibold">Omzet</th>
-                <th className="text-sm py-2 px-3 font-semibold">Salesman</th>
-                <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                 <th className="text-sm py-2 px-3 font-semibold">
+                  No
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                  Tanggal
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                   Omzet
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                  Salesman
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                  Aksi</th>
               </tr>
             </thead>
             <tbody>
               {omzet.length > 0 ? (
                 omzet.map((row, index) => (
                   <tr key={row.id}>
-                    <td className="text-sm py-2 px-3">{index + 1}</td>
                     <td className="text-sm py-2 px-3">
+                      
+                      {index + 1}
+                     </td>
+                     <td className="text-sm py-2 px-3">
                       {new Date(row.created_date).toLocaleDateString()}
-                    </td>
-                    <td className="text-sm py-2 px-3">{row.omzet}</td>
-                    {/* Akses property nama dari objek salesman */}
-                    <td className="text-sm py-2 px-3">{row.salesman.namaSalesman}</td>
-                    {/* Kolom aksi untuk tombol hapus */}
+                     </td>
+                     <td className="text-sm py-2 px-3">
+                      {row.omzet}
+                      </td>
+                     <td className="text-sm py-2 px-3">
+                      {row.salesman.namaSalesman}
+                      </td>
                     <td className="text-sm py-2 px-3 flex items-center justify-center">
                       <IconButton size="md" color="red" onClick={() => hapusOmzet(row.id)}>
                         <TrashIcon className="w-6 h-6 text-white" />
