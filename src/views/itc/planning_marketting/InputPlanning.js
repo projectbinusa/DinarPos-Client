@@ -549,7 +549,7 @@ function InputPlanning() {
                 </main>
             </div>
             <Dialog open={open} handler={handleOpen} size="lg">
-                <ModalEditPlanning handleOpen={handleOpen} terakhirUpdate={dataToEdit.terakhir_update} nama={dataToEdit.nama} jenis={dataToEdit.jenis} kab={dataToEdit.kab} kec={dataToEdit.kec} pihak={dataToEdit.pihak} ket={dataToEdit.ket} idCustomer={dataToEdit.idCustomer} idPlan={dataToEdit.idPlan} namaSalesman={dataToEdit.namaSalesman}/>
+                <ModalEditPlanning handleOpen={handleOpen} terakhirUpdate={dataToEdit.terakhir_update} nama={dataToEdit.nama} jenis={dataToEdit.jenis} kab={dataToEdit.kab} kec={dataToEdit.kec} pihak={dataToEdit.pihak} ket={dataToEdit.ket} idCustomer={dataToEdit.idCustomer} idPlan={dataToEdit.idPlan} namaSalesman={dataToEdit.namaSalesman} />
             </Dialog>
         </section>
     )

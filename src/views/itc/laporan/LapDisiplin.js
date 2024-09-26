@@ -2,14 +2,20 @@ import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react
 import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import $ from "jquery";
-import { API_SALESMAN } from "../../../utils/BaseUrl";
+import { API_IJIN, API_KUNJUNGAN, API_SALESMAN, API_SYNC_KUNJUNGAN } from "../../../utils/BaseUrl";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 function LapDisiplin() {
     const tableRef = useRef(null);
     const [laporans, setLaporan] = useState([]);
+    const [jmlKunjungan, setJmlKunjungan] = useState(0);
+    const [jmlNotNullFoto, setJmlNotNullFoto] = useState(0);
+    const [jmlIjin, setJmlIjin] = useState(0);
 
     const [tglAwal, setTglAwal] = useState("");
     const [tglAkhir, setTglAkhir] = useState("");
+    const [salesmanId2, setSalesmanId2] = useState(0);
     const [salesmanId, setSalesmanId] = useState(0);
 
     const initializeDataTable = () => {
@@ -19,6 +25,24 @@ function LapDisiplin() {
 
         $(tableRef.current).DataTable({});
     };
+
+    const formatDate = (value) => {
+        const date = new Date(value);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const formattedDate = `${year}/${month}/${day}`;
+
+        return formattedDate;
+    };
+
+    useEffect(() => {
+        if (laporans && laporans.length > 0) {
+            initializeDataTable();
+        }
+    }, [laporans]);
+
 
     // ALL ITC
     const [values, setvalues] = useState("");
@@ -46,11 +70,70 @@ function LapDisiplin() {
 
     const handleChange = (event) => {
         setvalues(event.target.value);
-        setSalesmanId(event.target.value);
+        setSalesmanId2(event.target.value);
         setCurrentPage(1);
     };
-    // END ALL ITC    
+    // END ALL ITC
 
+    // GET 
+    const getAll = async () => {
+        try {
+            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal_beetwen/salesman?id_salesman=${salesmanId}&tgl_akhir=${formatDate(tglAkhir)}&tgl_awal=${formatDate(tglAwal)}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            setLaporan(response.data.data || []);
+            try {
+                const res = await axios.get(`${API_KUNJUNGAN}/date/between/salesman?id_salesman=${salesmanId}&tgl_akhir=${tglAkhir}&tgl_awal=${tglAwal}`, {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                });
+                setJmlKunjungan(res.data.data.length);
+
+                const resNotNullFoto = await axios.get(`${API_KUNJUNGAN}/foto/not_null?id_salesman=${salesmanId}&tgl_akhir=${formatDate(tglAkhir)}&tgl_awal=${formatDate(tglAwal)}`, {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                });
+                setJmlNotNullFoto(res.data.data.length);
+
+                const resIjin = await axios.get(`${API_IJIN}/tanggal_beetwen/salesman?id_salesman=${salesmanId}&tgl_akhir=${formatDate(tglAkhir)}&tgl_awal=${formatDate(tglAwal)}`, {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                });
+                setJmlIjin(res.data.data.length);
+            } catch (err) {
+                console.log('error jumlah kunjungan : ', err);
+            }
+        } catch (error) {
+            setLaporan([]);
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    const filterTangggal = async () => {
+        if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir || salesmanId2 === 0) {
+            Swal.fire({
+                icon: "warning",
+                title: "Isi Form Terlebih Dahulu!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+        setSalesmanId(salesmanId2)
+    };
+
+    useEffect(() => {
+        if (tglAkhir !== "" && tglAwal !== "" && salesmanId !== 0) {
+            getAll()
+        }
+    }, [tglAkhir, tglAwal, salesmanId])
+
+    const formattedNumber = (number) => {
+        return number.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    };
+    
+    var total;
+    const sel = laporans.length - total;
+    const persen = (sel / laporans.length) * 100;
+    const persenFoto = (jmlNotNullFoto / jmlKunjungan) * 100;
+    const telat = laporans.length - sel
     return (
         <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
             <SidebarAdmin />
@@ -141,7 +224,7 @@ function LapDisiplin() {
                         <Button
                             className="mt-5 font-poppins font-medium"
                             color="blue"
-                            type="button"
+                            type="button" onClick={filterTangggal}
                         >
                             Cari
                         </Button>
@@ -163,6 +246,32 @@ function LapDisiplin() {
                                             <th className="text-sm py-2 px-2.5 font-semibold">Result</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        {laporans.length > 0 ? (
+                                            laporans.map((row, idx) => {
+                                                const x = row.tanggalKunjungan;
+                                                const y = row.timestamp;
+                                                var r;
+                                                x === y ? r = 0 : r = 1;
+                                                total = total + r;
+                                                return (
+                                                    <tr key={idx}>
+                                                        <td className="text-sm w-[4%]">{idx + 1}</td>
+                                                        <td className="text-sm py-2 px-3">{row.salesman.namaSalesman}</td>
+                                                        <td className="text-sm py-2 px-3">{row.tanggalKunjungan}</td>
+                                                        <td className="text-sm py-2 px-3">{row.timestamp}</td>
+                                                        <td className="text-sm py-2 px-3">{r}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        ) : (<tr>
+                                            <td
+                                                colSpan="5"
+                                                className="text-sm text-center capitalize py-2 bg-gray-100">
+                                                Tidak ada data
+                                            </td>
+                                        </tr>)}
+                                    </tbody>
                                 </table>
                             </div>
                             <div>
@@ -170,16 +279,16 @@ function LapDisiplin() {
                                     <Typography variant="lead" className="uppercase font-poppins text-white">Presentase</Typography>
                                 </div>
                                 <div className="border border-gray-500 text-center py-4">
-                                    <p>Dari Tanggal 2024-07-01 s/d 2024-09-09</p> <br />
+                                    <p>Dari Tanggal {tglAwal} s/d {tglAkhir}</p> <br />
                                     <p>Tingkat Kedisiplinan</p>
-                                    <Typography variant="h4" className="uppercase font-poppins">93.3%</Typography> <br />
+                                    <Typography variant="h4" className="uppercase font-poppins">{formattedNumber(persen)}%</Typography> <br />
                                     <p>Foto Evident</p>
-                                    <Typography variant="h4" className="uppercase font-poppins">93.3%</Typography>
-                                    <p>790 dari 790 Report terdapat foto evident</p> <br />
+                                    <Typography variant="h4" className="uppercase font-poppins">{formattedNumber(persenFoto)}%</Typography>
+                                    <p>{jmlNotNullFoto} dari {jmlKunjungan} Report terdapat foto evident</p> <br />
                                     <p>Jumlah Keterlambatan</p>
-                                    <Typography variant="h4" className="uppercase font-poppins">1</Typography> <br />
+                                    <Typography variant="h4" className="uppercase font-poppins">{telat}</Typography> <br />
                                     <p>Jumlah Izin</p>
-                                    <Typography variant="h4" className="uppercase font-poppins">1</Typography> <br />
+                                    <Typography variant="h4" className="uppercase font-poppins">{jmlIjin}</Typography> <br />
                                 </div>
                             </div>
                         </div> : <></>
