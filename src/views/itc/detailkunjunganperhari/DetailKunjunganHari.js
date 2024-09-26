@@ -10,6 +10,7 @@ function DetailKunjunganHari() {
   // const [kekurangan, setkekurangan] = useState("");
   const [kunjunganData, setKunjunganData] = useState([]);
   const param = useParams();
+
   useEffect(() => {
     if (param.id) {
       axios
@@ -54,34 +55,30 @@ function DetailKunjunganHari() {
             <table>
               <thead className="bg-blue-500 text-white w-full">
                 <tr>
-                  <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">
-                    No
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
-                    Instansi
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Jenis</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tujuan</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Action</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
+                  <th className="text-sm py-1 px-2 font-semibold w-[4%]">No</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Instansi</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Jenis</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Daerah</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Tujuan</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Action</th>
+                  <th className="text-sm py-1 px-2 font-semibold">
                     Info didapat
                   </th>
-                  <th className="text-sm py-2 px-3.5 font-semibold">CP</th>
-                  <th className="text-sm py-2 px-3.5 font-semibold">Visit</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tipe</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Peluang</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Deal</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Byr_%</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Wkt_p</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tgl_d</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Foto</th>
+                  <th className="text-sm py-1 px-3.5 font-semibold">CP</th>
+                  <th className="text-sm py-1 px-3.5 font-semibold">Visit</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Tipe</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Peluang</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Deal</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Byr_%</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Wkt_p</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Tgl_d</th>
+                  <th className="text-sm py-1 px-2 font-semibold">Foto</th>
                 </tr>
               </thead>
               <tbody>
                 {kunjunganData.map((item, index) => (
                   <tr key={item.id}>
-                    <td className="text-sm py-2 px-2.5 font-medium">
+                    <td className="text-sm py-2 px-2 font-medium">
                       {index + 1}
                     </td>
                     <td className="text-sm py-2 px-2.5">{item.instansi}</td>
