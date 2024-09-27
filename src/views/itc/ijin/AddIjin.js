@@ -18,22 +18,24 @@ function AddIjin() {
   const [created_date, setCreatedDate] = useState("");
   const [ket, setKet] = useState("");
   const [foto, setFoto] = useState(null);
-  const [previewFoto, setPreviewFoto] = useState("");
-  const [status, setStatus] = useState("");
+  const [jenis, setJenis] = useState("");
 
+  // Fungsi untuk menangani penambahan ijin
   const addIjin = async (e) => {
     e.preventDefault();
 
+    // Membuat FormData untuk mengirim data dan file
     const formData = new FormData();
     formData.append("created_date", created_date);
     formData.append("ket", ket);
-    formData.append("foto", foto);
+    formData.append("foto", foto); // Menyisipkan file foto
+    formData.append("jenis", jenis);
 
     try {
       await axios.post(`${API_IZIN}/add`, formData, {
         headers: {
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data", // Mengatur tipe konten untuk mengirim file
         },
       });
       Swal.fire({
@@ -43,6 +45,9 @@ function AddIjin() {
         timer: 1500,
       });
       history.push("/ijin");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
@@ -54,6 +59,7 @@ function AddIjin() {
           showConfirmButton: false,
           timer: 1500,
         });
+        console.log(error);
       } else {
         Swal.fire({
           icon: "error",
@@ -62,20 +68,16 @@ function AddIjin() {
           showConfirmButton: false,
           timer: 1500,
         });
+        console.log(error);
       }
     }
   };
 
+  // Fungsi untuk menangani perubahan input file foto
   const handleFotoChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       setFoto(file);
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewFoto(reader.result);
-      };
-      reader.readAsDataURL(file);
     } else {
       Swal.fire({
         icon: "warning",
@@ -83,19 +85,9 @@ function AddIjin() {
         showConfirmButton: false,
         timer: 1500,
       });
-      setPreviewFoto(null);
       setFoto(null);
     }
   };
-
-  const level = localStorage.getItem("userLevel");
-  let dashboard = "";
-
-  if (level === "Superadmin") {
-    dashboard = "dashboard";
-  } else if (level === "AdminService") {
-    dashboard = "dashboard_service";
-  }
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -106,7 +98,7 @@ function AddIjin() {
             Tambah Ijin
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href={`/${dashboard}`} className="opacity-60">
+            <a href={`/${localStorage.getItem("userLevel") === "Superadmin" ? "dashboard" : "dashboard_service"}`} className="opacity-60">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
@@ -122,12 +114,12 @@ function AddIjin() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="mt-2">
                 <Select
-                  label="Status"
+                  label="Durasi"
                   color="blue"
                   variant="outlined"
                   required
-                  value={status}
-                  onChange={(e) => setStatus(e)}
+                  value={jenis}
+                  onChange={(e) => setJenis(e)}
                 >
                   <Option value="1 HARI">1 Hari</Option>
                   <Option value="1 HARI LEBIH">1 Hari Lebih</Option>
@@ -162,30 +154,13 @@ function AddIjin() {
                   placeholder="Masukkan Keterangan"
                   variant="static"
                   color="blue"
-                  name="keterangan"
                   onChange={(e) => setKet(e.target.value)}
                 />
               </div>
             </div>
-            <div className="mt-10 flex gap-4">
-              <Button
-                variant="gradient"
-                color="blue"
-                type="submit"
-                className="font-popins font-medium"
-              >
-                <span>Simpan</span>
-              </Button>
-              <a href="/ijin">
-                <Button
-                  variant="text"
-                  color="gray"
-                  className="mr-1 font-popins font-medium"
-                >
-                  <span>Kembali</span>
-                </Button>
-              </a>
-            </div>
+            <Button type="submit" className="mt-5" color="blue">
+              Tambah
+            </Button>
           </form>
         </main>
       </div>

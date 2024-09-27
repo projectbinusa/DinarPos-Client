@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
 import "datatables.net";
@@ -104,6 +103,15 @@ function Ijin() {
     }
   };
 
+  useEffect(() => {
+    if (level === "Marketting") {
+      getAllIjinSalesman();
+    } else {
+      getAllIjin();
+    }
+  }, [salesmanId, level]);
+
+
   const hapusIjin = async (id) => {
     Swal.fire({
       title: "Apakah Anda Ingin Menghapus?",
@@ -166,6 +174,13 @@ function Ijin() {
     }
   }, [ijin]);
 
+  let dashboard = "";
+  if (level === "Superadmin") {
+    dashboard = "dashboard";
+  } else if (level === "AdminService") {
+    dashboard = "dashboard_service";
+  }
+
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -175,7 +190,7 @@ function Ijin() {
             Ijin
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href={"/home"} className="opacity-60">
+            <a href={"/" + dashboard} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -185,21 +200,23 @@ function Ijin() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
+            <a href="/ijin">
+              <span>ijin</span>
+            </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          {level === 'Marketting' ?
-            <a href="/add_ijin" className="float-right mb-5">
-              <Button variant="gradient" color="blue" className="font-popins font-medium">
-                Tambah
-              </Button>
-            </a>
-            : <></>}
+             <a href="/add_ijin" className="float-right mb-5">
+             <Button variant="gradient" color="blue" className="font-popins font-medium">
+               Tambah
+             </Button>
+           </a>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table id="example_data" ref={tableRef} className="table-auto w-full border-collapse rounded-sm">
               <thead className="bg-blue-500 text-white">
                 <tr>
                   <th className="text-sm py-3 px-4 font-semibold text-left">No</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">Durasi</th>
                   <th className="text-sm py-3 px-4 font-semibold text-left">Tanggal</th>
                   <th className="text-sm py-3 px-4 font-semibold text-left">Keterangan</th>
                   <th className="text-sm py-3 px-4 font-semibold text-left">Foto</th>
@@ -211,6 +228,7 @@ function Ijin() {
                 {ijin.map((row, index) => (
                   <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                     <td className="text-sm py-3 px-4">{index + 1}</td>
+                    <td className="text-sm py-3 px-4">{row.jenis}</td>
                     <td className="text-sm py-3 px-4">{row.created_date}</td>
                     <td className="text-sm py-3 px-4">{row.ket}</td>
                     <td className="text-sm py-3 px-4">
@@ -242,3 +260,4 @@ function Ijin() {
 }
 
 export default Ijin;
+
