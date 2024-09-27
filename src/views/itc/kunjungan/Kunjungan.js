@@ -95,7 +95,7 @@ function Kunjungan() {
               />
             </div>
             <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
-              Export Laporan
+              Export
             </Button>
           </form>
 

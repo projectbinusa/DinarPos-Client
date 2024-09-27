@@ -34,9 +34,17 @@ function EditCustomer() {
   const history = useHistory();
   const param = useParams();
   const [jurusan, setjurusan] = useState("");
-  const [unbk, setunbk] = useState("");
   const [kls3, setkls3] = useState(0);
   const [murid, setmurid] = useState(0);
+  const [idKabkot, setidKabkot] = useState("");
+  const [idKec, setidKec] = useState("");
+  const [idProv, setidProv] = useState("");
+  const [idSalesman, setidSalesman] = useState("");
+  const [internet, setinternet] = useState("");
+  const [proyektor, setproyektor] = useState("");
+  const [unbk, setunbk] = useState("");
+  const [web, setweb] = useState("");
+  const [printer, setprinter] = useState("");
   const [pc, setpc] = useState("");
 
   useEffect(() => {
@@ -51,6 +59,20 @@ function EditCustomer() {
         setnamaCustomer(response.nama_customer);
         setjenis(response.jenis);
         setnoTelp(response.telp);
+        setmurid(response.jml);
+        setkls3(response.kls3);
+        setjurusan(response.jurusan);
+        setpc(response.pc);
+        setunbk(response.unbk);
+        setinternet(response.internet);
+        setweb(response.web);
+        setproyektor(response.proyektor);
+        setprinter(response.printer);
+        setidKabkot(response.kabKot.id);
+        setidKec(response.kec.id);
+        setidProv(response.prov.idProv);
+        setidSalesman(response.salesman.id);
+        console.log(response)
       })
       .catch((error) => {
         console.log(error);
@@ -66,11 +88,24 @@ function EditCustomer() {
       email: email,
       jenis: jenis,
       nama_customer: namaCustomer,
-      not_telp: noTelp,
+      murid: murid,
+      kls3: kls3,
+      pc: pc,
+      jurusan: jurusan,
+      id_kabkot: idKabkot,
+      id_kec: idKec,
+      id_prov: idProv,
+      id_salesman: idSalesman,
+      internet: internet,
+      jml_printer: printer,
+      no_tlp: noTelp,
+      proyektor: proyektor,
+      unbk: unbk,
+      web: web
     };
 
     try {
-      await axios.put(`${API_CUSTOMER}/` + param.id, request, {
+      await axios.put(`${API_CUSTOMER}/itc/` + param.id, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       Swal.fire({
@@ -198,7 +233,7 @@ function EditCustomer() {
               DATA CUSTOMER
             </Typography>
             <form onSubmit={editDataCustomer}>
-              <div className="mt-2 grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="lg:mt-5">
                   <Input
                     label="Nama Customer"
@@ -291,6 +326,7 @@ function EditCustomer() {
                         size="lg"
                         type="number"
                         placeholder="Masukkan Jumlah Murid"
+                        defaultValue={murid}
                         onChange={(e) => setmurid(e.target.value)}
                         icon={<UsersIcon />}
                       />
@@ -303,6 +339,7 @@ function EditCustomer() {
                         size="lg"
                         type="number"
                         placeholder="Masukkan Jumlah Kelas 3"
+                        defaultValue={kls3}
                         onChange={(e) => setkls3(e.target.value)}
                         icon={<UsersIcon />}
                       />
@@ -314,41 +351,11 @@ function EditCustomer() {
                         color="blue"
                         size="lg"
                         type="number"
+                        defaultValue={pc}
                         placeholder="Masukkan Jumlah PC"
                         onChange={(e) => setpc(e.target.value)}
                         icon={<ComputerDesktopIcon />}
                       />
-                    </div>
-                    <div>
-                      <Typography
-                        className="font-poppins font-normal text-gray-600"
-                        variant="paragraph">
-                        UNBK
-                      </Typography>
-                      <div className="flex gap-8 pt-5">
-                        <div className="flex justify-center">
-                          <input
-                            type="radio"
-                            id="YUNBK"
-                            value="Y"
-                            onChange={(e) => setunbk(e.target.value)}
-                          />
-                          <label htmlFor="YUNBK" className="ml-1">
-                            Sudah
-                          </label>
-                        </div>
-                        <div className="flex justify-center">
-                          <input
-                            type="radio"
-                            id="TUNBK"
-                            value="T"
-                            onChange={(e) => setunbk(e.target.value)}
-                          />
-                          <label htmlFor="TUNBK" className="ml-1">
-                            Belum
-                          </label>
-                        </div>
-                      </div>
                     </div>
                     <div className="lg:mt-5 lg:col-span-2">
                       <Textarea
@@ -356,6 +363,7 @@ function EditCustomer() {
                         variant="static"
                         label="Jurusan"
                         placeholder="List jurusan apa saja"
+                        defaultValue={jurusan}
                         onChange={(e) => setjurusan(e.target.value)}
                         required
                       />

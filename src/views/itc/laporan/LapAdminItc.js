@@ -9,7 +9,7 @@ import {
   Option,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { API_KUNJUNGAN_EXPORT_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../../utils/BaseUrl";
+import { API_KUNJUNGAN, API_KUNJUNGAN_EXPORT_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../../utils/BaseUrl";
 import $ from "jquery";
 import Swal from "sweetalert2";
 
@@ -54,33 +54,120 @@ function LapAdminItc() {
 
   const [tglAwal, setTglAwal] = useState("");
   const [tglAkhir, setTglAkhir] = useState("");
-  const [status, setStatus] = useState("");
+  const [itcKunjungan, setItcKunjungan] = useState(0);
+
+  // ALL ITC
+  const [valuesK, setvaluesK] = useState("");
+  const [optionsK, setoptionsK] = useState([]);
+  const [currentPageK, setCurrentPageK] = useState(1);
+
+  const handleK = async () => {
+    if (valuesK.trim() !== "") {
+      const response = await fetch(
+        `${API_SALESMAN}/pagination?limit=10&page=${currentPageK}&search=${valuesK}&sort=1`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      const data = await response.json();
+      setoptionsK(data.data);
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    handleK();
+  }, [currentPageK, valuesK]);
+
+  const handleChangeK = (event) => {
+    setvaluesK(event.target.value);
+    setCurrentPageK(1);
+  };
+  // END ALL ITC  
 
   // EXPORT KUNJUNGAN
   const exportDataKunjungan = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.get(
-        `${API_KUNJUNGAN_EXPORT_KUNJUNGAN}?tglAwal=${tglAwal}&tglAkhir=${tglAkhir}&status=${status}`,
-        {
-          headers: {
-            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-          },
-          responseType: "blob", // penting untuk mendownload file
-        }
-      );
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "LAPORAN_KUNJUNGAN.xlsx");
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-    } catch (error) {
-      console.error("Error saat mengunduh file:", error);
+    if (tglAwal === "" || tglAkhir === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "Masukkan tanggal!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
     }
-  };
+
+    e.preventDefault();
+
+    if (itcKunjungan === 0) {
+      try {
+        const response = await axios.get(
+          `${API_KUNJUNGAN}/export/kunjungan?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            responseType: "blob",
+          }
+        );
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `Report Periode ${formatDate(tglAwal)} s.d ${formatDate(tglAkhir)}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+
+        Swal.fire({
+          icon: "success",
+          title: "Export Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error saat mengunduh file:",
+          text: error.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } else {
+      try {
+        const response = await axios.get(
+          `${API_KUNJUNGAN}/export/kunjungan/salesman?id_selesman=${itcKunjungan}&tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            responseType: "blob",
+          }
+        );
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `Report ${namaSalesman(itcKunjungan)} Periode ${formatDate(tglAwal)} s.d ${formatDate(tglAkhir)}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+
+        Swal.fire({
+          icon: "success",
+          title: "Export Berhasil!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error saat mengunduh file:",
+          text: error.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    }
+  }
 
   // EXPORT LAP PLANNING
   const [startPlanning, setstartPlanning] = useState("");
@@ -316,59 +403,74 @@ function LapAdminItc() {
               </div>
             </div>
             <div id="kunjungan" hidden>
-              <form onSubmit={exportDataKunjungan}>
+              <div>
                 <Typography variant="lead" className="capitalize font-medium font-poppins">Laporan Kunjungan</Typography>
-                <hr /> <br />
-                <div className="w-full">
-                  <div className="mt-8">
+                <hr /> <br /> <br />
+                <div>
+                  <Input
+                    label="Tanggal Awal"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="date"
+                    onChange={(e) => setTglAwal(e.target.value)}
+                  /><br />
+                  <Input
+                    label="Tanggal Akhir"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="date"
+                    onChange={(e) => setTglAkhir(e.target.value)}
+                  /> <br />
+                  <div className="flex gap-2 items-end">
                     <Input
+                      label="ITC"
                       variant="static"
                       color="blue"
-                      type="date"
-                      label="Tanggal Awal"
-                      required
-                      value={tglAwal}
-                      onChange={(e) => setTglAwal(e.target.value)}
+                      list="salesmanN-list"
+                      id="salesmanN"
+                      name="salesmanN"
+                      onChange={(event) => {
+                        handleChangeK(event);
+                        setItcKunjungan(event.target.value);
+                      }}
+                      placeholder="Pilih ITC"
                     />
-                  </div>
-                  <div className="mt-8">
-                    <Input
-                      variant="static"
-                      color="blue"
-                      type="date"
-                      label="Tanggal Akhir"
-                      required
-                      value={tglAkhir}
-                      onChange={(e) => setTglAkhir(e.target.value)}
-                    />
-                  </div>
-                  <div className="mt-8">
-                    <Select
-                      id="pilih"
-                      label="Status"
-                      color="blue"
-                      variant="static"
-                      required
-                      value={status}
-                      onChange={(value) => setStatus(value)}
-                    >
-                      <Option value="">Pilih Status</Option>
-                      <Option value="NAMA">Nama</Option>
-                      <Option value="USERNAME">Username</Option>
-                      <Option value="ALAMAT">Alamat</Option>
-                      <Option value="NO TELEFON">No Telefon</Option>
-                      <Option value="TARGET">Target</Option>
-                    </Select>
-                  </div>
+                    <datalist id="salesmanN-list">
+                      {optionsK.length > 0 && (
+                        <>
+                          {optionsK.map((option) => (
+                            <option value={option.id} key={option.id}>
+                              {option.namaSalesman}
+                            </option>
+                          ))}
+                        </>
+                      )}
+                    </datalist>
+
+                    <div className="flex gap-2">
+                      <button
+                        className="text-sm bg-gray-400 px-1"
+                        onClick={() => setCurrentPageK(currentPageK - 1)}
+                        disabled={currentPageK === 1}
+                      >
+                        Prev
+                      </button>
+                      <button
+                        className="text-sm bg-gray-400 px-1"
+                        onClick={() => setCurrentPageK(currentPageK + 1)}
+                        disabled={!optionsK.length}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div> <br />
+                  <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
+                  <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography> <br />
+                  <Button variant="gradient" color="blue" onClick={exportDataKunjungan} className="font-poppins font-medium" type="button">Export Kunjungan</Button>
                 </div>
-                <Button
-                  className="mt-5 font-poppins font-medium"
-                  color="blue"
-                  type="submit"
-                >
-                  Export Kunjungan
-                </Button>
-              </form>
+              </div>
             </div>
           </div>
         </main>
