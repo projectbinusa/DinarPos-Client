@@ -190,6 +190,8 @@ import InputPlanning from "./views/itc/planning_marketting/InputPlanning.js";
 import DetailPlanning from "./views/itc/planning_marketting/DetailPlanning.js";
 import DataPlanning from "./views/itc/planning_marketting/DataPlanning.js";
 import Model from "./views/itc/dealpo/EditDealPo.js";
+import AddFinish from "./views/itc/dealfinish/AddFinish.js";
+import FormFinish from "./views/itc/dealfinish/FormFinish.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1240,6 +1242,16 @@ function App() {
             <PrivateRoute
               path="/edit_dealpo/:id"
               component={Model}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_finish/:id"
+              component={AddFinish}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/form_finish"
+              component={FormFinish}
               isAuthenticated={true}
             />
           </Switch>

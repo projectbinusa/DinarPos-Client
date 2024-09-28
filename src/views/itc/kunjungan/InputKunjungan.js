@@ -56,9 +56,7 @@ function InputKunjungan() {
   const [foto, setfoto] = useState(0);
   const [tglDeal, settglDeal] = useState("");
   const [lokasiLat, setlokasiLat] = useState("");
-  const [tgl, settgl] = useState("");
   const [action, setaction] = useState("");
-  const [serviceTt, setserviceTt] = useState("");
   const [visit, setvisit] = useState("");
   const [lokasiLon, setlokasiLon] = useState("");
   const [nVisit, setnVisit] = useState(0);
@@ -117,6 +115,22 @@ function InputKunjungan() {
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
   const day = String(currentDate.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
+
+  const formatDateTime = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return formattedDate;
+  };
 
   const handleDate = () => {
     setdate("");
@@ -305,25 +319,28 @@ function InputKunjungan() {
       }).then((res) => {
         const data2 = res.data.data || [];
         let jml = 0;
-        if (Array.isArray(data2)) {
-          const validItems = data2.filter(item => item && Object.keys(item).length > 0);
+        if (Array.isArray(data2) && data2.length > 0) {
+          const validItems = data2.filter((item) => item && Object.keys(item).length > 0);
           jml = validItems.length;
         }
 
         let n = 0;
         if (jml > 0) {
-          const maxVisit = Math.max(...data2.map(item => item.n_visit));
-          if (visit === 'V') {
+          const maxVisit = Math.max(...data2.map((item) => item.nVisit));
+          console.log(maxVisit);
+
+          if (visit === "V") {
             n = maxVisit + 1;
           }
         } else {
-          if (visit === 'V') {
+          if (visit === "V") {
             n = 1;
           }
         }
 
         setnVisit(n);
-        console.log(`nVisit: ${n}`);
+        console.log(data2);
+        console.log(`nVisit: ${n} ${jml}`);
       }).catch((err) => {
         console.log(err);
       })
@@ -344,16 +361,24 @@ function InputKunjungan() {
     formData.append("tujuan", tujuan);
     formData.append("cp", cp);
     formData.append("infoDpt", infoDpt);
-    formData.append("id_plan", idPlan);
     formData.append("foto", foto);
-    formData.append("tanggal_deal", tglDeal);
+    formData.append("tanggal_deal", formatDateTime(tglDeal));
     formData.append("lokasiLat", lokasiLat);
-    formData.append("tgl", tgl);
-    formData.append("serviceTt", serviceTt);
+    formData.append("tgl_kunjungan", formatDateTime(date));
+    formData.append("serviceTt", 0);
     formData.append("action", action);
     formData.append("visit", visit);
     formData.append("lokasiLon", lokasiLon);
     formData.append("nVisit", nVisit);
+
+    let url = '';
+    if (kategori === 'Plan') {
+      formData.append("id_plan", idPlan);
+      url = `${API_KUNJUNGAN}/add`
+    } else {
+      url = `${API_KUNJUNGAN}/add/non_plan`
+    }
+
 
     Swal.fire({
       title: "Yakin sudah input dengan benar?",
@@ -366,7 +391,7 @@ function InputKunjungan() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post(`${API_KUNJUNGAN}/add`, formData, {
+          .post(`${url}`, formData, {
             headers: {
               "auth-tgh": `jwt ${localStorage.getItem("token")}`,
               "content-type": "multipart/form-data",
