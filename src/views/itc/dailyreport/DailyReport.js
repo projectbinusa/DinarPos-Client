@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom"; // Use useHistory for v5
+import React, { useState, useEffect, useRef } from "react";
+import { useHistory } from "react-router-dom";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -8,54 +8,137 @@ import {
   Button,
   Option,
   Select,
+  IconButton,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { API_KUNJUNGAN_DATE_BETWEEN_SALESMAN } from "../../../utils/BaseUrl";
+import { API_ITC, API_KUNJUNGAN, API_PENGGUNA } from "../../../utils/BaseUrl";
+import Decrypt from "../../../component/Decrypt";
+import $ from "jquery"
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
-function DailyRepost() {
+function DailyReport() {
   const [tglAwal, setTglAwal] = useState("");
   const [tglAkhir, setTglAkhir] = useState("");
-  const [dailyRepost, setDailyRepost] = useState([]);
-  const [status, setStatus] = useState("");
-  const [idSalesman, setIdSalesman] = useState("");
+  const [waktu, setwaktu] = useState("");
+  const [dailyReport, setDailyReport] = useState([]);
+  const [idSalesman, setIdSalesman] = useState(0);
   const history = useHistory();
 
-  const getAllDailyRepost = async () => {
-    if (!tglAwal || !tglAkhir || !idSalesman) {
-      console.log("Please select both dates and a salesman ID.");
-      return;
+  const tableRef = useRef(null);
+  const initializeDataTable = () => {
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
     }
+  };
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return formattedDate;
+  };
+
+  const formatDate2 = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
+  const id = Decrypt();
+  useEffect(() => {
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data.namaPengguna;
+        try {
+          axios.get(`${API_ITC}/nama?nama=` + response, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }).then((ress) => {
+            setIdSalesman(ress.data.data.id);
+          })
+        } catch (err) {
+          console.log(err);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  const getAllDailyReport = async () => {
     try {
       const response = await axios.get(
-        `${API_KUNJUNGAN_DATE_BETWEEN_SALESMAN}?id_salesman=${idSalesman}&tanggal_awal=${tglAwal}&tanggal_akhir=${tglAkhir}`,
+        `${API_KUNJUNGAN}/by_date/salesman?id_salesman=${idSalesman}`,
         {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
       console.log("API Response:", response.data);
-      setDailyRepost(response.data.data);
+      setDailyReport(response.data.data);
     } catch (err) {
       console.log("Error fetching data:", err);
     }
   };
 
-  useEffect(() => {
-    if (tglAwal && tglAkhir && idSalesman) {
-      getAllDailyRepost();
+  const [totals, setTotals] = useState([]);
+
+  const totalKunjungan = async (tgl, idx) => {
+    try {
+      const response = await axios.get(`${API_KUNJUNGAN}/date/salesman?id_salesman=${idSalesman}&tanggal=${tgl}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      const res = response.data.data.length;
+      setTotals(prevTotals => {
+        const newTotals = [...prevTotals];
+        newTotals[idx] = res;
+        return newTotals;
+      });
+    } catch (err) {
+      console.log(err);
     }
-  }, [tglAwal, tglAkhir, idSalesman]);
+  };
 
-  const handlePrint = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (dailyReport.length > 0) {
+      dailyReport.forEach((row, idx) => {
+        totalKunjungan(row.tanggalKunjungan, idx);
+      });
+    }
+  }, [dailyReport]);
 
-    await getAllDailyRepost();
 
+  useEffect(() => {
+    if (idSalesman) {
+      getAllDailyReport();
+    }
+  }, [idSalesman]);
+
+  const handlePrint = async () => {
     history.push({
       pathname: `/print_kunjungan`,
       search: `?tgl_awal=${tglAwal}&tgl_akhir=${tglAkhir}`,
       state: { tglAwal, tglAkhir },
     });
+    window.location.reload();
   };
+
+  useEffect(() => {
+    if (dailyReport && dailyReport.length > 0) {
+      initializeDataTable();
+    }
+  }, [dailyReport])
+
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -83,14 +166,13 @@ function DailyRepost() {
             <a href="/input_kunjungan">
               <Button
                 color="blue"
-                type="submit"
                 className="font-poppins font-medium"
               >
-                Tambah
+                Input
               </Button>
             </a>
           </div>
-          <form onSubmit={handlePrint}>
+          <div>
             <div className="w-72 lg:w-[50%]">
               <Input
                 variant="static"
@@ -116,7 +198,7 @@ function DailyRepost() {
             <Button
               className="mt-5 font-poppins font-medium mb-4"
               color="blue"
-              type="submit"
+              type="button" onClick={handlePrint}
             >
               Print
             </Button>
@@ -126,11 +208,10 @@ function DailyRepost() {
                 label="Waktu Pengadaan"
                 color="blue"
                 variant="static"
-                value={status}
-                onChange={(value) => setStatus(value)}
+                onChange={(value) => setwaktu(value)}
                 className="w-full text-sm"
               >
-                <Option value="">Pilih Bulan</Option>
+                <Option value="Pilih Bulan">Pilih Bulan</Option>
                 <Option value="01">Januari</Option>
                 <Option value="02">Februari</Option>
                 <Option value="03">Maret</Option>
@@ -145,11 +226,19 @@ function DailyRepost() {
                 <Option value="12">Desember</Option>
               </Select>
             </div>
-          </form>
+            <Button
+              className="mt-5 font-poppins font-medium mb-4"
+              color="blue"
+              type="button"
+            >
+              Cari
+            </Button>
+          </div>
 
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
             <table
               id="example_data"
+              ref={tableRef}
               className="rounded-sm table-auto w-full overflow-x-auto"
             >
               <thead className="bg-blue-500 text-white w-full">
@@ -165,25 +254,28 @@ function DailyRepost() {
                 </tr>
               </thead>
               <tbody>
-                {dailyRepost.length > 0 ? (
-                  dailyRepost.map((item, index) => (
+                {dailyReport.length > 0 ? (
+                  dailyReport.map((item, index) => (
                     <tr key={index}>
-                      <td className="text-sm py-2 px-2.5">{index + 1}</td>
-                      <td className="text-sm py-2 px-2.5">{item.tanggal}</td>
-                      <td className="text-sm py-2 px-2.5">
-                        {item.jumlah_report}
+                      <td className="text-sm py-2 px-3">{index + 1}</td>
+                      <td className="text-sm py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
+                      <td className="text-sm py-2 px-3">{totals[index] !== undefined ? totals[index] : 'Loading...'}
                       </td>
-                      <td className="text-sm py-2 px-2.5">Aksi</td>
+                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                        <a href={"/detail_kunjungan_by_tgl/" + formatDate2(item.tanggalKunjungan)}>
+                          <IconButton size="md" color="green">
+                            <InformationCircleIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      className="text-sm py-2 px-2.5"
-                      colSpan="30"
-                      style={{ textAlign: "center" }}
-                    >
-                      No Data Available
+                      colSpan="4"
+                      className="text-sm text-center capitalize py-2 bg-gray-100 ">
+                      Tidak ada data
                     </td>
                   </tr>
                 )}
@@ -196,4 +288,4 @@ function DailyRepost() {
   );
 }
 
-export default DailyRepost;
+export default DailyReport;

@@ -1150,7 +1150,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/detail_kunjungan_hari"
+              path="/detail_kunjungan_by_tgl/:tgl"
               component={DetailKunjunganHari}
               isAuthenticated={true}
             />
@@ -1182,11 +1182,6 @@ function App() {
             <PrivateRoute
               path="/by_month_kunjungan"
               component={ByMonthKunjungan}
-              isAuthenticated={true}
-            />
-            <PrivateRoute
-              path="/print_kunjungan"
-              component={PrintKunjungan}
               isAuthenticated={true}
             />
             <PrivateRoute
