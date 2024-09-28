@@ -1,28 +1,23 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { API_OMZET,API_SALESMAN  } from "../../../utils/BaseUrl";
-import {
-   Button,
-   Input,
-   Typography,
-   Breadcrumbs 
-} from "@material-tailwind/react";
+import { API_OMZET, API_SALESMAN } from "../../../utils/BaseUrl";
+import { Button, Input, Typography, Breadcrumbs } from "@material-tailwind/react";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 
 function AddOmzet() {
   const history = useHistory();
-  const [created_date, setCreatedDate] = useState("");
+  const [tgl, setTgl] = useState("");
   const [omzet, setOmzet] = useState("");
-  const [salesmanId, setsalesmanId] = useState(0);
+  const [salesmanId, setSalesmanId] = useState(0);
+  const [customerId, setCustomerId] = useState(0);
+  const [responseData, setResponseData] = useState(null);
 
   const addOmzet = async (e) => {
     e.preventDefault();
-
-    // Pastikan omzet adalah angka
     const parsedOmzet = parseFloat(omzet);
-    
+
     if (isNaN(parsedOmzet)) {
       Swal.fire({
         icon: "error",
@@ -31,38 +26,42 @@ function AddOmzet() {
         showConfirmButton: false,
         timer: 1500,
       });
-      return; // Hentikan eksekusi jika omzet tidak valid
+      return;
     }
 
     const request = {
-      created_date: created_date, // Pastikan format tanggal sesuai
-      omzet: omzet,
+      tgl: tgl,
+      omzet: parsedOmzet,
       id_salesman: salesmanId,
+      id_customer: customerId,
     };
 
     try {
       const response = await axios.post(`${API_OMZET}/add`, request, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-
-      // Cek respon dari API
-      console.log("Response dari server:", response.data);
-
-      if (response.data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Data Berhasil Ditambahkan",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        history.push("/omzet");
-      } else {
-        throw new Error(response.data.message);
-      }
+      Swal.fire({
+        icon: "success",
+        title: "Data Berhasil DiTambahkan",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      history.push("/omzet");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } catch (error) {
       if (error.response) {
         const { status, data } = error.response;
-        if (status === 401) {
+        if (status === 404) {
+          Swal.fire({
+            icon: "error",
+            title: "Gagal Menambahkan Data",
+            text: "Periksa kembali URL atau hubungi administrator.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else if (status === 401) {
           localStorage.clear();
           history.push("/");
         } else {
@@ -73,7 +72,7 @@ function AddOmzet() {
             showConfirmButton: false,
             timer: 1500,
           });
-          console.log("Error Response:", error.response); // Tampilkan respon kesalahan
+          console.log("Error Response:", error.response);
         }
       } else {
         Swal.fire({
@@ -87,36 +86,51 @@ function AddOmzet() {
     }
   };
 
-   // ALL SALESMAN
-   const [values, setvalues] = useState("");
-   const [options, setoptions] = useState([]);
-   const [currentPage, setCurrentPage] = useState(1);
- 
-   const handle = async () => {
-     if (values.trim() !== "") {
-       const response = await fetch(
-         `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
-         {
-           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-         }
-       );
-       const data = await response.json();
-       setoptions(data.data);
-     } else {
-       return;
-     }
-   };
- 
-   useEffect(() => {
-     handle();
-   }, [currentPage, values]);
- 
-   const handleChange = (event) => {
-     setvalues(event.target.value);
-     setCurrentPage(1);
-   };
+  // Fetch Salesman dan Customer
+  const [values, setValues] = useState("");
+  const [options, setOptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const level = localStorage.getItem("userLevel"); // Pastikan level didefinisikan dengan benar
+  const handle = async () => {
+    try {
+      if (values.trim() !== "") {
+        const response = await fetch(
+          `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        );
+        if (response.status === 200) {
+          const data = await response.json();
+          setOptions(data.data);
+        } else {
+          throw new Error("Failed to fetch data.");
+        }
+      } else {
+        setOptions([]); // Reset options if no search term
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Gagal memuat data salesman.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setValues(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const level = localStorage.getItem("userLevel");
   let dashboard = "";
 
   if (level === "Superadmin") {
@@ -124,7 +138,6 @@ function AddOmzet() {
   } else if (level === "AdminService") {
     dashboard = "dashboard_service";
   }
-
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -135,7 +148,7 @@ function AddOmzet() {
             Tambah Omzet
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href={`/${dashboard}`} className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -152,95 +165,117 @@ function AddOmzet() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <div> 
-           <form onSubmit={addOmzet}>
-             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-               <div className="flex gap-2 items-end">
+          <div>
+            <form onSubmit={addOmzet}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="flex gap-2 items-end">
                   <Input
-                      label="Tanggal"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Tanggal"
-                      type="date"
-                      name="tanggal"
-                      value={created_date}
-                      onChange={(e) => setCreatedDate(e.target.value)}
-                      required
-                    />
-                </div>
-                <div>
-                  <Input
-                    label="Omzet"
-                    size="lg"
-                    placeholder="Masukan Omzet"
+                    label="Tanggal"
                     variant="static"
                     color="blue"
-                    name="Omzet"
-                    value={omzet}
-                    onChange={(e) => setOmzet(e.target.value)}
+                    size="lg"
+                    type="date"
+                    value={tgl}
+                    onChange={(e) => setTgl(e.target.value)}
                     required
                   />
                 </div>
                 <div>
                   <Input
-                      label="Salesman"
-                      variant="static"
-                      color="blue"
-                      list="salesman-list"
-                      id="salesman"
-                      name="salesman"
-                      onChange={(event) => {
-                        handleChange(event);
-                        setsalesmanId(event.target.value);
-                      }}
-                      placeholder="Pilih Salesman"
-                    />
-                    <datalist id="salesman-list">
-                      {options.length > 0 && (
-                        <>
-                          {options.map((option) => (
-                            <option value={option.id} key={option.id}>
-                              {option.namaSalesman}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                    </datalist>
-
-                  {/* <div className="flex gap-2">
+                    label="Omzet"
+                    size="lg"
+                    placeholder="Masukkan Omzet"
+                    variant="static"
+                    color="blue"
+                    value={omzet}
+                    onChange={(e) => setOmzet(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="flex gap-2 items-end">
+                  <Input
+                    label="Salesman"
+                    variant="static"
+                    color="blue"
+                    list="salesman-list"
+                    id="salesman"
+                    placeholder="Pilih Salesman"
+                    required
+                    onChange={(event) => {
+                      handleChange(event);
+                      setSalesmanId(event.target.value);
+                    }}
+                  />
+                  <datalist id="salesman-list">
+                    {options.map((option) => (
+                      <option value={option.id} key={option.id}>
+                        {option.namaSalesman}
+                      </option>
+                    ))}
+                  </datalist>
+                  <div className="flex gap-2">
                     <button
                       className="text-sm bg-gray-400 px-1"
                       onClick={() => setCurrentPage(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    >
+                      disabled={currentPage === 1}>
                       Prev
                     </button>
                     <button
                       className="text-sm bg-gray-400 px-1"
                       onClick={() => setCurrentPage(currentPage + 1)}
-                      disabled={!options.length}
-                    >
+                      disabled={!options.length}>
                       Next
                     </button>
-                  </div> */}
-
-                <div className="mt-10 flex gap-4">
-                  <Button variant="gradient" color="blue" type="button" onClick={addOmzet} className="font-poppins font-medium">
-                    <span>Simpan</span>
+                  </div>
+                </div>
+                <div className="flex gap-2 items-end">
+                  <Input
+                    label="Customer"
+                    variant="static"
+                    color="blue"
+                    list="customer-list"
+                    id="customer"
+                    placeholder="Pilih Customer"
+                    onChange={(e) => setCustomerId(e.target.value)}
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}>
+                      Prev
+                    </button>
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={!options.length}>
+                      Next
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-10 flex gap-4">
+                <Button
+                  variant="gradient"
+                  color="blue"
+                  type="button"
+                  onClick={addOmzet}
+                  className="font-poppins font-medium">
+                  <span>Simpan</span>
+                </Button>
+                <a href="/omzet">
+                  <Button
+                    variant="text"
+                    color="gray"
+                    className="mr-1 font-poppins font-medium">
+                    <span>Kembali</span>
                   </Button>
-                  <a href="/omzet">
-                    <Button variant="text" color="gray" className="mr-1 font-poppins font-medium">
-                      <span>Kembali</span>
-                    </Button>
-                 </a>
-               </div>
-               </div>
-               </div>
+                </a>
+              </div>
             </form>
-            </div>
-          </main>
-        </div>
+          </div>
+        </main>
+      </div>
     </section>
   );
 }
