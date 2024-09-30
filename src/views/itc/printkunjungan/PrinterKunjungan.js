@@ -16,8 +16,11 @@ function PrintKunjungan({ param }) {
 
   const [salesmanId, setSalesmanId] = useState(null);
   const [supliers, setSupliers] = useState([]);
-  const [searchName, setSearchName] = useState(""); // Add state for searchName
-  const [salesmanData, setSalesmanData] = useState(null); // Add state for salesman data
+  const [searchName, setSearchName] = useState("");
+  const [salesmanData, setSalesmanData] = useState(null);
+
+  console.log(tglAwal);
+  
 
   // GET ALL with Param
   const getAll = async (tglAwal, tglAkhir) => {
@@ -83,27 +86,8 @@ function PrintKunjungan({ param }) {
 
   return (
     <div className="mx-5 my-3">
-      <div className="my-3">
-        {/* <h3 className="text-sm">
-          Print Kunjungan
-          <span className="block">
-            Jl. Bulustalan 1 No.27 Semarang 087729244899
-          </span>
-        </h3> */}
-      </div>
-      <hr /> <br />
-      <h1 className="text-center">BUKTI PEMBELIAN</h1>
-      <br />
-      <br />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={searchName}
-          onChange={(e) => setSearchName(e.target.value)} // Set searchName on change
-          placeholder="Search by name"
-        />
-        <button type="submit">Search</button>
-      </form>
+      <h1 className="text-center">PRINT KUNJUNGAN</h1>
+      <br /> <br />
       <table className="table-auto w-full">
         <thead>
           <tr className="border-b py-1">
