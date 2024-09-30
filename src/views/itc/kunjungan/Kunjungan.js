@@ -1,13 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react";
+import { Breadcrumbs, Button, IconButton, Input, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { API_KUNJUNGAN } from "../../../utils/BaseUrl";
+import $ from "jquery"
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 function Kunjungan() {
   const [datas, setDatas] = useState([]);
-  const [tglAwal, setTglAwal] = useState("");
-  const [tglAkhir, setTglAkhir] = useState("");
+
+  const tableRef = useRef(null);
+  const initializeDataTable = () => {
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
+    }
+  };
+  
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return formattedDate;
+  };
 
   const getAll = async () => {
     try {
@@ -24,30 +42,12 @@ function Kunjungan() {
     getAll();
   }, []);
 
-  // EXPORT LAPORAN KUNJUNGAN
-  const exportData = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.get(
-        `http://localhost:2000/api/kunjungan/export/kunjungan?tglAwal=${tglAwal}&tglAkhir=${tglAkhir}`,
-        {
-          headers: {
-            "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-            accept: "*/*",
-          },
-          responseType: "blob", // This is important for handling the file download
-        }
-      );
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "LAPORAN_KUNJUNGAN_ALL.xlsx"); // The filename from the API
-      document.body.appendChild(link);
-      link.click();
-    } catch (error) {
-      console.error("Error exporting data", error);
+  useEffect(() => {
+    if (datas && datas.length > 0) {
+      initializeDataTable();
     }
-  };
+  }, [datas])
+
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -58,7 +58,7 @@ function Kunjungan() {
             Kunjungan
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60">
+            <a href="/home" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -71,53 +71,25 @@ function Kunjungan() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-          <form onSubmit={exportData}>
-            <div className="mt-8 w-full lg:w-[50%]">
-              <Input
-                variant="static"
-                color="blue"
-                type="date"
-                label="Tanggal Awal"
-                value={tglAwal}
-                onChange={(e) => setTglAwal(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mt-8 w-full lg:w-[50%]">
-              <Input
-                variant="static"
-                color="blue"
-                type="date"
-                label="Tanggal Akhir"
-                value={tglAkhir}
-                onChange={(e) => setTglAkhir(e.target.value)}
-                required
-              />
-            </div>
-            <Button className="mt-5 font-poppins font-medium" color="blue" type="submit">
-              Export
-            </Button>
-          </form>
-
-          <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
-            <table className="w-full border-collapse">
+          <div className="rounded mb-5 p-1 overflow-x-auto">
+            <table className="w-full border-collapse" id="example_data" ref={tableRef}>
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-xs py-3 px-4 font-semibold">No</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Tanggal</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Nama</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Instansi</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Jenis</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Daerah</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Tujuan</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Action</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Info didapat</th>
-                  <th className="text-xs py-3 px-4 font-semibold">CP</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Visit</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Tipe</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Peluang</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Deal</th>
-                  <th className="text-xs py-3 px-4 font-semibold">Detail</th>
+                  <th className="text-sm py-3 px-4 font-semibold">No</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Tanggal</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Nama</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Instansi</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Jenis</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Daerah</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Tujuan</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Action</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Info didapat</th>
+                  <th className="text-sm py-3 px-4 font-semibold">CP</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Visit</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Tipe</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Peluang</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Deal</th>
+                  <th className="text-sm py-3 px-4 font-semibold">Detail</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,20 +97,26 @@ function Kunjungan() {
                   datas.map((kunjungan, index) => (
                     <tr key={index} className="border-b border-gray-200">
                       <td className="text-sm text-center py-3 px-4">{index + 1}</td>
-                      <td className="text-sm text-center py-3 px-4">{kunjungan.tanggal}</td>
-                      <td className="text-sm text-center py-3 px-4">{kunjungan.nama}</td>
-                      <td className="text-sm text-center py-3 px-4">{kunjungan.instansi}</td>
-                      <td className="text-sm text-center py-3 px-4">{kunjungan.jenis}</td>
-                      <td className="text-sm text-center py-3 px-4">{kunjungan.daerah}</td>
+                      <td className="text-sm text-center py-3 px-4">{formatDate(kunjungan.tanggalKunjungan)}</td>
+                      <td className="text-sm text-center py-3 px-4">{kunjungan.salesman.namaSalesman}</td>
+                      <td className="text-sm text-center py-3 px-4">{kunjungan.customer.nama_customer}</td>
+                      <td className="text-sm text-center py-3 px-4">{kunjungan.customer.jenis}</td>
+                      <td className="text-sm text-center py-3 px-4">{kunjungan.customer.kabKot.nama_kabkot} / {kunjungan.customer.kec.nama_kec}</td>
                       <td className="text-sm text-center py-3 px-4">{kunjungan.tujuan}</td>
                       <td className="text-sm text-center py-3 px-4">{kunjungan.action}</td>
-                      <td className="text-sm text-center py-3 px-4">{kunjungan.info_dapat}</td>
+                      <td className="text-sm text-center py-3 px-4">{kunjungan.infoDpt}</td>
                       <td className="text-sm text-center py-3 px-4">{kunjungan.cp}</td>
+                      <td className="text-sm text-center py-3 px-4">{kunjungan.nVisit}</td>
                       <td className="text-sm text-center py-3 px-4">{kunjungan.visit}</td>
-                      <td className="text-sm text-center py-3 px-4">{kunjungan.tipe}</td>
                       <td className="text-sm text-center py-3 px-4">{kunjungan.peluang}</td>
                       <td className="text-sm text-center py-3 px-4">{kunjungan.deal}</td>
-                      <td className="text-sm text-center py-3 px-4">Detail</td>
+                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                        <a href={"/detail_kunjungan/" + kunjungan.idReport}>
+                          <IconButton size="md" color="green">
+                            <InformationCircleIcon className="w-6 h-6 white" />
+                          </IconButton>
+                        </a>
+                      </td>
                     </tr>
                   ))
                 ) : (

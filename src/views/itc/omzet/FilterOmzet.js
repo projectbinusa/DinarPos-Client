@@ -6,7 +6,7 @@ import { Button, Typography, Card, Select, Option } from "@material-tailwind/rea
 import { API_OMZET } from "../../../utils/BaseUrl";
 import axios from "axios";
 
-function Omzet() {
+function FilterOmzet() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedITC, setSelectedITC] = useState(""); // State untuk ITC
   const [filter, setFilter] = useState([]);
@@ -181,4 +181,4 @@ function Omzet() {
   );
 }
 
-export default Omzet;
+export default FilterOmzet;

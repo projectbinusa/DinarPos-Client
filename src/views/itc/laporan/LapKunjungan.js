@@ -88,10 +88,11 @@ function LapKunjungan() {
     // < 100
     const getAllKurang100 = async () => {
         try {
-            const response = await axios.get(`${API_KUNJUNGAN}/between51and80`, {
+            const response = await axios.get(`${API_KUNJUNGAN}/deal_po`, {
                 headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
             });
             setLaporan(response.data.data);
+            console.log(response.data.data);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -136,10 +137,10 @@ function LapKunjungan() {
     }, []);
 
     useEffect(() => {
-        if (validasi || tglAkhir !== "" || tglAwal !== "") {
+        if (validasi && tglAkhir !== "" && tglAwal !== "") {
             getAllTanggal();
         }
-        if (validasi || tglAkhir !== "" || tglAwal !== "" || salesmanId !== 0) {
+        if (validasi && tglAkhir !== "" && tglAwal !== "" && salesmanId !== 0) {
             getAllTanggalSalesman();
         }
     }, [validasi, tglAkhir, tglAwal]);

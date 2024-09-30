@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import {
-  API_ITC_NAMA,
+  API_ITC,
   API_KUNJUNGAN_DATE_BETWEEN_SALESMAN,
   API_PENGGUNA,
 } from "../../../utils/BaseUrl";
@@ -15,12 +15,41 @@ function PrintKunjungan({ param }) {
   const tglAkhir = queryParams.get("tgl_akhir");
 
   const [salesmanId, setSalesmanId] = useState(null);
-  const [supliers, setSupliers] = useState([]);
-  const [searchName, setSearchName] = useState("");
-  const [salesmanData, setSalesmanData] = useState(null);
+  const [laporans, setLaporan] = useState([]);
 
-  console.log(tglAwal);
-  
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return formattedDate;
+  };
+
+  const id = Decrypt();
+  useEffect(() => {
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data.namaPengguna;
+        try {
+          axios.get(`${API_ITC}/nama?nama=` + response, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }).then((ress) => {
+            setSalesmanId(ress.data.data.id);
+          })
+        } catch (err) {
+          console.log(err);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   // GET ALL with Param
   const getAll = async (tglAwal, tglAkhir) => {
@@ -36,46 +65,12 @@ function PrintKunjungan({ param }) {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      setSupliers(response.data.data);
+      setLaporan(response.data.data);
+      console.log(response.data.data);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
-
-  // GET BY NAMA
-  const getByNama = async (nama) => {
-    try {
-      const response = await axios.get(`${API_ITC_NAMA}?nama=${nama}`, {
-        headers: {
-          "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-        },
-      });
-
-      setSalesmanData(response.data.data); // Set the returned salesman data
-    } catch (err) {
-      console.error("Failed to fetch salesman by name:", err.message);
-      setSalesmanData(null);
-    }
-  };
-
-  const id = Decrypt();
-  useEffect(() => {
-    axios
-      .get(`${API_PENGGUNA}/${id}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      })
-      .then((res) => {
-        const response = res.data.data;
-        setSalesmanId(response.id_salesman);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch salesman ID:", err);
-      });
-  }, [id]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    getByNama(searchName); // Use searchName from state
   };
 
   useEffect(() => {
@@ -86,31 +81,49 @@ function PrintKunjungan({ param }) {
 
   return (
     <div className="mx-5 my-3">
-      <h1 className="text-center">PRINT KUNJUNGAN</h1>
+      <h1 className="text-center font-semibold">PRINT KUNJUNGAN {formatDate(tglAwal)} s.d {formatDate(tglAkhir)}  </h1>
       <br /> <br />
-      <table className="table-auto w-full">
+      <table className="table-auto w-full border border-collapse border-black">
         <thead>
-          <tr className="border-b py-1">
-            <th className="text-sm py-1">No</th>
-            <th className="text-sm py-1">Kode Barang</th>
-            <th className="text-sm py-1">Nama Barang</th>
-            <th className="text-sm py-1">Jumlah</th>
-            <th className="text-sm py-1">Harga Satuan</th>
-            <th className="text-sm py-1">Diskon</th>
-            <th className="text-sm py-1">Total</th>
+          <tr className="border border-black py-1">
+            <th className="text-[10px] py-2 border border-black">No</th>
+            <th className="text-[10px] py-2 border border-black">Tgl</th>
+            <th className="text-[10px] py-2 border border-black">Instansi</th>
+            <th className="text-[10px] py-2 border border-black">Jenis</th>
+            <th className="text-[10px] py-2 border border-black">Daerah</th>
+            <th className="text-[10px] py-2 border border-black">Tujuan</th>
+            <th className="text-[10px] py-2 border border-black">Action</th>
+            <th className="text-[10px] py-2 border border-black">Info didapat	</th>
+            <th className="text-[10px] py-2 border border-black">CP</th>
+            <th className="text-[10px] py-2 border border-black">Visit</th>
+            <th className="text-[10px] py-2 border border-black">Tipe</th>
+            <th className="text-[10px] py-2 border border-black">Peluang</th>
+            <th className="text-[10px] py-2 border border-black">Deal</th>
+            <th className="text-[10px] py-2 border border-black">Byr_%</th>
+            <th className="text-[10px] py-2 border border-black">Wkt_p</th>
+            <th className="text-[10px] py-2 border border-black">Tgl_d</th>
           </tr>
         </thead>
         <tbody>
-          {supliers.map((item, index) => (
+          {laporans.map((item, index) => (
             <tr key={index} className="border-b py-1">
-              <td className="text-sm py-1">{index + 1}</td>
-              <td className="text-sm py-1">{item.kodeBarang}</td>
-              <td className="text-sm py-1">{item.namaBarang}</td>
-              <td className="text-sm py-1">{item.jumlah}</td>
-              <td className="text-sm py-1">{item.hargaSatuan}</td>
-              <td className="text-sm py-1">{item.diskon}</td>
-              <td className="text-sm py-1">{item.total}</td>
-            </tr>
+              <td className="text-[10px] p-1 border border-black text-center">{index + 1}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{formatDate(item.tanggalKunjungan)}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.customer.nama_customer}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.customer.jenis}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.customer.kabKot.nama_kabkot} / {item.customer.kec.nama_kec}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.tujuan}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.action}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.infoDpt}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.cp}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.nVisit}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.visit}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.peluang}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.deal}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.pembayaran}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{item.waktuPengadaan}</td>
+              <td className="text-[10px] p-1 border border-black text-center">{formatDate(item.tanggalDeal)}</td>
+            </tr> 
           ))}
         </tbody>
       </table>
