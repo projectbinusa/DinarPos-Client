@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
-import { API_FINISH, API_FINISH_MARKETTING } from "../../../utils/BaseUrl";
+import { API_FINISH } from "../../../utils/BaseUrl";
 
 function DataFinish() {
-  const [finish, setFinish] = useState([]); // perbaikan nama state
+  const [finish, setFinish] = useState([]);
   const [level, setLevel] = useState("");
 
   const getAllFinish = async () => {
@@ -13,7 +13,7 @@ function DataFinish() {
       const { data } = await axios.get(`${API_FINISH}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      setFinish(data.data); // sesuai dengan state yang diinisialisasi
+      setFinish(data.data);
     } catch (error) {
       console.error("Gagal mengambil data finish:", error);
     }
@@ -60,10 +60,7 @@ function DataFinish() {
         <main className="bg-white shadow-lg p-5 my-5 rounded">
           <div className="flex justify-end mb-5">
             <a href="/form_finish">
-              <Button
-                variant="gradient"
-                color="blue"
-                className="font-poppins font-medium">
+              <Button variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah
               </Button>
             </a>
