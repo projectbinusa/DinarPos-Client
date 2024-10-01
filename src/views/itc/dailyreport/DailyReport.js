@@ -21,13 +21,22 @@ function DailyReport() {
   const [tglAkhir, setTglAkhir] = useState("");
   const [waktu, setwaktu] = useState("");
   const [dailyReport, setDailyReport] = useState([]);
+  const [dailyReportWaktu, setDailyReportWaktu] = useState([]);
+  const [validasi, setvalidasi] = useState(false);
+  const [isDataFetched, setIsDataFetched] = useState(false);
   const [idSalesman, setIdSalesman] = useState(0);
-  const history = useHistory();
 
   const tableRef = useRef(null);
   const initializeDataTable = () => {
     if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable({});
+    }
+  };
+
+  const tableRef2 = useRef(null);
+  const initializeDataTable2 = () => {
+    if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable({});
     }
   };
 
@@ -117,27 +126,52 @@ function DailyReport() {
     }
   }, [dailyReport]);
 
+  const handlePrint = async () => {
+    const url = `/print_kunjungan?tgl_awal=${tglAwal}&tgl_akhir=${tglAkhir}`;
+    window.open(url, '_blank');
+  };
+
+  const getAllDailyReportWaktuPengadaan = async () => {
+    try {
+      const response = await axios.get(
+        `${API_KUNJUNGAN}/waktu_pengadaan/salesman?idSalesman=${idSalesman}&waktuPengadaan=${waktu}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log("API Response:", response.data);
+      setDailyReportWaktu(response.data.data);
+      setIsDataFetched(true)
+    } catch (err) {
+      console.log("Error fetching data:", err);
+    }
+  };
+
+  const filterWaktu = async () => {
+    setvalidasi(true)
+    setIsDataFetched(false)
+  }
 
   useEffect(() => {
     if (idSalesman) {
       getAllDailyReport();
     }
-  }, [idSalesman]);
-
-  const handlePrint = async () => {
-    history.push({
-      pathname: `/print_kunjungan`,
-      search: `?tgl_awal=${tglAwal}&tgl_akhir=${tglAkhir}`,
-      state: { tglAwal, tglAkhir },
-    });
-    window.location.reload();
-  };
+    if (validasi && idSalesman) {
+      getAllDailyReportWaktuPengadaan()
+    }
+  }, [idSalesman, validasi]);
 
   useEffect(() => {
     if (dailyReport && dailyReport.length > 0) {
       initializeDataTable();
     }
   }, [dailyReport])
+
+  useEffect(() => {
+    if (dailyReportWaktu.length > 0 && !$.fn.DataTable.isDataTable('#example_data2')) {
+      initializeDataTable2();
+    }
+  }, [dailyReportWaktu]);
 
 
   return (
@@ -212,78 +246,132 @@ function DailyReport() {
                 className="w-full text-sm"
               >
                 <Option value="Pilih Bulan">Pilih Bulan</Option>
-                <Option value="01">Januari</Option>
-                <Option value="02">Februari</Option>
-                <Option value="03">Maret</Option>
-                <Option value="04">April</Option>
-                <Option value="05">Mei</Option>
-                <Option value="06">Juni</Option>
-                <Option value="07">Juli</Option>
-                <Option value="08">Agustus</Option>
-                <Option value="09">September</Option>
-                <Option value="10">Oktober</Option>
-                <Option value="11">November</Option>
-                <Option value="12">Desember</Option>
+                <Option value="Januari">Januari</Option>
+                <Option value="Februari">Februari</Option>
+                <Option value="Maret">Maret</Option>
+                <Option value="April">April</Option>
+                <Option value="Mei">Mei</Option>
+                <Option value="Juni">Juni</Option>
+                <Option value="Juli">Juli</Option>
+                <Option value="Agustus">Agustus</Option>
+                <Option value="September">September</Option>
+                <Option value="Oktober">Oktober</Option>
+                <Option value="November">November</Option>
+                <Option value="Desember">Desember</Option>
               </Select>
             </div>
             <Button
               className="mt-5 font-poppins font-medium mb-4"
               color="blue"
-              type="button"
+              type="button" onClick={filterWaktu}
             >
               Cari
             </Button>
           </div>
 
-          <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
-            <table
-              id="example_data"
-              ref={tableRef}
-              className="rounded-sm table-auto w-full overflow-x-auto"
-            >
-              <thead className="bg-blue-500 text-white w-full">
-                <tr>
-                  <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">
-                    No
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Tanggal</th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">
-                    Jumlah Report
-                  </th>
-                  <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dailyReport.length > 0 ? (
-                  dailyReport.map((item, index) => (
-                    <tr key={index}>
-                      <td className="text-sm py-2 px-3">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
-                      <td className="text-sm py-2 px-3">{totals[index] !== undefined ? totals[index] : 'Loading...'}
-                      </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <a href={"/detail_kunjungan_by_tgl/" + formatDate2(item.tanggalKunjungan)}>
-                          <IconButton size="md" color="green">
-                            <InformationCircleIcon className="w-6 h-6 white" />
-                          </IconButton>
-                        </a>
+          {isDataFetched ?
+            (
+              <>
+                <div className="mt-12 bg-green-100 w-full px-5 py-3">
+                  <p className="text-green-800">Pencarian Waktu Pengadaan : <span className="font-medium">{waktu}</span></p>
+                </div>
+                <div className="rounded mb-5 p-1 mt-6 overflow-x-auto">
+                  <table
+                    id="example_data2"
+                    ref={tableRef2}
+                    className="rounded-sm table-auto w-full overflow-x-auto"
+                  >
+                    <thead className="bg-blue-500 text-white w-full">
+                      <tr>
+                        <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">No</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">Tgl_Report</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">Instansi</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">Jenis</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">Peluang</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">Info didapat</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">CP</th>
+                        <th className="text-sm py-2 px-2.5 font-semibold">Wkt_p</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dailyReportWaktu.length > 0 ? (
+                        dailyReportWaktu.map((item, index) => (
+                          <tr key={index}>
+                            <td className="text-sm py-2 px-3">{index + 1}</td>
+                            <td className="text-sm py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
+                            <td className="text-sm py-2 px-3">{item.customer.nama_customer}</td>
+                            <td className="text-sm py-2 px-3">{item.jenis}</td>
+                            <td className="text-sm py-2 px-3">{item.customer.kabKot.nama_kabkot} / {item.customer.kec.nama_kec}</td>
+                            <td className="text-sm py-2 px-3">{item.peluang}</td>
+                            <td className="text-sm py-2 px-3">{item.infoDpt}</td>
+                            <td className="text-sm py-2 px-3">{item.cp}</td>
+                            <td className="text-sm py-2 px-3">{item.waktuPengadaan}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="9"
+                            className="text-sm text-center capitalize py-2 bg-gray-100 ">
+                            Tidak ada data
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </>)
+            :
+            (<div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
+              <table
+                id="example_data"
+                ref={tableRef}
+                className="rounded-sm table-auto w-full overflow-x-auto"
+              >
+                <thead className="bg-blue-500 text-white w-full">
+                  <tr>
+                    <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">
+                      No
+                    </th>
+                    <th className="text-sm py-2 px-2.5 font-semibold">Tanggal</th>
+                    <th className="text-sm py-2 px-2.5 font-semibold">
+                      Jumlah Report
+                    </th>
+                    <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dailyReport.length > 0 ? (
+                    dailyReport.map((item, index) => (
+                      <tr key={index}>
+                        <td className="text-sm py-2 px-3">{index + 1}</td>
+                        <td className="text-sm py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
+                        <td className="text-sm py-2 px-3">{totals[index] !== undefined ? totals[index] : 'Loading...'}
+                        </td>
+                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                          <a href={"/detail_kunjungan_by_tgl/" + formatDate2(item.tanggalKunjungan)}>
+                            <IconButton size="md" color="green">
+                              <InformationCircleIcon className="w-6 h-6 white" />
+                            </IconButton>
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="text-sm text-center capitalize py-2 bg-gray-100 ">
+                        Tidak ada data
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      className="text-sm text-center capitalize py-2 bg-gray-100 ">
-                      Tidak ada data
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  )}
+                </tbody>
+              </table>
+            </div>)}
         </main>
-      </div>
+      </div >
     </section >
   );
 }

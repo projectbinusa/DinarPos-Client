@@ -454,6 +454,53 @@ function ExportLaporan() {
     const [startReview, setstartReview] = useState("");
     const [endReview, setendReview] = useState("");
 
+    const exportReview = async (e) => {
+        if (startReview === "" || endReview === "") {
+            Swal.fire({
+                icon: "warning",
+                title: "Masukkan tanggal!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(
+                `${API_KUNJUNGAN}/export/review?tglAkhir=${endReview}&tglAwal=${startReview}`,
+                {
+                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    responseType: "blob",
+                }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `Report Periode ${formatDate(startIzin)} s.d ${formatDate(endIzin)}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Export Berhasil!",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error saat mengunduh file:",
+                text: error.message,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+
     // EXPORT LAP IZIN
     const [startIzin, setstartIzin] = useState("");
     const [endIzin, setendIzin] = useState("");
@@ -1090,7 +1137,7 @@ function ExportLaporan() {
                                     type="date"
                                     onChange={(e) => setendReview(e.target.value)}
                                 /> <br />
-                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium">Submit</Button>
+                                <Button variant="gradient" color="blue" type="button" className="font-poppins font-medium" onClick={exportReview}>Submit</Button>
                             </div>
                         </div>
 

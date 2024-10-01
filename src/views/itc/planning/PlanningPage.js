@@ -21,6 +21,17 @@ function PlanningPage() {
 
   const [validasi, setvalidasi] = useState(false);
 
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return formattedDate;
+  };
+
   const tableRef = useRef(null);
   const initializeDataTable = () => {
     if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
@@ -44,6 +55,20 @@ function PlanningPage() {
   const getBetweenTanggal = async () => {
     try {
       const response = await axios.get(`${API_PLANNING}/date?tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      const res = response.data.data;
+      setPlanning(res);
+      setvalidasi(false)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // BETWEEN TGL SALESMAN
+  const getBetweenTanggalSalesman = async () => {
+    try {
+      const response = await axios.get(`${API_PLANNING}/tgl_between/salesman?id_salesman=${idItc}&tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       const res = response.data.data;
@@ -81,6 +106,9 @@ function PlanningPage() {
   useEffect(() => {
     if (validasi || tglAkhir !== "" || tglAwal !== "") {
       getBetweenTanggal();
+    }
+    if (validasi || tglAkhir !== "" || tglAwal !== "" || idItc !== 0) {
+      getBetweenTanggalSalesman();
     }
   }, [validasi]);
 
@@ -203,7 +231,7 @@ function PlanningPage() {
               </div>
             </div>
             <Button
-              type="submit"
+              type="button"
               variant="gradient"
               color="blue"
               className="mt-5 font-poppins font-medium mb-4"
@@ -218,59 +246,40 @@ function PlanningPage() {
               ref={tableRef} className="w-full table-auto border-collapse  overflow-x-auto">
               <thead className="bg-blue-600 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    No
+                  <th className="text-sm py-2 px-3">Tanggal</th>
+                  <th className="text-sm py-2 px-3">Nama ITC</th>
+                  <th className="text-sm py-2 px-3">Nama Customer</th>
+                  <th className="text-sm py-2 px-3">Jenis</th>
+                  <th className="text-sm py-2 px-3">Daerah</th>
+                  <th className="text-sm py-2 px-3">
+                    Printer / Projector
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    Tanggal
+                  <th className="text-sm py-2 px-3">
+                    Jumlah Murid / KLS 3
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    Nama Customer
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    Jenis
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    kecamatan
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    Printer
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    Jumlah Murid
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    PC
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold text-left">
-                    UNBK
-                  </th>
+                  <th className="text-sm py-2 px-3">PC</th>
+                  <th className="text-sm py-2 px-3">UNBK</th>
+                  <th className="text-sm py-2 px-3">Jurusan</th>
+                  <th className="text-sm py-2 px-3">Pihak dituju</th>
+                  <th className="text-sm py-2 px-3">Tujuan</th>
                 </tr>
               </thead>
               <tbody>
                 {planning.length > 0 ? (
                   planning.map((row, index) => (
-                    <tr key={row.id} className="border-t hover:bg-gray-50 transition">
+                    <tr key={index} className="border-t hover:bg-gray-50 transition">
+                      <td className="text-sm py-2 px-3">{formatDate(row.tgl)}</td>
+                      <td className="text-sm py-2 px-3">{row.salesman.namaSalesman}</td>
+                      <td className="text-sm py-2 px-3">{row.customer.nama_customer}</td>
+                      <td className="text-sm py-2 px-3"> {row.customer.jenis}</td>
                       <td className="text-sm py-2 px-3">
-                        {index + 1}
+                        {row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {row.created_date}
+                        {row.customer.printer} / {row.customer.proyektor}
                       </td>
                       <td className="text-sm py-2 px-3">
-                        {row.customer.nama_customer}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.customer.jenis}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.customer.kec.nama_kec}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.customer.printer}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.customer.jml}
+                        {row.customer.jml} / {row.customer.kls3}
                       </td>
                       <td className="text-sm py-2 px-3">
                         {row.customer.pc}
@@ -278,13 +287,21 @@ function PlanningPage() {
                       <td className="text-sm py-2 px-3">
                         {row.customer.unbk}
                       </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.customer.jurusan}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.bertemu}
+                      </td>
+                      <td className="text-sm py-2 px-3">
+                        {row.ket}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td colSpan="13" className="text-center py-4 text-sm text-gray-600">
-                      Data tidak ditemukan
-                    </td>
+                      Tidak ada data                    </td>
                   </tr>
                 )}
               </tbody>

@@ -192,6 +192,7 @@ import DataPlanning from "./views/itc/planning_marketting/DataPlanning.js";
 import Model from "./views/itc/dealpo/EditDealPo.js";
 import AddFinish from "./views/itc/dealfinish/AddFinish.js";
 import FormFinish from "./views/itc/dealfinish/FormFinish.js";
+import FilterOmzet from "./views/itc/omzet/FilterOmzet.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1105,7 +1106,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/detail_kunjungan"
+              path="/detail_kunjungan/:id"
               component={DetailKunjungan}
               isAuthenticated={true}
             />
@@ -1145,12 +1146,17 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/filter_omzet"
+              component={FilterOmzet}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/add_omzet"
               component={AddOmzet}
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/detail_kunjungan_by_tgl/:tgl"
+              path="/detail_kunjungan/:id_by_tgl/:tgl"
               component={DetailKunjunganHari}
               isAuthenticated={true}
             />
