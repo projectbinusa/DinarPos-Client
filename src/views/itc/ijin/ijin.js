@@ -17,6 +17,7 @@ function Ijin() {
   const [salesmanId, setsalesmanId] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  
   const id = Decrypt();
   useEffect(() => {
     axios
@@ -215,10 +216,24 @@ function Ijin() {
             <table id="example_data" ref={tableRef} className="table-auto w-full border-collapse rounded-sm">
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">No</th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">Durasi</th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">Tanggal</th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">Keterangan</th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">
+                    No
+                  </th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">
+                    Durasi
+                  </th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">
+                    Tanggal Awal
+                  </th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">
+                    Tanggal Akhir
+                  </th>
+                  <th className="text-sm py-2 px-3 font-semibold">
+                    Salesman
+                  </th>
+                  <th className="text-sm py-3 px-4 font-semibold text-left">
+                    Keterangan
+                    </th>
                   <th className="text-sm py-3 px-4 font-semibold text-left">Foto</th>
                   {level === 'Marketting' ?
                     <th className="text-sm py-3 px-4 font-semibold text-left">Aksi</th> : <></>}
@@ -227,21 +242,35 @@ function Ijin() {
               <tbody>
                 {ijin.map((row, index) => (
                   <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                    <td className="text-sm py-3 px-4">{index + 1}</td>
-                    <td className="text-sm py-3 px-4">{row.jenis}</td>
-                    <td className="text-sm py-3 px-4">{row.created_date}</td>
-                    <td className="text-sm py-3 px-4">{row.ket}</td>
                     <td className="text-sm py-3 px-4">
-                      {row.foto ? (
-                        <img
-                          src={`${API_IJIN}/images/${row.foto}`} // Adjust the path according to your API structure
-                          alt="foto"
-                          className="w-16 h-16 object-cover"
-                        />
-                      ) : (
-                        <span>Tidak ada foto</span>
-                      )}
+                      {index + 1}
                     </td>
+                    <td className="text-sm py-3 px-4">
+                      {row.jenis}
+                    </td>
+                    <td className="text-sm py-3 px-4">
+                      {row.created_date}
+                    </td>
+                    <td className="text-sm py-3 px-4">
+                      {row.updated_date}
+                    </td>
+                    <td className="text-sm py-3 px-4">
+                      {row.ket}
+                    </td>
+                    <td className="text-sm py-2 px-3">
+                        {row.salesman.namaSalesman}
+                      </td>
+                    <td className="text-sm py-3 px-4">
+                    {row.foto ? (
+                      <img
+                        src={`${API_IJIN}/images/${row.foto}`} 
+                        alt="foto"
+                        className="w-16 h-16 object-cover"
+                      />
+                    ) : (
+                      <span>Tidak ada foto</span>
+                    )}
+                  </td>
                     {level === 'Marketting' ?
                       <td className="text-sm py-3 px-4 flex items-center justify-center">
                         <IconButton size="md" color="red" onClick={() => hapusIjin(row.id)}>
