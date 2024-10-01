@@ -84,6 +84,7 @@ function DataItc() {
             const response = await axios.get(`${API_PENGGUNA}/nama?nama=${nama}`, {
                 headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
             });
+            console.log(response.data.data);
             return response.data.data;
         } catch (error) {
             console.log("get all", error);

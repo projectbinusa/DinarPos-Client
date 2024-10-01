@@ -21,6 +21,17 @@ function LapSync() {
         }
     }
 
+    const formatDate = (value) => {
+        const date = new Date(value);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const formattedDate = `${year}-${month}-${day}`;
+
+        return formattedDate;
+    };
+
     // ALL ITC
     const [values, setvalues] = useState("");
     const [options, setoptions] = useState([]);
@@ -135,8 +146,8 @@ function LapSync() {
     useEffect(() => {
         if (laporans.length > 0) {
             laporans.forEach((row, idx) => {
-                totalPlanning(row.tgl, idx, row.salesman.id);
-                totalKunjungan(row.tgl, idx, row.salesman.id);
+                totalPlanning(formatDate(row.tanggalKunjungan), idx, row.salesman.id);
+                totalKunjungan(formatDate(row.tanggalKunjungan), idx, row.salesman.id);
             });
         }
     }, [laporans]);
@@ -146,6 +157,9 @@ function LapSync() {
             initializeDataTable();
         }
     }, [laporans])
+
+    console.log(laporans);
+
 
     useEffect(() => {
         if (validasi || tglAkhir !== "" || tglAwal !== "") {
@@ -176,7 +190,7 @@ function LapSync() {
             <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
                 <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
                     <Typography variant="lead" className="uppercase font-poppins">
-                        Laporan Sync
+                        Sync
                     </Typography>
                     <Breadcrumbs className="bg-transparent">
                         <a href="/home" className="opacity-60">
@@ -284,14 +298,14 @@ function LapSync() {
                             <tbody>
                                 {laporans.length > 0 ? (
                                     laporans.map((row, idx) => {
-                                        const persen = totalsK[idx] / totalsP[idx] * 100;
+                                        const persen = (totalsK[idx] / totalsP[idx]) * 100;
                                         return (
                                             <tr key={idx}>
                                                 <td className="text-sm w-[4%]">{idx + 1}</td>
                                                 <td className="text-sm py-2 px-2.5">{row.tanggalKunjungan}</td>
                                                 <td className="text-sm py-2 px-2.5">{row.salesman.namaSalesman}</td>
                                                 <td className="text-sm py-2 px-2.5">
-                                                    <Progress value={persen || 0} color="green" />
+                                                    <Progress value={persen || 0} color="green" label/>
                                                 </td>
                                                 <td className="text-sm py-2 px-3 flex items-center justify-center">
                                                     <a href={`/detail_sync/${row.salesman.id}/${row.tanggalKunjungan}`}>

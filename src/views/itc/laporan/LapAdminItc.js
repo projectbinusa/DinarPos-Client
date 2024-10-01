@@ -5,11 +5,9 @@ import {
   Button,
   Input,
   Typography,
-  Select,
-  Option,
 } from "@material-tailwind/react";
 import axios from "axios";
-import { API_KUNJUNGAN, API_KUNJUNGAN_EXPORT_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../../utils/BaseUrl";
+import { API_KUNJUNGAN, API_PLANNING, API_SALESMAN } from "../../../utils/BaseUrl";
 import $ from "jquery";
 import Swal from "sweetalert2";
 
@@ -41,15 +39,14 @@ function LapAdminItc() {
   };
 
   const namaSalesman = async (value) => {
-    axios.get(`${API_SALESMAN}/${value}`, {
-      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    }).then((res) => {
-      const nama = res.data.data.namaSalesman;
-      return nama;
-    }).catch((err) => {
+    try {
+      const res = await axios.get(`${API_SALESMAN}/${value}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      return res.data.data.namaSalesman;
+    } catch (err) {
       console.log(err);
-      return "";
-    })
+    }
   };
 
   const [tglAwal, setTglAwal] = useState("");
@@ -134,6 +131,9 @@ function LapAdminItc() {
         });
       }
     } else {
+      const salesmanResponse = await namaSalesman(itcKunjungan);
+      const nama = salesmanResponse || "Unknown Salesman";
+
       try {
         const response = await axios.get(
           `${API_KUNJUNGAN}/export/kunjungan/salesman?id_selesman=${itcKunjungan}&tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`,
@@ -146,7 +146,7 @@ function LapAdminItc() {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", `Report ${namaSalesman(itcKunjungan)} Periode ${formatDate(tglAwal)} s.d ${formatDate(tglAkhir)}.xlsx`);
+        link.setAttribute("download", `Report ${nama} Periode ${formatDate(tglAwal)} s.d ${formatDate(tglAkhir)}.xlsx`);
         document.body.appendChild(link);
         link.click();
         link.parentNode.removeChild(link);
@@ -251,6 +251,9 @@ function LapAdminItc() {
         });
       }
     } else {
+      const salesmanResponse = await namaSalesman(itcPlanning);
+      const nama = salesmanResponse || "Unknown Salesman";
+
       try {
         const response = await axios.get(
           `${API_PLANNING}/export/excel/salesman?id_salesman=${itcPlanning}&tglAkhir=${endPlanning}&tglAwal=${startPlanning}`,
@@ -263,7 +266,7 @@ function LapAdminItc() {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", `Planning ${namaSalesman(itcPlanning)} Periode ${formatDate(startPlanning)} s.d ${formatDate(endPlanning)}.xlsx`);
+        link.setAttribute("download", `Planning ${nama} Periode ${formatDate(startPlanning)} s.d ${formatDate(endPlanning)}.xlsx`);
         document.body.appendChild(link);
         link.click();
         link.parentNode.removeChild(link);
