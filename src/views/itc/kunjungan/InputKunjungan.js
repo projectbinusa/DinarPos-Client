@@ -99,6 +99,12 @@ function InputKunjungan() {
     }
   };
 
+  useEffect(() => {
+    if (kunjungan && kunjungan.length > 0) {
+      initializeDataTable();
+    }
+  }, [kunjungan]);
+
   const formatDate = (value) => {
     const date = new Date(value);
 
@@ -868,45 +874,43 @@ function InputKunjungan() {
                                   {res.customer.jenis}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.kabKot.nama_kabkot} /{" "}
-                                  {res.customer.kec.nama_kec}
+                                  {res.customer.kabKot.nama_kabkot} / {res.customer.kec.nama_kec}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.tujuan}
+                                  {res.tujuan}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.action}
+                                  {res.action}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.infoDpt}
+                                  {res.infoDpt}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.cp}
+                                  {res.cp}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.nVisit}
+                                  {res.nVisit}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.visit}
+                                  {res.visit}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.peluang}
+                                  {res.peluang}
                                 </td>
                                 <td className="text-sm py-2 px-3">
-                                  {res.customer.deal}
-                                </td>
-                                <td className="text-sm py-2 px-3">
-                                  {res.customer.deal}
+                                  {res.deal}
                                 </td>
                                 <td className="text-sm py-2 px-3 flex items-center justify-center">
                                   {formatDate(res.timestamp) ===
                                     formattedDate ? (
                                     <>
                                       <div className="flex flex-col lg:flex-row gap-3">
-                                        <IconButton size="md" color="green">
-                                          <InformationCircleIcon className="w-6 h-6 white" />
-                                        </IconButton>
-                                        <IconButton size="md" color="red">
+                                        <a href={`/detail_kunjungan/` + res.idReport}>
+                                          <IconButton size="md" color="green">
+                                            <InformationCircleIcon className="w-6 h-6 white" />
+                                          </IconButton>
+                                        </a>
+                                        <IconButton size="md" color="red" onClick={() => deleteKunjungan(res.idReport)}>
                                           <TrashIcon className="w-6 h-6 white" />
                                         </IconButton>
                                       </div>

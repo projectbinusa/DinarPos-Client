@@ -110,8 +110,14 @@ table.dataTable thead tr {
   color: white;
 }
 
+table.dataTable thead tr th{
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
 table.dataTable tbody tr td {
   text-align: center;
+  font-size: 0.75rem;
 }
 
 table.dataTable tbody tr:nth-child(even) {
