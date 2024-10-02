@@ -164,7 +164,6 @@ function AddIjin() {
     setCurrentPage(1);
   };
 
-
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -189,40 +188,31 @@ function AddIjin() {
           <form onSubmit={addIjin}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="mt-2">
-              <Input
-                    label="Salesman"
-                    variant="static"
-                    color="blue"
-                    list="salesman-list"
-                    id="salesman"
-                    placeholder="Pilih Salesman"
-                    required
-                    onChange={(event) => {
-                      handleChange(event);
-                      setSalesmanId(event.target.value);
-                    }}
-                  />
-                  <datalist id="salesman-list">
-                    {options.map((option) => (
-                      <option value={option.id} key={option.id}>
-                        {option.namaSalesman}
-                      </option>
-                    ))}
-                  </datalist>
-
-              </div>
-              <div className="mt-2">
-                <Select
-                  label="Durasi"
+              <Select
+                  label="Salesman"
                   color="blue"
                   variant="outlined"
                   required
-                  value={jenis}
-                  onChange={(e) => setJenis(e)}
+                  value={salesmanId} 
+                  onChange={(e) => setSalesmanId(e.target.value)} // perbaiki untuk mendapatkan nilai dari target
                 >
-                  <Option value="1 HARI">1 Hari</Option>
-                  <Option value="1 HARI LEBIH">1 Hari Lebih</Option>
+                  {options.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.namaSalesman}
+                    </Option>
+                  ))}
                 </Select>
+              </div>
+              <div className="mt-2">
+                <Input
+                  label="Durasi"
+                  variant="static"
+                  color="blue"
+                  size="lg"
+                  value={jenis}
+                  required
+                  onChange={(e) => setJenis(e.target.value)}
+                />
               </div>
               <div>
                 <Input
@@ -260,15 +250,19 @@ function AddIjin() {
               <div>
                 <Input
                   label="Keterangan"
-                  size="lg"
-                  placeholder="Masukkan Keterangan"
                   variant="static"
                   color="blue"
+                  size="lg"
+                  type="text"
+                  name="keterangan"
                   onChange={(e) => setKet(e.target.value)}
                 />
               </div>
             </div>
-            <Button type="submit" className="mt-5" color="blue">
+            <Button
+              type="submit"
+              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
               Tambah
             </Button>
           </form>
