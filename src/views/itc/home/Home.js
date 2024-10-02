@@ -7,6 +7,18 @@ import { API_KUNJUNGAN, API_OMZET, API_PLANNING } from "../../../utils/BaseUrl";
 function Home() {
   const [planning, setPlanning] = useState([]);
   const [kunjungan, setKunjungan] = useState([]);
+  const [ttlOmzet, setTtlOmzet] = useState([]);
+
+  const formatDate = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return formattedDate;
+  };
 
   // GET ALL PLANNING
   const allPlanning = async () => {
@@ -15,6 +27,7 @@ function Home() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setPlanning(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -27,6 +40,7 @@ function Home() {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
       setKunjungan(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -41,16 +55,37 @@ function Home() {
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  const omzet = async (itc) => {
+  const totalOmzet = async (idx, itc) => {
     try {
-      const response = await axios.get(`${API_OMZET}/bulan_tahun/salesman?bulan=${month}&id_salesman=${itc}&tahun=${year}`, {
+      const response = await axios.get(`${API_OMZET}/bulan_tahun/salesman?bulan=${month}&id_salesman=1&tahun=${year}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      const res = response.data.data[0].total_omzet;
+      setTtlOmzet(prevTotals => {
+        const newTotals = [...prevTotals];
+        newTotals[idx] = res;
+        return newTotals;
+      });
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (planning.length > 0) {
+      planning.forEach((row, idx) => {
+        totalOmzet(idx, row.salesman.id);
+      });
+    }
+  }, [planning]);
+
+  useEffect(() => {
+    if (kunjungan.length > 0) {
+      kunjungan.forEach((row, idx) => {
+        totalOmzet(idx, row.salesman.id);
+      });
+    }
+  }, [kunjungan]);
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -58,13 +93,13 @@ function Home() {
       <div className="lg:ml-[19rem] pt-20 lg:pt-5 w-full">
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 lg:mr-4 mx-5 lg:mx-0">
           {/* Report Card */}
-          <Card className="p-2 order-1 lg:order-2">
+          <Card className="p-5 order-1 lg:order-2">
             <Typography variant="h4" color="blue-gray" className="font-poppins uppercase">
               Report
             </Typography>
             <br />
             <table className="w-full border-collapse">
-              <thead>
+              <thead className="border-b-2">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold">Nama ITC</th>
                   <th className="text-sm py-2 px-3 font-semibold">
@@ -75,27 +110,29 @@ function Home() {
                 </tr>
               </thead>
               <tbody>
-                {kunjungan.map((item, index) => (
-                  <tr key={index}>
-                    <td className="text-sm py-2 px-3">{item.namaITC}</td>
-                    <td className="text-sm py-2 px-3">{item.lastUpdate}</td>
-                    <td className="text-sm py-2 px-3">{item.omzet}</td>
-                    <td className="text-sm py-2 px-3">{item.persen}</td>
-                  </tr>
-                ))}
+                {kunjungan.map((item, index) => {
+                  const persen = (ttlOmzet[index] / item.salesman.target) * 100;
+                  return (
+                    <tr key={index} className="border-b-2">
+                      <td className="text-sm text-center py-2 px-3">{item.salesman.namaSalesman}</td>
+                      <td className="text-sm text-center py-2 px-3">{formatDate(item.updated_date)}</td>
+                      <td className="text-sm text-center py-2 px-3">{ttlOmzet[index]}</td>
+                      <td className="text-sm text-center py-2 px-3">{persen} %</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
-            <hr className="my-4 border-gray-300" />
           </Card>
 
           {/* Planning Card */}
-          <Card className="p-2 order-1 lg:order-2">
+          <Card className="p-5 order-1 lg:order-2">
             <Typography variant="h4" color="blue-gray" className="font-poppins uppercase">
               Planning
             </Typography>
             <br />
             <table className="w-full border-collapse">
-              <thead>
+              <thead className="border-b-2">
                 <tr>
                   <th className="text-sm py-2 px-3 font-semibold">Nama ITC</th>
                   <th className="text-sm py-2 px-3 font-semibold">
@@ -106,17 +143,19 @@ function Home() {
                 </tr>
               </thead>
               <tbody>
-                {planning.map((item, index) => (
-                  <tr key={index}>
-                    <td className="text-sm py-2 px-3">{item.namaITC}</td>
-                    <td className="text-sm py-2 px-3">{item.lastUpdate}</td>
-                    <td className="text-sm py-2 px-3">{item.omzet}</td>
-                    <td className="text-sm py-2 px-3">{item.persen}</td>
-                  </tr>
-                ))}
+                {planning.map((item, index) => {
+                  const persen = (ttlOmzet[index] / item.salesman.target) * 100;
+                  return (
+                    <tr key={index} className="border-b-2">
+                      <td className="text-sm text-center py-2 px-3">{item.salesman.namaSalesman}</td>
+                      <td className="text-sm text-center py-2 px-3">{formatDate(item.updated_date)}</td>
+                      <td className="text-sm text-center py-2 px-3">{ttlOmzet[index]}</td>
+                      <td className="text-sm text-center py-2 px-3">{persen} %</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
-            <hr className="my-4 border-gray-300" />
           </Card>
         </div>
         <br />
