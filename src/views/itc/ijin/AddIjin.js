@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -8,34 +8,47 @@ import {
   Select,
   Typography,
 } from "@material-tailwind/react";
-import { API_IZIN } from "../../../utils/BaseUrl";
+import { API_IJIN, API_SALESMAN } from "../../../utils/BaseUrl";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 function AddIjin() {
   const history = useHistory();
+  const [salesmanId, setSalesmanId] = useState(0);
   const [created_date, setCreatedDate] = useState("");
+  const [tgl, setTgl] = useState("");
   const [ket, setKet] = useState("");
   const [foto, setFoto] = useState(null);
-  const [previewFoto, setPreviewFoto] = useState("");
-  const [status, setStatus] = useState("");
+  const [jenis, setJenis] = useState("");
 
+  // Fungsi untuk menambahkan Ijin
   const addIjin = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("created_date", created_date);
+    formData.append("id_salesman", salesmanId); // Menambahkan id_salesman
+    formData.append("s_d_tgl", new Date(created_date).toISOString().slice(0, 19).replace('T', ' ')); // Format tanggal awal
+    formData.append("tgl", new Date(tgl).toISOString().slice(0, 19).replace('T', ' ')); // Format tanggal akhir
+    formData.append("jenis", jenis);
     formData.append("ket", ket);
-    formData.append("foto", foto);
+
+    if (foto) {
+      formData.append("foto", foto); // Menambahkan file foto
+    }
+
+    console.log("Data yang dikirim:");
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
 
     try {
-      await axios.post(`${API_IZIN}/add`, formData, {
+      const response = await axios.post(`${API_IJIN}/add`, formData, {
         headers: {
           "auth-tgh": `jwt ${localStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data",
         },
       });
+
       Swal.fire({
         icon: "success",
         title: "Data Berhasil Ditambahkan",
@@ -43,22 +56,47 @@ function AddIjin() {
         timer: 1500,
       });
       history.push("/ijin");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.clear();
-        history.push("/");
-      } else if (error.response && error.response.status === 400) {
-        Swal.fire({
-          icon: "error",
-          title: "Data Sudah Ada!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "Tambah Data Gagal!",
+            text: data.message || "Request tidak valid, periksa kembali data yang dikirim.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else if (status === 404) {
+          Swal.fire({
+            icon: "error",
+            title: "Gagal Menambahkan Data",
+            text: "Periksa kembali URL atau hubungi administrator.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else if (status === 401) {
+          localStorage.clear();
+          history.push("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Tambah Data Gagal!",
+            text: data.message || "Terjadi kesalahan saat menambahkan data.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+        console.log("Error Response:", error.response); // Debugging response error
       } else {
         Swal.fire({
           icon: "error",
           title: "Tambah Data Gagal!",
-          text: error.response?.data?.data || "Terjadi kesalahan",
+          text: "Tidak dapat terhubung ke server.",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -66,16 +104,11 @@ function AddIjin() {
     }
   };
 
+  // Fungsi untuk menangani perubahan input file foto
   const handleFotoChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       setFoto(file);
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewFoto(reader.result);
-      };
-      reader.readAsDataURL(file);
     } else {
       Swal.fire({
         icon: "warning",
@@ -83,19 +116,54 @@ function AddIjin() {
         showConfirmButton: false,
         timer: 1500,
       });
-      setPreviewFoto(null);
       setFoto(null);
     }
   };
 
-  const level = localStorage.getItem("userLevel");
-  let dashboard = "";
+  // Fetch Salesman dan Customer
+  const [values, setValues] = useState("");
+  const [options, setOptions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  if (level === "Superadmin") {
-    dashboard = "dashboard";
-  } else if (level === "AdminService") {
-    dashboard = "dashboard_service";
-  }
+  const handle = async () => {
+    try {
+      if (values.trim() !== "") {
+        const response = await fetch(
+          `${API_SALESMAN}/pagination?limit=10&page=${currentPage}&search=${values}&sort=1`,
+          {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+          }
+        );
+        if (response.status === 200) {
+          const data = await response.json();
+          setOptions(data.data);
+        } else {
+          throw new Error("Failed to fetch data.");
+        }
+      } else {
+        setOptions([]); // Reset options if no search term
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Gagal memuat data salesman.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  useEffect(() => {
+    handle();
+  }, [currentPage, values]);
+
+  const handleChange = (event) => {
+    setValues(event.target.value);
+    setCurrentPage(1);
+  };
+
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -106,7 +174,7 @@ function AddIjin() {
             Tambah Ijin
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href={`/${dashboard}`} className="opacity-60">
+            <a href={`/${localStorage.getItem("userLevel") === "Superadmin" ? "dashboard" : "dashboard_service"}`} className="opacity-60">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
@@ -121,13 +189,36 @@ function AddIjin() {
           <form onSubmit={addIjin}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="mt-2">
+              <Input
+                    label="Salesman"
+                    variant="static"
+                    color="blue"
+                    list="salesman-list"
+                    id="salesman"
+                    placeholder="Pilih Salesman"
+                    required
+                    onChange={(event) => {
+                      handleChange(event);
+                      setSalesmanId(event.target.value);
+                    }}
+                  />
+                  <datalist id="salesman-list">
+                    {options.map((option) => (
+                      <option value={option.id} key={option.id}>
+                        {option.namaSalesman}
+                      </option>
+                    ))}
+                  </datalist>
+
+              </div>
+              <div className="mt-2">
                 <Select
-                  label="Status"
+                  label="Durasi"
                   color="blue"
                   variant="outlined"
                   required
-                  value={status}
-                  onChange={(e) => setStatus(e)}
+                  value={jenis}
+                  onChange={(e) => setJenis(e)}
                 >
                   <Option value="1 HARI">1 Hari</Option>
                   <Option value="1 HARI LEBIH">1 Hari Lebih</Option>
@@ -135,13 +226,24 @@ function AddIjin() {
               </div>
               <div>
                 <Input
-                  label="Tanggal"
+                  label="Tanggal Awal"
                   variant="static"
                   color="blue"
                   size="lg"
-                  type="date"
-                  name="tanggal"
+                  type="datetime-local"
+                  name="tanggal_awal"
                   onChange={(e) => setCreatedDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <Input
+                  label="Tanggal Akhir"
+                  variant="static"
+                  color="blue"
+                  size="lg"
+                  type="datetime-local"
+                  name="tanggal_akhir"
+                  onChange={(e) => setTgl(e.target.value)}
                 />
               </div>
               <div>
@@ -162,30 +264,13 @@ function AddIjin() {
                   placeholder="Masukkan Keterangan"
                   variant="static"
                   color="blue"
-                  name="keterangan"
                   onChange={(e) => setKet(e.target.value)}
                 />
               </div>
             </div>
-            <div className="mt-10 flex gap-4">
-              <Button
-                variant="gradient"
-                color="blue"
-                type="submit"
-                className="font-popins font-medium"
-              >
-                <span>Simpan</span>
-              </Button>
-              <a href="/ijin">
-                <Button
-                  variant="text"
-                  color="gray"
-                  className="mr-1 font-popins font-medium"
-                >
-                  <span>Kembali</span>
-                </Button>
-              </a>
-            </div>
+            <Button type="submit" className="mt-5" color="blue">
+              Tambah
+            </Button>
           </form>
         </main>
       </div>
