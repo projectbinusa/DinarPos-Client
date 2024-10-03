@@ -2,10 +2,504 @@ import { Breadcrumbs, Button, IconButton, Input, Option, Select, Typography } fr
 import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { API_KUNJUNGAN, API_SALESMAN } from "../../../utils/BaseUrl";
-import { ChevronLeftIcon, InformationCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import $ from "jquery";
 import axios from "axios";
 import Swal from "sweetalert2";
+import formatDate from "../../../component/FormatDate";
+
+function AllBetweenDate({ tglAwal, tglAkhir }) {
+    const tableRef2 = useRef(null);
+    const initializeDataTable2 = () => {
+        if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
+            $(tableRef2.current).DataTable({
+                responsive: true
+            });
+        }
+    }
+
+    const [kunjunganDate, setKunjunganDate] = useState([]);
+
+    // BETWEEN TGL
+    const getBetweenTanggal = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/date/between?tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setKunjunganDate(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    useEffect(() => {
+        getBetweenTanggal();
+    }, [tglAkhir, tglAwal]);
+
+    useEffect(() => {
+        if (kunjunganDate && kunjunganDate.length > 0) {
+            initializeDataTable2();
+        }
+    }, [kunjunganDate])
+
+    return (<>
+        <div className="overflow-x-auto mt-6">
+            <table id="example_data2"
+                ref={tableRef2} className="w-full table-auto border-collapse  overflow-x-auto">
+                <thead className="bg-blue-600 text-white">
+                    <tr>
+                        <th className="py-2 px-2.5 text-xs">Tgl</th>
+                        <th className="py-2 px-2.5 text-xs">Timestamp</th>
+                        <th className="py-2 px-2.5 text-xs">Nama</th>
+                        <th className="py-2 px-2.5 text-xs">Instansi</th>
+                        <th className="py-2 px-2.5 text-xs">Daerah</th>
+                        <th className="py-2 px-2.5 text-xs">Tujuan</th>
+                        <th className="py-2 px-2.5 text-xs">Action</th>
+                        <th className="py-2 px-2.5 text-xs">Info didapat</th>
+                        <th className="py-2 px-2.5 text-xs">Peluang</th>
+                        <th className="py-2 px-2.5 text-xs">Visit</th>
+                        <th className="py-2 px-2.5 text-xs">Tipe</th>
+                        <th className="py-2 px-2.5 text-xs">Deal</th>
+                        <th className="py-2 px-2.5 text-xs">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {kunjunganDate.length > 0 ? (
+                        kunjunganDate.map((row, idx) => (
+                            <tr key={idx}>
+                                <td>{formatDate(row.tanggalDeal)}</td>
+                                <td>{formatDate(row.timestamp)}</td>
+                                <td>{row.salesman.namaSalesman}</td>
+                                <td>{row.customer.nama_customer}</td>
+                                <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                <td>{row.tujuan}</td>
+                                <td>{row.action}</td>
+                                <td>{row.infoDpt}</td>
+                                <td>{row.peluang}</td>
+                                <td>{row.nVisit}</td>
+                                <td>{row.visit}</td>
+                                <td>{row.deal}</td>
+                                <td className="py-2 px-3 flex items-center justify-center">
+                                    <div className="flex flex-col lg:flex-row gap-3">
+                                        <a href={"/detail_kunjungan/" + row.idReport}>
+                                            <IconButton size="md" color="green">
+                                                <InformationCircleIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="13" className="text-xs text-center py-4 text-gray-600 bg-[#f9f9f9]">
+                                Tidak ada data
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    </>)
+
+}
+
+function AllBetweenDateSalesman({ tglAwal, tglAkhir, id }) {
+    const tableRef3 = useRef(null);
+    const initializeDataTable3 = () => {
+        if (tableRef3.current && !$.fn.DataTable.isDataTable(tableRef3.current)) {
+            $(tableRef3.current).DataTable({
+                responsive: true
+            });
+        }
+    }
+
+    const [kunjunganDateSalesman, setKunjunganDateSalesman] = useState([]);
+
+    // BETWEEN TGL SALESMAN
+    const getBetweenTanggalSalesman = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/date/between/salesman?id_salesman=${id}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setKunjunganDateSalesman(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+    useEffect(() => {
+        getBetweenTanggalSalesman();
+    }, [tglAkhir, tglAwal]);
+
+    useEffect(() => {
+        if (kunjunganDateSalesman && kunjunganDateSalesman.length > 0) {
+            initializeDataTable3();
+        }
+    }, [kunjunganDateSalesman])
+
+    return (<>
+        <div className="overflow-x-auto mt-6">
+            <table id="example_data3"
+                ref={tableRef3} className="w-full table-auto border-collapse  overflow-x-auto">
+                <thead className="bg-blue-600 text-white">
+                    <tr>
+                        <th className="py-2 px-2.5 text-xs">Tgl</th>
+                        <th className="py-2 px-2.5 text-xs">Timestamp</th>
+                        <th className="py-2 px-2.5 text-xs">Nama</th>
+                        <th className="py-2 px-2.5 text-xs">Instansi</th>
+                        <th className="py-2 px-2.5 text-xs">Daerah</th>
+                        <th className="py-2 px-2.5 text-xs">Tujuan</th>
+                        <th className="py-2 px-2.5 text-xs">Action</th>
+                        <th className="py-2 px-2.5 text-xs">Info didapat</th>
+                        <th className="py-2 px-2.5 text-xs">Peluang</th>
+                        <th className="py-2 px-2.5 text-xs">Visit</th>
+                        <th className="py-2 px-2.5 text-xs">Tipe</th>
+                        <th className="py-2 px-2.5 text-xs">Deal</th>
+                        <th className="py-2 px-2.5 text-xs">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {kunjunganDateSalesman.length > 0 ? (
+                        kunjunganDateSalesman.map((row, idx) => (
+                            <tr key={idx}>
+                                <td>{formatDate(row.tanggalDeal)}</td>
+                                <td>{formatDate(row.timestamp)}</td>
+                                <td>{row.salesman.namaSalesman}</td>
+                                <td>{row.customer.nama_customer}</td>
+                                <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                <td>{row.tujuan}</td>
+                                <td>{row.action}</td>
+                                <td>{row.infoDpt}</td>
+                                <td>{row.peluang}</td>
+                                <td>{row.nVisit}</td>
+                                <td>{row.visit}</td>
+                                <td>{row.deal}</td>
+                                <td className="py-2 px-3 flex items-center justify-center">
+                                    <div className="flex flex-col lg:flex-row gap-3">
+                                        <a href={"/detail_kunjungan/" + row.idReport}>
+                                            <IconButton size="md" color="green">
+                                                <InformationCircleIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="13" className="text-xs text-center py-4 text-gray-600 bg-[#f9f9f9]">
+                                Tidak ada data
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    </>)
+}
+
+function AllDeal50({ deal }) {
+    const tableRef4 = useRef(null);
+    const initializeDataTable4 = () => {
+        if (tableRef4.current && !$.fn.DataTable.isDataTable(tableRef4.current)) {
+            $(tableRef4.current).DataTable({
+                responsive: true
+            });
+        }
+    }
+
+    const [deals50, setDeals50] = useState([]);
+
+    // BETWEEN TGL SALESMAN
+    const getAll = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/between0and50`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data;
+            setDeals50(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+    useEffect(() => {
+        getAll();
+    }, [deal]);
+
+    useEffect(() => {
+        if (deals50 && deals50.length > 0) {
+            initializeDataTable4();
+        }
+    }, [deals50])
+
+    return (<>
+        <div className="overflow-x-auto mt-6">
+            <table id="example_data4"
+                ref={tableRef4} className="w-full table-auto border-collapse  overflow-x-auto">
+                <thead className="bg-blue-600 text-white">
+                    <tr>
+                        <th className="py-2 px-2.5 text-xs">Tgl</th>
+                        <th className="py-2 px-2.5 text-xs">Timestamp</th>
+                        <th className="py-2 px-2.5 text-xs">Nama</th>
+                        <th className="py-2 px-2.5 text-xs">Instansi</th>
+                        <th className="py-2 px-2.5 text-xs">Daerah</th>
+                        <th className="py-2 px-2.5 text-xs">Tujuan</th>
+                        <th className="py-2 px-2.5 text-xs">Action</th>
+                        <th className="py-2 px-2.5 text-xs">Info didapat</th>
+                        <th className="py-2 px-2.5 text-xs">Peluang</th>
+                        <th className="py-2 px-2.5 text-xs">Visit</th>
+                        <th className="py-2 px-2.5 text-xs">Tipe</th>
+                        <th className="py-2 px-2.5 text-xs">Deal</th>
+                        <th className="py-2 px-2.5 text-xs">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {deals50.length > 0 ? (
+                        deals50.map((row, idx) => (
+                            <tr key={idx}>
+                                <td>{formatDate(row.tanggalDeal)}</td>
+                                <td>{formatDate(row.timestamp)}</td>
+                                <td>{row.salesman.namaSalesman}</td>
+                                <td>{row.customer.nama_customer}</td>
+                                <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                <td>{row.tujuan}</td>
+                                <td>{row.action}</td>
+                                <td>{row.infoDpt}</td>
+                                <td>{row.peluang}</td>
+                                <td>{row.nVisit}</td>
+                                <td>{row.visit}</td>
+                                <td>{row.deal}</td>
+                                <td className="py-2 px-3 flex items-center justify-center">
+                                    <div className="flex flex-col lg:flex-row gap-3">
+                                        <a href={"/detail_kunjungan/" + row.idReport}>
+                                            <IconButton size="md" color="green">
+                                                <InformationCircleIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="13" className="text-xs text-center py-4 text-gray-600 bg-[#f9f9f9]">
+                                Tidak ada data
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    </>)
+}
+
+function AllDeal80({ deal }) {
+    const tableRef5 = useRef(null);
+    const initializeDataTable5 = () => {
+        if (tableRef5.current && !$.fn.DataTable.isDataTable(tableRef5.current)) {
+            $(tableRef5.current).DataTable({
+                responsive: true
+            });
+        }
+    }
+
+    const [deals80, setDeals80] = useState([]);
+
+    // BETWEEN TGL SALESMAN
+    const getAll = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/between51and80`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data;
+            setDeals80(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+    useEffect(() => {
+        getAll();
+    }, [deal]);
+
+    useEffect(() => {
+        if (deals80 && deals80.length > 0) {
+            initializeDataTable5();
+        }
+    }, [deals80])
+
+    return (<>
+        <div className="overflow-x-auto mt-6">
+            <table id="example_data5"
+                ref={tableRef5} className="w-full table-auto border-collapse  overflow-x-auto">
+                <thead className="bg-blue-600 text-white">
+                    <tr>
+                        <th className="py-2 px-2.5 text-xs">Tgl</th>
+                        <th className="py-2 px-2.5 text-xs">Timestamp</th>
+                        <th className="py-2 px-2.5 text-xs">Nama</th>
+                        <th className="py-2 px-2.5 text-xs">Instansi</th>
+                        <th className="py-2 px-2.5 text-xs">Daerah</th>
+                        <th className="py-2 px-2.5 text-xs">Tujuan</th>
+                        <th className="py-2 px-2.5 text-xs">Action</th>
+                        <th className="py-2 px-2.5 text-xs">Info didapat</th>
+                        <th className="py-2 px-2.5 text-xs">Peluang</th>
+                        <th className="py-2 px-2.5 text-xs">Visit</th>
+                        <th className="py-2 px-2.5 text-xs">Tipe</th>
+                        <th className="py-2 px-2.5 text-xs">Deal</th>
+                        <th className="py-2 px-2.5 text-xs">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {deals80.length > 0 ? (
+                        deals80.map((row, idx) => (
+                            <tr key={idx}>
+                                <td>{formatDate(row.tanggalDeal)}</td>
+                                <td>{formatDate(row.timestamp)}</td>
+                                <td>{row.salesman.namaSalesman}</td>
+                                <td>{row.customer.nama_customer}</td>
+                                <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                <td>{row.tujuan}</td>
+                                <td>{row.action}</td>
+                                <td>{row.infoDpt}</td>
+                                <td>{row.peluang}</td>
+                                <td>{row.nVisit}</td>
+                                <td>{row.visit}</td>
+                                <td>{row.deal}</td>
+                                <td className="py-2 px-3 flex items-center justify-center">
+                                    <div className="flex flex-col lg:flex-row gap-3">
+                                        <a href={"/detail_kunjungan/" + row.idReport}>
+                                            <IconButton size="md" color="green">
+                                                <InformationCircleIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="13" className="text-xs text-center py-4 text-gray-600 bg-[#f9f9f9]">
+                                Tidak ada data
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    </>)
+}
+
+function AllDeal100({ deal }) {
+    const tableRef6 = useRef(null);
+    const initializeDataTable6 = () => {
+        if (tableRef6.current && !$.fn.DataTable.isDataTable(tableRef6.current)) {
+            $(tableRef6.current).DataTable({
+                responsive: true
+            });
+        }
+    }
+
+    const [deals100, setDeals100] = useState([]);
+
+    // BETWEEN TGL SALESMAN
+    const getAll = async () => {
+        try {
+            const response = await axios.get(`${API_KUNJUNGAN}/deal_po`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setDeals100(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+    useEffect(() => {
+        getAll();
+    }, [deal]);
+
+    useEffect(() => {
+        if (deals100 && deals100.length > 0) {
+            initializeDataTable6();
+        }
+    }, [deals100])
+
+    return (<>
+        <div className="overflow-x-auto mt-6">
+            <table id="example_data6"
+                ref={tableRef6} className="w-full table-auto border-collapse  overflow-x-auto">
+                <thead className="bg-blue-600 text-white">
+                    <tr>
+                        <th className="py-2 px-2.5 text-xs">Tgl</th>
+                        <th className="py-2 px-2.5 text-xs">Timestamp</th>
+                        <th className="py-2 px-2.5 text-xs">Nama</th>
+                        <th className="py-2 px-2.5 text-xs">Instansi</th>
+                        <th className="py-2 px-2.5 text-xs">Daerah</th>
+                        <th className="py-2 px-2.5 text-xs">Tujuan</th>
+                        <th className="py-2 px-2.5 text-xs">Action</th>
+                        <th className="py-2 px-2.5 text-xs">Info didapat</th>
+                        <th className="py-2 px-2.5 text-xs">Peluang</th>
+                        <th className="py-2 px-2.5 text-xs">Visit</th>
+                        <th className="py-2 px-2.5 text-xs">Tipe</th>
+                        <th className="py-2 px-2.5 text-xs">Deal</th>
+                        <th className="py-2 px-2.5 text-xs">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {deals100.length > 0 ? (
+                        deals100.map((row, idx) => (
+                            <tr key={idx}>
+                                <td>{formatDate(row.tanggalDeal)}</td>
+                                <td>{formatDate(row.timestamp)}</td>
+                                <td>{row.salesman.namaSalesman}</td>
+                                <td>{row.customer.nama_customer}</td>
+                                <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                <td>{row.tujuan}</td>
+                                <td>{row.action}</td>
+                                <td>{row.infoDpt}</td>
+                                <td>{row.peluang}</td>
+                                <td>{row.nVisit}</td>
+                                <td>{row.visit}</td>
+                                <td>{row.deal}</td>
+                                <td className="py-2 px-3 flex items-center justify-center">
+                                    <div className="flex flex-col lg:flex-row gap-3">
+                                        <a href={"/detail_kunjungan/" + row.idReport}>
+                                            <IconButton size="md" color="green">
+                                                <InformationCircleIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="13" className="text-xs text-center py-4 text-gray-600 bg-[#f9f9f9]">
+                                Tidak ada data
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    </>)
+}
+
+function AllByDeal({ deal }) {
+    return (
+        <>
+            {deal === "50" ? <AllDeal50 deal={deal}/> : deal === "80" ? <AllDeal80 deal={deal} /> : <AllDeal100 deal={deal}/>}
+        </>
+    )
+}
 
 function LapKunjungan() {
     const [tglAwal, setTglAwal] = useState("");
@@ -13,10 +507,17 @@ function LapKunjungan() {
     const [deal, setDeal] = useState("");
     const [salesmanId, setSalesmanId] = useState(0);
 
+    const [tglAwalInput, settglAwalInput] = useState("");
+    const [tglAkhirInput, settglAkhirInput] = useState("");
+    const [idItcInput, setIdItcInput] = useState(0);
+    const [dealInput, setDealInput] = useState("");
+
+    const [validasi, setvalidasi] = useState(false);
+    const [validasiIdItc, setvalidasiIdItc] = useState(false);
+    const [validasiDeal, setvalidasiDeal] = useState(false);
+
     const tableRef = useRef(null);
     const [laporans, setLaporan] = useState([]);
-    const [validasi, setvalidasi] = useState(false);
-
     const initializeDataTable = () => {
         if ($.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable().destroy();
@@ -37,67 +538,6 @@ function LapKunjungan() {
         }
     };
 
-    // GET ALL TANGGAL BETWEEN
-    const getAllTanggal = async () => {
-        try {
-            const response = await axios.get(`${API_KUNJUNGAN}/date/between?tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            setLaporan(response.data.data);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    // GET ALL TGL SALESMAN
-    const getAllTanggalSalesman = async () => {
-        try {
-            const response = await axios.get(`${API_KUNJUNGAN}/date/between/salesman?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            setLaporan(response.data.data);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    // < 50
-    const getAllKurang50 = async () => {
-        try {
-            const response = await axios.get(`${API_KUNJUNGAN}/between0and50`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            setLaporan(response.data.data);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    // < 80
-    const getAllKurang80 = async () => {
-        try {
-            const response = await axios.get(`${API_KUNJUNGAN}/deal_po`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            setLaporan(response.data.data);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    // < 100
-    const getAllKurang100 = async () => {
-        try {
-            const response = await axios.get(`${API_KUNJUNGAN}/deal_po`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            setLaporan(response.data.data);
-            console.log(response.data.data);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
     const filterTangggal = async () => {
         if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
             Swal.fire({
@@ -109,7 +549,21 @@ function LapKunjungan() {
             return;
         }
 
-        setvalidasi(true);
+        settglAwalInput(tglAwal);
+        settglAkhirInput(tglAkhir);
+        setIdItcInput(salesmanId);
+
+        if (salesmanId !== 0 && salesmanId !== "") {
+            if (validasi) { setvalidasi(false) }
+            if (validasiDeal) { setvalidasiDeal(false) }
+            setvalidasiIdItc(true);
+        } else {
+            if (validasiIdItc) {
+                setvalidasiIdItc(false)
+            }
+            if (validasiDeal) { setvalidasiDeal(false) }
+            setvalidasi(true);
+        }
     };
 
     const filterDeal = async () => {
@@ -122,8 +576,8 @@ function LapKunjungan() {
             });
             return;
         }
-
-        setvalidasi(true);
+        setDealInput(deal)
+        setvalidasiDeal(true);
     };
 
     useEffect(() => {
@@ -136,30 +590,6 @@ function LapKunjungan() {
         getAllKunjungan();
     }, []);
 
-    useEffect(() => {
-        if (validasi && tglAkhir !== "" && tglAwal !== "") {
-            getAllTanggal();
-        }
-        if (validasi && tglAkhir !== "" && tglAwal !== "" && salesmanId !== 0) {
-            getAllTanggalSalesman();
-        }
-    }, [validasi, tglAkhir, tglAwal]);
-
-    useEffect(() => {
-        if (validasi && deal === "50") {
-            getAllKurang50();
-        }
-        if (validasi && deal === "80") {
-            getAllKurang80();
-        }
-        if (validasi && deal === "100") {
-            getAllKurang100();
-        }
-    }, [validasi, deal]);
-
-
-
-    // ALL ITC
     const [values, setvalues] = useState("");
     const [options, setoptions] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -261,14 +691,14 @@ function LapKunjungan() {
 
                                 <div className="flex gap-2">
                                     <button
-                                        className="text-sm bg-gray-400 px-1"
+                                        className="bg-gray-400 px-1"
                                         onClick={() => setCurrentPage(currentPage - 1)}
                                         disabled={currentPage === 1}
                                     >
                                         Prev
                                     </button>
                                     <button
-                                        className="text-sm bg-gray-400 px-1"
+                                        className="bg-gray-400 px-1"
                                         onClick={() => setCurrentPage(currentPage + 1)}
                                         disabled={!options.length}
                                     >
@@ -276,7 +706,9 @@ function LapKunjungan() {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> <br />
+                        <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Cari Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
+                        <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Cari Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography>
                         <Button
                             className="mt-5 font-poppins font-medium"
                             color="blue"
@@ -294,9 +726,9 @@ function LapKunjungan() {
                             required
                         >
                             <Option value="">Pilih</Option>
-                            <Option value="50" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 50</Option>
-                            <Option value="80" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 80</Option>
-                            <Option value="100" className="flex gap-1"><ChevronLeftIcon className="w-4 h-4 text-black" /> 100</Option>
+                            <Option value="50" className="flex gap-1"> 50 ></Option>
+                            <Option value="80" className="flex gap-1">80 ></Option>
+                            <Option value="100" className="flex gap-1">100 ></Option>
                         </Select>
                         <IconButton
                             color="blue"
@@ -305,65 +737,73 @@ function LapKunjungan() {
                             onClick={filterDeal}
                         ><MagnifyingGlassIcon className="w-5 h-5 text-white" /></IconButton>
                     </div> <br /> <br />
-                    <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
-                        <table
-                            id="example_data"
-                            ref={tableRef}
-                            className="rounded-sm table-auto w-full overflow-x-auto"
-                        >
-                            <thead className="bg-blue-500 text-white w-full">
-                                <tr>
-                                    <th className="text-sm py-2 px-2.5">Tgl</th>
-                                    <th className="text-sm py-2 px-2.5">Timestamp</th>
-                                    <th className="text-sm py-2 px-2.5">Nama</th>
-                                    <th className="text-sm py-2 px-2.5">Instansi</th>
-                                    <th className="text-sm py-2 px-2.5">Daerah</th>
-                                    <th className="text-sm py-2 px-2.5">Tujuan</th>
-                                    <th className="text-sm py-2 px-2.5">Action</th>
-                                    <th className="text-sm py-2 px-2.5">Info didapat</th>
-                                    <th className="text-sm py-2 px-2.5">Peluang</th>
-                                    <th className="text-sm py-2 px-2.5">Visit</th>
-                                    <th className="text-sm py-2 px-2.5">Tipe</th>
-                                    <th className="text-sm py-2 px-2.5">Deal</th>
-                                    <th className="text-sm py-2 px-2.5">Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {laporans.length > 0 ? (
-                                    laporans.map((row, idx) => (
-                                        <tr key={idx}>
-                                            <td>{row.tanggalDeal}</td>
-                                            <td>{row.timestamp}</td>
-                                            <td>{row.salesman.namaSalesman}</td>
-                                            <td>{row.customer.nama_customer}</td>
-                                            <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
-                                            <td>{row.tujuan}</td>
-                                            <td>{row.action}</td>
-                                            <td>{row.infoDpt}</td>
-                                            <td>{row.peluang}</td>
-                                            <td>{row.nVisit}</td>
-                                            <td>{row.visit}</td>
-                                            <td>{row.deal}</td>
-                                            <td className="text-sm py-2 px-3 flex items-center justify-center">
-                                                <div className="flex flex-col lg:flex-row gap-3">
-                                                    <a href={"/edit_customer/" + row.idReport}>
-                                                        <IconButton size="md" color="green">
-                                                            <InformationCircleIcon className="w-6 h-6 white" />
-                                                        </IconButton>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="13" className="text-center py-4 text-sm text-gray-600">
-                                            Tidak ada data
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table> </div>
+
+                    {/* TABEL */}
+
+                    {validasi ? <AllBetweenDate tglAkhir={tglAkhirInput} tglAwal={tglAwalInput} /> :
+                        validasiIdItc ? <AllBetweenDateSalesman tglAkhir={tglAkhirInput} tglAwal={tglAwalInput} id={idItcInput} /> :
+                            validasiDeal ? <AllByDeal deal={dealInput} /> :
+                                <div className="mt-6 overflow-x-auto">
+                                    <table
+                                        id="example_data"
+                                        ref={tableRef}
+                                        className="rounded-sm table-auto w-full overflow-x-auto"
+                                    >
+                                        <thead className="bg-blue-500 text-white w-full">
+                                            <tr>
+                                                <th className="py-2 px-2.5 text-xs">Tgl</th>
+                                                <th className="py-2 px-2.5 text-xs">Timestamp</th>
+                                                <th className="py-2 px-2.5 text-xs">Nama</th>
+                                                <th className="py-2 px-2.5 text-xs">Instansi</th>
+                                                <th className="py-2 px-2.5 text-xs">Daerah</th>
+                                                <th className="py-2 px-2.5 text-xs">Tujuan</th>
+                                                <th className="py-2 px-2.5 text-xs">Action</th>
+                                                <th className="py-2 px-2.5 text-xs">Info didapat</th>
+                                                <th className="py-2 px-2.5 text-xs">Peluang</th>
+                                                <th className="py-2 px-2.5 text-xs">Visit</th>
+                                                <th className="py-2 px-2.5 text-xs">Tipe</th>
+                                                <th className="py-2 px-2.5 text-xs">Deal</th>
+                                                <th className="py-2 px-2.5 text-xs">Detail</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {laporans.length > 0 ? (
+                                                laporans.map((row, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{formatDate(row.tanggalDeal)}</td>
+                                                        <td>{formatDate(row.timestamp)}</td>
+                                                        <td>{row.salesman.namaSalesman}</td>
+                                                        <td>{row.customer.nama_customer}</td>
+                                                        <td>{row.customer.kabKot.nama_kabkot} / {row.customer.kec.nama_kec}</td>
+                                                        <td>{row.tujuan}</td>
+                                                        <td>{row.action}</td>
+                                                        <td>{row.infoDpt}</td>
+                                                        <td>{row.peluang}</td>
+                                                        <td>{row.nVisit}</td>
+                                                        <td>{row.visit}</td>
+                                                        <td>{row.deal}</td>
+                                                        <td className="py-2 px-3 flex items-center justify-center">
+                                                            <div className="flex flex-col lg:flex-row gap-3">
+                                                                <a href={"/detail_kunjungan/" + row.idReport}>
+                                                                    <IconButton size="md" color="green">
+                                                                        <InformationCircleIcon className="w-6 h-6 white" />
+                                                                    </IconButton>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="13" className="text-xs text-center py-4 text-gray-600 bg-[#f9f9f9]">
+                                                        Tidak ada data
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                    }
                 </main>
             </div>
         </section>

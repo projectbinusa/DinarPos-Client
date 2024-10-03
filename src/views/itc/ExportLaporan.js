@@ -34,18 +34,16 @@ function ExportLaporan() {
     };
 
     const namaSalesman = async (value) => {
-        axios.get(`${API_SALESMAN}/${value}`, {
+        try {
+          const res = await axios.get(`${API_SALESMAN}/${value}`, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }).then((res) => {
-            const nama = res.data.data.namaSalesman;
-            console.log(nama);
-            return nama;
-        }).catch((err) => {
-            console.log(err);
-            return "";
-        })
-    };    
-
+          });
+          return res.data.data.namaSalesman;
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    
     // EXPORT LAP PLANNING
     const [startPlanning, setstartPlanning] = useState("");
     const [endPlanning, setendPlanning] = useState("");
@@ -129,6 +127,9 @@ function ExportLaporan() {
             }
         } else {
             try {
+                const salesmanResponse = await namaSalesman(itcPlanning);
+                const nama = salesmanResponse || "Unknown Salesman";
+          
                 const response = await axios.get(
                     `${API_PLANNING}/export/excel/salesman?id_salesman=${itcPlanning}&tglAkhir=${endPlanning}&tglAwal=${startPlanning}`,
                     {
@@ -140,7 +141,7 @@ function ExportLaporan() {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement("a");
                 link.href = url;
-                link.setAttribute("download", `Planning ${namaSalesman(itcPlanning)} Periode ${formatDate(startPlanning)} s.d ${formatDate(endPlanning)}.xlsx`);
+                link.setAttribute("download", `Planning ${nama} Periode ${formatDate(startPlanning)} s.d ${formatDate(endPlanning)}.xlsx`);
                 document.body.appendChild(link);
                 link.click();
                 link.parentNode.removeChild(link);
@@ -248,6 +249,9 @@ function ExportLaporan() {
             }
         } else {
             try {
+                const salesmanResponse = await namaSalesman(itcReport);
+                const nama = salesmanResponse || "Unknown Salesman";
+          
                 const response = await axios.get(
                     `${API_KUNJUNGAN}/export/kunjungan/salesman?id_salesman=${itcReport}&tglAkhir=${endReport}&tglAwal=${startReport}`,
                     {
@@ -259,7 +263,7 @@ function ExportLaporan() {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement("a");
                 link.href = url;
-                link.setAttribute("download", `Report ${namaSalesman(itcReport)} Periode ${formatDate(startReport)} s.d ${formatDate(endReport)}.xlsx`);
+                link.setAttribute("download", `Report ${nama} Periode ${formatDate(startReport)} s.d ${formatDate(endReport)}.xlsx`);
                 document.body.appendChild(link);
                 link.click();
                 link.parentNode.removeChild(link);
@@ -331,8 +335,10 @@ function ExportLaporan() {
 
         e.preventDefault();
 
-
         try {
+            const salesmanResponse = await namaSalesman(itcSync);
+            const nama = salesmanResponse || "Unknown Salesman";
+      
             const response = await axios.get(
                 `${API_KUNJUNGAN}/export/laporan/sync?id_selesman=${itcSync}&tglAkhir=${endSync}&tglAwal=${startSync}`,
                 {
@@ -344,7 +350,7 @@ function ExportLaporan() {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", `Laporan Sync Report ${namaSalesman(itcSync)} Periode ${formatDate(startSync)} s.d ${formatDate(endSync)}.xlsx`);
+            link.setAttribute("download", `Laporan Sync Report ${nama} Periode ${formatDate(startSync)} s.d ${formatDate(endSync)}.xlsx`);
             document.body.appendChild(link);
             link.click();
             link.parentNode.removeChild(link);
@@ -416,6 +422,9 @@ function ExportLaporan() {
         e.preventDefault();
 
         try {
+            const salesmanResponse = await namaSalesman(itcOmzet);
+            const nama = salesmanResponse || "Unknown Salesman";
+      
             const response = await axios.get(
                 `${API_OMZET}/export/pimpinan?id_salesman=${itcOmzet}&tglAkhir=${endOmzet}&tglAwal=${startOmzet}`,
                 {
@@ -427,7 +436,7 @@ function ExportLaporan() {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", `Laporan Omzet ${namaSalesman(itcReport)} Periode ${formatDate(startReport)} s.d ${formatDate(endReport)}.xlsx`);
+            link.setAttribute("download", `Laporan Omzet ${nama} Periode ${formatDate(startOmzet)} s.d ${formatDate(endOmzet)}.xlsx`);
             document.body.appendChild(link);
             link.click();
             link.parentNode.removeChild(link);
@@ -698,7 +707,7 @@ function ExportLaporan() {
 
         try {
             const response = await axios.get(
-                `${API_CUSTOMER}/export/customer_cp/google`,
+                `${API_CUSTOMER_CP}/export/customer_cp/google`,
                 {
                     headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
                     responseType: "blob",
@@ -906,6 +915,9 @@ function ExportLaporan() {
                                         </button>
                                     </div>
                                 </div> <br />
+                                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
+                                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography>
+                                <br />
                                 <Button variant="gradient" color="blue" onClick={exportPlanning} className="font-poppins font-medium" type="button">Submit</Button>
                             </div>
                         </div>
@@ -1110,8 +1122,6 @@ function ExportLaporan() {
                                         </button>
                                     </div>
                                 </div> <br />
-                                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
-                                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography> <br />
                                 <Button variant="gradient" color="blue" type="button" onClick={exportOmzet} className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>

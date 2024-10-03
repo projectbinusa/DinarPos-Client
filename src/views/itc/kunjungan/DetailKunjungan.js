@@ -3,23 +3,13 @@ import { useParams } from "react-router-dom";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { API_KUNJUNGAN } from "../../../utils/BaseUrl";
+import { API_KUNJUNGAN, API_PENGGUNA } from "../../../utils/BaseUrl";
+import Decrypt from "../../../component/Decrypt";
+import formatDate from "../../../component/FormatDate";
 
 function DetailKunjungan() {
   const [datas, setDatas] = useState(null);
   const param = useParams();
-
-
-  const formatDate = (value) => {
-    const date = new Date(value);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const formattedDate = `${day}-${month}-${year}`;
-
-    return formattedDate;
-  };
 
   useEffect(() => {
     if (param.id) {
@@ -35,6 +25,31 @@ function DetailKunjungan() {
         });
     }
   }, [param.id]);
+
+  const [level, setlevel] = useState("");
+
+  const id = Decrypt();
+  useEffect(() => {
+    axios
+      .get(`${API_PENGGUNA}/` + id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data.levelPengguna;
+        setlevel(response)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  let dashboard = "kunjungan";
+  if (level === "PimpinanItc") {
+    dashboard = "laporan_kunjungan"
+  }
+
+  console.log(level);
+  
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -55,7 +70,7 @@ function DetailKunjungan() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/kunjungan">
+            <a href={`/` + dashboard}>
               <span>Kunjungan</span>
             </a>
           </Breadcrumbs>

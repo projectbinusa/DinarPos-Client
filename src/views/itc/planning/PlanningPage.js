@@ -289,10 +289,6 @@ function PlanningPage() {
   };
   // END ALL ITC  
 
-  console.log(validasi);
-  console.log("a" + validasiIdItc);
-
-
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
       <SidebarAdmin />
@@ -380,7 +376,9 @@ function PlanningPage() {
                   Next
                 </button>
               </div>
-            </div>
+            </div> <br />
+            <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Cari Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
+            <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Cari Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography>
             <Button
               type="button"
               variant="gradient"
