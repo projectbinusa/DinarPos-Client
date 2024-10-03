@@ -260,7 +260,7 @@ function Ijin() {
                     {row.salesman?.namaSalesman || '-'}
                   </td>
                   <td className="border text-sm text-gray-700 px-4 py-2">
-                    <img src={row.foto} alt="foto" className="h-16 w-16 rounded object-cover" />
+                    <img src={row.foto} alt="foto" className="h-24 w-24 rounded object-cover" />
                   </td>
                    <td className="text-sm py-3 px-4 text-center">
                       <IconButton
