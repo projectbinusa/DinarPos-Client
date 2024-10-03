@@ -235,51 +235,45 @@ function Ijin() {
                     Keterangan
                     </th>
                   <th className="text-sm py-3 px-4 font-semibold text-left">Foto</th>
-                  {level === 'Marketting' ?
-                    <th className="text-sm py-3 px-4 font-semibold text-left">Aksi</th> : <></>}
+                    <th className="text-sm py-3 px-4 font-semibold text-left">Aksi</th> 
                 </tr>
               </thead>
               <tbody>
-                {ijin.map((row, index) => (
-                  <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                    <td className="text-sm py-3 px-4">
-                      {index + 1}
-                    </td>
-                    <td className="text-sm py-3 px-4">
-                      {row.jenis}
-                    </td>
-                    <td className="text-sm py-3 px-4">
-                      {row.created_date}
-                    </td>
-                    <td className="text-sm py-3 px-4">
-                      {row.updated_date}
-                    </td>
-                    <td className="text-sm py-3 px-4">
-                      {row.ket}
-                    </td>
-                    <td className="text-sm py-2 px-3">
-                        {row.salesman.namaSalesman}
-                      </td>
-                    <td className="text-sm py-3 px-4">
-                    {row.foto ? (
-                      <img
-                        src={`${API_IJIN}/images/${row.foto}`} 
-                        alt="foto"
-                        className="w-16 h-16 object-cover"
-                      />
-                    ) : (
-                      <span>Tidak ada foto</span>
-                    )}
+              {ijin.map((row, index) => (
+                <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                  <td className="text-sm py-3 px-4">
+                    {index + 1}
                   </td>
-                    {level === 'Marketting' ?
-                      <td className="text-sm py-3 px-4 flex items-center justify-center">
-                        <IconButton size="md" color="red" onClick={() => hapusIjin(row.id)}>
-                          <TrashIcon className="w-6 h-6 text-white" />
-                        </IconButton>
-                      </td> : <></>}
-                  </tr>
-                ))}
-              </tbody>
+                  <td className="text-sm py-3 px-4">
+                    {row.jenis}
+                  </td>
+                  <td className="text-sm py-3 px-4">
+                    {row.created_date}
+                  </td>
+                  <td className="text-sm py-3 px-4">
+                    {row.updated_date}
+                  </td>
+                  <td className="text-sm py-3 px-4">
+                    {row.ket}
+                  </td>
+                  <td className="text-sm py-2 px-3">
+                    {row.salesman?.namaSalesman || '-'}
+                  </td>
+                  <td className="border text-sm text-gray-700 px-4 py-2">
+                    <img src={row.foto} alt="foto" className="h-16 w-16 rounded object-cover" />
+                  </td>
+                   <td className="text-sm py-3 px-4 text-center">
+                      <IconButton
+                        onClick={() => hapusIjin(row.id)}
+                        color="red"
+                        className="hover:bg-red-600"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </IconButton>
+                    </td>
+                </tr>
+              ))}
+            </tbody>
             </table>
           </div>
         </main>
