@@ -442,7 +442,7 @@ function InputKunjungan() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${API_KUNJUNGAN}/delete/` + id, {
+          .delete(`${API_KUNJUNGAN}/` + id, {
             headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
           })
           .then(() => {

@@ -55,7 +55,7 @@ function AddIjin() {
         showConfirmButton: false,
         timer: 1500,
       });
-      history.push("/ijin");
+      history.push("/ijin_marketting");
       setTimeout(() => {
         window.location.reload();
       }, 1500);

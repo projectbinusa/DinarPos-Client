@@ -303,9 +303,10 @@ function LapSync() {
                                             <tr key={idx}>
                                                 <td className="text-sm w-[4%]">{idx + 1}</td>
                                                 <td className="text-sm py-2 px-2.5">{row.tanggalKunjungan}</td>
-                                                <td className="text-sm py-2 px-2.5">{row.salesman.namaSalesman}</td>
+                                                <td className="text-sm py-2 px-2.5">{row.salesman.namaSalesman} / {row.salesman.id}</td>
                                                 <td className="text-sm py-2 px-2.5">
-                                                    <Progress value={persen || 0} color="green" label/>
+                                                    {totalsK[idx]}
+                                                    {/* <Progress value={persen || 0} color="green" label/> */}
                                                 </td>
                                                 <td className="text-sm py-2 px-3 flex items-center justify-center">
                                                     <a href={`/detail_sync/${row.salesman.id}/${row.tanggalKunjungan}`}>

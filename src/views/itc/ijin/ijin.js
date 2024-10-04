@@ -5,64 +5,22 @@ import "./../../../assets/styles/datatables.css";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Button, Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { API_IJIN, API_ITC, API_PENGGUNA } from "../../../utils/BaseUrl";
+import { API_IJIN } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
-import Decrypt from "../../../component/Decrypt";
+import formatDate from "../../../component/FormatDate";
 
 function Ijin() {
   const tableRef = useRef(null);
-  const [ijin, setIjin] = useState([]);
-  const [level, setLevel] = useState("");
-  const [salesmanId, setsalesmanId] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  
-  const id = Decrypt();
-  useEffect(() => {
-    axios
-      .get(`${API_PENGGUNA}/` + id, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      })
-      .then((res) => {
-        const response = res.data.data;
-        setLevel(response.levelPengguna);
-
-        if (level === "Marketting") {
-          const nama = response.namaPengguna;
-          try {
-            axios.get(`${API_ITC}/nama?nama=` + nama, {
-              headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            }).then((ress) => {
-              setsalesmanId(ress.data.data.id || 0);
-            })
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id]);
+  const [ijins, setIjin] = useState([]);
 
   const initializeDataTable = () => {
-    if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+    if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable({});
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      autoWidth: false,
-      searching: true,
-      paging: true,
-      ordering: true,
-      lengthChange: true,
-      pageLength: 10,
-    });
   };
 
   const getAllIjin = async () => {
-    setLoading(true);
     try {
       const response = await axios.get(`${API_IJIN}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
@@ -77,110 +35,22 @@ function Ijin() {
         showConfirmButton: false,
         timer: 1500,
       });
-    } finally {
-      setLoading(false);
     }
   };
 
-  // BY ID SALESMAN
-  const getAllIjinSalesman = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${API_IJIN}/salesman/${salesmanId}`, {
-        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-      });
-      setIjin(response.data.data || []);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal!",
-        text: "Gagal memuat data ijin!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    if (level === "Marketting") {
-      getAllIjinSalesman();
-    } else {
-      getAllIjin();
-    }
-  }, [salesmanId, level]);
-
-
-  const hapusIjin = async (id) => {
-    Swal.fire({
-      title: "Apakah Anda Ingin Menghapus?",
-      text: "Perubahan data tidak bisa dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Hapus",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .delete(`${API_IJIN}/${id}`, {
-            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-          })
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Data Berhasil Dihapus!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-
-            setTimeout(() => {
-              window.location.reload();
-            }, 1500);
-          })
-          .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              title: "Gagal!",
-              text: "Hapus data gagal!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            console.log(err);
-          });
-      }
-    });
-  };
+    getAllIjin();
+  }, []);
 
   useEffect(() => {
-    if (level === 'Marketting') {
-      getAllIjinSalesman()
-    } else {
-      getAllIjin();
-    }
-
-    return () => {
-      if (tableRef.current && $.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-    };
-  }, [salesmanId, level]);
-
-  useEffect(() => {
-    if (ijin.length > 0) {
+    if (ijins && ijins.length > 0) {
       initializeDataTable();
     }
-  }, [ijin]);
+  }, [ijins]);
 
-  let dashboard = "";
-  if (level === "Superadmin") {
-    dashboard = "dashboard";
-  } else if (level === "AdminService") {
-    dashboard = "dashboard_service";
-  }
+  console.log(ijins);
+
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -191,7 +61,7 @@ function Ijin() {
             Ijin
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href={"/" + dashboard} className="opacity-60">
+            <a href="/home" className="opacity-60">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -201,79 +71,46 @@ function Ijin() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/ijin">
-              <span>ijin</span>
-            </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
-             <a href="/add_ijin" className="float-right mb-5">
-             <Button variant="gradient" color="blue" className="font-popins font-medium">
-               Tambah
-             </Button>
-           </a>
           <div className="rounded my-5 p-2 w-full overflow-x-auto">
             <table id="example_data" ref={tableRef} className="table-auto w-full border-collapse rounded-sm">
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">
-                    No
-                  </th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">
-                    Durasi
-                  </th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">
-                    Tanggal Awal
-                  </th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">
-                    Tanggal Akhir
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Salesman
-                  </th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">
-                    Keterangan
-                    </th>
-                  <th className="text-sm py-3 px-4 font-semibold text-left">Foto</th>
-                    <th className="text-sm py-3 px-4 font-semibold text-left">Aksi</th> 
+                  <th className="text-xs py-3 px-4">No</th>
+                  <th className="text-xs py-3 px-4">Durasi</th>
+                  <th className="text-xs py-3 px-4">Tanggal Awal</th>
+                  <th className="text-xs py-3 px-4">Tanggal Akhir</th>
+                  <th className="text-xs py-2 px-3">Salesman</th>
+                  <th className="text-xs py-3 px-4">Keterangan</th>
+                  <th className="text-xs py-3 px-4">Foto</th>
                 </tr>
               </thead>
               <tbody>
-              {ijin.map((row, index) => (
-                <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                  <td className="text-sm py-3 px-4">
-                    {index + 1}
-                  </td>
-                  <td className="text-sm py-3 px-4">
-                    {row.jenis}
-                  </td>
-                  <td className="text-sm py-3 px-4">
-                    {row.created_date}
-                  </td>
-                  <td className="text-sm py-3 px-4">
-                    {row.updated_date}
-                  </td>
-                  <td className="text-sm py-3 px-4">
-                    {row.ket}
-                  </td>
-                  <td className="text-sm py-2 px-3">
-                    {row.salesman?.namaSalesman || '-'}
-                  </td>
-                  <td className="border text-sm text-gray-700 px-4 py-2">
-                    <img src={row.foto} alt="foto" className="h-24 w-24 rounded object-cover" />
-                  </td>
-                   <td className="text-sm py-3 px-4 text-center">
-                      <IconButton
-                        onClick={() => hapusIjin(row.id)}
-                        color="red"
-                        className="hover:bg-red-600"
-                      >
-                        <TrashIcon className="h-5 w-5" />
-                      </IconButton>
+                {ijins.length > 0 ? (
+                  ijins.map((row, index) => (
+                    <tr key={index} className="border-b border-gray-200">
+                      <td className="text-sm text-center py-3 px-4">{index + 1}</td>
+                      <td className="text-sm text-center py-3 px-4">{row.jenis}</td>
+                      <td className="text-sm text-center py-3 px-4">{formatDate(row.tgl_a)}</td>
+                      <td className="text-sm text-center py-3 px-4">{formatDate(row.tgl_b)}</td>
+                      <td className="text-sm text-center py-3 px-4">{row.salesman.namaSalesman}</td>
+                      <td className="text-sm text-center py-3 px-4">{row.ket}</td>
+                      <td className="text-sm text-center py-3 px-4">
+                        <img src={row.foto} alt="foto" className="h-24 w-24 rounded object-cover" />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-center py-4 bg-gray-100 text-xs">
+                      Tidak Ada Data
                     </td>
-                </tr>
-              ))}
-            </tbody>
+                  </tr>
+                )}
+              </tbody>
+
             </table>
           </div>
         </main>

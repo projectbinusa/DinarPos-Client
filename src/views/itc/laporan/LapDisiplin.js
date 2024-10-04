@@ -78,25 +78,25 @@ function LapDisiplin() {
     // GET 
     const getAll = async () => {
         try {
-            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal_beetwen/salesman?id_salesman=${salesmanId}&tgl_akhir=${formatDate(tglAkhir)}&tgl_awal=${formatDate(tglAwal)}`, {
+            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal_beetwen/salesman?id_salesman=${salesmanId}&tgl_akhir=${tglAkhir}&tgl_awal=${tglAwal}`, {
                 headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
             });
             setLaporan(response.data.data || []);
             try {
-                const res = await axios.get(`${API_KUNJUNGAN}/date/between/salesman?id_salesman=${salesmanId}&tgl_akhir=${tglAkhir}&tgl_awal=${tglAwal}`, {
+                const res = await axios.get(`${API_KUNJUNGAN}/date/between/salesman?id_salesman=${salesmanId}&tanggal_akhir=${tglAkhir}&tanggal_awal=${tglAwal}`, {
                     headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-                });
+                });                
                 setJmlKunjungan(res.data.data.length);
 
-                const resNotNullFoto = await axios.get(`${API_KUNJUNGAN}/foto/not_null?id_salesman=${salesmanId}&tgl_akhir=${formatDate(tglAkhir)}&tgl_awal=${formatDate(tglAwal)}`, {
+                const resNotNullFoto = await axios.get(`${API_KUNJUNGAN}/foto/not_null?id_salesman=${salesmanId}&tgl_akhir=${tglAkhir}&tgl_awal=${tglAwal}`, {
                     headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
                 });
-                setJmlNotNullFoto(res.data.data.length);
+                setJmlNotNullFoto(resNotNullFoto.data.data.length);
 
                 const resIjin = await axios.get(`${API_IJIN}/tanggal_beetwen/salesman?id_salesman=${salesmanId}&tgl_akhir=${formatDate(tglAkhir)}&tgl_awal=${formatDate(tglAwal)}`, {
                     headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
                 });
-                setJmlIjin(res.data.data.length);
+                setJmlIjin(resIjin.data.data.length);
             } catch (err) {
                 console.log('error jumlah kunjungan : ', err);
             }
@@ -128,8 +128,8 @@ function LapDisiplin() {
     const formattedNumber = (number) => {
         return number.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
     };
-    
-    var total;
+
+    var total = 0;
     const sel = laporans.length - total;
     const persen = (sel / laporans.length) * 100;
     const persenFoto = (jmlNotNullFoto / jmlKunjungan) * 100;

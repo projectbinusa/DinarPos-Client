@@ -1546,7 +1546,7 @@ function SidebarAdmin() {
                       Deal Finish
                     </ListItem>
                   </a>
-                  <a href="/ijin">
+                  <a href="/ijin_marketting">
                     <ListItem className="px-3 py-2 text-sm rounded uppercase">
                       Ijin
                     </ListItem>
@@ -3190,7 +3190,7 @@ function SidebarAdmin() {
                     Deal Finish
                   </ListItem>
                 </a>
-                <a href="/ijin">
+                <a href="/ijin_marketting">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Ijin
                   </ListItem>

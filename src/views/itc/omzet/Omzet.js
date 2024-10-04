@@ -8,24 +8,151 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { API_OMZET, API_SALESMAN } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Swal from "sweetalert2";
+import formatDate from "../../../component/FormatDate";
+
+const formatRupiah = (number) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  }).format(number);
+};
+
+function AllByMonth({ month, year }) {
+  const tableRef2 = useRef(null);
+  const [omzetMonth, setOmzetMonth] = useState([]);
+
+  const initializeDataTable2 = () => {
+    if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable();
+    }
+  };
+
+  const getAllOmzetMonth = async () => {
+    try {
+      const response = await axios.get(`${API_OMZET}/bulan_tahun?bulan=${month}&tahun=${year}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setOmzetMonth(response.data.data || []);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllOmzetMonth();
+  }, [month, year]);
+
+  useEffect(() => {
+    if (omzetMonth.length > 0) {
+      initializeDataTable2();
+    }
+  }, [omzetMonth]);
+
+  return (
+    <>
+      <div className="bg-green-100 w-full px-5 py-3">
+        <p className="text-green-800">Omzet : <span className="font-medium">{month}-{year}</span></p>
+      </div>
+      <div className="rounded my-5 p-2 w-full overflow-x-auto">
+        <table id="example_data2" ref={tableRef2} className="rounded-sm table-auto w-full">
+          <thead className="bg-blue-500 text-white">
+            <tr>
+              <th className="text-sm py-2 px-3 font-semibold">
+                No
+              </th>
+              <th className="text-sm py-2 px-3 font-semibold">Nama</th>
+              <th className="text-sm py-2 px-3 font-semibold">Omzet</th>
+              <th className="text-sm py-2 px-3 font-semibold">Presentase Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            {omzetMonth.length > 0 ? (
+              omzetMonth.map((row, index) => {
+                const persen = (row.total_omzet / row.target) * 100;
+                return (
+                  <tr key={row.id}>
+                    <td className="text-sm py-2 px-3 w-[4%]">
+                      {index + 1}
+                    </td>
+                    <td className="text-sm py-2 px-3">
+                      {row.nama_salesman}
+                    </td>
+                    <td className="text-sm py-2 px-3">
+                      {formatRupiah(row.total_omzet)}
+                    </td>
+                    <td className="text-sm py-2 px-3">
+                      {persen} %
+                    </td>
+                  </tr>
+                )
+              })
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-xs text-center capitalize py-3 bg-gray-100">
+                  Tidak ada data
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )
+}
+
+function AllByMonthSalesman({ month, year, itc }) {
+  const [omzetMonthSalesman, setOmzetMonthSalesman] = useState([]);
+
+  const getAllOmzetMonthSalesman = async () => {
+    try {
+      const response = await axios.get(`${API_OMZET}/bulan_tahun/salesman?bulan=${month}&id_salesman=${itc}&tahun=${year}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setOmzetMonthSalesman(response.data.data[0]);
+      console.log(response.data.data[0]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllOmzetMonthSalesman();
+  }, [month, year, itc]);
+
+  const persen = (omzetMonthSalesman?.total_omzet / omzetMonthSalesman?.target) * 100;
+  return (
+    <>
+      <div>
+        <div className="bg-blue-500 p-5">
+          <Typography variant="lead" className="uppercase font-poppins text-white text-center">{omzetMonthSalesman?.nama_salesman} ( {month}-{year} )</Typography>
+        </div>
+        <div className="border border-gray-500 text-center py-4">
+          <Typography variant="h5" className="uppercase font-poppins">{formatRupiah(omzetMonthSalesman?.total_omzet)}</Typography> <br />
+          <Typography variant="h5" className="font-poppins">{persen} % dari target</Typography>
+        </div>
+      </div>
+    </>
+  )
+}
 
 function Omzet() {
   const tableRef = useRef(null);
   const [omzet, setOmzet] = useState([]);
   const [month, setMonth] = useState("");
   const [itc, setItc] = useState(0);
+  const [monthInput, setMonthInput] = useState("");
+  const [yearInput, setYearInput] = useState("");
+  const [itcInput, setItcInput] = useState(0);
+  const [validasiAll, setValidasiAll] = useState(false);
+  const [validasiItc, setValidasiItc] = useState(false);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       $(tableRef.current).DataTable().destroy();
     }
-
-    $(tableRef.current).DataTable({
-      paging: true,
-      searching: true,
-      ordering: true,
-      info: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const getAllOmzet = async () => {
@@ -120,16 +247,37 @@ function Omzet() {
     setvalues(event.target.value);
     setCurrentPage(1);
   };
-  // END ALL ITC    
+  // END ALL ITC
 
-  useEffect(() => {
-    axios.get(`${API_OMZET}/bulan_tahun?bulan=08&tahun=2024`, {
-      headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-    }).then((res) => {
-      console.log(res);
-      console.log(res.data.data.length)
-    })
-  }, [])
+  const filterSeacrh = async () => {
+    if (month === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    const [years, months] = month.split('-');
+
+    // Konversi ke integer
+    setMonthInput(parseInt(months))
+    setYearInput(parseInt(years))
+    setItcInput(itc)
+
+    if (itc !== 0 && itc !== "") {
+      if (validasiAll) {
+        setValidasiAll(false)
+      }
+      setValidasiItc(true)
+    } else {
+      if (validasiItc) {
+        setValidasiItc(false)
+      }
+      setValidasiAll(true)
+    }
+  };
 
   return (
     <section className="lg:flex font-poppins bg-gray-50 min-h-screen">
@@ -217,64 +365,71 @@ function Omzet() {
             <Button
               className="mt-5 font-poppins font-medium"
               color="blue"
-            // onClick={filterTangggal}
+              onClick={filterSeacrh}
             >
               Cari
             </Button>
           </div> <br />
-          <div className="rounded my-5 p-2 w-full overflow-x-auto">
-            <table id="example_data" ref={tableRef} className="rounded-sm table-auto w-full">
-              <thead className="bg-blue-500 text-white">
-                <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    No
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Tanggal
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Omzet
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Salesman
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {omzet.length > 0 ? (
-                  omzet.map((row, index) => (
-                    <tr key={row.id}>
-                      <td className="text-sm py-2 px-3 w-[4%]">
-                        {index + 1}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {new Date(row.created_date).toLocaleDateString()}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.omzet}
-                      </td>
-                      <td className="text-sm py-2 px-3">
-                        {row.salesman.namaSalesman}
-                      </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
-                        <IconButton size="md" color="red" onClick={() => hapusOmzet(row.id)}>
-                          <TrashIcon className="w-6 h-6 text-white" />
-                        </IconButton>
-                      </td>
+          {validasiAll ? <AllByMonth month={monthInput} year={yearInput} /> :
+            validasiItc ? <AllByMonthSalesman month={monthInput} year={yearInput} itc={itcInput} /> :
+              <div className="rounded my-5 p-2 w-full overflow-x-auto">
+                <table id="example_data" ref={tableRef} className="rounded-sm table-auto w-full">
+                  <thead className="bg-blue-500 text-white">
+                    <tr>
+                      <th className="text-sm py-2 px-3 font-semibold">
+                        No
+                      </th>
+                      <th className="text-sm py-2 px-3 font-semibold">
+                        Salesman
+                      </th>
+                      <th className="text-sm py-2 px-3 font-semibold">
+                        Tanggal
+                      </th>
+                      <th className="text-sm py-2 px-3 font-semibold">
+                        Omzet
+                      </th>
+                      <th className="text-sm py-2 px-3 font-semibold">Customer</th>
+                      <th className="text-sm py-2 px-3 font-semibold">
+                        Aksi</th>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="text-sm text-center capitalize py-3 bg-gray-100">
-                      Tidak ada data
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  <tbody>
+                    {omzet.length > 0 ? (
+                      omzet.map((row, index) => (
+                        <tr key={row.id}>
+                          <td className="text-sm py-2 px-3 w-[4%]">
+                            {index + 1}
+                          </td>
+                          <td className="text-sm py-2 px-3">
+                            {row.salesman.namaSalesman}
+                          </td>
+                          <td className="text-sm py-2 px-3">
+                            {formatDate(row.tgl)}
+                          </td>
+                          <td className="text-sm py-2 px-3">
+                            {formatRupiah(row.omzet)}
+                          </td>
+                          <td className="text-sm py-2 px-3">
+                            {row.customer.nama_customer}
+                          </td>
+                          <td className="text-sm py-2 px-3 flex items-center justify-center">
+                            <IconButton size="md" color="red" onClick={() => hapusOmzet(row.id)}>
+                              <TrashIcon className="w-6 h-6 text-white" />
+                            </IconButton>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="text-xs text-center capitalize py-3 bg-gray-100">
+                          Tidak ada data
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+          }
         </main>
       </div>
     </section>
