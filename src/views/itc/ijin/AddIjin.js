@@ -187,22 +187,42 @@ function AddIjin() {
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
           <form onSubmit={addIjin}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="mt-2">
-              <Select
-                  label="Salesman"
-                  color="blue"
-                  variant="outlined"
-                  required
-                  value={salesmanId} 
-                  onChange={(e) => setSalesmanId(e.target.value)} // perbaiki untuk mendapatkan nilai dari target
-                >
-                  {options.map((option) => (
-                    <Option value={option.id} key={option.id}>
-                      {option.namaSalesman}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
+            <div className="flex gap-2 items-end">
+                  <Input
+                    label="Salesman"
+                    variant="static"
+                    color="blue"
+                    list="salesman-list"
+                    id="salesman"
+                    placeholder="Pilih Salesman"
+                    required
+                    onChange={(event) => {
+                      handleChange(event);
+                      setSalesmanId(event.target.value);
+                    }}
+                  />
+                  <datalist id="salesman-list">
+                    {options.map((option) => (
+                      <option value={option.id} key={option.id}>
+                        {option.namaSalesman}
+                      </option>
+                    ))}
+                  </datalist>
+                  <div className="flex gap-2">
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}>
+                      Prev
+                    </button>
+                    <button
+                      className="text-sm bg-gray-400 px-1"
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={!options.length}>
+                      Next
+                    </button>
+                  </div>
+                </div>
               <div className="mt-2">
                 <Input
                   label="Durasi"
