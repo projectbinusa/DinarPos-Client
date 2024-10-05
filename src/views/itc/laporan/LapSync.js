@@ -7,6 +7,38 @@ import axios from "axios";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 
+const totalPlanning = async (tgl, idx, salesmanId, setTotalsP) => {
+    try {
+        const response = await axios.get(`${API_SYNC_PLANNING}?id_salesman=${salesmanId}&tanggal=${tgl}`, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+        const res = response.data.data.length;
+        setTotalsP(prevTotals => {
+            const newTotals = [...prevTotals];
+            newTotals[idx] = res;
+            return newTotals;
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const totalKunjungan = async (tgl, idx, salesmanId, setTotalsK) => {
+    try {
+        const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal/salesman?id_salesman=${salesmanId}&tgl=${tgl}`, {
+            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        });
+        const res = response.data.data.length;
+        setTotalsK(prevTotals => {
+            const newTotals = [...prevTotals];
+            newTotals[idx] = res;
+            return newTotals;
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 function LapSync() {
     const tableRef = useRef(null);
     const [laporans, setLaporan] = useState([]);
@@ -111,43 +143,11 @@ function LapSync() {
     const [totalsK, setTotalsK] = useState([]);
     const [totalsP, setTotalsP] = useState([]);
 
-    const totalPlanning = async (tgl, idx, salesmanId) => {
-        try {
-            const response = await axios.get(`${API_SYNC_PLANNING}?id_salesman=${salesmanId}&tanggal=${tgl}`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            const res = response.data.data.length;
-            setTotalsP(prevTotals => {
-                const newTotals = [...prevTotals];
-                newTotals[idx] = res;
-                return newTotals;
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const totalKunjungan = async (tgl, idx, salesmanId) => {
-        try {
-            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal/salesman?id_salesman=${salesmanId}&tgl=${tgl}`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            const res = response.data.data.length;
-            setTotalsK(prevTotals => {
-                const newTotals = [...prevTotals];
-                newTotals[idx] = res;
-                return newTotals;
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     useEffect(() => {
         if (laporans.length > 0) {
             laporans.forEach((row, idx) => {
-                totalPlanning(formatDate(row.tanggalKunjungan), idx, row.salesman.id);
-                totalKunjungan(formatDate(row.tanggalKunjungan), idx, row.salesman.id);
+                totalPlanning(formatDate(row.tanggalKunjungan), idx, row.salesman.id, setTotalsP);
+                totalKunjungan(formatDate(row.tanggalKunjungan), idx, row.salesman.id, setTotalsK);
             });
         }
     }, [laporans]);
@@ -299,14 +299,14 @@ function LapSync() {
                                 {laporans.length > 0 ? (
                                     laporans.map((row, idx) => {
                                         const persen = (totalsK[idx] / totalsP[idx]) * 100;
+                                        const formattedPersen = isNaN(persen) ? 0 : persen.toFixed(1);
                                         return (
                                             <tr key={idx}>
                                                 <td className="text-sm w-[4%]">{idx + 1}</td>
                                                 <td className="text-sm py-2 px-2.5">{row.tanggalKunjungan}</td>
-                                                <td className="text-sm py-2 px-2.5">{row.salesman.namaSalesman} / {row.salesman.id}</td>
+                                                <td className="text-sm py-2 px-2.5">{row.salesman.namaSalesman}</td>
                                                 <td className="text-sm py-2 px-2.5">
-                                                    {totalsK[idx]}
-                                                    {/* <Progress value={persen || 0} color="green" label/> */}
+                                                    <Progress value={formattedPersen || 0} color="green" label/>
                                                 </td>
                                                 <td className="text-sm py-2 px-3 flex items-center justify-center">
                                                     <a href={`/detail_sync/${row.salesman.id}/${row.tanggalKunjungan}`}>

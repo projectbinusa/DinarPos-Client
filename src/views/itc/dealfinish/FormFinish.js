@@ -1,26 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import SidebarAdmin from "../../../component/SidebarAdmin";
-import { Breadcrumbs, Typography } from "@material-tailwind/react";
-import { API_KUNJUNGAN } from "../../../utils/BaseUrl";
+import { Breadcrumbs, IconButton, Typography } from "@material-tailwind/react";
+import { API_KUNJUNGAN, API_PENGGUNA } from "../../../utils/BaseUrl";
+import $ from "jquery";
+import Decrypt from "../../../component/Decrypt";
+import formatDate from "../../../component/FormatDate";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 function FormFinish() {
     const [kunjungan, setKunjungan] = useState([]);
+    const [nama, setNama] = useState("");
+    const tableRef = useRef(null);
+    const initializeDataTable = () => {
+        if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable({});
+        }
+    };
+
+    const id = Decrypt();
+    useEffect(() => {
+        axios
+            .get(`${API_PENGGUNA}/` + id, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            })
+            .then((res) => {
+                const response = res.data.data.namaPengguna;
+                setNama(response)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [id]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`${API_KUNJUNGAN}`, {
-                    headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-                });
-                setKunjungan(response.data.data);
-            } catch (error) {
-                console.error("Error fetching data: ", error);
-            }
-        };
+        if (nama && nama !== "") {
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get(`${API_KUNJUNGAN}/deal_po/salesman?nama_salesman=${nama}`, {
+                        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                    });
+                    setKunjungan(response.data.data);
+                    console.log(response.data.data);
 
-        fetchData();
-    }, []);
+                } catch (error) {
+                    console.error("Error fetching data: ", error);
+                }
+            };
+
+            fetchData();
+        }
+    }, [nama]);
+
+    useEffect(() => {
+        if (kunjungan && kunjungan.length > 0) {
+            initializeDataTable();
+        }
+    }, [kunjungan]);
 
     return (
         <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -48,53 +84,53 @@ function FormFinish() {
                 </div>
                 <main className="bg-white shadow-lg p-5 my-5 rounded">
                     <div className="rounded mb-5 p-1 overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full" ref={tableRef}>
                             <thead className="bg-blue-500 text-white w-full">
                                 <tr>
-                                    <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Tgl Input</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Tujuan</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Action</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Info didapat</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">CP</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Peluang</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Deal</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Byr_%</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Wkt_p</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Tgl_d</th>
-                                    <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                    <th className="text-xs py-2 px-3 w-[4%]">No</th>
+                                    <th className="text-xs py-2 px-3">Tgl Input</th>
+                                    <th className="text-xs py-2 px-3">Tujuan</th>
+                                    <th className="text-xs py-2 px-3">Action</th>
+                                    <th className="text-xs py-2 px-3">Info didapat</th>
+                                    <th className="text-xs py-2 px-3">CP</th>
+                                    <th className="text-xs py-2 px-3">Peluang</th>
+                                    <th className="text-xs py-2 px-3">Deal</th>
+                                    <th className="text-xs py-2 px-3">Byr_%</th>
+                                    <th className="text-xs py-2 px-3">Wkt_p</th>
+                                    <th className="text-xs py-2 px-3">Tgl_d</th>
+                                    <th className="text-xs py-2 px-3">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {kunjungan.length > 0 ? (
                                     kunjungan.map((item, index) => (
                                         <tr key={index}>
-                                            <td className="text-sm py-2 px-3">{index + 1}</td>
-                                            <td className="text-sm py-2 px-3">{item.tgl_input}</td>
-                                            <td className="text-sm py-2 px-3">{item.tujuan}</td>
-                                            <td className="text-sm py-2 px-3">{item.action}</td>
-                                            <td className="text-sm py-2 px-3">{item.info_didapat}</td>
-                                            <td className="text-sm py-2 px-3">{item.cp}</td>
-                                            <td className="text-sm py-2 px-3">{item.peluang}</td>
-                                            <td className="text-sm py-2 px-3">{item.deal}</td>
-                                            <td className="text-sm py-2 px-3">{item.byr_persentase}</td>
-                                            <td className="text-sm py-2 px-3">{item.wkt_p}</td>
-                                            <td className="text-sm py-2 px-3">{item.tgl_d}</td>
-                                            <td className="text-sm py-2 px-3">
-                                                <button
-                                                    className="bg-red-500 text-white px-2 py-1 rounded"
-                                                    onClick
-                                                >
-                                                    delete
-                                                </button>
+                                            <td className="text-xs py-2 px-3">{index + 1}</td>
+                                            <td className="text-xs py-2 px-3">{formatDate(item.created_date)}</td>
+                                            <td className="text-xs py-2 px-3">{item.tujuan}</td>
+                                            <td className="text-xs py-2 px-3">{item.action}</td>
+                                            <td className="text-xs py-2 px-3">{item.infoDpt}</td>
+                                            <td className="text-xs py-2 px-3">{item.cp}</td>
+                                            <td className="text-xs py-2 px-3">{item.peluang}</td>
+                                            <td className="text-xs py-2 px-3">{item.deal}</td>
+                                            <td className="text-xs py-2 px-3">{item.pembayaran}</td>
+                                            <td className="text-xs py-2 px-3">{item.waktuPengadaan}</td>
+                                            <td className="text-xs py-2 px-3">{formatDate(item.tanggalDeal)}</td>
+                                            <td>
+                                                <div className="py-2 px-3 flex items-center justify-center">
+                                                    <a href={"/add_finish/" + item.idReport}>
+                                                        <IconButton size="md" color="blue">
+                                                            <PlusIcon className="w-6 h-6 white" />
+                                                        </IconButton>
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="12" className="text-center text-sm py-2">
-                                            No data available
-                                        </td>
+                                        <td colSpan="12" className="text-center text-xs py-2">
+                                            Tidak ada data                                          </td>
                                     </tr>
                                 )}
                             </tbody>

@@ -3185,7 +3185,7 @@ function SidebarAdmin() {
                     Deal PO
                   </ListItem>
                 </a>
-                <a href="/dealfinish">
+                <a href="/dealfinish_marketting">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Deal Finish
                   </ListItem>

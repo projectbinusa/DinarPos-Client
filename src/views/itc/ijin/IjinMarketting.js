@@ -160,17 +160,17 @@ function IjinMarketting() {
                                             <td className="py-3 px-4">{row.jenis}</td>
                                             <td className="py-3 px-4">{formatDate(row.tgl_a)}</td>
                                             <td className="py-3 px-4">{formatDate(row.tgl_b)}</td>
-                                            <td className="py-3 px-4">{index + 1}</td>
-                                            <td className="py-3 px-4">{index + 1}</td>
+                                            <td className="py-3 px-4">{row.salesman.namaSalesman}</td>
+                                            <td className="py-3 px-4">{row.ket}</td>
                                             <td className="py-3 px-4">
                                                 <img src={row.foto} alt="foto" className="h-24 w-24 rounded object-cover" />
                                             </td>
-                                            <td className="py-2 px-3 flex items-center justify-center">
-                                                <a href={"/detail_kunjungan/" + row.id}>
-                                                    <IconButton size="md" color="green">
+                                            <td>
+                                                <div className="py-2 px-3 flex items-center justify-center">
+                                                    <IconButton size="md" color="red" onClick={() => hapusIjin(row.id)}>
                                                         <TrashIcon className="w-6 h-6 white" />
                                                     </IconButton>
-                                                </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
