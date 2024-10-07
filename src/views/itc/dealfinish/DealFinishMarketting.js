@@ -1,8 +1,68 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { Breadcrumbs, Button, Typography } from "@material-tailwind/react";
+import $ from "jquery";
+import Decrypt from "../../../component/Decrypt";
+import axios from "axios";
+import { API_DEAL, API_ITC, API_PENGGUNA } from "../../../utils/BaseUrl";
 
 function DealFinishMarketting() {
+    const [finish, setFinish] = useState([]);
+    const [salesmanId, setsalesmanId] = useState(0);
+    const tableRef = useRef(null);
+    const initializeDataTable = () => {
+        if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable({});
+        }
+    };
+
+    const id = Decrypt();
+    useEffect(() => {
+        axios
+            .get(`${API_PENGGUNA}/` + id, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            })
+            .then((res) => {
+                const response = res.data.data.namaPengguna;
+                try {
+                    axios
+                        .get(`${API_ITC}/nama?nama=` + response, {
+                            headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+                        })
+                        .then((ress) => {
+                            setsalesmanId(ress.data.data.id);
+                        });
+                } catch (err) {
+                    console.log(err);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [id]);
+
+    const getFinish = async () => {
+        try {
+            const response = await axios.get(`${API_DEAL}/finish/salesman?id_salesman=${salesmanId}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setFinish(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    useEffect(() => {
+        getFinish()
+    }, [])
+
+    useEffect(() => {
+        if (finish && finish.length > 0) {
+            initializeDataTable();
+        }
+    }, [finish])
+
     return (
         <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
             <SidebarAdmin />
@@ -45,27 +105,27 @@ function DealFinishMarketting() {
                                     <th className="text-xs py-3 px-4">Ev_Finish</th>
                                 </tr>
                             </thead>
-                            {/* <tbody>
-                {finish.length > 0 ? (
-                  finish.map((row, index) => (
-                    <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                      <td className="text-xs py-2 px-4 border">{index + 1}</td>
-                      <td className="text-xs py-2 px-4 border">{row.basp}</td>
-                      <td className="text-xs py-2 px-4 border">{row.baut}</td>
-                      <td className="text-xs py-2 px-4 border">{row.file_spk}</td>
-                      <td className="text-xs py-2 px-4 border">{row.ev_dtg}</td>
-                      <td className="text-xs py-2 px-4 border">{row.ev_pro}</td>
-                      <td className="text-xs py-2 px-4 border">{row.ev_fin}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="7" className="text-center text-xs py-3 bg-gray-200 border">
-                      Tidak ada data
-                    </td>
-                  </tr>
-                )}
-              </tbody> */}
+                            <tbody>
+                                {finish.length > 0 ? (
+                                    finish.map((row, index) => (
+                                        <tr key={row.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                                            <td className="text-xs py-2 px-4 border">{index + 1}</td>
+                                            <td className="text-xs py-2 px-4 border">{row.basp}</td>
+                                            <td className="text-xs py-2 px-4 border">{row.baut}</td>
+                                            <td className="text-xs py-2 px-4 border">{row.file_spk}</td>
+                                            <td className="text-xs py-2 px-4 border">{row.ev_dtg}</td>
+                                            <td className="text-xs py-2 px-4 border">{row.ev_pro}</td>
+                                            <td className="text-xs py-2 px-4 border">{row.ev_fin}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="7" className="text-center text-xs py-3 bg-gray-200 border">
+                                            Tidak ada data
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
                         </table>
                     </div>
                 </main>

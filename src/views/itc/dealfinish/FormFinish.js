@@ -37,12 +37,11 @@ function FormFinish() {
         if (nama && nama !== "") {
             const fetchData = async () => {
                 try {
-                    const response = await axios.get(`${API_KUNJUNGAN}/deal_po/salesman?nama_salesman=${nama}`, {
+                    const response = await axios.get(`${API_KUNJUNGAN}/deal_finish/salesman?nama_salesman=${nama}`, {
                         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
                     });
                     setKunjungan(response.data.data);
                     console.log(response.data.data);
-
                 } catch (error) {
                     console.error("Error fetching data: ", error);
                 }

@@ -25,7 +25,7 @@ import {
 } from "../../../utils/BaseUrl";
 import axios from "axios";
 import Decrypt from "../../../component/Decrypt";
-import $, { isEmptyObject } from "jquery";
+import $ from "jquery";
 import Swal from "sweetalert2";
 
 function InputKunjungan() {
