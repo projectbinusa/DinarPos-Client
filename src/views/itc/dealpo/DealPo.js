@@ -5,8 +5,8 @@ import {
   Typography,
   Button,
   IconButton,
-  PencilIcon,
 } from "@material-tailwind/react";
+import { PencilIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { API_DEAL_PO } from "../../../utils/BaseUrl";
 
@@ -17,6 +17,9 @@ function DealPo() {
     try {
       const response = await axios.get(`${API_DEAL_PO}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        params: {
+          /* Tambahkan query params jika ada sesuai Swagger */
+        },
       });
       setDatas(response.data.data);
     } catch (error) {
@@ -57,7 +60,7 @@ function DealPo() {
               color="blue"
               className="font-poppins font-medium"
             >
-              Tambah
+              <a href="/add_dealpo">Tambah</a>
             </Button>
           </div>
           <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
@@ -68,7 +71,7 @@ function DealPo() {
                   <th className="text-sm py-1 px-2 font-semibold">Tgl Input</th>
                   <th className="text-sm py-1 px-2 font-semibold">Marketing</th>
                   <th className="text-sm py-1 px-2 font-semibold">Customer</th>
-                  <th className="text-sm py-1 px-2 font-semibold">Foto</th>
+                  <th className="text-xs py-1 px-2 font-semibold">Foto</th>
                   <th className="text-sm py-1 px-2 font-semibold">
                     Keterangan
                   </th>
@@ -80,6 +83,7 @@ function DealPo() {
                   <th className="text-sm py-1 px-2 font-semibold">
                     Administrasi
                   </th>
+                  <th className="text-sm py-1 px-2 font-semibold">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,9 +96,34 @@ function DealPo() {
                       </td>
                       <td className="text-sm py-2 px-3">{dealpo.marketing}</td>
                       <td className="text-sm py-2 px-3">{dealpo.customer}</td>
-                      <td className="text-sm py-2 px-3">{dealpo.foto}</td>
+                      <td className="text-xs py-2 px-3">
+                        {dealpo.foto ? (
+                          <img
+                            src={dealpo.foto}
+                            alt="Foto"
+                            className="w-[100px] h-[50px] object-cover rounded-lg"
+                            style={{ maxWidth: "100%", maxHeight: "100%" }}
+                          />
+                        ) : (
+                          "Tidak ada foto"
+                        )}
+                      </td>
                       <td className="text-sm py-2 px-3">{dealpo.keterangan}</td>
-                      <td className="text-sm py-2 px-3">{dealpo.file_po}</td>
+                      <td className="text-sm py-2 px-3">
+                        {dealpo.file_po ? (
+                          <a
+                            href={dealpo.file_po}
+                            download
+                            className="text-blue-500 underline"
+                          >
+                            <Button className="text-xs py-1 px-2 bg-blue-500">
+                              file
+                            </Button>
+                          </a>
+                        ) : (
+                          "Tidak ada file"
+                        )}
+                      </td>
                       <td className="text-sm py-2 px-3">{dealpo.status}</td>
                       <td className="text-sm py-2 px-3">{dealpo.ket_status}</td>
                       <td className="text-sm py-2 px-3">
@@ -112,7 +141,7 @@ function DealPo() {
                 ) : (
                   <tr>
                     <td
-                      colSpan="10"
+                      colSpan="11"
                       className="text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data

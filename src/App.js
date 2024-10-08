@@ -195,6 +195,8 @@ import FormFinish from "./views/itc/dealfinish/FormFinish.js";
 import FilterOmzet from "./views/itc/omzet/FilterOmzet.js";
 import IjinMarketting from "./views/itc/ijin/IjinMarketting.js";
 import DealFinishMarketting from "./views/itc/dealfinish/DealFinishMarketting.js";
+import AddDealPo from "./views/itc/dealpo/AddDealPoo.js";
+import FromDealPo from "./views/itc/dealpo/fromDealPoo.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1265,6 +1267,17 @@ function App() {
             <PrivateRoute
               path="/form_finish"
               component={FormFinish}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/add_dealpo"
+              component={AddDealPo}
+              isAuthenticated={true}
+            />
+
+            <PrivateRoute
+              path="/from_deal_po"
+              component={FromDealPo}
               isAuthenticated={true}
             />
           </Switch>
