@@ -306,10 +306,14 @@ function LapSync() {
                                                 <td className="text-sm py-2 px-2.5">{row.tanggalKunjungan}</td>
                                                 <td className="text-sm py-2 px-2.5">{row.salesman.namaSalesman}</td>
                                                 <td className="text-sm py-2 px-2.5">
-                                                    <Progress value={formattedPersen || 0} color="green" label/>
+                                                    {formattedPersen <= 33 ?
+                                                        <Progress value={formattedPersen || 0} color="red" label /> : formattedPersen <= 66 ?
+                                                            <Progress value={formattedPersen || 0} color="yellow" label /> :
+                                                            <Progress value={formattedPersen || 0} color="green" label />
+                                                    }
                                                 </td>
                                                 <td className="text-sm py-2 px-3 flex items-center justify-center">
-                                                    <a href={`/detail_sync/${row.salesman.id}/${row.tanggalKunjungan}`}>
+                                                    <a href={`/detail_sync/${row.salesman.id}/${formatDate(row.tanggalKunjungan)}`}>
                                                         <IconButton size="md" color="green">
                                                             <InformationCircleIcon className="w-6 h-6 white" />
                                                         </IconButton>
