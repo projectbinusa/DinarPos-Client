@@ -57,15 +57,24 @@ function Home() {
 
   const totalOmzet = async (idx, itc) => {
     try {
-      const response = await axios.get(`${API_OMZET}/bulan_tahun/salesman?bulan=${month}&id_salesman=1&tahun=${year}`, {
+      const response = await axios.get(`${API_OMZET}/bulan_tahun/salesman?bulan=${month}&id_salesman=${itc}&tahun=${year}`, {
         headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
       });
-      const res = response.data.data[0].total_omzet;
-      setTtlOmzet(prevTotals => {
-        const newTotals = [...prevTotals];
-        newTotals[idx] = res;
-        return newTotals;
-      });
+      if (response.data.data.length > 0) {
+        const res = response.data.data[0].total_omzet || 0;
+        setTtlOmzet(prevTotals => {
+          const newTotals = [...prevTotals];
+          newTotals[idx] = res;
+          return newTotals;
+        });
+      } else {
+        setTtlOmzet(prevTotals => {
+          const newTotals = [...prevTotals];
+          newTotals[idx] = 0;
+          return newTotals;
+        });
+      }
+
     } catch (err) {
       console.log(err);
     }

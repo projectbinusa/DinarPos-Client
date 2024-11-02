@@ -3180,7 +3180,7 @@ function SidebarAdmin() {
                     Daily Report
                   </ListItem>
                 </a>
-                <a href="/dealpo">
+                <a href="/dealpo_marketting">
                   <ListItem className="px-3 py-2 text-sm rounded uppercase">
                     Deal PO
                   </ListItem>

@@ -496,7 +496,7 @@ function AllDeal100({ deal }) {
 function AllByDeal({ deal }) {
     return (
         <>
-            {deal === "50" ? <AllDeal50 deal={deal}/> : deal === "80" ? <AllDeal80 deal={deal} /> : <AllDeal100 deal={deal}/>}
+            {deal === "50" ? <AllDeal50 deal={deal} /> : deal === "80" ? <AllDeal80 deal={deal} /> : <AllDeal100 deal={deal} />}
         </>
     )
 }
@@ -558,9 +558,7 @@ function LapKunjungan() {
             if (validasiDeal) { setvalidasiDeal(false) }
             setvalidasiIdItc(true);
         } else {
-            if (validasiIdItc) {
-                setvalidasiIdItc(false)
-            }
+            if (validasiIdItc) { setvalidasiIdItc(false) }
             if (validasiDeal) { setvalidasiDeal(false) }
             setvalidasi(true);
         }
@@ -577,8 +575,12 @@ function LapKunjungan() {
             return;
         }
         setDealInput(deal)
+        if (validasiIdItc) { setvalidasiIdItc(false) }
+        if (validasi) { setvalidasi(false) }
         setvalidasiDeal(true);
     };
+
+    console.log(`validasi ${validasi} --- validasi itc ${validasiIdItc} --- validasi deal ${validasiDeal}`);
 
     useEffect(() => {
         if (laporans && laporans.length > 0) {

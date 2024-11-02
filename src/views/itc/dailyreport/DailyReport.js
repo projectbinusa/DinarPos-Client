@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
   Breadcrumbs,
@@ -15,51 +14,143 @@ import { API_ITC, API_KUNJUNGAN, API_PENGGUNA } from "../../../utils/BaseUrl";
 import Decrypt from "../../../component/Decrypt";
 import $ from "jquery"
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
+
+const formatDate = (value) => {
+  const date = new Date(value);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const formattedDate = `${day}-${month}-${year}`;
+
+  return formattedDate;
+};
+
+const formatDate2 = (value) => {
+  const date = new Date(value);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
+
+  return formattedDate;
+};
+
+function AllWaktuPengadaan({ waktu, idSalesman }) {
+  const tableRef2 = useRef(null);
+  const initializeDataTable2 = () => {
+    if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable({
+        responsive: true
+      });
+    }
+  }
+
+  const destroyDataTable2 = () => {
+    if (tableRef2.current && $.fn.DataTable.isDataTable(tableRef2.current)) {
+      $(tableRef2.current).DataTable().destroy();
+    }
+  };
+
+  const [dailyReportWaktu, setDailyReportWaktu] = useState([]);
+
+  console.log("length : " + dailyReportWaktu.length);
+
+  const getAllDailyReportWaktuPengadaan = async () => {
+    try {
+      const response = await axios.get(
+        `${API_KUNJUNGAN}/waktu_pengadaan/salesman?idSalesman=${idSalesman}&waktuPengadaan=${waktu}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      setDailyReportWaktu(response.data.data);
+    } catch (err) {
+      console.log("Error fetching data:", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllDailyReportWaktuPengadaan()
+  }, [waktu, idSalesman])
+
+  useEffect(() => {
+    if (dailyReportWaktu && dailyReportWaktu.length > 0) {
+      initializeDataTable2();
+    }
+  }, [dailyReportWaktu]);
+
+  return (
+    <>
+      <div className="mt-12 bg-green-100 w-full px-5 py-3">
+        <p className="text-green-800">Pencarian Waktu Pengadaan : <span className="font-medium">{waktu}</span></p>
+      </div>
+      <div className="rounded mb-5 p-1 mt-6 overflow-x-auto">
+        <table
+          id="example_data2"
+          ref={tableRef2}
+          className="rounded-sm table-auto w-full overflow-x-auto"
+        >
+          <thead className="bg-blue-500 text-white w-full">
+            <tr>
+              <th className="text-xs py-2 px-2.5 font-semibold w-[4%]">No</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">Tgl_Report</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">Instansi</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">Jenis</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">Daerah</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">Peluang</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">Info didapat</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">CP</th>
+              <th className="text-xs py-2 px-2.5 font-semibold">Wkt_p</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dailyReportWaktu.length > 0 ? (
+              dailyReportWaktu.map((item, idx) => (
+                <tr key={idx}>
+                  <td className="text-xs py-2 px-3">{idx + 1}</td>
+                  <td className="text-xs py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
+                  <td className="text-xs py-2 px-3">{item.customer.nama_customer}</td>
+                  <td className="text-xs py-2 px-3">{item.jenis}</td>
+                  <td className="text-xs py-2 px-3">{item.customer.kabKot.nama_kabkot} / {item.customer.kec.nama_kec}</td>
+                  <td className="text-xs py-2 px-3">{item.peluang}</td>
+                  <td className="text-xs py-2 px-3">{item.infoDpt}</td>
+                  <td className="text-xs py-2 px-3">{item.cp}</td>
+                  <td className="text-xs py-2 px-3">{item.waktuPengadaan}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="9" className="text-xs text-center capitalize py-2 bg-gray-100">
+                  Tidak ada data
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )
+}
 
 function DailyReport() {
   const [tglAwal, setTglAwal] = useState("");
   const [tglAkhir, setTglAkhir] = useState("");
+
   const [waktu, setwaktu] = useState("");
+  const [waktuPengadaan, setwaktuPengadaan] = useState("");
+
   const [dailyReport, setDailyReport] = useState([]);
-  const [dailyReportWaktu, setDailyReportWaktu] = useState([]);
-  const [validasi, setvalidasi] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [idSalesman, setIdSalesman] = useState(0);
 
   const tableRef = useRef(null);
   const initializeDataTable = () => {
     if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable({});
+      $(tableRef.current).DataTable({ responsive: true });
     }
-  };
-
-  const tableRef2 = useRef(null);
-  const initializeDataTable2 = () => {
-    if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
-      $(tableRef2.current).DataTable({});
-    }
-  };
-
-  const formatDate = (value) => {
-    const date = new Date(value);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const formattedDate = `${day}-${month}-${year}`;
-
-    return formattedDate;
-  };
-
-  const formatDate2 = (value) => {
-    const date = new Date(value);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-
-    return formattedDate;
   };
 
   const id = Decrypt();
@@ -93,7 +184,6 @@ function DailyReport() {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         }
       );
-      console.log("API Response:", response.data);
       setDailyReport(response.data.data);
     } catch (err) {
       console.log("Error fetching data:", err);
@@ -127,39 +217,37 @@ function DailyReport() {
   }, [dailyReport]);
 
   const handlePrint = async () => {
+    if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
     const url = `/print_kunjungan?tgl_awal=${tglAwal}&tgl_akhir=${tglAkhir}`;
     window.open(url, '_blank');
   };
 
-  const getAllDailyReportWaktuPengadaan = async () => {
-    try {
-      const response = await axios.get(
-        `${API_KUNJUNGAN}/waktu_pengadaan/salesman?idSalesman=${idSalesman}&waktuPengadaan=${waktu}`,
-        {
-          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-        }
-      );
-      console.log("API Response:", response.data);
-      setDailyReportWaktu(response.data.data);
-      setIsDataFetched(true)
-    } catch (err) {
-      console.log("Error fetching data:", err);
-    }
-  };
-
   const filterWaktu = async () => {
-    setvalidasi(true)
-    setIsDataFetched(false)
+    if (waktu === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+    setwaktuPengadaan(waktu)
+    if (waktu !== "") {
+      setIsDataFetched(true);
+    }
   }
 
-  useEffect(() => {
-    if (idSalesman) {
-      getAllDailyReport();
-    }
-    if (validasi && idSalesman) {
-      getAllDailyReportWaktuPengadaan()
-    }
-  }, [idSalesman, validasi]);
+  console.log(isDataFetched);
+
 
   useEffect(() => {
     if (dailyReport && dailyReport.length > 0) {
@@ -168,11 +256,8 @@ function DailyReport() {
   }, [dailyReport])
 
   useEffect(() => {
-    if (dailyReportWaktu.length > 0 && !$.fn.DataTable.isDataTable('#example_data2')) {
-      initializeDataTable2();
-    }
-  }, [dailyReportWaktu]);
-
+    getAllDailyReport();
+  }, [idSalesman]);
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -263,67 +348,14 @@ function DailyReport() {
             <Button
               className="mt-5 font-poppins font-medium mb-4"
               color="blue"
-              type="button" onClick={filterWaktu}
-            >
+              type="button" onClick={filterWaktu} >
               Cari
             </Button>
           </div>
 
           {isDataFetched ?
-            (
-              <>
-                <div className="mt-12 bg-green-100 w-full px-5 py-3">
-                  <p className="text-green-800">Pencarian Waktu Pengadaan : <span className="font-medium">{waktu}</span></p>
-                </div>
-                <div className="rounded mb-5 p-1 mt-6 overflow-x-auto">
-                  <table
-                    id="example_data2"
-                    ref={tableRef2}
-                    className="rounded-sm table-auto w-full overflow-x-auto"
-                  >
-                    <thead className="bg-blue-500 text-white w-full">
-                      <tr>
-                        <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">No</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">Tgl_Report</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">Instansi</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">Jenis</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">Daerah</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">Peluang</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">Info didapat</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">CP</th>
-                        <th className="text-sm py-2 px-2.5 font-semibold">Wkt_p</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dailyReportWaktu.length > 0 ? (
-                        dailyReportWaktu.map((item, index) => (
-                          <tr key={index}>
-                            <td className="text-sm py-2 px-3">{index + 1}</td>
-                            <td className="text-sm py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
-                            <td className="text-sm py-2 px-3">{item.customer.nama_customer}</td>
-                            <td className="text-sm py-2 px-3">{item.jenis}</td>
-                            <td className="text-sm py-2 px-3">{item.customer.kabKot.nama_kabkot} / {item.customer.kec.nama_kec}</td>
-                            <td className="text-sm py-2 px-3">{item.peluang}</td>
-                            <td className="text-sm py-2 px-3">{item.infoDpt}</td>
-                            <td className="text-sm py-2 px-3">{item.cp}</td>
-                            <td className="text-sm py-2 px-3">{item.waktuPengadaan}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan="9"
-                            className="text-sm text-center capitalize py-2 bg-gray-100 ">
-                            Tidak ada data
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </>)
-            :
-            (<div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
+            <AllWaktuPengadaan waktu={waktuPengadaan} idSalesman={idSalesman} /> :
+            <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
               <table
                 id="example_data"
                 ref={tableRef}
@@ -331,26 +363,26 @@ function DailyReport() {
               >
                 <thead className="bg-blue-500 text-white w-full">
                   <tr>
-                    <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">
+                    <th className="text-xs py-2 px-2.5 font-semibold w-[4%]">
                       No
                     </th>
-                    <th className="text-sm py-2 px-2.5 font-semibold">Tanggal</th>
-                    <th className="text-sm py-2 px-2.5 font-semibold">
+                    <th className="text-xs py-2 px-2.5 font-semibold">Tanggal</th>
+                    <th className="text-xs py-2 px-2.5 font-semibold">
                       Jumlah Report
                     </th>
-                    <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
+                    <th className="text-xs py-2 px-2.5 font-semibold">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {dailyReport.length > 0 ? (
                     dailyReport.map((item, index) => (
                       <tr key={index}>
-                        <td className="text-sm py-2 px-3">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
-                        <td className="text-sm py-2 px-3">{totals[index] !== undefined ? totals[index] : 'Loading...'}
+                        <td className="text-xs py-2 px-3">{index + 1}</td>
+                        <td className="text-xs py-2 px-3">{formatDate(item.tanggalKunjungan)}</td>
+                        <td className="text-xs py-2 px-3">{totals[index] !== undefined ? totals[index] : 'Loading...'}
                         </td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
-                          <a href={"/detail_kunjungan_by_tgl/" + formatDate2(item.tanggalKunjungan)}>
+                        <td className="text-xs py-2 px-3 flex items-center justify-center">
+                          <a href={`/detail_kunjungan_by_tgl/${formatDate2(item.tanggalKunjungan)}`}>
                             <IconButton size="md" color="green">
                               <InformationCircleIcon className="w-6 h-6 white" />
                             </IconButton>
@@ -362,14 +394,14 @@ function DailyReport() {
                     <tr>
                       <td
                         colSpan="4"
-                        className="text-sm text-center capitalize py-2 bg-gray-100 ">
+                        className="text-xs text-center capitalize py-2 bg-gray-100 ">
                         Tidak ada data
                       </td>
                     </tr>
                   )}
                 </tbody>
               </table>
-            </div>)}
+            </div>}
         </main>
       </div >
     </section >

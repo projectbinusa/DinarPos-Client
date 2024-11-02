@@ -53,22 +53,22 @@ function AllBetweenDate({ tglAwal, tglAkhir }) {
         ref={tableRef2} className="w-full table-auto border-collapse  overflow-x-auto">
         <thead className="bg-blue-600 text-white">
           <tr>
-            <th className="py-2 px-3">Tanggal</th>
-            <th className="py-2 px-3">Nama ITC</th>
-            <th className="py-2 px-3">Nama Customer</th>
-            <th className="py-2 px-3">Jenis</th>
-            <th className="py-2 px-3">Daerah</th>
-            <th className="py-2 px-3">
+            <th className="py-2 px-3 text-xs">Tanggal</th>
+            <th className="py-2 px-3 text-xs">Nama ITC</th>
+            <th className="py-2 px-3 text-xs">Nama Customer</th>
+            <th className="py-2 px-3 text-xs">Jenis</th>
+            <th className="py-2 px-3 text-xs">Daerah</th>
+            <th className="py-2 px-3 text-xs">
               Printer / Projector
             </th>
-            <th className="py-2 px-3">
+            <th className="py-2 px-3 text-xs">
               Jumlah Murid / KLS 3
             </th>
-            <th className="py-2 px-3">PC</th>
-            <th className="py-2 px-3">UNBK</th>
-            <th className="py-2 px-3">Jurusan</th>
-            <th className="py-2 px-3">Pihak dituju</th>
-            <th className="py-2 px-3">Tujuan</th>
+            <th className="py-2 px-3 text-xs">PC</th>
+            <th className="py-2 px-3 text-xs">UNBK</th>
+            <th className="py-2 px-3 text-xs">Jurusan</th>
+            <th className="py-2 px-3 text-xs">Pihak dituju</th>
+            <th className="py-2 px-3 text-xs">Tujuan</th>
           </tr>
         </thead>
         <tbody>
@@ -90,8 +90,7 @@ function AllBetweenDate({ tglAwal, tglAkhir }) {
               </tr>))
           ) : (
             <tr>
-              <td colSpan="13" className="text-center py-4 text-gray-600">
-                Tidak ada data
+              <td colSpan="13" className="text-center text-xs py-3 bg-gray-200 border">                Tidak ada data
               </td>
             </tr>
           )}
@@ -127,7 +126,6 @@ function AllBetweenDateSalesman({ tglAwal, tglAkhir, id }) {
     }
   }
 
-
   useEffect(() => {
     getBetweenTanggalSalesman();
   }, [tglAkhir, tglAwal]);
@@ -144,22 +142,22 @@ function AllBetweenDateSalesman({ tglAwal, tglAkhir, id }) {
         ref={tableRef3} className="w-full table-auto border-collapse  overflow-x-auto">
         <thead className="bg-blue-600 text-white">
           <tr>
-            <th className="py-2 px-3">Tanggal</th>
-            <th className="py-2 px-3">Nama ITC</th>
-            <th className="py-2 px-3">Nama Customer</th>
-            <th className="py-2 px-3">Jenis</th>
-            <th className="py-2 px-3">Daerah</th>
-            <th className="py-2 px-3">
+            <th className="py-2 px-3 text-xs">Tanggal</th>
+            <th className="py-2 px-3 text-xs">Nama ITC</th>
+            <th className="py-2 px-3 text-xs">Nama Customer</th>
+            <th className="py-2 px-3 text-xs">Jenis</th>
+            <th className="py-2 px-3 text-xs">Daerah</th>
+            <th className="py-2 px-3 text-xs">
               Printer / Projector
             </th>
-            <th className="py-2 px-3">
+            <th className="py-2 px-3 text-xs">
               Jumlah Murid / KLS 3
             </th>
-            <th className="py-2 px-3">PC</th>
-            <th className="py-2 px-3">UNBK</th>
-            <th className="py-2 px-3">Jurusan</th>
-            <th className="py-2 px-3">Pihak dituju</th>
-            <th className="py-2 px-3">Tujuan</th>
+            <th className="py-2 px-3 text-xs">PC</th>
+            <th className="py-2 px-3 text-xs">UNBK</th>
+            <th className="py-2 px-3 text-xs">Jurusan</th>
+            <th className="py-2 px-3 text-xs">Pihak dituju</th>
+            <th className="py-2 px-3 text-xs">Tujuan</th>
           </tr>
         </thead>
         <tbody>
@@ -181,9 +179,7 @@ function AllBetweenDateSalesman({ tglAwal, tglAkhir, id }) {
               </tr>))
           ) : (
             <tr>
-              <td colSpan="13" className="text-center py-4 text-gray-600">
-                Tidak ada data
-              </td>
+              <td colSpan="13" className="text-center text-xs py-3 bg-gray-200 border">Tidak ada Data</td>
             </tr>
           )}
         </tbody>
@@ -243,11 +239,13 @@ function PlanningPage() {
     setIdItcInput(idItc);
 
     if (idItc !== 0 && idItc !== "") {
+      setvalidasi(false);
       setvalidasiIdItc(true)
     } else {
+      setvalidasiIdItc(false)
       setvalidasi(true);
     }
-  };
+  };  
 
   useEffect(() => {
     if (planning && planning.length > 0) {
@@ -384,8 +382,7 @@ function PlanningPage() {
               variant="gradient"
               color="blue"
               className="mt-5 font-poppins font-medium mb-4"
-              onClick={filterTangggal}
-            >
+              onClick={filterTangggal}>
               Cari
             </Button>
           </div>
@@ -397,22 +394,22 @@ function PlanningPage() {
                   ref={tableRef} className="w-full table-auto border-collapse  overflow-x-auto">
                   <thead className="bg-blue-600 text-white">
                     <tr>
-                      <th className="py-2 px-3">Tanggal</th>
-                      <th className="py-2 px-3">Nama ITC</th>
-                      <th className="py-2 px-3">Nama Customer</th>
-                      <th className="py-2 px-3">Jenis</th>
-                      <th className="py-2 px-3">Daerah</th>
-                      <th className="py-2 px-3">
+                      <th className="py-2 px-3 text-xs">Tanggal</th>
+                      <th className="py-2 px-3 text-xs">Nama ITC</th>
+                      <th className="py-2 px-3 text-xs">Nama Customer</th>
+                      <th className="py-2 px-3 text-xs">Jenis</th>
+                      <th className="py-2 px-3 text-xs">Daerah</th>
+                      <th className="py-2 px-3 text-xs">
                         Printer / Projector
                       </th>
-                      <th className="py-2 px-3">
+                      <th className="py-2 px-3 text-xs">
                         Jumlah Murid / KLS 3
                       </th>
-                      <th className="py-2 px-3">PC</th>
-                      <th className="py-2 px-3">UNBK</th>
-                      <th className="py-2 px-3">Jurusan</th>
-                      <th className="py-2 px-3">Pihak dituju</th>
-                      <th className="py-2 px-3">Tujuan</th>
+                      <th className="py-2 px-3 text-xs">PC</th>
+                      <th className="py-2 px-3 text-xs">UNBK</th>
+                      <th className="py-2 px-3 text-xs">Jurusan</th>
+                      <th className="py-2 px-3 text-xs">Pihak dituju</th>
+                      <th className="py-2 px-3 text-xs">Tujuan</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -434,8 +431,7 @@ function PlanningPage() {
                         </tr>))
                     ) : (
                       <tr>
-                        <td colSpan="13" className="text-center py-4 text-gray-600">
-                          Tidak ada data
+                        <td colSpan="13" className="text-center text-xs py-3 bg-gray-200 border">                          Tidak ada data
                         </td>
                       </tr>
                     )}

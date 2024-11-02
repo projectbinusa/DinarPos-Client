@@ -59,12 +59,12 @@ function AllByMonth({ month, year }) {
         <table id="example_data2" ref={tableRef2} className="rounded-sm table-auto w-full">
           <thead className="bg-blue-500 text-white">
             <tr>
-              <th className="text-sm py-2 px-3 font-semibold">
+              <th className="text-xs py-2 px-3">
                 No
               </th>
-              <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-              <th className="text-sm py-2 px-3 font-semibold">Omzet</th>
-              <th className="text-sm py-2 px-3 font-semibold">Presentase Target</th>
+              <th className="text-xs py-2 px-3">Nama</th>
+              <th className="text-xs py-2 px-3">Omzet</th>
+              <th className="text-xs py-2 px-3">Presentase Target</th>
             </tr>
           </thead>
           <tbody>
@@ -376,20 +376,20 @@ function Omzet() {
                 <table id="example_data" ref={tableRef} className="rounded-sm table-auto w-full">
                   <thead className="bg-blue-500 text-white">
                     <tr>
-                      <th className="text-sm py-2 px-3 font-semibold">
+                      <th className="text-xs py-2 px-3">
                         No
                       </th>
-                      <th className="text-sm py-2 px-3 font-semibold">
+                      <th className="text-xs py-2 px-3">
                         Salesman
                       </th>
-                      <th className="text-sm py-2 px-3 font-semibold">
+                      <th className="text-xs py-2 px-3">
                         Tanggal
                       </th>
-                      <th className="text-sm py-2 px-3 font-semibold">
+                      <th className="text-xs py-2 px-3">
                         Omzet
                       </th>
-                      <th className="text-sm py-2 px-3 font-semibold">Customer</th>
-                      <th className="text-sm py-2 px-3 font-semibold">
+                      <th className="text-xs py-2 px-3">Customer</th>
+                      <th className="text-xs py-2 px-3">
                         Aksi</th>
                     </tr>
                   </thead>

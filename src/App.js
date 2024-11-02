@@ -166,10 +166,8 @@ import Home from "./views/itc/home/Home.js";
 import Kunjungan from "./views/itc/kunjungan/Kunjungan.js";
 import DealPo from "./views/itc/dealpo/DealPo.js";
 import DetailKunjungan from "./views/itc/kunjungan/DetailKunjungan.js";
-import PrintKunjungan from "./views/itc/printkunjungan/PrinterKunjungan.js";
 import ByMonthKunjungan from "./views/itc/by_month_kunjungan/ByMonthKunjungann.js";
 import DailyRepost from "./views/itc/dailyreport/DailyReport.js";
-import DetailKunjunganHari from "./views/itc/detailkunjunganperhari/DetailKunjunganHari.js";
 import ExportLaporan from "./views/itc/ExportLaporan.js";
 import LapSync from "./views/itc/laporan/LapSync.js";
 import LapDisiplin from "./views/itc/laporan/LapDisiplin.js";
@@ -196,7 +194,11 @@ import FilterOmzet from "./views/itc/omzet/FilterOmzet.js";
 import IjinMarketting from "./views/itc/ijin/IjinMarketting.js";
 import DealFinishMarketting from "./views/itc/dealfinish/DealFinishMarketting.js";
 import AddDealPo from "./views/itc/dealpo/AddDealPoo.js";
-import FromDealPo from "./views/itc/dealpo/fromDealPoo.js";
+import PrintKunjungan from "./views/itc/kunjungan/PrinterKunjungan.js";
+import DetailKunjunganHari from "./views/itc/kunjungan/DetailKunjunganHari.js";
+import EditFinish from "./views/itc/dealfinish/EditFinish.js";
+import DealPoMarketting from "./views/itc/dealpo/DealPoMarketting.js";
+import FormPo from "./views/itc/dealpo/FormPo.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1105,6 +1107,11 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/dealpo_marketting"
+              component={DealPoMarketting}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/kunjungan"
               component={Kunjungan}
               isAuthenticated={true}
@@ -1170,7 +1177,7 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/detail_kunjungan/:id_by_tgl/:tgl"
+              path="/detail_kunjungan_by_tgl/:tgl"
               component={DetailKunjunganHari}
               isAuthenticated={true}
             />
@@ -1265,19 +1272,24 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
+              path="/edit_finish/:id"
+              component={EditFinish}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
               path="/form_finish"
               component={FormFinish}
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/add_dealpo"
+              path="/add_dealpo/:id"
               component={AddDealPo}
               isAuthenticated={true}
             />
 
             <PrivateRoute
-              path="/from_deal_po"
-              component={FromDealPo}
+              path="/form_dealpo"
+              component={FormPo}
               isAuthenticated={true}
             />
           </Switch>

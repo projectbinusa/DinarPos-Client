@@ -986,6 +986,8 @@ function ExportLaporan() {
                                         </button>
                                     </div>
                                 </div> <br />
+                                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
+                                <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Export Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography> <br />
                                 <Button variant="gradient" color="blue" type="button" onClick={exportReport} className="font-poppins font-medium">Submit</Button>
                             </div>
                         </div>

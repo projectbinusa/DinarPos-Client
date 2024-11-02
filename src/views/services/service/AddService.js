@@ -41,7 +41,7 @@ function AddService() {
   const history = useHistory();
 
   // ADD SERVICE
-  const addService = async (e) => {
+  const addTandaTerima = async (e) => {
     e.preventDefault();
 
     const request = {
@@ -146,251 +146,240 @@ function AddService() {
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
           <Typography variant="lead" className="uppercase">
-            Data Service
+            Input Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href={"/" + dashboard} className="opacity-60">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+            <a href={`/${dashboard}`} className="opacity-60">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
             <a href="/data_service">
               <span>Service</span>
             </a>
-            <span className="cursor-default capitalize">tambah Service</span>
           </Breadcrumbs>
         </div>
-        <form onSubmit={addService}>
-          <main className="my-5 grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
-            <Card className="bg-blue-50 border border-blue-50 shadow-lg rounded p-1">
-              <div className="flex justify-between items-center m-2">
-                <Typography
-                  variant="paragraph"
-                  className="capitalize font-medium text-blue-900"
-                >
-                  Data Pelanggan
-                </Typography>
-                <Button onClick={handleOpen} variant="gradient" color="blue" className="font-popins font-medium">
-                  New
-                </Button>
-              </div>
-              <CardBody className="bg-white rounded p-3">
-                <ol className="mt-5">
-                  <li>
-                    <div className="flex gap-2 items-end">
-                      <Input
-                        label="Customer"
-                        variant="static"
-                        color="blue"
-                        list="customer-list"
-                        id="customer"
-                        name="customer"
-                        onChange={(event) => {
-                          handleChange(event);
-                          setcustomerId(event.target.value);
-                        }}
-                        placeholder="Pilih Customer"
-                      />
-                      <datalist id="customer-list">
-                        {options.length > 0 && (
-                          <>
-                            {options.map((option) => (
-                              <option value={option.id} key={option.id}>
-                                {option.nama_customer}
-                              </option>
-                            ))}
-                          </>
-                        )}
-                      </datalist>
+        <main className="my-5 grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+          <Card className="bg-blue-50 border border-blue-50 shadow-lg rounded p-1">
+            <div className="flex justify-between items-center m-2">
+              <Typography
+                variant="paragraph"
+                className="capitalize font-medium text-blue-900 font-poppins">
+                Data Pelanggan
+              </Typography>
+              <Button onClick={handleOpen} variant="gradient" color="blue" className="font-popins font-medium">
+                New
+              </Button>
+            </div>
+            <CardBody className="bg-white rounded p-3">
+              <ol className="mt-5">
+                <li>
+                  <div className="flex gap-2 items-end">
+                    <Input
+                      label="Customer"
+                      variant="static"
+                      color="blue"
+                      list="customer-list"
+                      id="customer"
+                      name="customer"
+                      onChange={(event) => {
+                        handleChange(event);
+                        setcustomerId(event.target.value);
+                      }}
+                      placeholder="Pilih Customer"
+                    />
+                    <datalist id="customer-list">
+                      {options.length > 0 && (
+                        <>
+                          {options.map((option) => (
+                            <option value={option.id} key={option.id}>
+                              {option.nama_customer}
+                            </option>
+                          ))}
+                        </>
+                      )}
+                    </datalist>
 
-                      <div className="flex gap-2">
-                        <button
-                          className="text-sm bg-gray-400 px-1"
-                          onClick={() => setCurrentPage(currentPage - 1)}
-                          disabled={currentPage === 1}
-                        >
-                          Prev
-                        </button>
-                        <button
-                          className="text-sm bg-gray-400 px-1"
-                          onClick={() => setCurrentPage(currentPage + 1)}
-                          disabled={!options.length}
-                        >
-                          Next
-                        </button>
-                      </div>
+                    <div className="flex gap-2">
+                      <button
+                        className="text-sm bg-gray-400 px-1"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                      >
+                        Prev
+                      </button>
+                      <button
+                        className="text-sm bg-gray-400 px-1"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        disabled={!options.length}
+                      >
+                        Next
+                      </button>
                     </div>
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Keterangan"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Keterangan"
-                      onChange={(e) => setket(e.target.value)}
-                    />
-                  </li>
-                </ol>
-              </CardBody>
-            </Card>
-            <Card className="bg-yellow-50 border border-yellow-50 shadow-lg rounded p-1">
-              <Typography
-                variant="paragraph"
-                className="capitalize font-medium text-yellow-900 p-3"
-              >
-                Data Barang
-              </Typography>
-              <CardBody className="bg-white rounded p-3">
-                <ol className="mt-5">
-                  <li>
-                    <Input
-                      label="Jenis Produk"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Jenis Produk"
-                      onChange={(e) => setproduk(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Merk"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Merk"
-                      onChange={(e) => setmerek(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Type"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Type"
-                      onChange={(e) => settype(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="No Seri"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan No Seri"
-                      onChange={(e) => setnoseri(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Perlengkapan"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Perlengkapan"
-                      onChange={(e) => setperlengkapan(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Keluhan"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Keluhan"
-                      onChange={(e) => setkeluhan(e.target.value)}
-                    />
-                  </li>
-                </ol>
-              </CardBody>
-            </Card>
-            <Card className="bg-green-50 border border-green-50 shadow-lg rounded p-1">
-              <Typography
-                variant="paragraph"
-                className="capitalize font-medium text-green-900 p-3"
-              >
-                Data Tanda Terima
-              </Typography>
-              <CardBody className="bg-white rounded p-3">
-                <ol className="mt-5">
-                  <li>
-                    <Input
-                      label="Penerima"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Penerima"
-                      onChange={(e) => setpenerima(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Tgl Masuk"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      type="date"
-                      onChange={(e) => settglMasuk(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Biaya Maksimal"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Biaya Maksimal"
-                      type="number"
-                      onChange={(e) => setbmax(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Estimasi Biaya"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Estimasi Biaya"
-                      type="number"
-                      onChange={(e) => setestimasi(e.target.value)}
-                    />
-                  </li>
-                  <br />
-                  <li>
-                    <Input
-                      label="Checker"
-                      variant="static"
-                      color="blue"
-                      size="lg"
-                      placeholder="Masukkan Checker"
-                      onChange={(e) => setchecker(e.target.value)}
-                    />
-                  </li>
-                </ol>
+                  </div>
+                </li>
                 <br />
-                <Button variant="gradient" color="blue" type="submit" className="font-popins font-medium">
-                  Simpan
-                </Button>
-              </CardBody>
-            </Card>
-          </main>
-        </form>
+                <li>
+                  <Input
+                    label="Keterangan"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Keterangan"
+                    onChange={(e) => setket(e.target.value)}
+                  />
+                </li>
+              </ol>
+            </CardBody>
+          </Card>
+          <Card className="bg-yellow-50 border border-yellow-50 shadow-lg rounded p-1">
+            <Typography
+              variant="paragraph"
+              className="capitalize font-medium text-yellow-900 p-3 font-poppins">
+              Data Barang
+            </Typography>
+            <CardBody className="bg-white rounded p-3">
+              <ol className="mt-5">
+                <li>
+                  <Input
+                    label="Jenis Produk"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Jenis Produk"
+                    onChange={(e) => setproduk(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Merk"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Merk"
+                    onChange={(e) => setmerek(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Type"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Type"
+                    onChange={(e) => settype(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="No Seri"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan No Seri"
+                    onChange={(e) => setnoseri(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Perlengkapan"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Perlengkapan"
+                    onChange={(e) => setperlengkapan(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Keluhan"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Keluhan"
+                    onChange={(e) => setkeluhan(e.target.value)}
+                  />
+                </li>
+              </ol>
+            </CardBody>
+          </Card>
+          <Card className="bg-green-50 border border-green-50 shadow-lg rounded p-1">
+            <Typography
+              variant="paragraph"
+              className="capitalize font-medium text-green-900 p-3 font-poppins">
+              Data Tanda Terima
+            </Typography>
+            <CardBody className="bg-white rounded p-3">
+              <ol className="mt-5">
+                <li>
+                  <Input
+                    label="Penerima"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Penerima"
+                    onChange={(e) => setpenerima(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Tgl Masuk"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    type="date"
+                    onChange={(e) => settglMasuk(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Biaya Maksimal"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Biaya Maksimal"
+                    type="number"
+                    onChange={(e) => setbmax(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Estimasi Biaya"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Estimasi Biaya"
+                    type="number"
+                    onChange={(e) => setestimasi(e.target.value)}
+                  />
+                </li>
+                <br />
+                <li>
+                  <Input
+                    label="Checker"
+                    variant="static"
+                    color="blue"
+                    size="lg"
+                    placeholder="Masukkan Checker"
+                    onChange={(e) => setchecker(e.target.value)}
+                  />
+                </li>
+              </ol>
+              <br />
+              <Button variant="gradient" color="blue" type="button" onClick={addTandaTerima} className="font-popins font-medium">
+                Simpan
+              </Button>
+            </CardBody>
+          </Card>
+        </main>
         {/* MODAL TAMBAH CUSTOMER */}
         <Dialog open={open} handler={handleOpen} size="lg">
           <ModalTambahCustomer handleOpen={handleOpen} />

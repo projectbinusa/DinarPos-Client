@@ -49,7 +49,7 @@ function DetailKunjungan() {
   }
 
   console.log(level);
-  
+
 
   return (
     <section className="lg:flex w-full font-poppins bg-gray-50 min-h-screen">
@@ -76,38 +76,39 @@ function DetailKunjungan() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
+          <Typography variant="lead" className="font-poppins text-[1.1em]">Detail Kunjungan {datas?.salesman?.namaSalesman}</Typography> <hr /> <br />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Column 1 */}
             <div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Tanggal</span>
                 <span className="col-span-2">{formatDate(datas?.tanggalKunjungan)}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Jenis Instansi</span>
                 <span className="col-span-2">{datas?.customer?.jenis}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Daerah</span>
                 <span className="col-span-2">{datas?.customer?.kabKot?.nama_kabkot} / {datas?.customer?.kec?.nama_kec}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Action</span>
                 <span className="col-span-2">{datas?.action}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">CP</span>
                 <span className="col-span-2">{datas?.cp}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Deal</span>
                 <span className="col-span-2">{datas?.deal}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Waktu Pengadaan</span>
                 <span className="col-span-2">{datas?.waktuPengadaan}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Tanggal Deal</span>
                 <span className="col-span-2">{formatDate(datas?.tanggalDeal)}</span>
               </div>
@@ -115,37 +116,37 @@ function DetailKunjungan() {
 
             {/* Column 2 */}
             <div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Instansi</span>
                 <span className="col-span-2">{datas?.customer?.nama_customer}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Tujuan</span>
                 <span className="col-span-2">{datas?.tujuan}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Peluang</span>
                 <span className="col-span-2">{datas?.peluang}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Info yang didapat</span>
                 <span className="col-span-2">{datas?.infoDpt}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Kunjungan Ke-</span>
                 <span className="col-span-2">{datas?.nVisit}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Pembayaran</span>
                 <span className="col-span-2">{datas?.pembayaran}</span>
               </div>
-              <div className="my-8 grid grid-cols-3 gap-3">
+              <div className="my-5 grid grid-cols-3 gap-3">
                 <span className="font-semibold text-right">Tipe</span>
                 <span className="col-span-2">{datas?.visit}</span>
               </div>
 
               {/* Lokasi Reporting */}
-              <div className="my-8">
+              <div className="my-5">
                 <p className="font-semibold mb-4">Lokasi Reporting</p>
                 <div>
                   {/* <iframe
@@ -160,7 +161,7 @@ function DetailKunjungan() {
               </div>
 
               {/* Foto Section */}
-              <div className="my-8">
+              <div className="my-5">
                 <p className="font-semibold mb-4">Foto</p>
                 <img
                   src={datas?.foto}

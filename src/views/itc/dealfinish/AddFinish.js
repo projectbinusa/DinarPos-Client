@@ -1,9 +1,9 @@
 import { Breadcrumbs, Button, Input, Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import Swal from "sweetalert2";
-import { API_DEAL } from "../../../utils/BaseUrl";
+import { API_DEAL, API_KUNJUNGAN } from "../../../utils/BaseUrl";
 import axios from "axios";
 
 function AddFinish() {
@@ -19,6 +19,21 @@ function AddFinish() {
   const [customer, setCustomer] = useState("");
   const [kunjunganId, setKunjunganId] = useState("");
 
+  useEffect(() => {
+    axios
+      .get(`${API_KUNJUNGAN}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setCustomer(response.customer.nama_customer);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+
   const addKunjungan = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -30,7 +45,6 @@ function AddFinish() {
     formData.append("ev_dtg", evDatang);
     formData.append("ev_pro", evProses);
     formData.append("ev_fin", evFinish);
-    formData.append("customer", customer);
     formData.append("id_kunjungan", kunjunganId);
 
     try {
@@ -50,7 +64,7 @@ function AddFinish() {
         });
 
         setTimeout(() => {
-          window.location.reload();
+          window.location.href = "/form_finish";
         }, 1500);
       }
     } catch (err) {
@@ -84,13 +98,13 @@ function AddFinish() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-        <Input 
-            variant="static" 
-            color="blue" 
-            size="lg" 
-            label="Kunjungan"
-            value={kunjunganId}
-            onChange={(e) => setKunjunganId(e.target.value)}
+          <Input
+            variant="static"
+            color="blue"
+            size="lg"
+            label="Customer"
+            value={customer}
+            readOnly
           />
           <br />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -128,7 +142,6 @@ function AddFinish() {
                 size="lg"
                 label="File SPK"
                 type="file"
-                accept="image/*"
                 onChange={(e) => setFileSpk(e.target.files[0])}
               />
               <Typography variant="small" className="font-poppins font-medium">

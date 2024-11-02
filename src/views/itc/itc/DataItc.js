@@ -128,7 +128,7 @@ function DataItc() {
                     </Breadcrumbs>
                 </div>
                 <main className="bg-white shadow-lg p-5 my-5 rounded ">
-                    <div className="block">
+                    <div className="flex justify-end mb-5">
                         <a href="/add_itc">
                             <Button variant="gradient" color="blue" className="font-poppins font-medium">
                                 Tambah

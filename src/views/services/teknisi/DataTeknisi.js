@@ -66,9 +66,6 @@ const deleteTeknisi = async (id) => {
         const response = await axios.delete(`${API_TEKNISI}/` + id, {
           headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
         });
-
-        console.log('Response:', response); // Log the response to see the details
-
         Swal.fire({
           icon: "success",
           title: "Dihapus!",
@@ -164,12 +161,12 @@ const deleteTeknisi = async (id) => {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                  <th className="text-sm py-2 px-3 font-semibold">No HP </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Bagian </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-xs py-2 px-3">No</th>
+                  <th className="text-xs py-2 px-3">Nama</th>
+                  <th className="text-xs py-2 px-3">Alamat </th>
+                  <th className="text-xs py-2 px-3">No HP </th>
+                  <th className="text-xs py-2 px-3">Bagian </th>
+                  <th className="text-xs py-2 px-3">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -204,8 +201,7 @@ const deleteTeknisi = async (id) => {
                   <tr>
                     <td
                       colSpan="6"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
-                    >
+                      className="text-xs text-center capitalize py-3 bg-gray-100">
                       Tidak ada data
                     </td>
                   </tr>

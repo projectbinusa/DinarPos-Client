@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import SidebarAdmin from "../../../component/SidebarAdmin";
 import {
@@ -7,10 +7,9 @@ import {
   Input,
   Typography,
 } from "@material-tailwind/react";
-// import { UserCircleIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { API_DEAL_ADD_DEAL_PO } from "../../../utils/BaseUrl";
+import { API_DEAL_ADD_DEAL_PO, API_KUNJUNGAN } from "../../../utils/BaseUrl";
 
 function AddDealPo() {
   const param = useParams();
@@ -18,7 +17,22 @@ function AddDealPo() {
   const [filePO, setFilePO] = useState(null);
   const [ket, setKet] = useState("");
   const [administrasi, setAdministrasi] = useState("");
+  const [customer, setCustomer] = useState("");
   const history = useHistory();
+
+  useEffect(() => {
+    axios
+      .get(`${API_KUNJUNGAN}/` + param.id, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        const response = res.data.data;
+        setCustomer(response.customer.nama_customer);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -63,7 +77,7 @@ function AddDealPo() {
     }
   };
 
-  const AddDealPo = async (e) => {
+  const addPO = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -71,7 +85,7 @@ function AddDealPo() {
     formData.append("file", filePO);
     formData.append("ket", ket);
     formData.append("administrasi", administrasi);
-    formData.append("id_report", param.id);
+    formData.append("id_kunjungan", param.id);
 
     try {
       const response = await axios.post(`${API_DEAL_ADD_DEAL_PO}`, formData, {
@@ -84,9 +98,11 @@ function AddDealPo() {
       Swal.fire({
         icon: "success",
         title: "Data Berhasil Ditambahkan",
+        showConfirmButton: false,
+        timer: 1500,
       });
 
-      history.push("/dealpo");
+      history.push("/dealpo_marketting");
     } catch (error) {
       if (error.response && error.response.status === 401) {
         localStorage.clear();
@@ -120,66 +136,68 @@ function AddDealPo() {
             Tambah Deal Po
           </Typography>
           <Breadcrumbs className="bg-transparent">
-            <a href="/dashboard" className="opacity-60"></a>
+            <a href="/home" className="opacity-60">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+              </svg>
+            </a>
+            <a href="/dealpo_marketting">
+              <span>Deal PO</span>
+            </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={AddDealPo}>
+          <form onSubmit={addPO}>
             <div className="space-y-8">
-              {/* <Input
+              <Input
                 label="Customer"
                 variant="static"
                 color="blue"
                 size="lg"
                 placeholder="Masukkan Customer"
                 value={customer}
-                onChange={(e) => setCustomer(e.target.value)}
-                icon={<UserCircleIcon />}
-              /> */}
-              <div className="flex flex-col">
-                <label className="mb-2">Administrasi</label>
+                readOnly
+              />
+              <Input
+                label="Administrasi"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Administrasi"
+                value={administrasi}
+                onChange={(e) => setAdministrasi(e.target.value)}
+              />
+              <div>
                 <Input
+                  label="Foto Po"
                   variant="static"
                   color="blue"
                   size="lg"
-                  placeholder="Administrasi"
-                  value={administrasi}
-                  onChange={(e) => setAdministrasi(e.target.value)}
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="mb-2">Foto PO</label>
-                <input
                   type="file"
-                  className="mb-2"
                   accept="image/*"
                   onChange={handleFotoChange}
                 />
-                <span>Upload Foto PO</span>
+                <p className="text-sm mt-2">Upload Foto PO</p>
               </div>
               <div className="flex flex-col">
-                <label className="mb-2">File PO</label>
+                <label className="text-sm mb-2">File PO</label>
                 <input
                   type="file"
                   className="mb-2"
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.txt"
                   onChange={handleFileChange}
                 />
-                <span>
-                  Upload File PO (PDF, doc, docx, xls, xlsx, txt) *max 2 MB
-                </span>
+                <p className="text-sm">Upload File PO (PDF, doc, docx, xls, xlsx, txt) *max 2 MB</p>
               </div>
-              <div className="flex flex-col">
-                <label className="mb-2">Keterangan</label>
-                <Input
-                  variant="static"
-                  color="blue"
-                  size="lg"
-                  placeholder="Keterangan"
-                  value={ket}
-                  onChange={(e) => setKet(e.target.value)}
-                />
-              </div>
+              <Input
+                label="Keterangan"
+                variant="static"
+                color="blue"
+                size="lg"
+                placeholder="Keterangan"
+                value={ket}
+                onChange={(e) => setKet(e.target.value)}
+              />
             </div>
             <div className="mt-10 flex gap-4">
               <Button

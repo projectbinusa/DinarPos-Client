@@ -92,7 +92,6 @@ function EditItc() {
                         <a href="/data_itc">
                             <span>ITC</span>
                         </a>
-                        <span className="cursor-default">Edit ITC</span>
                     </Breadcrumbs>
                 </div>
                 <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">

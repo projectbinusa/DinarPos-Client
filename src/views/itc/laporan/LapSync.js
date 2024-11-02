@@ -6,6 +6,18 @@ import { API_SALESMAN, API_SYNC_KUNJUNGAN, API_SYNC_PLANNING } from "../../../ut
 import axios from "axios";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
+import formatDate from "../../../component/FormatDate";
+
+const formatDate2 = (value) => {
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+};
 
 const totalPlanning = async (tgl, idx, salesmanId, setTotalsP) => {
     try {
@@ -39,30 +51,229 @@ const totalKunjungan = async (tgl, idx, salesmanId, setTotalsK) => {
     }
 };
 
+function AllBetweenDate({ tglAwal, tglAkhir }) {
+    const tableRef2 = useRef(null);
+    const initializeDataTable2 = () => {
+        if (tableRef2.current && !$.fn.DataTable.isDataTable(tableRef2.current)) {
+            $(tableRef2.current).DataTable({
+                responsive: true
+            });
+        }
+    }
+
+    const [laporanbyDate, setLaporanByDate] = useState([]);
+
+    // ALL SYNC BETWEEN
+    const getKunjunganSyncBetweenTanggal = async () => {
+        try {
+            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setLaporanByDate(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const [totalsK, setTotalsK] = useState([]);
+    const [totalsP, setTotalsP] = useState([]);
+
+    useEffect(() => {
+        if (laporanbyDate.length > 0) {
+            laporanbyDate.forEach((row, idx) => {
+                totalPlanning(formatDate2(row.tanggalKunjungan), idx, row.salesman.id, setTotalsP);
+                totalKunjungan(formatDate2(row.tanggalKunjungan), idx, row.salesman.id, setTotalsK);
+            });
+        }
+    }, [laporanbyDate]);
+
+    useEffect(() => {
+        if (laporanbyDate && laporanbyDate.length > 0) {
+            initializeDataTable2();
+        }
+    }, [laporanbyDate])
+
+    useEffect(() => {
+        getKunjunganSyncBetweenTanggal()
+    }, [])
+
+    return (
+        <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
+            <table
+                id="example_data2"
+                ref={tableRef2}
+                className="rounded-sm table-auto w-full overflow-x-auto"
+            >
+                <thead className="bg-blue-500 text-white w-full">
+                    <tr>
+                        <th className="text-xs py-2 px-2.5 font-semibold w-[4%]">No</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Tanggal</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Nama ITC</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Presentase</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {laporanbyDate.length > 0 ? (
+                        laporanbyDate.map((row, idx) => {
+                            const persen = (totalsK[idx] / totalsP[idx]) * 100;
+                            const formattedPersen = isNaN(persen) ? 0 : persen.toFixed(1);
+                            return (
+                                <tr key={idx}>
+                                    <td className="text-xs w-[4%]">{idx + 1}</td>
+                                    <td className="text-xs py-2 px-2.5">{row.tanggalKunjungan}</td>
+                                    <td className="text-xs py-2 px-2.5">{row.salesman.namaSalesman}</td>
+                                    <td className="text-xs py-2 px-2.5">
+                                        {formattedPersen <= 33 ?
+                                            <Progress value={formattedPersen || 0} color="red" label /> : formattedPersen <= 66 ?
+                                                <Progress value={formattedPersen || 0} color="yellow" label /> :
+                                                <Progress value={formattedPersen || 0} color="green" label />
+                                        }
+                                    </td>
+                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
+                                        <a href={`/detail_sync/${row.salesman.id}/${formatDate(row.tanggalKunjungan)}`}>
+                                            <IconButton size="md" color="green">
+                                                <InformationCircleIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </a>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    ) : (<tr>
+                        <td
+                            colSpan="5"
+                            className="text-xs text-center capitalize py-2 bg-gray-100">
+                            Tidak ada data
+                        </td>
+                    </tr>)}
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+function AllBetweenDateSalesman({ tglAwal, tglAkhir, id }) {
+    const tableRef3 = useRef(null);
+    const initializeDataTable3 = () => {
+        if (tableRef3.current && !$.fn.DataTable.isDataTable(tableRef3.current)) {
+            $(tableRef3.current).DataTable({
+                responsive: true
+            });
+        }
+    }
+
+    const [laporanSalesman, setLaporanSalesman] = useState([]);
+
+    // ALL SYNC BETWEEN TGL & ID SALESMAN
+    const getKunjunganSyncBetweenTanggalSalesman = async () => {
+        try {
+            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal_beetwen/salesman?id_salesman=${id}&tgl_akhir=${tglAkhir}&tgl_awal=${tglAwal}`, {
+                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+            });
+            const res = response.data.data;
+            setLaporanSalesman(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const [totalsK, setTotalsK] = useState([]);
+    const [totalsP, setTotalsP] = useState([]);
+
+    useEffect(() => {
+        if (laporanSalesman.length > 0) {
+            laporanSalesman.forEach((row, idx) => {
+                totalPlanning(formatDate2(row.tanggalKunjungan), idx, row.salesman.id, setTotalsP);
+                totalKunjungan(formatDate2(row.tanggalKunjungan), idx, row.salesman.id, setTotalsK);
+            });
+        }
+    }, [laporanSalesman]);
+
+    useEffect(() => {
+        if (laporanSalesman && laporanSalesman.length > 0) {
+            initializeDataTable3();
+        }
+    }, [laporanSalesman])
+
+    useEffect(() => {
+        getKunjunganSyncBetweenTanggalSalesman()
+    }, [])
+
+    return (
+        <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
+            <table
+                id="example_data3"
+                ref={tableRef3}
+                className="rounded-sm table-auto w-full overflow-x-auto"
+            >
+                <thead className="bg-blue-500 text-white w-full">
+                    <tr>
+                        <th className="text-xs py-2 px-2.5 font-semibold w-[4%]">No</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Tanggal</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Nama ITC</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Presentase</th>
+                        <th className="text-xs py-2 px-2.5 font-semibold">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {laporanSalesman.length > 0 ? (
+                        laporanSalesman.map((row, idx) => {
+                            const persen = (totalsK[idx] / totalsP[idx]) * 100;
+                            const formattedPersen = isNaN(persen) ? 0 : persen.toFixed(1);
+                            return (
+                                <tr key={idx}>
+                                    <td className="text-xs w-[4%]">{idx + 1}</td>
+                                    <td className="text-xs py-2 px-2.5">{row.tanggalKunjungan}</td>
+                                    <td className="text-xs py-2 px-2.5">{row.salesman.namaSalesman}</td>
+                                    <td className="text-xs py-2 px-2.5">
+                                        {formattedPersen <= 33 ?
+                                            <Progress value={formattedPersen || 0} color="red" label /> : formattedPersen <= 66 ?
+                                                <Progress value={formattedPersen || 0} color="yellow" label /> :
+                                                <Progress value={formattedPersen || 0} color="green" label />
+                                        }
+                                    </td>
+                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
+                                        <a href={`/detail_sync/${row.salesman.id}/${formatDate(row.tanggalKunjungan)}`}>
+                                            <IconButton size="md" color="green">
+                                                <InformationCircleIcon className="w-6 h-6 white" />
+                                            </IconButton>
+                                        </a>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    ) : (<tr>
+                        <td
+                            colSpan="5"
+                            className="text-xs text-center capitalize py-2 bg-gray-100">
+                            Tidak ada data
+                        </td>
+                    </tr>)}
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
 function LapSync() {
     const tableRef = useRef(null);
     const [laporans, setLaporan] = useState([]);
     const [tglAwal, settglAwal] = useState("");
     const [tglAkhir, settglAkhir] = useState("");
     const [itcId, setitcId] = useState(0);
+    const [tglAwalInput, settglAwalInput] = useState("");
+    const [tglAkhirInput, settglAkhirInput] = useState("");
+    const [itcIdInput, setitcIdInput] = useState(0);
     const [validasi, setvalidasi] = useState(false);
+    const [validasiItc, setvalidasiItc] = useState(false);
 
     const initializeDataTable = () => {
         if (tableRef.current && !$.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable();
         }
     }
-
-    const formatDate = (value) => {
-        const date = new Date(value);
-
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        const formattedDate = `${year}-${month}-${day}`;
-
-        return formattedDate;
-    };
 
     // ALL ITC
     const [values, setvalues] = useState("");
@@ -111,43 +322,14 @@ function LapSync() {
         getKunjunganSync()
     }, [])
 
-    // ALL SYNC BETWEEN
-    const getKunjunganSyncBetweenTanggal = async () => {
-        try {
-            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal?tglAkhir=${tglAkhir}&tglAwal=${tglAwal}`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            const res = response.data.data;
-            setLaporan(res);
-            setvalidasi(false)
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    // ALL SYNC BETWEEN TGL & ID SALESMAN
-    const getKunjunganSyncBetweenTanggalSalesman = async () => {
-        try {
-            const response = await axios.get(`${API_SYNC_KUNJUNGAN}/tanggal_beetwen/salesman?id_salesman=${itcId}&tgl_akhir=${tglAkhir}&tgl_awal=${tglAwal}`, {
-                headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
-            });
-            const res = response.data.data;
-            setLaporan(res);
-            setvalidasi(false)
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-
     const [totalsK, setTotalsK] = useState([]);
     const [totalsP, setTotalsP] = useState([]);
 
     useEffect(() => {
         if (laporans.length > 0) {
             laporans.forEach((row, idx) => {
-                totalPlanning(formatDate(row.tanggalKunjungan), idx, row.salesman.id, setTotalsP);
-                totalKunjungan(formatDate(row.tanggalKunjungan), idx, row.salesman.id, setTotalsK);
+                totalPlanning(formatDate2(row.tanggalKunjungan), idx, row.salesman.id, setTotalsP);
+                totalKunjungan(formatDate2(row.tanggalKunjungan), idx, row.salesman.id, setTotalsK);
             });
         }
     }, [laporans]);
@@ -157,18 +339,6 @@ function LapSync() {
             initializeDataTable();
         }
     }, [laporans])
-
-    console.log(laporans);
-
-
-    useEffect(() => {
-        if (validasi || tglAkhir !== "" || tglAwal !== "") {
-            getKunjunganSyncBetweenTanggal();
-        }
-        if (validasi || tglAkhir !== "" || tglAwal !== "" || itcId !== 0) {
-            getKunjunganSyncBetweenTanggalSalesman();
-        }
-    }, [validasi]);
 
     const filterTangggal = async () => {
         if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
@@ -181,7 +351,17 @@ function LapSync() {
             return;
         }
 
-        setvalidasi(true);
+        settglAwalInput(tglAwal)
+        settglAkhirInput(tglAkhir)
+        setitcIdInput(itcId)
+
+        if (itcId !== 0 && itcId !== "") {
+            setvalidasi(false);
+            setvalidasiItc(true)
+        } else {
+            setvalidasiItc(false)
+            setvalidasi(true);
+        }
     };
 
     return (
@@ -256,14 +436,14 @@ function LapSync() {
 
                                 <div className="flex gap-2">
                                     <button
-                                        className="text-sm bg-gray-400 px-1"
+                                        className="text-xs bg-gray-400 px-1"
                                         onClick={() => setCurrentPage(currentPage - 1)}
                                         disabled={currentPage === 1}
                                     >
                                         Prev
                                     </button>
                                     <button
-                                        className="text-sm bg-gray-400 px-1"
+                                        className="text-xs bg-gray-400 px-1"
                                         onClick={() => setCurrentPage(currentPage + 1)}
                                         disabled={!options.length}
                                     >
@@ -271,7 +451,9 @@ function LapSync() {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> <br />
+                        <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Cari Semua ITC:</span> Masukkan tanggal awal dan akhir saja.</Typography>
+                        <Typography className="font-poppins font-normal text-gray-800" variant="small"><span className="font-medium">Cari Per ITC:</span> Masukkan tanggal awal, akhir, dan ITC yang dipilih.</Typography>
                         <Button
                             className="mt-5 font-poppins font-medium"
                             color="blue"
@@ -280,58 +462,60 @@ function LapSync() {
                             Cari
                         </Button>
                     </div> <br />
-                    <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
-                        <table
-                            id="example_data"
-                            ref={tableRef}
-                            className="rounded-sm table-auto w-full overflow-x-auto"
-                        >
-                            <thead className="bg-blue-500 text-white w-full">
-                                <tr>
-                                    <th className="text-sm py-2 px-2.5 font-semibold w-[4%]">No</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Tanggal</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Nama ITC</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Presentase</th>
-                                    <th className="text-sm py-2 px-2.5 font-semibold">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {laporans.length > 0 ? (
-                                    laporans.map((row, idx) => {
-                                        const persen = (totalsK[idx] / totalsP[idx]) * 100;
-                                        const formattedPersen = isNaN(persen) ? 0 : persen.toFixed(1);
-                                        return (
-                                            <tr key={idx}>
-                                                <td className="text-sm w-[4%]">{idx + 1}</td>
-                                                <td className="text-sm py-2 px-2.5">{row.tanggalKunjungan}</td>
-                                                <td className="text-sm py-2 px-2.5">{row.salesman.namaSalesman}</td>
-                                                <td className="text-sm py-2 px-2.5">
-                                                    {formattedPersen <= 33 ?
-                                                        <Progress value={formattedPersen || 0} color="red" label /> : formattedPersen <= 66 ?
-                                                            <Progress value={formattedPersen || 0} color="yellow" label /> :
-                                                            <Progress value={formattedPersen || 0} color="green" label />
-                                                    }
-                                                </td>
-                                                <td className="text-sm py-2 px-3 flex items-center justify-center">
-                                                    <a href={`/detail_sync/${row.salesman.id}/${formatDate(row.tanggalKunjungan)}`}>
-                                                        <IconButton size="md" color="green">
-                                                            <InformationCircleIcon className="w-6 h-6 white" />
-                                                        </IconButton>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
-                                ) : (<tr>
-                                    <td
-                                        colSpan="5"
-                                        className="text-sm text-center capitalize py-2 bg-gray-100">
-                                        Tidak ada data
-                                    </td>
-                                </tr>)}
-                            </tbody>
-                        </table>
-                    </div>
+                    {validasi ? <AllBetweenDate tglAkhir={tglAkhirInput} tglAwal={tglAwalInput} /> :
+                        validasiItc ? <AllBetweenDateSalesman tglAkhir={tglAkhirInput} tglAwal={tglAwalInput} id={itcIdInput} /> :
+                            <div className="rounded mb-5 p-1 mt-12 overflow-x-auto">
+                                <table
+                                    id="example_data"
+                                    ref={tableRef}
+                                    className="rounded-sm table-auto w-full overflow-x-auto"
+                                >
+                                    <thead className="bg-blue-500 text-white w-full">
+                                        <tr>
+                                            <th className="text-xs py-2 px-2.5 font-semibold w-[4%]">No</th>
+                                            <th className="text-xs py-2 px-2.5 font-semibold">Tanggal</th>
+                                            <th className="text-xs py-2 px-2.5 font-semibold">Nama ITC</th>
+                                            <th className="text-xs py-2 px-2.5 font-semibold">Presentase</th>
+                                            <th className="text-xs py-2 px-2.5 font-semibold">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {laporans.length > 0 ? (
+                                            laporans.map((row, idx) => {
+                                                const persen = (totalsK[idx] / totalsP[idx]) * 100;
+                                                const formattedPersen = isNaN(persen) ? 0 : persen.toFixed(1);
+                                                return (
+                                                    <tr key={idx}>
+                                                        <td className="text-xs w-[4%]">{idx + 1}</td>
+                                                        <td className="text-xs py-2 px-2.5">{row.tanggalKunjungan}</td>
+                                                        <td className="text-xs py-2 px-2.5">{row.salesman.namaSalesman}</td>
+                                                        <td className="text-xs py-2 px-2.5">
+                                                            {formattedPersen <= 33 ?
+                                                                <Progress value={formattedPersen || 0} color="red" label /> : formattedPersen <= 66 ?
+                                                                    <Progress value={formattedPersen || 0} color="yellow" label /> :
+                                                                    <Progress value={formattedPersen || 0} color="green" label />
+                                                            }
+                                                        </td>
+                                                        <td className="text-xs py-2 px-3 flex items-center justify-center">
+                                                            <a href={`/detail_sync/${row.salesman.id}/${formatDate(row.tanggalKunjungan)}`}>
+                                                                <IconButton size="md" color="green">
+                                                                    <InformationCircleIcon className="w-6 h-6 white" />
+                                                                </IconButton>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        ) : (<tr>
+                                            <td
+                                                colSpan="5"
+                                                className="text-xs text-center capitalize py-2 bg-gray-100">
+                                                Tidak ada data
+                                            </td>
+                                        </tr>)}
+                                    </tbody>
+                                </table>
+                            </div>}
                 </main>
             </div>
         </section>
