@@ -272,7 +272,7 @@ function LaporanService() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Laporan Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -283,11 +283,8 @@ function LaporanService() {
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/laporan_service">
-              <span>Laporan Service</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -325,7 +322,7 @@ function LaporanService() {
               <Cog6ToothIcon className="h-12 w-12 text-blue-900" />
               <Typography
                 variant="paragraph"
-                className="text-blue-900 text-center"
+                className="text-blue-900 text-center font-poppins"
               >
                 Service All
               </Typography>
@@ -344,7 +341,7 @@ function LaporanService() {
               <CheckIcon className="h-12 w-12 text-green-900" />
               <Typography
                 variant="paragraph"
-                className="text-green-900 text-center"
+                className="text-green-900 text-center font-poppins"
               >
                 Service Ready
               </Typography>
@@ -363,7 +360,7 @@ function LaporanService() {
               <ArrowPathIcon className="h-12 w-12 text-yellow-900" />
               <Typography
                 variant="paragraph"
-                className="text-yellow-900 text-center"
+                className="text-yellow-900 text-center font-poppins"
               >
                 Service Proses
               </Typography>
@@ -385,7 +382,7 @@ function LaporanService() {
               <XMarkIcon className="h-12 w-12 text-red-900" />
               <Typography
                 variant="paragraph"
-                className="text-red-900 text-center"
+                className="text-red-900 text-center font-poppins"
               >
                 Service Cancel
               </Typography>
@@ -404,7 +401,7 @@ function LaporanService() {
               <CheckCircleIcon className="h-12 w-12 text-blue-900" />
               <Typography
                 variant="paragraph"
-                className="text-blue-900 text-center"
+                className="text-blue-900 text-center font-poppins"
               >
                 Service Taken
               </Typography>

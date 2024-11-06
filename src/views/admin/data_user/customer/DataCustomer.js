@@ -132,20 +132,18 @@ function DataCustomer() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
             </a>
-            <a href="/data_customer">
-              <span>Customer</span>
-            </a>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded ">
-          <div className="flex flex-col lg:flex-row gap-4">
+        {/* <div className="flex justify-end mb-5"> */}
+          <div className="flex flex-col lg:flex-row gap-4 justify-end">
             <a href="/add_customer">
               <Button variant="gradient" color="blue" className="font-poppins font-medium">
                 Tambah Customer
               </Button>
             </a>
             <div>
-              <Button onClick={handleOpen} variant="gradient" color="blue" className="font-poppins font-medium">
+              <Button onClick={handleOpen} variant="outlined" color="blue" className="font-poppins font-medium">
                 Tambah customer cp
               </Button>
             </div>
@@ -158,34 +156,32 @@ function DataCustomer() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">ITC</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Jenis</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Alamat</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Email</th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    No Telepon
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-xs py-2 px-3">No</th>
+                  <th className="text-xs py-2 px-3">ITC</th>
+                  <th className="text-xs py-2 px-3">Nama</th>
+                  <th className="text-xs py-2 px-3">Jenis</th>
+                  <th className="text-xs py-2 px-3">Alamat</th>
+                  <th className="text-xs py-2 px-3">Email</th>
+                  <th className="text-xs py-2 px-3">No Telepon</th>
+                  <th className="text-xs py-2 px-3">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {customers.length > 0 ? (
                   customers.map((customer, index) => (
                     <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs w-[4%]">{index + 1}</td>
+                      <td className="text-xs py-2 px-3">
                         {customer.salesman.namaSalesman}
                       </td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs py-2 px-3">
                         {customer.nama_customer}
                       </td>
-                      <td className="text-sm py-2 px-3">{customer.jenis}</td>
-                      <td className="text-sm py-2 px-3">{customer.alamat}</td>
-                      <td className="text-sm py-2 px-3">{customer.email}</td>
-                      <td className="text-sm py-2 px-3">{customer.telp}</td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                      <td className="text-xs py-2 px-3">{customer.jenis}</td>
+                      <td className="text-xs py-2 px-3">{customer.alamat}</td>
+                      <td className="text-xs py-2 px-3">{customer.email}</td>
+                      <td className="text-xs py-2 px-3">{customer.telp}</td>
+                      <td className="text-xs py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-col lg:flex-row gap-3">
                           <a href={"/edit_customer/" + customer.id}>
                             <IconButton size="md" color="light-blue">
@@ -215,7 +211,7 @@ function DataCustomer() {
                   <tr>
                     <td
                       colSpan="8"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                      className="text-xs text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

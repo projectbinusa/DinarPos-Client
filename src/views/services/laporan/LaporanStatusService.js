@@ -158,7 +158,7 @@ function LaporanStatusService() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Laporan Status Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -169,11 +169,8 @@ function LaporanStatusService() {
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/laporan_status">
-              <span>Laporan Status Service</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -225,16 +222,16 @@ function LaporanStatusService() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">ID TT</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Customer </th>
-                  <th className="text-sm py-2 px-3 font-semibold">TGL Masuk</th>
-                  <th className="text-sm py-2 px-3 font-semibold">No Faktur </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Keluhan </th>
-                  <th className="text-sm py-2 px-3 font-semibold">TGL </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Status</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Solusi</th>
+                  <th className="text-xs p-3">No</th>
+                  <th className="text-xs p-3">ID TT</th>
+                  <th className="text-xs p-3">Customer </th>
+                  <th className="text-xs p-3">TGL Masuk</th>
+                  <th className="text-xs p-3">No Faktur </th>
+                  <th className="text-xs p-3">Keluhan </th>
+                  <th className="text-xs p-3">TGL </th>
+                  <th className="text-xs p-3">Teknisi</th>
+                  <th className="text-xs p-3">Status</th>
+                  <th className="text-xs p-3">Solusi</th>
                 </tr>
               </thead>
               <tbody>
@@ -244,34 +241,34 @@ function LaporanStatusService() {
 
                     return (
                       <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs w-[4%]">{index + 1}</td>
+                        <td className="text-xs py-2 px-3">
                           {row.service.idTT}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {row.service.customer.nama_customer}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {formatDate(row.service.tanggalMasuk)}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {noFakturs.map((down, idx) => (
                             <span key={idx}>{down.noFaktur}</span>
                           ))}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {row.service.keluhan}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {formatDate(row.tanggal)}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {row.teknisi.nama}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {row.status}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {row.solusi}
                         </td>
                       </tr>
@@ -281,7 +278,7 @@ function LaporanStatusService() {
                   <tr>
                     <td
                       colSpan="10"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                      className="text-xs text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

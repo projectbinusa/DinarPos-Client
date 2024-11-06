@@ -116,7 +116,7 @@ function DataRetur() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Data Retur
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -129,9 +129,6 @@ function DataRetur() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/data_retur">
-              <span>Retur</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -149,19 +146,15 @@ function DataRetur() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    No TT Baru
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    No TT Lama
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Produk </th>
-                  <th className="text-sm py-2 px-3 font-semibold">IN </th>
-                  <th className="text-sm py-2 px-3 font-semibold">C </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-xs py-2 px-3">No TT Baru</th>
+                  <th className="text-xs py-2 px-3">No TT Lama</th>
+                  <th className="text-xs py-2 px-3">Nama</th>
+                  <th className="text-xs py-2 px-3">Alamat </th>
+                  <th className="text-xs py-2 px-3">Produk </th>
+                  <th className="text-xs py-2 px-3">IN </th>
+                  <th className="text-xs py-2 px-3">C </th>
+                  <th className="text-xs py-2 px-3">Status </th>
+                  <th className="text-xs py-2 px-3">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -171,29 +164,29 @@ function DataRetur() {
 
                     return (
                       <tr key={index}>
-                        <td className="text-sm w-[4%]">{row?.ttBaru?.idTT}</td>
-                        <td className="text-sm py-2 px-3">{row?.ttLama?.idTT}</td>
-                        <td className="text-sm py-2 px-3">{row?.ttBaru?.nama}</td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs w-[4%]">{row?.ttBaru?.idTT}</td>
+                        <td className="text-xs py-2 px-3">{row?.ttLama?.idTT}</td>
+                        <td className="text-xs py-2 px-3">{row?.ttBaru?.nama}</td>
+                        <td className="text-xs py-2 px-3">
                           {row?.ttBaru?.alamat}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {row?.ttBaru?.produk}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {formatDate(row?.ttBaru?.tanggalMasuk)}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {tglKonfirms.map((down, idx) => (
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {row?.ttBaru?.statusEnd}
                         </td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                        <td className="text-xs py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-row gap-3">
                             <a href={"/detail_service/" + row?.ttBaru?.idTT}>
                               <IconButton size="md" color="light-blue">
@@ -209,7 +202,7 @@ function DataRetur() {
                   <tr>
                     <td
                       colSpan="9"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                      className="text-xs text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

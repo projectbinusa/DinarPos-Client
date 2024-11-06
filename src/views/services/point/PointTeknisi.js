@@ -174,7 +174,7 @@ const PointTeknisi = () => {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between w-full">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Poin Teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -187,9 +187,6 @@ const PointTeknisi = () => {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/poin_teknisi">
-              <span>Poin Teknisi</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -220,28 +217,28 @@ const PointTeknisi = () => {
               >
                 <thead className="bg-blue-500 text-white">
                   <tr>
-                    <th className="text-sm py-2 px-3 font-semibold">No</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Poin</th>
-                    <th className="text-sm py-2 px-3 font-semibold">
+                    <th className="text-xs p-3">No</th>
+                    <th className="text-xs p-3">Teknisi</th>
+                    <th className="text-xs p-3">Poin</th>
+                    <th className="text-xs p-3">
                       Nominal (Rp)
                     </th>
-                    <th className="text-sm py-2 px-3 font-semibold">Graph</th>
+                    <th className="text-xs p-3">Graph</th>
                   </tr>
                 </thead>
                 <tbody>
                   {poins.length > 0 ? (
                     poins.map((row, index) => (
                       <tr key={index}>
-                        <td className="text-sm py-2 px-3">{index + 1}</td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">{index + 1}</td>
+                        <td className="text-xs py-2 px-3">
                           {row.teknisiNama}
                         </td>
-                        <td className="text-sm py-2 px-3">{row.totalPoin}</td>
-                        <td className="text-sm py-2 px-3 text-right">
+                        <td className="text-xs py-2 px-3">{row.totalPoin}</td>
+                        <td className="text-xs py-2 px-3 text-right">
                           {formatCurrency(row.totalPoin * 90000)}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           <a href={"/grafik_poin/" + row.teknisiId}>
                             <IconButton
                               variant="gradient"
@@ -258,7 +255,7 @@ const PointTeknisi = () => {
                     <tr>
                       <td
                         colSpan="5"
-                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                        className="text-xs text-center capitalize py-3 bg-gray-100"
                       >
                         Tidak ada data
                       </td>
@@ -270,21 +267,21 @@ const PointTeknisi = () => {
                     <>
                       <tr>
                         <td
-                          className="text-sm py-2 px-3"
+                          className="text-xs py-2 px-3"
                           style={{ textAlign: "right" }}
                           colSpan="2"
                         >
                           Total
                         </td>
                         <td
-                          className="text-sm py-2 px-3"
+                          className="text-xs py-2 px-3"
                           style={{ textAlign: "center" }}
                           colSpan="1"
                         >
                           {poins.reduce((total, row) => total + row.totalPoin, 0)}
                         </td>
                         <td
-                          className="text-sm py-2 px-3"
+                          className="text-xs py-2 px-3"
                           style={{ textAlign: "center" }}
                           colSpan="1"
                         >
@@ -295,18 +292,18 @@ const PointTeknisi = () => {
                             )
                           )}
                         </td>
-                        <td className="text-sm py-2 px-3" colSpan="1"></td>
+                        <td className="text-xs py-2 px-3" colSpan="1"></td>
                       </tr>
                       <tr>
                         <td
-                          className="text-sm py-2 px-3"
+                          className="text-xs py-2 px-3"
                           style={{ textAlign: "right" }}
                           colSpan="2"
                         >
                           Rata-rata
                         </td>
                         <td
-                          className="text-sm py-2 px-3"
+                          className="text-xs py-2 px-3"
                           style={{ textAlign: "center" }}
                           colSpan="1"
                         >
@@ -314,7 +311,7 @@ const PointTeknisi = () => {
                             teknisi.length}
                         </td>
                         <td
-                          className="text-sm py-2 px-3"
+                          className="text-xs py-2 px-3"
                           style={{ textAlign: "center" }}
                           colSpan="1"
                         >
@@ -325,7 +322,7 @@ const PointTeknisi = () => {
                             ) / teknisi.length
                           )}
                         </td>
-                        <td className="text-sm py-2 px-3" colSpan="1"></td>
+                        <td className="text-xs py-2 px-3" colSpan="1"></td>
                       </tr>
                     </>
                   ) : (

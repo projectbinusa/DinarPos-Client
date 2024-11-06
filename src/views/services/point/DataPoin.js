@@ -194,7 +194,7 @@ function DataPoin() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Poin Teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -207,9 +207,6 @@ function DataPoin() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/take_over">
-              <span>Poin</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -259,16 +256,16 @@ function DataPoin() {
               >
                 <thead className="bg-blue-500 text-white">
                   <tr>
-                    <th className="text-sm py-2 px-3 font-semibold">No</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
-                    <th className="text-sm py-2 px-3 font-semibold">
+                    <th className="text-xs py-2 px-3">No</th>
+                    <th className="text-xs py-2 px-3">Teknisi</th>
+                    <th className="text-xs py-2 px-3">
                       Total Poin
                     </th>
-                    <th className="text-sm py-2 px-3 font-semibold">
+                    <th className="text-xs py-2 px-3">
                       Nominal (Rp)
                     </th>
-                    <th className="text-sm py-2 px-3 font-semibold">%</th>
-                    <th className="text-sm py-2 px-3 font-semibold">
+                    <th className="text-xs py-2 px-3">%</th>
+                    <th className="text-xs py-2 px-3">
                       <ChartBarIcon className="w-5 h-6 white" />
                     </th>
                   </tr>
@@ -281,22 +278,22 @@ function DataPoin() {
                       ).toFixed(2);
                       return (
                         <tr key={index}>
-                          <td className="text-sm py-2 px-3 text-center">
+                          <td className="text-xs py-2 px-3 text-center">
                             {index + 1}
                           </td>
-                          <td className="text-sm py-2 px-3 text-center">
+                          <td className="text-xs py-2 px-3 text-center">
                             {poin.teknisiNama}
                           </td>
-                          <td className="text-sm py-2 px-3 text-center">
+                          <td className="text-xs py-2 px-3 text-center">
                             {poin.totalPoin}
                           </td>
-                          <td className="text-sm py-2 px-3 text-center">
+                          <td className="text-xs py-2 px-3 text-center">
                             {poin.totalNominal}
                           </td>
-                          <td className="text-sm py-2 px-3 text-center">
+                          <td className="text-xs py-2 px-3 text-center">
                             {percent}%
                           </td>
-                          <td className="text-sm py-2 px-3 text-center">
+                          <td className="text-xs py-2 px-3 text-center">
                             <a href={`/grafik_poin/${poin.teknisiId}`}>
                               <IconButton color="blue" size="md">
                                 <ChartBarIcon className="w-5 h-6 white" />
@@ -310,7 +307,7 @@ function DataPoin() {
                     <tr>
                       <td
                         colSpan="6"
-                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                        className="text-xs text-center capitalize py-3 bg-gray-100"
                       >
                         Tidak ada data
                       </td>
@@ -328,11 +325,11 @@ function DataPoin() {
               History Poin
             </Typography>
             <br />
-            <hr /> <br /> <br />
-            <div className="flex gap-2 items-center">
+            <hr /> <br />
+            <div className="flex flex-col gap-y-5 items-start">
               <Input
                 label="Tanggal Awal"
-                variant="static"
+                variant="outlined"
                 color="blue"
                 size="md"
                 onChange={(e) => setTanggalAwal(e.target.value)}
@@ -342,7 +339,7 @@ function DataPoin() {
               />
               <Input
                 label="Tanggal Akhir"
-                variant="static"
+                variant="outlined"
                 color="blue"
                 size="md"
                 onChange={(e) => setTanggalAkhir(e.target.value)}
@@ -369,32 +366,32 @@ function DataPoin() {
               >
                 <thead className="bg-blue-500 text-white">
                   <tr>
-                    <th className="text-sm py-2 px-3 font-semibold">No</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Teknisi</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Tgl</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Poin</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Nominal</th>
-                    <th className="text-sm py-2 px-3 font-semibold">Ket</th>
+                    <th className="text-xs py-2 px-3">No</th>
+                    <th className="text-xs py-2 px-3">Teknisi</th>
+                    <th className="text-xs py-2 px-3">Tgl</th>
+                    <th className="text-xs py-2 px-3">Poin</th>
+                    <th className="text-xs py-2 px-3">Nominal</th>
+                    <th className="text-xs py-2 px-3">Ket</th>
                   </tr>
                 </thead>
                 <tbody>
                   {points.length > 0 ? (
                     points.map((point, index) => (
                       <tr key={index}>
-                        <td className="text-sm w-[4%]">{index + 1}</td>
-                        <td className="text-sm py-2 px-3 text-center">
+                        <td className="text-xs w-[4%]">{index + 1}</td>
+                        <td className="text-xs py-2 px-3 text-center">
                           {point.teknisi.nama}
                         </td>
-                        <td className="text-sm py-2 px-3 text-center">
+                        <td className="text-xs py-2 px-3 text-center">
                           {formatDate(point.tanggal)}
                         </td>
-                        <td className="text-sm py-2 px-3 text-center">
+                        <td className="text-xs py-2 px-3 text-center">
                           {point.poin}
                         </td>
-                        <td className="text-sm py-2 px-3 text-center">
+                        <td className="text-xs py-2 px-3 text-center">
                           {point.nominal}
                         </td>
-                        <td className="text-sm py-2 px-3 text-center">
+                        <td className="text-xs py-2 px-3 text-center">
                           {point.keterangan}
                         </td>
                       </tr>
@@ -403,7 +400,7 @@ function DataPoin() {
                     <tr>
                       <td
                         colSpan="6"
-                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                        className="text-xs text-center capitalize py-3 bg-gray-100"
                       >
                         Tidak ada data
                       </td>

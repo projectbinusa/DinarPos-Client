@@ -586,7 +586,7 @@ function DashboardAdminService() {
                                 <Typography variant="h3" className="text-blue-900 text-right">
                                     {naAll.length}
                                 </Typography>
-                                <Typography variant="paragraph" className="text-blue-900">Service Terbaru
+                                <Typography variant="paragraph" className="text-blue-900 font-poppins">Service Terbaru
                                 </Typography>
                             </div>
                         </CardBody>
@@ -594,7 +594,7 @@ function DashboardAdminService() {
                             <button onClick={() => toggleElement("na")} >
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <Typography variant="paragraph" color="blue-gray">Lihat Detail</Typography>
+                                        <Typography variant="paragraph" color="blue-gray" className="font-poppins font-medium">Lihat Detail</Typography>
                                     </div>
                                     <div>
                                         <ChevronRightIcon className="h-5 w-6" color="blue-gray" />
@@ -610,7 +610,7 @@ function DashboardAdminService() {
                                 <Typography variant="h3" className="text-green-900 text-right">
                                     {readyAll.length}
                                 </Typography>
-                                <Typography variant="paragraph" className="text-green-900">Service Ready
+                                <Typography variant="paragraph" className="text-green-900 font-poppins">Service Ready
                                 </Typography>
                             </div>
                         </CardBody>
@@ -618,7 +618,7 @@ function DashboardAdminService() {
                             <button onClick={() => toggleElement("ready")} >
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <Typography variant="paragraph" color="blue-gray">Lihat Detail</Typography>
+                                        <Typography variant="paragraph" color="blue-gray" className="font-poppins font-medium">Lihat Detail</Typography>
                                     </div>
                                     <div>
                                         <ChevronRightIcon className="h-5 w-6" color="blue-gray" />
@@ -634,7 +634,7 @@ function DashboardAdminService() {
                                 <Typography variant="h3" className="text-yellow-900 text-right">
                                     {prosesAll.length}
                                 </Typography>
-                                <Typography variant="paragraph" className="text-yellow-900">Service Proses
+                                <Typography variant="paragraph" className="text-yellow-900 font-poppins">Service Proses
                                 </Typography>
                             </div>
                         </CardBody>
@@ -642,7 +642,7 @@ function DashboardAdminService() {
                             <button onClick={() => toggleElement("proses")} >
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <Typography variant="paragraph" color="blue-gray">Lihat Detail</Typography>
+                                        <Typography variant="paragraph" color="blue-gray" className="font-poppins font-medium">Lihat Detail</Typography>
                                     </div>
                                     <div>
                                         <ChevronRightIcon className="h-5 w-6" color="blue-gray" />
@@ -658,7 +658,7 @@ function DashboardAdminService() {
                                 <Typography variant="h3" className="text-red-900 text-right">
                                     {returAll.length}
                                 </Typography>
-                                <Typography variant="paragraph" className="text-red-900">Service Retur
+                                <Typography variant="paragraph" className="text-red-900 font-poppins">Service Retur
                                 </Typography>
                             </div>
                         </CardBody>
@@ -666,7 +666,7 @@ function DashboardAdminService() {
                             <button onClick={() => toggleElement("retur")} >
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <Typography variant="paragraph" color="blue-gray">Lihat Detail</Typography>
+                                        <Typography variant="paragraph" color="blue-gray" className="font-poppins font-medium">Lihat Detail</Typography>
                                     </div>
                                     <div>
                                         <ChevronRightIcon className="h-5 w-6" color="blue-gray" />
@@ -685,7 +685,7 @@ function DashboardAdminService() {
                                 <Typography variant="h3" className="text-red-900 text-right">
                                     {cancelAll.length}
                                 </Typography>
-                                <Typography variant="paragraph" className="text-red-900">Service Cancel
+                                <Typography variant="paragraph" className="text-red-900 font-poppins">Service Cancel
                                 </Typography>
                             </div>
                         </CardBody>
@@ -693,7 +693,7 @@ function DashboardAdminService() {
                             <button onClick={() => toggleElement("cancel")} >
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <Typography variant="paragraph" color="blue-gray">Lihat Detail</Typography>
+                                        <Typography variant="paragraph" color="blue-gray" className="font-poppins font-medium">Lihat Detail</Typography>
                                     </div>
                                     <div>
                                         <ChevronRightIcon className="h-5 w-6" color="blue-gray" />
@@ -709,7 +709,7 @@ function DashboardAdminService() {
                                 <Typography variant="h3" className="text-yellow-900 text-right">
                                     {semingguAll.length}
                                 </Typography>
-                                <Typography variant="paragraph" className="text-yellow-900">Service > 1 Minggu
+                                <Typography variant="paragraph" className="text-yellow-900 font-poppins">Service > 1 Minggu
                                 </Typography>
                             </div>
                         </CardBody>
@@ -717,7 +717,7 @@ function DashboardAdminService() {
                             <button onClick={() => toggleElement("seminggu")} >
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <Typography variant="paragraph" color="blue-gray">Lihat Detail</Typography>
+                                        <Typography variant="paragraph" color="blue-gray" className="font-poppins font-medium">Lihat Detail</Typography>
                                     </div>
                                     <div>
                                         <ChevronRightIcon className="h-5 w-6" color="blue-gray" />
@@ -733,7 +733,7 @@ function DashboardAdminService() {
                                 <Typography variant="h3" className="text-blue-900 text-right">
                                     {takenAll.length}
                                 </Typography>
-                                <Typography variant="paragraph" className="text-blue-900">Service Taken
+                                <Typography variant="paragraph" className="text-blue-900 font-poppins">Service Taken
                                 </Typography>
                             </div>
                         </CardBody>
@@ -741,7 +741,7 @@ function DashboardAdminService() {
                             <button onClick={() => toggleElement("taken")} >
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <Typography variant="paragraph" color="blue-gray">Lihat Detail</Typography>
+                                        <Typography variant="paragraph" color="blue-gray" className="font-poppins font-medium">Lihat Detail</Typography>
                                     </div>
                                     <div>
                                         <ChevronRightIcon className="h-5 w-6" color="blue-gray" />
@@ -754,7 +754,7 @@ function DashboardAdminService() {
                 <br />
                 <div>
                     <div id="na" className="bg-white shadow-lg p-3 my-5 rounded" hidden>
-                        <Typography variant="h5">Service Terbaru</Typography>
+                        <Typography variant="h5" className="font-poppins">Service Terbaru</Typography>
                         <hr /> <br />
                         <div className="w-full overflow-x-auto">
                             <table
@@ -764,14 +764,14 @@ function DashboardAdminService() {
                             >
                                 <thead className="bg-blue-500 text-white">
                                     <tr>
-                                        <th className="text-sm py-2 px-3 font-semibold">No</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">In </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">C </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                        <th className="text-xs py-2 px-3">No</th>
+                                        <th className="text-xs py-2 px-3">Nama</th>
+                                        <th className="text-xs py-2 px-3">Alamat </th>
+                                        <th className="text-xs py-2 px-3">Produk</th>
+                                        <th className="text-xs py-2 px-3">In </th>
+                                        <th className="text-xs py-2 px-3">C </th>
+                                        <th className="text-xs py-2 px-3">Status </th>
+                                        <th className="text-xs py-2 px-3">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -781,32 +781,32 @@ function DashboardAdminService() {
 
                                             return (
                                                 <tr key={index}>
-                                                    <td className="text-sm w-[4%]">{index + 1}</td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs w-[4%]">{index + 1}</td>
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.nama_customer}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.alamat}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.produk}
                                                         <span className="block">{row.merk}</span>
                                                         <span className="block">{row.type}</span>
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {formatDate(row.tanggalMasuk)}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {tglKonfirms.map((down, idx) => (
                                                             <ul key={idx}>
                                                                 <li>{formatDate(down.tglKonf)}</li>
                                                             </ul>
                                                         ))}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.statusEnd}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
                                                         <div className="flex flex-row gap-3">
                                                             <a href={"/detail_service/" + row.idTT}>
                                                                 <IconButton size="md" color="light-blue">
@@ -822,7 +822,7 @@ function DashboardAdminService() {
                                         <tr>
                                             <td
                                                 colSpan="8"
-                                                className="text-sm text-center capitalize py-3 bg-gray-100"
+                                                className="text-xs text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
                                             </td>
@@ -833,7 +833,7 @@ function DashboardAdminService() {
                         </div>
                     </div>
                     <div id="ready" className="bg-white shadow-lg p-3 my-5 rounded" hidden>
-                        <Typography variant="h5">Service Ready</Typography>
+                        <Typography variant="h5" className="font-poppins">Service Ready</Typography>
                         <hr /> <br />
                         <div className="w-full overflow-x-auto">
                             <table
@@ -843,14 +843,14 @@ function DashboardAdminService() {
                             >
                                 <thead className="bg-blue-500 text-white">
                                     <tr>
-                                        <th className="text-sm py-2 px-3 font-semibold">No</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">In </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">C </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                        <th className="text-xs py-2 px-3">No</th>
+                                        <th className="text-xs py-2 px-3">Nama</th>
+                                        <th className="text-xs py-2 px-3">Alamat </th>
+                                        <th className="text-xs py-2 px-3">Produk</th>
+                                        <th className="text-xs py-2 px-3">In </th>
+                                        <th className="text-xs py-2 px-3">C </th>
+                                        <th className="text-xs py-2 px-3">Status </th>
+                                        <th className="text-xs py-2 px-3">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -860,32 +860,32 @@ function DashboardAdminService() {
 
                                             return (
                                                 <tr key={index}>
-                                                    <td className="text-sm w-[4%]">{index + 1}</td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs w-[4%]">{index + 1}</td>
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.nama_customer}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.alamat}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.produk}
                                                         <span className="block">{row.merk}</span>
                                                         <span className="block">{row.type}</span>
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {formatDate(row.tanggalMasuk)}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {tglKonfirms.map((down, idx) => (
                                                             <ul key={idx}>
                                                                 <li>{formatDate(down.tglKonf)}</li>
                                                             </ul>
                                                         ))}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.statusEnd}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
                                                         <div className="flex flex-row gap-3">
                                                             <a href={"/detail_service/" + row.idTT}>
                                                                 <IconButton size="md" color="light-blue">
@@ -901,7 +901,7 @@ function DashboardAdminService() {
                                         <tr>
                                             <td
                                                 colSpan="8"
-                                                className="text-sm text-center capitalize py-3 bg-gray-100"
+                                                className="text-xs text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
                                             </td>
@@ -912,7 +912,7 @@ function DashboardAdminService() {
                         </div>
                     </div>
                     <div id="proses" className="bg-white shadow-lg p-3 my-5 rounded" hidden>
-                        <Typography variant="h5">Service Proses</Typography>
+                        <Typography variant="h5" className="font-poppins">Service Proses</Typography>
                         <hr /> <br />
                         <div className="w-full overflow-x-auto">
                             <table
@@ -922,14 +922,14 @@ function DashboardAdminService() {
                             >
                                 <thead className="bg-blue-500 text-white">
                                     <tr>
-                                        <th className="text-sm py-2 px-3 font-semibold">No</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">In </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">C </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                        <th className="text-xs py-2 px-3">No</th>
+                                        <th className="text-xs py-2 px-3">Nama</th>
+                                        <th className="text-xs py-2 px-3">Alamat </th>
+                                        <th className="text-xs py-2 px-3">Produk</th>
+                                        <th className="text-xs py-2 px-3">In </th>
+                                        <th className="text-xs py-2 px-3">C </th>
+                                        <th className="text-xs py-2 px-3">Status </th>
+                                        <th className="text-xs py-2 px-3">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -939,32 +939,32 @@ function DashboardAdminService() {
 
                                             return (
                                                 <tr key={index}>
-                                                    <td className="text-sm w-[4%]">{index + 1}</td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs w-[4%]">{index + 1}</td>
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.nama_customer}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.alamat}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.produk}
                                                         <span className="block">{row.merk}</span>
                                                         <span className="block">{row.type}</span>
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {formatDate(row.tanggalMasuk)}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {tglKonfirms.map((down, idx) => (
                                                             <ul key={idx}>
                                                                 <li>{formatDate(down.tglKonf)}</li>
                                                             </ul>
                                                         ))}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.statusEnd}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
                                                         <div className="flex flex-row gap-3">
                                                             <a href={"/detail_service/" + row.idTT}>
                                                                 <IconButton size="md" color="light-blue">
@@ -980,7 +980,7 @@ function DashboardAdminService() {
                                         <tr>
                                             <td
                                                 colSpan="8"
-                                                className="text-sm text-center capitalize py-3 bg-gray-100"
+                                                className="text-xs text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
                                             </td>
@@ -991,7 +991,7 @@ function DashboardAdminService() {
                         </div>
                     </div>
                     <div id="retur" className="bg-white shadow-lg p-3 my-5 rounded" hidden>
-                        <Typography variant="h5">Service Retur</Typography>
+                        <Typography variant="h5" className="font-poppins">Service Retur</Typography>
                         <hr /> <br />
                         <div className="w-full overflow-x-auto">
                             <table
@@ -1001,14 +1001,14 @@ function DashboardAdminService() {
                             >
                                 <thead className="bg-blue-500 text-white">
                                     <tr>
-                                        <th className="text-sm py-2 px-3 font-semibold">No</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">In </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">C </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                        <th className="text-xs py-2 px-3">No</th>
+                                        <th className="text-xs py-2 px-3">Nama</th>
+                                        <th className="text-xs py-2 px-3">Alamat </th>
+                                        <th className="text-xs py-2 px-3">Produk</th>
+                                        <th className="text-xs py-2 px-3">In </th>
+                                        <th className="text-xs py-2 px-3">C </th>
+                                        <th className="text-xs py-2 px-3">Status </th>
+                                        <th className="text-xs py-2 px-3">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1018,32 +1018,32 @@ function DashboardAdminService() {
 
                                             return (
                                                 <tr key={index}>
-                                                    <td className="text-sm w-[4%]">{index + 1}</td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs w-[4%]">{index + 1}</td>
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer?.nama_customer}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer?.alamat}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.produk}
                                                         <span className="block">{row.merk}</span>
                                                         <span className="block">{row.type}</span>
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {formatDate(row.tanggalMasuk)}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {tglKonfirms.map((down, idx) => (
                                                             <ul key={idx}>
                                                                 <li>{formatDate(down.tglKonf)}</li>
                                                             </ul>
                                                         ))}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.statusEnd}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
                                                         <div className="flex flex-row gap-3">
                                                             <a href={"/detail_service/" + row.idTT}>
                                                                 <IconButton size="md" color="light-blue">
@@ -1059,7 +1059,7 @@ function DashboardAdminService() {
                                         <tr>
                                             <td
                                                 colSpan="8"
-                                                className="text-sm text-center capitalize py-3 bg-gray-100"
+                                                className="text-xs text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
                                             </td>
@@ -1070,7 +1070,7 @@ function DashboardAdminService() {
                         </div>
                     </div>
                     <div id="cancel" className="bg-white shadow-lg p-3 my-5 rounded" hidden>
-                        <Typography variant="h5">Service Cancel</Typography>
+                        <Typography variant="h5" className="font-poppins">Service Cancel</Typography>
                         <hr /> <br />
                         <div className="w-full overflow-x-auto">
                             <table
@@ -1080,14 +1080,14 @@ function DashboardAdminService() {
                             >
                                 <thead className="bg-blue-500 text-white">
                                     <tr>
-                                        <th className="text-sm py-2 px-3 font-semibold">No</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">In </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">C </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                        <th className="text-xs py-2 px-3">No</th>
+                                        <th className="text-xs py-2 px-3">Nama</th>
+                                        <th className="text-xs py-2 px-3">Alamat </th>
+                                        <th className="text-xs py-2 px-3">Produk</th>
+                                        <th className="text-xs py-2 px-3">In </th>
+                                        <th className="text-xs py-2 px-3">C </th>
+                                        <th className="text-xs py-2 px-3">Status </th>
+                                        <th className="text-xs py-2 px-3">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1097,32 +1097,32 @@ function DashboardAdminService() {
 
                                             return (
                                                 <tr key={index}>
-                                                    <td className="text-sm w-[4%]">{index + 1}</td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs w-[4%]">{index + 1}</td>
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.nama_customer}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.alamat}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.produk}
                                                         <span className="block">{row.merk}</span>
                                                         <span className="block">{row.type}</span>
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {formatDate(row.tanggalMasuk)}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {tglKonfirms.map((down, idx) => (
                                                             <ul key={idx}>
                                                                 <li>{formatDate(down.tglKonf)}</li>
                                                             </ul>
                                                         ))}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.statusEnd}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
                                                         <div className="flex flex-row gap-3">
                                                             <a href={"/detail_service/" + row.idTT}>
                                                                 <IconButton size="md" color="light-blue">
@@ -1138,7 +1138,7 @@ function DashboardAdminService() {
                                         <tr>
                                             <td
                                                 colSpan="8"
-                                                className="text-sm text-center capitalize py-3 bg-gray-100"
+                                                className="text-xs text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
                                             </td>
@@ -1149,7 +1149,7 @@ function DashboardAdminService() {
                         </div>
                     </div>
                     <div id="seminggu" className="bg-white shadow-lg p-3 my-5 rounded" hidden>
-                        <Typography variant="h5">Service > 1 Minggu</Typography>
+                        <Typography variant="h5" className="font-poppins">Service > 1 Minggu</Typography>
                         <hr /> <br />
                         <div className="w-full overflow-x-auto">
                             <table
@@ -1159,14 +1159,14 @@ function DashboardAdminService() {
                             >
                                 <thead className="bg-blue-500 text-white">
                                     <tr>
-                                        <th className="text-sm py-2 px-3 font-semibold">No</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">In </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">C </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                        <th className="text-xs py-2 px-3">No</th>
+                                        <th className="text-xs py-2 px-3">Nama</th>
+                                        <th className="text-xs py-2 px-3">Alamat </th>
+                                        <th className="text-xs py-2 px-3">Produk</th>
+                                        <th className="text-xs py-2 px-3">In </th>
+                                        <th className="text-xs py-2 px-3">C </th>
+                                        <th className="text-xs py-2 px-3">Status </th>
+                                        <th className="text-xs py-2 px-3">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1176,32 +1176,32 @@ function DashboardAdminService() {
 
                                             return (
                                                 <tr key={index}>
-                                                    <td className="text-sm w-[4%]">{index + 1}</td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs w-[4%]">{index + 1}</td>
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.nama_customer}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.alamat}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.produk}
                                                         <span className="block">{row.merk}</span>
                                                         <span className="block">{row.type}</span>
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {formatDate(row.tanggalMasuk)}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {tglKonfirms.map((down, idx) => (
                                                             <ul key={idx}>
                                                                 <li>{formatDate(down.tglKonf)}</li>
                                                             </ul>
                                                         ))}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.statusEnd}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
                                                         <div className="flex flex-row gap-3">
                                                             <a href={"/detail_service/" + row.idTT}>
                                                                 <IconButton size="md" color="light-blue">
@@ -1217,7 +1217,7 @@ function DashboardAdminService() {
                                         <tr>
                                             <td
                                                 colSpan="8"
-                                                className="text-sm text-center capitalize py-3 bg-gray-100"
+                                                className="text-xs text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
                                             </td>
@@ -1228,7 +1228,7 @@ function DashboardAdminService() {
                         </div>
                     </div>
                     <div id="taken" className="bg-white shadow-lg p-3 my-5 rounded" hidden>
-                        <Typography variant="h5">Service Taken</Typography>
+                        <Typography variant="h5" className="font-poppins">Service Taken</Typography>
                         <hr /> <br />
                         <div className="w-full overflow-x-auto">
                             <table
@@ -1238,14 +1238,14 @@ function DashboardAdminService() {
                             >
                                 <thead className="bg-blue-500 text-white">
                                     <tr>
-                                        <th className="text-sm py-2 px-3 font-semibold">No</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Produk</th>
-                                        <th className="text-sm py-2 px-3 font-semibold">In </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">C </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                                        <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                                        <th className="text-xs py-2 px-3">No</th>
+                                        <th className="text-xs py-2 px-3">Nama</th>
+                                        <th className="text-xs py-2 px-3">Alamat </th>
+                                        <th className="text-xs py-2 px-3">Produk</th>
+                                        <th className="text-xs py-2 px-3">In </th>
+                                        <th className="text-xs py-2 px-3">C </th>
+                                        <th className="text-xs py-2 px-3">Status </th>
+                                        <th className="text-xs py-2 px-3">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1255,32 +1255,32 @@ function DashboardAdminService() {
 
                                             return (
                                                 <tr key={index}>
-                                                    <td className="text-sm w-[4%]">{index + 1}</td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs w-[4%]">{index + 1}</td>
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.nama_customer}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.customer.alamat}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.produk}
                                                         <span className="block">{row.merk}</span>
                                                         <span className="block">{row.type}</span>
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {formatDate(row.tanggalMasuk)}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {tglKonfirms.map((down, idx) => (
                                                             <ul key={idx}>
                                                                 <li>{formatDate(down.tglKonf)}</li>
                                                             </ul>
                                                         ))}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3">
+                                                    <td className="text-xs py-2 px-3">
                                                         {row.statusEnd}
                                                     </td>
-                                                    <td className="text-sm py-2 px-3 flex items-center justify-center">
+                                                    <td className="text-xs py-2 px-3 flex items-center justify-center">
                                                         <div className="flex flex-row gap-3">
                                                             <a href={"/detail_service_taken/" + row.idTT}>
                                                                 <IconButton size="md" color="light-blue">
@@ -1296,7 +1296,7 @@ function DashboardAdminService() {
                                         <tr>
                                             <td
                                                 colSpan="8"
-                                                className="text-sm text-center capitalize py-3 bg-gray-100"
+                                                className="text-xs text-center capitalize py-3 bg-gray-100"
                                             >
                                                 Tidak ada data
                                             </td>

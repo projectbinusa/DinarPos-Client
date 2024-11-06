@@ -18,7 +18,7 @@ import axios from "axios";
 import { API_DEAL } from "../../../utils/BaseUrl";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-function Model() {
+function EditDealPO({ handleOpen, idDeal }) {
   const [tanggal, setTanggal] = useState("");
   const [nama, setNama] = useState("");
   const [instansi, setInstansi] = useState("");
@@ -77,149 +77,33 @@ function Model() {
 
   return (
     <div>
-      <DialogHeader>Edit Deal Po</DialogHeader>
+      <DialogHeader className="font-poppins">Edit Deal PO</DialogHeader>
       <form onSubmit={editDealPo}>
-        <DialogBody className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <DialogBody className="">
           <Input
             color="blue"
             variant="static"
-            label="Tanggal"
+            label="Ket Status"
             placeholder="Masukkan tanggal"
-            value={tanggal}
             onChange={(e) => setTanggal(e.target.value)}
-            icon={<UserCircleIcon />}
-          />
+          /> <br />
           <Input
             color="blue"
             variant="static"
-            label="Nama"
-            placeholder="Masukkan Nama"
+            label="Status"
+            placeholder="Masukkan Status"
             value={nama}
             onChange={(e) => setNama(e.target.value)}
-            icon={<AcademicCapIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label="Instansi"
-            type="Instansi"
-            placeholder="Masukkan Instansi"
-            value={instansi}
-            onChange={(e) => setInstansi(e.target.value)}
-            icon={<AtSymbolIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label="Jenis"
-            type="number"
-            placeholder="Masukkan Jenis"
-            value={jenis}
-            onChange={(e) => setJenis(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label="Daerah"
-            type="number"
-            placeholder="Masukkan Daerah"
-            value={daerah}
-            onChange={(e) => setDaerah(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label="Tujuan"
-            type="number"
-            placeholder="Masukkan Tujuan"
-            value={tujuan}
-            onChange={(e) => setTujuan(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label=" Info Didapat"
-            type="number"
-            placeholder="Masukkan  Info Didapat"
-            value={infodidapat}
-            onChange={(e) => setInfoDidapat(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label="CP"
-            type="number"
-            placeholder="Masukkan CP "
-            value={cp}
-            onChange={(e) => setCP(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label=" visit"
-            type="number"
-            placeholder="Masukkan  visit"
-            value={visit}
-            onChange={(e) => setVisit(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label=" tipe "
-            type="number"
-            placeholder="Masukkan tipe "
-            value={tipe}
-            onChange={(e) => setTipe(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label=" peluang"
-            type="number"
-            placeholder="Masukkan peluang"
-            value={peluang}
-            onChange={(e) => setPeluang(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label=" deal"
-            type="number"
-            placeholder="Masukkan deal"
-            value={deal}
-            onChange={(e) => setDeal(e.target.value)}
-            icon={<PhoneIcon />}
-          />
-          <Input
-            color="blue"
-            variant="static"
-            label=" Action"
-            type="number"
-            placeholder="Masukkan Action"
-            value={action}
-            onChange={(e) => setAction(e.target.value)}
-            icon={<PhoneIcon />}
           />
         </DialogBody>
         <DialogFooter>
           <div className="mt-10 flex gap-4">
-            <a href="/dealpo">
-              <Button
-                variant="text"
-                color="gray"
-                className="mr-1 font-popins font-medium"
-              >
-                <span>Kembali</span>
-              </Button>
-            </a>
+            <Button
+              variant="text"
+              color="gray" onClick={handleOpen}
+              className="mr-1 font-popins font-medium">
+              <span>Tutup</span>
+            </Button>
             <Button
               variant="gradient"
               color="blue"
@@ -235,4 +119,4 @@ function Model() {
   );
 }
 
-export default Model;
+export default EditDealPO;

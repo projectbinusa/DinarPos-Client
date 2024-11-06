@@ -205,7 +205,7 @@ function DataBon() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Bon Barang
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -218,9 +218,6 @@ function DataBon() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/data_bon_barang">
-              <span>Bon Barang</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -240,56 +237,46 @@ function DataBon() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold w-[4%]">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">ID TT</th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Nama Teknisi
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Barcode Barang
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Tanggal Ambil
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Status Barang                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Status Service                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
-                    Tanggal Kembalikan
-                  </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi </th>
+                  <th className="text-xs p-3 w-[4%]">No</th>
+                  <th className="text-xs p-3">ID TT</th>
+                  <th className="text-xs p-3">Nama Teknisi</th>
+                  <th className="text-xs p-3">Barcode Barang</th>
+                  <th className="text-xs p-3">Tanggal Ambil</th>
+                  <th className="text-xs p-3">Status Barang</th>
+                  <th className="text-xs p-3">Status Service</th>
+                  <th className="text-xs p-3">Tanggal Kembalikan</th>
+                  <th className="text-xs p-3">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {bonBarang.length > 0 ? (
                   bonBarang.map((bon, index) => (
                     <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs w-[4%]">{index + 1}</td>
+                      <td className="text-xs p-3">
                         {bon.serviceBarang.idTT}
                       </td>
-                      <td className="text-sm py-2 px-3">{bon.teknisi.nama}</td>
-                      <td className="text-sm w-[15%] py-2 px-3">
+                      <td className="text-xs p-3">{bon.teknisi.nama}</td>
+                      <td className="text-xs w-[15%] p-3">
                         {bon.barang.barcodeBarang}
                       </td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs p-3">
                         {formatDate(bon.tgl_ambil)}
                       </td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs p-3">
                         {bon.status_barang}
                       </td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs p-3">
                         {bon.status_service}
                       </td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs p-3">
                         {bon.tgl_kembalikan === null ? (
                           <></>
                         ) : (
                           <>{formatDate(bon.tgl_kembalikan)}</>
                         )}
                       </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                      <td className="text-xs p-3 flex items-center justify-center">
                         <div className="flex flex-wrap gap-3">
                           {bon.tgl_kembalikan != null ? (
                             <></>
@@ -344,7 +331,7 @@ function DataBon() {
                   <tr>
                     <td
                       colSpan="9"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                      className="text-xs text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

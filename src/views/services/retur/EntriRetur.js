@@ -111,7 +111,7 @@ function EntriRetur() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Entri Retur
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -128,7 +128,6 @@ function EntriRetur() {
             <a href="/data_retur">
               <span>Retur</span>
             </a>
-            <span className="cursor-default capitalize">Entri Retur</span>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded">
@@ -140,14 +139,14 @@ function EntriRetur() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No TT</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Nama</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Alamat </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Produk </th>
-                  <th className="text-sm py-2 px-3 font-semibold">IN </th>
-                  <th className="text-sm py-2 px-3 font-semibold">C </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Status </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-xs py-2 px-3">No TT</th>
+                  <th className="text-xs py-2 px-3">Nama</th>
+                  <th className="text-xs py-2 px-3">Alamat </th>
+                  <th className="text-xs py-2 px-3">Produk </th>
+                  <th className="text-xs py-2 px-3">IN </th>
+                  <th className="text-xs py-2 px-3">C </th>
+                  <th className="text-xs py-2 px-3">Status </th>
+                  <th className="text-xs py-2 px-3">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,24 +156,24 @@ function EntriRetur() {
 
                     return (
                       <tr key={index}>
-                        <td className="text-sm w-[4%]">{row.idTT}</td>
-                        <td className="text-sm py-2 px-3">{row.nama}</td>
-                        <td className="text-sm py-2 px-3">{row.alamat}</td>
-                        <td className="text-sm py-2 px-3">{row.produk}</td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs w-[4%]">{row.idTT}</td>
+                        <td className="text-xs py-2 px-3">{row.nama}</td>
+                        <td className="text-xs py-2 px-3">{row.alamat}</td>
+                        <td className="text-xs py-2 px-3">{row.produk}</td>
+                        <td className="text-xs py-2 px-3">
                           {formatDate(row.tanggalMasuk)}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           {tglKonfirms.map((down, idx) => (
                             <ul key={idx}>
                               <li>{formatDate(down.tglKonf)}</li>
                             </ul>
                           ))}
                         </td>
-                        <td className="text-sm py-2 px-3">
+                        <td className="text-xs py-2 px-3">
                           TAKEN <span className="block">({row.statusEnd})</span>
                         </td>
-                        <td className="text-sm py-2 px-3 flex items-center justify-center">
+                        <td className="text-xs py-2 px-3 flex items-center justify-center">
                           <div className="flex flex-row gap-3">
                             <a href={"/add_retur/" + row.idTT}>
                               <IconButton size="md" color="light-blue">
@@ -190,7 +189,7 @@ function EntriRetur() {
                   <tr>
                     <td
                       colSpan="8"
-                      className="text-sm text-center capitalize py-3 bg-gray-100"
+                      className="text-xs text-center capitalize py-3 bg-gray-100"
                     >
                       Tidak ada data
                     </td>

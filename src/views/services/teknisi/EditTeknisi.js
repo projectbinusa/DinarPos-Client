@@ -166,7 +166,7 @@ function EditTeknisi() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             edit teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -183,7 +183,6 @@ function EditTeknisi() {
             <a href="/data_teknisi">
               <span>Teknisi</span>
             </a>
-            <span className="cursor-default capitalize">edit Teknisi</span>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">

@@ -125,7 +125,7 @@ function AddGaransi() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             tambah garansi
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -142,7 +142,6 @@ function AddGaransi() {
             <a href="/garansi">
               <span>Garansi</span>
             </a>
-            <span className="cursor-default capitalize">tambah Garansi</span>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">

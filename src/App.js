@@ -1262,11 +1262,6 @@ function App() {
               isAuthenticated={true}
             />
             <PrivateRoute
-              path="/edit_dealpo/:id"
-              component={Model}
-              isAuthenticated={true}
-            />
-            <PrivateRoute
               path="/add_finish/:id"
               component={AddFinish}
               isAuthenticated={true}

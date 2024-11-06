@@ -162,7 +162,7 @@ function Garansi() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Data Garansi
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -175,9 +175,6 @@ function Garansi() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
               </svg>
-            </a>
-            <a href="/garansi">
-              <span>Garansi</span>
             </a>
           </Breadcrumbs>
         </div>
@@ -195,44 +192,44 @@ function Garansi() {
             >
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="text-sm py-2 px-3 font-semibold">No</th>
-                  <th className="text-sm py-2 px-3 font-semibold">ID TT</th>
-                  <th className="text-sm py-2 px-3 font-semibold">
+                  <th className="text-xs py-2 px-3">No</th>
+                  <th className="text-xs py-2 px-3">ID TT</th>
+                  <th className="text-xs py-2 px-3">
                     TGL Masuk
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Barang</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Merek </th>
-                  <th className="text-sm py-2 px-3 font-semibold">Masuk ke </th>
-                  <th className="text-sm py-2 px-3 font-semibold">
+                  <th className="text-xs py-2 px-3">Barang</th>
+                  <th className="text-xs py-2 px-3">Merek </th>
+                  <th className="text-xs py-2 px-3">Masuk ke </th>
+                  <th className="text-xs py-2 px-3">
                     Kerusakan
                   </th>
-                  <th className="text-sm py-2 px-3 font-semibold">TGL Jadi</th>
-                  <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
+                  <th className="text-xs py-2 px-3">TGL Jadi</th>
+                  <th className="text-xs py-2 px-3">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {garansi.length > 0 ? (
                   garansi.map((row, index) => (
                     <tr key={index}>
-                      <td className="text-sm w-[4%]">{index + 1}</td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs w-[4%]">{index + 1}</td>
+                      <td className="text-xs py-2 px-3">
                         {row.serviceBarang.idTT}
                       </td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs py-2 px-3">
                         {formatDate(row.tanggalMasuk)}
                       </td>
-                      <td className="text-sm py-2 px-3">{row.namaBrg}</td>
-                      <td className="text-sm py-2 px-3">{row.merek}</td>
-                      <td className="text-sm py-2 px-3">{row.masukKe}</td>
-                      <td className="text-sm py-2 px-3">{row.kerusakan}</td>
-                      <td className="text-sm py-2 px-3">
+                      <td className="text-xs py-2 px-3">{row.namaBrg}</td>
+                      <td className="text-xs py-2 px-3">{row.merek}</td>
+                      <td className="text-xs py-2 px-3">{row.masukKe}</td>
+                      <td className="text-xs py-2 px-3">{row.kerusakan}</td>
+                      <td className="text-xs py-2 px-3">
                         {row.tanggalJadi === null ? (
                           <></>
                         ) : (
                           <>{formatDate(row.tanggalJadi)}</>
                         )}
                       </td>
-                      <td className="text-sm py-2 px-3 flex items-center justify-center">
+                      <td className="text-xs py-2 px-3 flex items-center justify-center">
                         <div className="flex flex-row gap-3">
                           {row.tanggalJadi != null ? (
                             <></>
@@ -268,7 +265,7 @@ function Garansi() {
                     <tr>
                       <td
                         colSpan="9"
-                        className="text-sm text-center capitalize py-3 bg-gray-100"
+                        className="text-xs text-center capitalize py-3 bg-gray-100"
                       >
                         Tidak ada data
                       </td>
