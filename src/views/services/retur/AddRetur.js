@@ -135,8 +135,8 @@ function AddRetur() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
-            Data Service
+          <Typography variant="lead" className="uppercase font-poppins">
+            Tambah Service Retur
           </Typography>
           <Breadcrumbs className="bg-transparent">
             <a href={"/" + dashboard} className="opacity-60">
@@ -152,7 +152,6 @@ function AddRetur() {
             <a href="/data_retur">
               <span>Retur</span>
             </a>
-            <span className="cursor-default capitalize">Input</span>
           </Breadcrumbs>
         </div>
         <form onSubmit={addRetur}>

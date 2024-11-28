@@ -148,6 +148,7 @@ function AddGaransi() {
           <form onSubmit={addGaransi}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
+                required
                 label="Nama Barang"
                 variant="static"
                 color="blue"
@@ -157,6 +158,7 @@ function AddGaransi() {
                 onChange={(e) => setNamaBrg(e.target.value)}
               />
               <Input
+                required
                 label="Merek"
                 variant="static"
                 color="blue"
@@ -166,6 +168,7 @@ function AddGaransi() {
                 onChange={(e) => setMerek(e.target.value)}
               />
               <Input
+                required
                 label="TGL Masuk"
                 variant="static"
                 color="blue"
@@ -176,6 +179,7 @@ function AddGaransi() {
                 onChange={(e) => setTanggalMasuk(e.target.value)}
               />
               <Input
+                required
                 label="Masuk ke"
                 variant="static"
                 color="blue"
@@ -185,6 +189,7 @@ function AddGaransi() {
                 onChange={(e) => setMasukKe(e.target.value)}
               />
               <Input
+                required
                 label="ID TT"
                 variant="static"
                 color="blue"

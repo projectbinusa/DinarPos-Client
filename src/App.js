@@ -199,6 +199,7 @@ import DetailKunjunganHari from "./views/itc/kunjungan/DetailKunjunganHari.js";
 import EditFinish from "./views/itc/dealfinish/EditFinish.js";
 import DealPoMarketting from "./views/itc/dealpo/DealPoMarketting.js";
 import FormPo from "./views/itc/dealpo/FormPo.js";
+import TestTable from "./views/serviceteknisi/TestTable.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -1285,6 +1286,11 @@ function App() {
             <PrivateRoute
               path="/form_dealpo"
               component={FormPo}
+              isAuthenticated={true}
+            />
+            <PrivateRoute
+              path="/test_table"
+              component={TestTable}
               isAuthenticated={true}
             />
           </Switch>

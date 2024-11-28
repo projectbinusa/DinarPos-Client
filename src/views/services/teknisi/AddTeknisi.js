@@ -29,7 +29,7 @@ function AddTeknisi() {
 
   const history = useHistory();
 
-  const addTeknisi = async (e) => {
+  const tambahTeknisi = async (e) => {
     e.preventDefault();
 
     const request = {
@@ -127,9 +127,10 @@ function AddTeknisi() {
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg px-5 py-8 my-5 rounded">
-          <form onSubmit={addTeknisi}>
+          <form onSubmit={tambahTeknisi}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <Input
+                required
                 label="Nama Teknisi"
                 variant="static"
                 color="blue"
@@ -139,6 +140,7 @@ function AddTeknisi() {
                 placeholder="Masukkan Nama Teknisi"
               />
               <Input
+                required
                 label="Alamat"
                 variant="static"
                 color="blue"
@@ -148,6 +150,7 @@ function AddTeknisi() {
                 icon={<MapPinIcon />}
               />
               <Input
+                required
                 label="No HP"
                 variant="static"
                 color="blue"
@@ -169,6 +172,7 @@ function AddTeknisi() {
               </Select>
               <div>
                 <Input
+                  required
                   label="Password"
                   variant="static"
                   color="blue"

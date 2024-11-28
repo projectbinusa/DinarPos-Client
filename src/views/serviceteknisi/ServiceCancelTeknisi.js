@@ -12,6 +12,157 @@ import { API_SERVICE } from "../../utils/BaseUrl";
 import $ from "jquery";
 import "../../assets/styles/datatables.css";
 import { InformationCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import DataTable from "react-data-table-component";
+import customStylesTables from "../../assets/styles/stylesreacttables";
+import formatDate from "../../component/FormatDate";
+
+function AllByDate({ tglAwal, tglAkhir }) {
+  const [services, setservicesFilter] = useState([]);
+  const [tglKonfirm, setTglKonfirm] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState(services);
+
+  const getAllServiceFilter = async () => {
+    try {
+      const response = await axios.get(`${API_SERVICE}/cancel/filter?akhir=${tglAkhir}&awal=${tglAwal}`, {
+        headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+      });
+      setservicesFilter(response.data.data);
+    } catch (error) {
+      console.log("get all", error);
+    }
+  };
+
+  useEffect(() => {
+    const filtered = services.filter((item) => {
+      return (
+        item.customer?.nama_customer?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.customer?.alamat?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.produk?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.merk?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.status?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredData(filtered);
+  }, [searchTerm, services]);
+
+  useEffect(() => {
+    getAllServiceFilter()
+  }, [tglAwal, tglAkhir])
+
+  const tglKonfirmasi = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `${API_SERVICE}/tgl_konfirm?id=${transactionId}`,
+        {
+          headers: { "auth-tgh": `jwt ${localStorage.getItem("token")}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log("tglKonfirmasi", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchTglKonfirm = async () => {
+      const tglObj = {};
+      await Promise.all(
+        services.map(async (service) => {
+          const tglData = await tglKonfirmasi(service.idTT);
+          tglObj[service.idTT] = tglData;
+        })
+      );
+      setTglKonfirm(tglObj);
+    };
+
+    fetchTglKonfirm();
+  }, [services]);
+
+  const columns = [
+    {
+      name: "No",
+      selector: (row, index) => index + 1,
+      width: "50px",
+    },
+    {
+      name: "Nama",
+      selector: (row) => row.customer.nama_customer,
+    },
+    {
+      name: "Alamat",
+      selector: (row) => row.customer.alamat,
+    },
+    {
+      name: "Produk",
+      selector: (row) => (
+        <p className="text-center">
+          {row.produk}
+          <span className="block">{row.merk}</span>
+          <span className="block">{row.type}</span>
+        </p>
+      ),
+    },
+    {
+      name: "Status",
+      selector: (row) => row.statusEnd,
+    },
+    {
+      name: "In",
+      selector: (row) => formatDate(row.tanggalMasuk),
+    },
+    {
+      name: "C",
+      cell: (row, index) => {
+        const tglKonfirms = tglKonfirm[row.idTT] || [];
+        return (
+          <ul>
+            {tglKonfirms.map((down, idx) => (
+              <li key={idx}>{formatDate(down.tglKonf)}</li>
+            ))}
+          </ul>
+        );
+      },
+    },
+    {
+      name: "Aksi",
+      cell: (row) => (
+        <div className="text-xs py-2 px-3 flex items-center justify-center">
+          <div className="flex flex-row gap-3">
+            <a href={"/detail_service_teknisi/" + row.idTT}>
+              <IconButton size="md" color="green">
+                <InformationCircleIcon className="w-6 h-6 white" />
+              </IconButton>
+            </a>
+          </div>
+        </div>
+
+      ),
+    },
+  ];
+
+  return (
+    <div className="rounded mt-10 p-2 w-full overflow-x-auto">
+      <Input
+        variant="outlined" color="blue" label="Cari Data"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      /> <br />
+      <DataTable
+        columns={columns}
+        data={filteredData}
+        pagination
+        highlightOnHover
+        striped
+        noDataComponent="Tidak ada data tersedia"
+        customStyles={customStylesTables}
+        responsive
+      />
+    </div>
+  )
+}
 
 function ServiceCancelTeknisi() {
   const tableRef = useRef(null);

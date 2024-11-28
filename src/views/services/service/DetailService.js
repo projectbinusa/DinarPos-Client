@@ -895,7 +895,7 @@ function DetailService() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Detail Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -912,7 +912,6 @@ function DetailService() {
             <a href="/data_service">
               <span>Service</span>
             </a>
-            <span className="cursor-default capitalize">detail Service</span>
           </Breadcrumbs>
         </div>
         <main className="bg-blue-500 border-4 border-blue-500 shadow-lg my-5 rounded">
@@ -920,7 +919,7 @@ function DetailService() {
             <a href="/data_service">
               <Typography
                 variant="paragraph"
-                className="capitalize font-semibold text-white flex"
+                className="capitalize font-semibold text-white flex font-poppins"
               >
                 <ChevronLeftIcon className="w-6 h-6 white" /> NO. {datas?.idTT}
               </Typography>
@@ -933,7 +932,7 @@ function DetailService() {
               >
                 <PrinterIcon className="w-6 h-6 white" />
               </IconButton>
-              <IconButton size="md" color="green">
+              <IconButton size="md" color="green" className="ml-3">
                 <ChatBubbleBottomCenterIcon
                   className="w-6 h-6 white"
                   onClick={() => {

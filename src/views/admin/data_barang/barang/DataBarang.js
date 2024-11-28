@@ -146,6 +146,15 @@ function DataBarang() {
   // IMPORT BARANG
   const importFromExcel = async (e) => {
     e.preventDefault();
+    if (excel === "") {
+      Swal.fire({
+        icon: "warning",
+        title: "Isi Form Terlebih Dahulu!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
 
     const formData = new FormData();
 
@@ -183,13 +192,14 @@ function DataBarang() {
   // EXPORT PERSEDIAAN BARANG 
   const exportPersediaanBarang = async (e) => {
     e.preventDefault();
-    if (!tglAwal || !tglAkhir) {
+    if (tglAwal === "" || tglAkhir === "" || tglAwal === tglAkhir) {
       Swal.fire({
         icon: "warning",
-        title: "Masukkan Tanggal Terlebih Dahulu",
+        title: "Isi Form Terlebih Dahulu!",
         showConfirmButton: false,
         timer: 1500,
       });
+      return;
     }
 
     try {
@@ -364,7 +374,7 @@ function DataBarang() {
                   </th>
                   {level === "Superadmin" || level === "Gudang" ? (
                     <>
-                      
+
                       <th className="text-sm py-2 px-3 font-semibold">Aksi</th>
                     </>
                   ) : (
@@ -474,7 +484,6 @@ function DataBarang() {
             <Button
               variant="gradient"
               color="blue"
-              onClick={handleOpen}
               type="submit"
               className="font-poppins font-medium"
             >

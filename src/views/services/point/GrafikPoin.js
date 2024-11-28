@@ -310,7 +310,7 @@ function GrafikPoin() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             GRAFIK Poin Teknisi
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -327,7 +327,6 @@ function GrafikPoin() {
             <a href="/poin_teknisi">
               <span>Poin</span>
             </a>
-            <span className="cursor-default capitalize">Grafik</span>
           </Breadcrumbs>
         </div>
         <main className="bg-white shadow-lg p-5 my-5 rounded overflow-auto">

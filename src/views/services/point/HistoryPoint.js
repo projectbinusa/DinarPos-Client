@@ -78,6 +78,8 @@ function HistoryPoint() {
         }
       );
       setPoints(response.data.data);
+      console.log(response.data);
+      
     } catch (error) {
       console.error("Error fetching data", error);
     }

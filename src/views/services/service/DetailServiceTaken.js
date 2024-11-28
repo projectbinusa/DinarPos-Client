@@ -177,7 +177,7 @@ function DetailServiceTaken() {
       <SidebarAdmin />
       <div className="lg:ml-[18rem] ml-0 pt-24 lg:pt-5 w-full px-5 overflow-x-auto">
         <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between">
-          <Typography variant="lead" className="uppercase">
+          <Typography variant="lead" className="uppercase font-poppins">
             Detail Service
           </Typography>
           <Breadcrumbs className="bg-transparent">
@@ -192,9 +192,11 @@ function DetailServiceTaken() {
               </svg>
             </a>
             <a href="/data_service">
+              <span>Service</span>
+            </a>
+            <a href="/data_service_taken">
               <span>Taken</span>
             </a>
-            <span className="cursor-default capitalize">detail Service</span>
           </Breadcrumbs>
         </div>
         <main className="bg-blue-500 border-4 border-blue-500 shadow-lg my-5 rounded">
@@ -215,7 +217,7 @@ function DetailServiceTaken() {
               >
                 <PrinterIcon className="w-6 h-6 white" />
               </IconButton>
-              <IconButton size="md" color="green">
+              <IconButton size="md" color="green" className="ml-3">
                 <ChatBubbleBottomCenterIcon
                   className="w-6 h-6 white"
                   onClick={() => {
